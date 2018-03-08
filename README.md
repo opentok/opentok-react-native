@@ -72,6 +72,8 @@
   * `OTSubscriberView.swift`
   * `<YourProjectName>-Bridging-Header.h`
 
+9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
+
 ### Android Installation
 
 1. In you terminal, change into your project directory.
@@ -80,9 +82,19 @@
 
 3. Open your Android project in Android Studio.
 
-4. Sync Gradle
+4. Add the following to your project `build.gradle` file: 
 
-5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
+```
+        maven {
+            url "http://tokbox.bintray.com/maven"
+        }
+```
+* It should look something like this:
+* ![](https://dha4w82d62smt.cloudfront.net/items/1W1p0Z27471J210d3M2r/Image%202018-03-08%20at%202.12.38%20PM.png?X-CloudApp-Visitor-Id=2816462&v=8ce583bb)
+
+5. Sync Gradle
+
+6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
 
 ## API Reference
 
