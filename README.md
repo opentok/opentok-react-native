@@ -135,7 +135,7 @@ The `OTPublisher` component will initialize a publisher and publish to a specifi
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
-  <OTPublisher />
+  <OTPublisher style={{ width: 100, height: 100 }} />
 </OTSession>
 ```
 ```js
