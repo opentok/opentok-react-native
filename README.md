@@ -118,8 +118,8 @@ The `OTSession` component manages the connection to an OpenTok Session. It passe
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
-  <OTPublisher />
-  <OTSubscriber />
+  <OTPublisher style={{ width: 100, height: 100 }}/>
+  <OTSubscriber style={{ width: 100, height: 100 }} />
 </OTSession>
 ```
 
@@ -144,7 +144,7 @@ class App extends Component {
     super(props);
 
     this.publisherProperties = {
-      audioFallbackEnabled: false,
+      publishAudio: false,
       cameraPosition: 'front'
     };
 
@@ -164,6 +164,7 @@ class App extends Component {
         <OTPublisher
           properties={this.publisherProperties}
           eventHandlers={this.publisherEventHandlers}
+          style={{ height: 100, width: 100 }}
         />
       </OTSession>
     );
