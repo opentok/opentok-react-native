@@ -14,6 +14,7 @@ class OTSessionManager: RCTEventEmitter {
   
   var connectCallback: RCTResponseSenderBlock?
   var jsEvents: [String] = [];
+  var componentEvents: [String] = [];
   var sessionPreface: String = "session:";
   var publisherPreface: String = "publisher:";
   var subscriberPreface: String = "subscriber:";
@@ -122,6 +123,20 @@ class OTSessionManager: RCTEventEmitter {
   @objc func setNativeEvents(_ events: Array<String>) -> Void {
     for event in events {
       self.jsEvents.append(event);
+    }
+  }
+  
+  @objc func setJSComponentEvents(_ events: Array<String>) -> Void {
+    for event in events {
+      self.componentEvents.append(event);
+    }
+  }
+  
+  @objc func removeJSComponentEvents(_ events: Array<String>) -> Void {
+    for event in events {
+      if let i = self.componentEvents.index(of: event) {
+        self.componentEvents.remove(at: i)
+      }
     }
   }
   
@@ -277,7 +292,7 @@ extension OTSessionManager: OTSessionDelegate {
   }
   
   func session(_ session: OTSession, streamCreated stream: OTStream) {
-    if (self.jsEvents.contains("\(sessionPreface)streamCreated")) {
+    if (self.jsEvents.contains("\(sessionPreface)streamCreated") || self.componentEvents.contains("\(sessionPreface)streamCreated")) {
       OTRN.sharedState.subscriberStreams.updateValue(stream, forKey: stream.streamId)
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
       self.sendEvent(withName: "\(sessionPreface)streamCreated", body: streamInfo)
@@ -286,7 +301,7 @@ extension OTSessionManager: OTSessionDelegate {
   }
   
   func session(_ session: OTSession, streamDestroyed stream: OTStream) {
-    if (self.jsEvents.contains("\(sessionPreface)streamDestroyed")) {
+    if (self.jsEvents.contains("\(sessionPreface)streamDestroyed") || self.componentEvents.contains("\(sessionPreface)streamDestroyed")) {
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
       self.sendEvent(withName: "\(sessionPreface)streamDestroyed", body: streamInfo)
     }

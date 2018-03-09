@@ -49,6 +49,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     private Callback connectCallback;
     private Callback disconnectCallback;
     private ArrayList<String> jsEvents = new ArrayList<String>();
+    private ArrayList<String> componentEvents = new ArrayList<String>();
     private static final String TAG = "OTRN";
     private final String sessionPreface = "session:";
     private final String publisherPreface = "publisher:";
@@ -210,6 +211,22 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void setJSComponentEvents(ReadableArray events) {
+
+        for (int i = 0; i < events.size(); i++) {
+            componentEvents.add(events.getString(i));
+        }
+    }
+
+    @ReactMethod
+    public void removeJSComponentEvents(ReadableArray events) {
+
+        for (int i = 0; i < events.size(); i++) {
+            componentEvents.remove(events.getString(i));
+        }
+    }
+
+    @ReactMethod
     public void sendSignal(ReadableMap signal, Callback callback) {
 
         Session mSession = sharedState.getSession();
@@ -327,7 +344,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamReceived(Session session, Stream stream) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamReceived")) {
+        if (contains(jsEvents, sessionPreface + "onStreamReceived") || contains(componentEvents, sessionPreface + "onStreamReceived")) {
             ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
             mSubscriberStreams.put(stream.getStreamId(), stream);
             WritableMap streamInfo = prepareStreamMap(stream);
@@ -408,7 +425,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamDropped(Session session, Stream stream) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamDropped")) {
+        if (contains(jsEvents, sessionPreface + "onStreamDropped") || contains(componentEvents, sessionPreface + "onStreamDropped")) {
             WritableMap streamInfo = prepareStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamDropped", streamInfo);
         }

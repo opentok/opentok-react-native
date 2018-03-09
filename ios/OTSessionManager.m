@@ -46,5 +46,9 @@ RCT_EXTERN_METHOD(sendSignal:
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(destroyPublisher:
                   (RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(setJSComponentEvents:
+                  (NSArray*)events)
+RCT_EXTERN_METHOD(removeJSComponentEvents:
+                  (NSArray*)events)
 @end
 

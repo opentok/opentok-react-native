@@ -12,6 +12,11 @@ export default class OTSubscriber extends Component {
     this.state = {
       streams: [],
     };
+    this.componentEvents = {
+      streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
+      streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
+    };
+    this.componentEventsArray = Object.values(this.componentEvents);
   }
   componentWillMount() {
     const subscriberEvents = sanitizeSubscriberEvents(this.props.eventHandlers);
@@ -21,12 +26,12 @@ export default class OTSubscriber extends Component {
   componentWillUnmount() {
     this.streamCreated.remove();
     this.streamDestroyed.remove();
+    OT.removeJSComponentEvents(this.componentEventsArray);    
   }
   setEventListeners() {
-    const streamDestroyed = Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed';
-    const streamCreated = Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated';
+    OT.setJSComponentEvents(this.componentEventsArray);
     this.streamCreated = nativeEvents.addListener(
-      streamCreated,
+      this.componentEvents.streamCreated,
       (stream) => {
         const subscriberProperties = sanitizeProperties(this.props.properties);
         OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
@@ -43,7 +48,7 @@ export default class OTSubscriber extends Component {
       },
     );
     this.streamDestroyed = nativeEvents.addListener(
-      streamDestroyed,
+      this.componentEvents.streamDestroyed,
       (stream) => {
         OT.removeSubscriber(stream.streamId, (error) => {
           if (error) {
