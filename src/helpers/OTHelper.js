@@ -1,7 +1,6 @@
 import { Platform } from 'react-native';
 import { handleError } from '../OTError';
 
-const libraryVersion = require('../../package.json').version;
 const _ = require('underscore');
 
 const reassignEvents = (type, customEvents, events) => {
@@ -24,14 +23,14 @@ const logOT = (apiKey, sessionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
-      otrn_version: libraryVersion,
+      otrn_version: require('../../package.json').version,
       platform_version: Platform.Version,
     },
     action: 'rn_initialize',
     payload_type: 'info',
     partner_id: apiKey,
     session_id: sessionId,
-    source: 'https://github.com/opentok/OpenTokReactNative',
+    source: require('../../package.json').repository.url,
   };
   fetch('https://hlg.tokbox.com/prod/logging/ClientEvent', {
     body: JSON.stringify(body),

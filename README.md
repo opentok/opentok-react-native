@@ -114,7 +114,8 @@ The `OpenTok React Native` library comprises of:
 | signal | Object | No | Used to send a signal to the session
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native session instance.
 
-The `OTSession` component manages the connection to an OpenTok Session. It passes the sessionId to the `sessionId` prop to its child components. To publish and subscribe, you must nest `OTPublisher` and `OTSubscriber` inside `OTSession`:
+The `OTSession` component manages the connection to an OpenTok Session. It passes the sessionId to the `sessionId` prop to its child components. To disconnect the session, unmount the `OTSession` component. To publish and subscribe, you must nest `OTPublisher` and `OTSubscriber` inside `OTSession`:
+
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
@@ -131,7 +132,7 @@ The `OTSession` component manages the connection to an OpenTok Session. It passe
 | properties | Object | No | Properties passed into the native publisher instance
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into native publsiher instance
 
-The `OTPublisher` component will initialize a publisher and publish to a specified session upon mounting.
+The `OTPublisher` component will initialize a publisher and publish to a specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component.
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
@@ -190,7 +191,7 @@ Please keep in mind that `OT` is not the same as `OT` in the JS SDK, the `OT` in
 | properties | Object | No | Properties passed into the native subscriber instance
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
 
-The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting.
+The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting. The `OTSubscriber` component will stop subscribing and unsubscribing when it's unmounting.
 
 ## Contributing
 
