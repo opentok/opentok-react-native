@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "React Native components for OpenTok iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "www.tokbox.com",
@@ -26,7 +26,8 @@
     "url": "https://github.com/opentok/opentok-react-native.git"
   },
   "dependencies": {
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "prop-types": "^15.6.0"    
   },
   "devDependencies": {
     "babel-jest": "22.1.0",
@@ -39,7 +40,6 @@
     "jest": "22.1.4",
     "react-test-renderer": "16.2.0",
     "react": "16.2.0",
-    "react-native": "0.51.0",
-    "prop-types": "^15.6.0"
+    "react-native": "0.51.0"
   }
 }
