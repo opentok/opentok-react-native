@@ -172,6 +172,16 @@ class OTSessionManager: RCTEventEmitter {
       }
     }
   }
+
+  @objc func getSessionInfo(_ callback: RCTResponseSenderBlock) -> Void {
+    guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
+    var sessionInfo: Dictionary<String, Any> = [:];
+    if let connection = session.connection {
+      sessionInfo["connection"] = self.prepareJSConnectionEventData(connection);
+    }
+    sessionInfo["sessionId"] = session.sessionId;
+    callback([sessionInfo]);
+  }
   
   func sanitizeBooleanProperty(_ property: Any) -> Bool {
     guard let prop = property as? Bool else { return true; }

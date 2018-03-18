@@ -50,5 +50,7 @@ RCT_EXTERN_METHOD(setJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(removeJSComponentEvents:
                   (NSArray*)events)
+RCT_EXTERN_METHOD(getSessionInfo:
+                  (RCTResponseSenderBlock*)callback)
 @end
 
