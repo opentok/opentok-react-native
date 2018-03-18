@@ -256,6 +256,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         });
     }
 
+    @ReactMethod
+    public void getSessionInfo(Callback callback) {
+
+        Session mSession = sharedState.getSession();
+        WritableMap sessionInfo = Arguments.createMap();
+        sessionInfo.putString("sessionId", mSession.getSessionId());
+        sessionInfo.putMap("connection", prepareConnectionMap(mSession.getConnection()));
+        callback.invoke(sessionInfo);
+    }
+
     private boolean contains(ArrayList array, String value) {
 
         for (int i = 0; i < array.size(); i++) {

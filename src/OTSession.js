@@ -11,6 +11,7 @@ export default class OTSession extends Component {
     super(props);
     this.state = {
       isConnected: false,
+      sessionInfo: null,
     };
   }
 
@@ -48,8 +49,11 @@ export default class OTSession extends Component {
       token: this.props.token,
     })
       .then(() => {
-        this.setState({
-          isConnected: true,
+        OT.getSessionInfo((sessionInfo) => {
+          this.setState({
+            isConnected: true,
+            sessionInfo,
+          });
         });
         const signalData = sanitizeSignalData(this.props.signal);
         OT.sendSignal(signalData, signalData.errorHandler);
@@ -63,14 +67,18 @@ export default class OTSession extends Component {
       .then(() => {
         this.setState({
           isConnected: false,
+          sessionInfo: null,
         });
       })
       .catch((error) => {
         handleError(error);
       });
   }
+  getSessionInfo() {
+    return this.state.sessionInfo;
+  }
   render() {
-    if (this.state.isConnected) {
+    if (this.state.isConnected && this.props.children) {
       const childrenWithProps = Children.map(
         this.props.children,
         child => (child ? cloneElement(
@@ -93,7 +101,7 @@ OTSession.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
-  ]).isRequired,
+  ]),
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   signal: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
