@@ -1,13 +1,13 @@
 import { Platform } from 'react-native';
 import { handleError } from '../OTError';
-
-const _ = require('underscore');
+import { each } from 'underscore';
+import axios from 'axios';
 
 const reassignEvents = (type, customEvents, events) => {
   const newEvents = {};
   const preface = `${type}:`;
   const platform = Platform.OS;
-  _.each(events, (eventHandler, eventType) => {
+  each(events, (eventHandler, eventType) => {
     if (customEvents[platform][eventType] !== undefined) {
       newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else {
@@ -32,13 +32,11 @@ const logOT = (apiKey, sessionId) => {
     session_id: sessionId,
     source: require('../../package.json').repository.url,
   };
-  fetch('https://hlg.tokbox.com/prod/logging/ClientEvent', {
-    body: JSON.stringify(body),
+  axios({
+    url: 'https://hlg.tokbox.com/prod/logging/ClientEvent',
     method: 'post',
+    data: JSON.stringify(body),
   })
-    .then(() => {
-      // initial response
-    })
     .then(() => {
       // response complete
     })

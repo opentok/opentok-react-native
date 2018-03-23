@@ -1,6 +1,5 @@
 import { NativeModules, NativeEventEmitter, PermissionsAndroid } from 'react-native';
-
-const _ = require('underscore');
+import { each } from 'underscore';
 
 const OT = NativeModules.OTSessionManager;
 const nativeEvents = new NativeEventEmitter(OT);
@@ -23,7 +22,7 @@ const checkAndroidPermissions = () => new Promise((resolve, reject) => {
     .then((result) => {
       const permissionsError = {};
       permissionsError.permissionsDenied = [];
-      _.each(result, (permissionValue, permissionType) => {
+      each(result, (permissionValue, permissionType) => {
         if (permissionValue === 'denied') {
           permissionsError.permissionsDenied.push(permissionType);
           permissionsError.type = 'Permissions error';
@@ -69,7 +68,7 @@ const disconnectSession = () => new Promise((resolve, reject) => {
 const setNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.setNativeEvents(eventNames);
-  _.each(events, (eventHandler, eventType) => {
+  each(events, (eventHandler, eventType) => {
     const allEvents = nativeEvents.listeners();
     if (!allEvents.includes(eventType)) {
       nativeEvents.addListener(eventType, eventHandler);
@@ -80,7 +79,7 @@ const setNativeEvents = (events) => {
 const removeNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.removeNativeEvents(eventNames);
-  _.each(events, (eventHandler, eventType) => {
+  each(events, (eventHandler, eventType) => {
     nativeEvents.removeListener(eventType, eventHandler);
   });
 };
