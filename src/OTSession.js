@@ -1,5 +1,5 @@
 import React, { Component, Children, cloneElement } from 'react';
-import { View } from 'react-native';
+import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { createSession, disconnectSession, setNativeEvents, OT } from './OT';
 import { sanitizeSessionEvents, sanitizeSignalData } from './helpers/OTSessionHelper';
@@ -78,6 +78,8 @@ export default class OTSession extends Component {
     return this.state.sessionInfo;
   }
   render() {
+    const { style } = this.props;
+
     if (this.state.isConnected && this.props.children) {
       const childrenWithProps = Children.map(
         this.props.children,
@@ -88,7 +90,7 @@ export default class OTSession extends Component {
           },
         ) : child),
       );
-      return <View>{ childrenWithProps }</View>;
+      return <View style={style}>{ childrenWithProps }</View>;
     }
     return <View />;
   }
@@ -102,6 +104,7 @@ OTSession.propTypes = {
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),
+  style: ViewPropTypes.style,
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   signal: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
@@ -109,4 +112,7 @@ OTSession.propTypes = {
 OTSession.defaultProps = {
   eventHandlers: {},
   signal: {},
+  style: {
+    flex: 1
+  },
 };
