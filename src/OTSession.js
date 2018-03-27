@@ -111,6 +111,7 @@ export default class OTSession extends Component {
 
   render() {
     const { streams } = this.state;
+    const { style } = this.props;
 
     if (this.state.isConnected && this.props.children) {
       const childrenWithProps = Children.map(
@@ -125,7 +126,7 @@ export default class OTSession extends Component {
           ) : child)
         },
       );
-      return <View style={this.props.style}>{ childrenWithProps }</View>;
+      return <View style={style}>{ childrenWithProps }</View>;
     }
     return <View />;
   }
@@ -149,5 +150,5 @@ OTSession.defaultProps = {
   signal: {},
   style: {
     flex: 1
-  }
+  },
 };
