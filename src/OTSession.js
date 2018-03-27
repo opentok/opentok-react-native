@@ -1,26 +1,34 @@
 import React, { Component, Children, cloneElement } from 'react';
-import { View } from 'react-native';
+import { View, Platform, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
-import { createSession, disconnectSession, setNativeEvents, OT } from './OT';
+import { createSession, disconnectSession, setNativeEvents, nativeEvents, OT } from './OT';
 import { sanitizeSessionEvents, sanitizeSignalData } from './helpers/OTSessionHelper';
 import { logOT } from './helpers/OTHelper';
 import { handleError } from './OTError';
 
 export default class OTSession extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isConnected: false,
-      sessionInfo: null,
-    };
+  componentEvents = {
+    streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
+    streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
+  }
+
+  state = {
+    streams: [],
+    isConnected: false,
+    sessionInfo: null,
   }
 
   componentWillMount() {
     const sessionEvents = sanitizeSessionEvents(this.props.eventHandlers);
     setNativeEvents(sessionEvents);
+
+    nativeEvents.addListener(this.componentEvents.streamCreated, this.onStreamCreated)
+    nativeEvents.addListener(this.componentEvents.streamDestroyed, this.onStreamDestroyed)
+    
     this.createSession();
     logOT(this.props.apiKey, this.props.sessionId);
   }
+
   componentDidUpdate(previousProps) {
     const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
     const shouldUpdate = (key, defaultValue) => {
@@ -39,9 +47,13 @@ export default class OTSession extends Component {
 
     updateSessionProperty('signal', {});
   }
+
   componentWillUnmount() {
+    nativeEvents.removeListener(this.componentEvents.streamCreated)
+    nativeEvents.removeListener(this.componentEvents.streamDestroyed)
     this.disconnectSession();
   }
+
   createSession() {
     createSession({
       apiKey: this.props.apiKey,
@@ -62,6 +74,7 @@ export default class OTSession extends Component {
         handleError(error);
       });
   }
+
   disconnectSession() {
     disconnectSession()
       .then(() => {
@@ -77,18 +90,42 @@ export default class OTSession extends Component {
   getSessionInfo() {
     return this.state.sessionInfo;
   }
+
+  onStreamCreated = event => {
+    const index = this.state.streams.findIndex(stream => stream.id === event.streamId);
+    if (index < 0) {
+      this.setState({
+        streams: [...this.state.streams, event.streamId]
+      })
+    }
+  }
+
+  onStreamDestroyed = event => {
+    const index = this.state.streams.findIndex(stream => stream.id === event.streamId);
+    if (index >= 0) {
+      this.setState({
+        streams: this.state.streams.splice(index, 1)
+      })
+    }
+  }
+
   render() {
+    const { streams } = this.state;
+
     if (this.state.isConnected && this.props.children) {
       const childrenWithProps = Children.map(
         this.props.children,
-        child => (child ? cloneElement(
-          child,
-          {
-            sessionId: this.props.sessionId,
-          },
-        ) : child),
+        child => {
+          return (child ? cloneElement(
+            child,
+            {
+              streams,
+              sessionId: this.props.sessionId,
+            },
+          ) : child)
+        },
       );
-      return <View>{ childrenWithProps }</View>;
+      return <View style={this.props.style}>{ childrenWithProps }</View>;
     }
     return <View />;
   }
@@ -102,6 +139,7 @@ OTSession.propTypes = {
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
   ]),
+  style: ViewPropTypes.style,
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   signal: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
@@ -109,4 +147,7 @@ OTSession.propTypes = {
 OTSession.defaultProps = {
   eventHandlers: {},
   signal: {},
+  style: {
+    flex: 1
+  }
 };
