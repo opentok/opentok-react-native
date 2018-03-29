@@ -12,13 +12,21 @@ class OTPublisher extends Component {
     this.state = {
       publisher: null,
     };
-    this.streamDestroyed = Platform.OS === 'android' ? 'publisher:onStreamDestroyed' : 'publisher:streamDestroyed';
+    this.componentEvents = {
+      streamDestroyed: Platform.OS === 'android' ? 'publisher:onStreamDestroyed' : 'publisher:streamDestroyed',
+      sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
+    };
+    this.componentEventsArray = Object.values(this.componentEvents);    
   }
   componentWillMount() {
     const publisherEvents = sanitizePublisherEvents(this.props.eventHandlers);
     setNativeEvents(publisherEvents);
-    this.createPublisher();
-    this.setEventListeners();
+    OT.setJSComponentEvents(this.componentEventsArray);
+    this.sessionConnected = nativeEvents.addListener(this.componentEvents.sessionConnected, () => this.sessionConnectedHandler());
+    this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, () => this.streamDestroyedHandler());
+  }
+  componentDidMount() {
+    this.createPublisher();    
   }
   componentDidUpdate(previousProps) {
     const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
@@ -41,23 +49,31 @@ class OTPublisher extends Component {
   componentWillUnmount() {
     OT.destroyPublisher((error) => {
       if (!error) {
-        this.streamChanged.remove();
+        this.streamDestroyed.remove();
         const events = sanitizePublisherEvents(this.props.eventHandlers);
         removeNativeEvents(events);
       } else {
         handleError(error);
       }
     });
+    OT.removeJSComponentEvents(this.componentEventsArray); 
+    this.sessionConnected.remove();
   }
-  setEventListeners() {
-    this.streamChanged = nativeEvents.addListener(
-      this.streamDestroyed,
-      () => {
+  sessionConnectedHandler = () => {
+    OT.publish((publishError) => {
+      if (publishError) {
+        handleError(error);
+      } else {
         this.setState({
-          publisher: null,
-        });
-      },
-    );
+          publisher: true,
+        })
+      }
+    });
+  }
+  streamDestroyedHandler = () => {
+    this.setState({
+      publisher: null,
+    });
   }
   createPublisher() {
     if (Platform.OS === 'android') {
@@ -74,21 +90,13 @@ class OTPublisher extends Component {
   }
   initPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
-    createPublisher(publisherProperties)
-      .then(() => {
-        this.setState({
-          publisher: true,
-        });
-      })
-      .catch((error) => {
-        handleError(error);
-      });
+    OT.initPublisher(publisherProperties);
   }
   render() {
-    if (!this.state.publisher) {
-      return <View />;
+    if (this.state.publisher) {
+      return <OTPublisherView {...this.props} />;
     }
-    return <OTPublisherView {...this.props} />;
+    return <View />;
   }
 }
 const viewPropTypes = View.propTypes;
