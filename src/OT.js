@@ -4,17 +4,6 @@ import { each } from 'underscore';
 const OT = NativeModules.OTSessionManager;
 const nativeEvents = new NativeEventEmitter(OT);
 
-const createSession = data => new Promise((resolve, reject) => {
-  OT.initSession(data.apiKey, data.sessionId);
-  OT.connect(data.token, (error) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve();
-    }
-  });
-});
-
 const checkAndroidPermissions = () => new Promise((resolve, reject) => {
   PermissionsAndroid.requestMultiple([
     PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -39,32 +28,6 @@ const checkAndroidPermissions = () => new Promise((resolve, reject) => {
     });
 });
 
-const createPublisher = properties => new Promise((resolve, reject) => {
-  OT.initPublisher(properties, (initPublisherError) => {
-    if (initPublisherError) {
-      reject(initPublisherError);
-    } else {
-      OT.publish((publishError) => {
-        if (publishError) {
-          reject(publishError);
-        } else {
-          resolve();
-        }
-      });
-    }
-  });
-});
-
-const disconnectSession = () => new Promise((resolve, reject) => {
-  OT.disconnectSession((disconnectError) => {
-    if (disconnectError) {
-      reject(disconnectError);
-    } else {
-      resolve();
-    }
-  });
-});
-
 const setNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.setNativeEvents(eventNames);
@@ -85,11 +48,8 @@ const removeNativeEvents = (events) => {
 };
 
 export {
-  createSession,
-  createPublisher,
   OT,
   nativeEvents,
-  disconnectSession,
   checkAndroidPermissions,
   setNativeEvents,
   removeNativeEvents,

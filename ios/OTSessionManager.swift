@@ -36,8 +36,8 @@ class OTSessionManager: RCTEventEmitter {
       connectCallback = callback
     }
   }
-
-  @objc func initPublisher(_ properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
+  
+  @objc func initPublisher(_ properties: Dictionary<String, Any>) -> Void {
     DispatchQueue.main.async {
       let publisherProperties = OTPublisherSettings()
       publisherProperties.videoTrack = self.sanitizeBooleanProperty(properties["videoTrack"] as Any);
@@ -56,7 +56,6 @@ class OTSessionManager: RCTEventEmitter {
       OTRN.sharedState.publisher?.publishAudio = self.sanitizeBooleanProperty(properties["publishAudio"] as Any);
       OTRN.sharedState.publisher?.publishVideo = self.sanitizeBooleanProperty(properties["publishVideo"] as Any);
       OTRN.sharedState.publisher?.audioLevelDelegate = self;
-      callback([NSNull()])
     }
   }
   
@@ -98,7 +97,7 @@ class OTSessionManager: RCTEventEmitter {
       OTRN.sharedState.subscriberStreams[streamId] = nil;
       callback([NSNull()])
     }
-
+    
   }
   
   @objc func disconnectSession(_ callback: RCTResponseSenderBlock) -> Void {
@@ -119,7 +118,7 @@ class OTSessionManager: RCTEventEmitter {
     OTRN.sharedState.publisher?.publishVideo = pubVideo;
   }
   
-
+  
   @objc func setNativeEvents(_ events: Array<String>) -> Void {
     for event in events {
       self.jsEvents.append(event);
@@ -172,7 +171,7 @@ class OTSessionManager: RCTEventEmitter {
       }
     }
   }
-
+  
   @objc func getSessionInfo(_ callback: RCTResponseSenderBlock) -> Void {
     guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
     var sessionInfo: Dictionary<String, Any> = [:];
@@ -238,12 +237,10 @@ class OTSessionManager: RCTEventEmitter {
 
 extension OTSessionManager: OTSessionDelegate {
   func sessionDidConnect(_ session: OTSession) {
-    guard let callback = connectCallback else {
-      return
-    }
+    guard let callback = connectCallback else { return }
     callback([NSNull()])
     print("OTRN: Session connected")
-    if (self.jsEvents.contains("\(sessionPreface)sessionDidConnect")) {
+    if (self.jsEvents.contains("\(sessionPreface)sessionDidConnect") || self.componentEvents.contains("\(sessionPreface)sessionDidConnect")) {
       self.sendEvent(withName: "\(sessionPreface)sessionDidConnect", body: [NSNull()]);
     }
   }

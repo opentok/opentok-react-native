@@ -84,7 +84,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void initPublisher(ReadableMap properties, Callback callback ) {
+    public void initPublisher(ReadableMap properties) {
 
         String name = properties.getString("name");
         Boolean videoTrack = properties.getBoolean("videoTrack");
@@ -114,7 +114,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mPublisher.cycleCamera();
         }
         sharedState.setPublisher(mPublisher);
-        callback.invoke();
     }
 
     @ReactMethod
@@ -368,7 +367,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onConnected(Session session) {
 
         connectCallback.invoke();
-        if (contains(jsEvents, sessionPreface + "onConnected")) {
+        if (contains(jsEvents, sessionPreface + "onConnected") || contains(componentEvents, sessionPreface + "onConnected")) {
             sendEvent(this.getReactApplicationContext(), sessionPreface + "onConnected", null);
         }
         Log.i(TAG, "onConnected: Connected to session: "+session.getSessionId());
