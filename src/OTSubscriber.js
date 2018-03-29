@@ -25,7 +25,6 @@ export default class OTSubscriber extends Component {
     const subscriberEvents = sanitizeSubscriberEvents(this.props.eventHandlers);
     OT.setJSComponentEvents(this.componentEventsArray);
     setNativeEvents(subscriberEvents);
-    console.log('sub did mount');
   }
   componentWillUnmount() {
     this.streamCreated.remove();
