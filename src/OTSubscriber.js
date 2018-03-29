@@ -19,56 +19,45 @@ export default class OTSubscriber extends Component {
     this.componentEventsArray = Object.values(this.componentEvents);
   }
   componentWillMount() {
+    const subscriberProperties = sanitizeProperties(this.props.properties);
+    this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream, subscriberProperties));
+    this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, stream => this.streamDestroyedHandler(stream));
     const subscriberEvents = sanitizeSubscriberEvents(this.props.eventHandlers);
+    OT.setJSComponentEvents(this.componentEventsArray);
     setNativeEvents(subscriberEvents);
-    this.setEventListeners();
+    console.log('sub did mount');
   }
   componentWillUnmount() {
     this.streamCreated.remove();
     this.streamDestroyed.remove();
     OT.removeJSComponentEvents(this.componentEventsArray);    
   }
-  setEventListeners() {
-    OT.setJSComponentEvents(this.componentEventsArray);
-    this.streamCreated = nativeEvents.addListener(
-      this.componentEvents.streamCreated,
-      (stream) => {
-        const subscriberProperties = sanitizeProperties(this.props.properties);
-        OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
-          if (error) {
-            handleError(error);
-          } else {
-            const oldStreams = this.state.streams;
-            const streams = [...oldStreams, stream.streamId];
-            this.setState({
-              streams,
-            });
-          }
+  streamCreatedHandler = (stream, subscriberProperties) => {
+    OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
+      if (error) {
+        handleError(error);
+      } else {
+        this.setState({
+          streams: [...this.state.streams, stream.streamId],
         });
-      },
-    );
-    this.streamDestroyed = nativeEvents.addListener(
-      this.componentEvents.streamDestroyed,
-      (stream) => {
-        OT.removeSubscriber(stream.streamId, (error) => {
-          if (error) {
-            handleError(error);
-          } else {
-            const indexOfStream = this.state.streams.indexOf(stream.streamId);
-            const newState = this.state.streams.slice();
-            newState.splice(indexOfStream, 1);
-            this.setState({
-              streams: newState,
-            });
-          }
+      }
+    });
+  }
+  streamDestroyedHandler = (stream) => {
+    OT.removeSubscriber(stream.streamId, (error) => {
+      if (error) {
+        handleError(error);
+      } else {
+        const indexOfStream = this.state.streams.indexOf(stream.streamId);
+        const newState = this.state.streams.slice();
+        newState.splice(indexOfStream, 1);
+        this.setState({
+          streams: newState,
         });
-      },
-    );
+      }
+    });
   }
   render() {
-    if (this.state.streams.length < 1) {
-      return <View />;
-    }
     const childrenWithStreams = this.state.streams.map(streamId =>
       <OTSubscriberView key={streamId} streamId={streamId} style={this.props.style} />);
     return <View>{ childrenWithStreams }</View>;

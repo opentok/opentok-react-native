@@ -20,8 +20,7 @@ RCT_EXTERN_METHOD(connect:
                   (NSString*)token
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(initPublisher:
-                  (NSDictionary*)properties
-                  callback:(RCTResponseSenderBlock*)callback)
+                  (NSDictionary*)properties)
 RCT_EXTERN_METHOD(publish:
                   (RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(subscribeToStream:
