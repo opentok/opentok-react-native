@@ -58,12 +58,12 @@ export default class OTSession extends Component {
   }
   disconnectSession() {
     OT.disconnectSession((disconnectError) => {
-      if (disconnectError) {
+      if (!disconnectError) {
         this.setState({
           sessionInfo: null,
         });
       } else {
-        handleError(error);
+        handleError(disconnectError);
       }
     });
   }
