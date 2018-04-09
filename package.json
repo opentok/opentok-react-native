@@ -1,12 +1,11 @@
 {
   "name": "opentok-react-native",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "React Native components for OpenTok iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "www.tokbox.com",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node ./scripts/postInstall"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "opentok",

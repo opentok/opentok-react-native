@@ -54,11 +54,11 @@
 
 5. Open XCode
 
-6. Open <YourProjectName>.xcworkspace file in XCode. This file can be found in the `ios` folder. 
+6. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
 
 7. Click `File` and `Add Files to`
 
-8. Add the following files to the project:
+8. Add the following files from `../node_modules/opentok-react-native/ios` to the project:
   * `OTPublisher.h`
   * `OTPublisher.m`
   * `OTPublisherManager.swift`
@@ -70,9 +70,10 @@
   * `OTSubscriber.m`
   * `OTSubscriberManager.swift`
   * `OTSubscriberView.swift`
-  * `<YourProjectName>-Bridging-Header.h`
 
 9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
+
+10. Add the contents from the `Bridging-Header.h` file in `../node_modules/opentok-react-native/ios` to `<YourProjectName>-Bridging-Header.h`
 
 ### Android Installation
 
