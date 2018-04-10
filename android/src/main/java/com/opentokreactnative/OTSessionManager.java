@@ -521,7 +521,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             signalInfo.putString("connectionId", connection.getConnectionId());
             sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
         }
-        Log.d(TAG, "onSignalReceived: Data: " + data.toString() + " Type: " + type.toString());
+        Log.d(TAG, "onSignalReceived: Data: " + data + " Type: " + type);
     }
 
     @Override
