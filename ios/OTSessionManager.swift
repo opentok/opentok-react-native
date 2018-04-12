@@ -93,6 +93,7 @@ class OTSessionManager: RCTEventEmitter {
   @objc func removeSubscriber(_ streamId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
       OTRN.sharedState.subscribers[streamId]?.view?.removeFromSuperview();
+      OTRN.sharedState.subscribers[streamId]?.delegate = nil;
       OTRN.sharedState.subscribers[streamId] = nil;
       OTRN.sharedState.subscriberStreams[streamId] = nil;
       callback([NSNull()])
@@ -106,6 +107,8 @@ class OTSessionManager: RCTEventEmitter {
     if let err = error {
       callback([err.localizedDescription as Any])
     } else {
+      OTRN.sharedState.session?.delegate = nil;
+      OTRN.sharedState.session = nil;
       callback([NSNull()])
     }
   }
@@ -153,12 +156,14 @@ class OTSessionManager: RCTEventEmitter {
   @objc func destroyPublisher(_ callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
       guard let publisher = OTRN.sharedState.publisher else { return }
+      guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
       var error: OTError?
-      OTRN.sharedState.session?.unpublish(publisher, error: &error)
+      session.unpublish(publisher, error: &error)
       if let err = error {
         callback([err.localizedDescription as Any])
       } else {
         publisher.view?.removeFromSuperview()
+        publisher.delegate = nil;
         callback([NSNull()])
       }
     }

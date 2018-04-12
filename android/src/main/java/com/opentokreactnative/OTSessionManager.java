@@ -176,6 +176,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         Session mSession = sharedState.getSession();
         mSession.disconnect();
+        sharedState.setSession(null);
         disconnectCallback = callback;
     }
 
@@ -247,8 +248,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 mPublisherViewContainer.removeAllViews();
                 mPublisherViewContainer = null;
                 sharedState.setPublisherViewContainer(mPublisherViewContainer);
-                mSession.unpublish(mPublisher);
-                mPublisher.destroy();
+                if (mSession != null) {
+                    mSession.unpublish(mPublisher);
+                }
+                mPublisher.destroy();                
+                sharedState.setPublisher(null);
                 mCallback.invoke();
 
             }
