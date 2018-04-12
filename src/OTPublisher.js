@@ -48,16 +48,16 @@ class OTPublisher extends Component {
   }
   componentWillUnmount() {
     OT.destroyPublisher((error) => {
-      if (!error) {
+      if (error) {
+        handleError(error);        
+      } else {
+        this.sessionConnected.remove();        
         this.streamDestroyed.remove();
+        OT.removeJSComponentEvents(this.componentEventsArray);         
         const events = sanitizePublisherEvents(this.props.eventHandlers);
         removeNativeEvents(events);
-      } else {
-        handleError(error);
       }
     });
-    OT.removeJSComponentEvents(this.componentEventsArray); 
-    this.sessionConnected.remove();
   }
   sessionConnectedHandler = () => {
     OT.publish((publishError) => {
