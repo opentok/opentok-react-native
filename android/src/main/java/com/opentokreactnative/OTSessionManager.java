@@ -250,8 +250,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 }
                 mPublisher.destroy();
                 mPublisherViewContainer.removeAllViews();
-                mPublisherViewContainer = null;
-                sharedState.setPublisherViewContainer(mPublisherViewContainer);             
+                sharedState.setPublisherViewContainer(null);             
                 sharedState.setPublisher(null);
                 mCallback.invoke();
 
