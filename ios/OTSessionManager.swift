@@ -155,15 +155,18 @@ class OTSessionManager: RCTEventEmitter {
   
   @objc func destroyPublisher(_ callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
-      guard let publisher = OTRN.sharedState.publisher else { return }
-      guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
+      guard let publisher = OTRN.sharedState.publisher else { callback([NSNull()]); return }
+      guard let session = OTRN.sharedState.session else {
+        self.resetPublisher(publisher);
+        callback([NSNull()]);
+        return
+      }
       var error: OTError?
       session.unpublish(publisher, error: &error)
       if let err = error {
         callback([err.localizedDescription as Any])
       } else {
-        publisher.view?.removeFromSuperview()
-        publisher.delegate = nil;
+        self.resetPublisher(publisher);
         callback([NSNull()])
       }
     }
@@ -238,6 +241,10 @@ class OTSessionManager: RCTEventEmitter {
     return errorInfo;
   }
   
+  func resetPublisher(_ publisher: OTPublisher) -> Void {
+    publisher.view?.removeFromSuperview()
+    publisher.delegate = nil;
+  }
 }
 
 extension OTSessionManager: OTSessionDelegate {

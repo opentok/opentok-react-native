@@ -245,13 +245,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 FrameLayout mPublisherViewContainer = sharedState.getPublisherViewContainer();
                 Publisher mPublisher = sharedState.getPublisher();
                 Session mSession = sharedState.getSession();
-                mPublisherViewContainer.removeAllViews();
-                mPublisherViewContainer = null;
-                sharedState.setPublisherViewContainer(mPublisherViewContainer);
                 if (mSession != null) {
                     mSession.unpublish(mPublisher);
                 }
-                mPublisher.destroy();                
+                mPublisher.destroy();
+                mPublisherViewContainer.removeAllViews();
+                mPublisherViewContainer = null;
+                sharedState.setPublisherViewContainer(mPublisherViewContainer);             
                 sharedState.setPublisher(null);
                 mCallback.invoke();
 
