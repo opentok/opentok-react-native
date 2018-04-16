@@ -62,7 +62,7 @@ class OTPublisher extends Component {
   sessionConnectedHandler = () => {
     OT.publish((publishError) => {
       if (publishError) {
-        handleError(error);
+        handleError(publishError);
       } else {
         this.setState({
           publisher: true,
