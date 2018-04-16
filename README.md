@@ -165,7 +165,7 @@ The `OTSession` component manages the connection to an OpenTok Session. It passe
 
 
 
-The `OTPublisher` component will initialize a publisher and publish to a specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component.
+The `OTPublisher` component will initialize a publisher and publish to the specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component. Please keep in mind that the publisher view is not removed unless you specifically unmount the `OTPublisher` component. This is why it's recommended that your app listens to the `streamDestroyed` publisher level event so you can unmount the component to remove the view.
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
