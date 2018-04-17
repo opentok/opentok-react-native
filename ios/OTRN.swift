@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import OpenTok
 
 class OTRN : NSObject {
   static let sharedState = OTRN()

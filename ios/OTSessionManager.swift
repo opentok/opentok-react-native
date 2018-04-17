@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import OpenTok
 
 @objc(OTSessionManager)
 class OTSessionManager: RCTEventEmitter {

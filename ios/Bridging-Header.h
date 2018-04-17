@@ -5,3 +5,4 @@
 #import <React/RCTBridgeMethod.h>
 #import <React/RCTViewManager.h>
 #import <React/RCTEventEmitter.h>
+#import <OpenTok/OpenTok.h>
