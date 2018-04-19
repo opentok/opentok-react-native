@@ -75,6 +75,15 @@
 
 10. Add the contents from the `Bridging-Header.h` file in `../node_modules/opentok-react-native/ios` to `<YourProjectName>-Bridging-Header.h`
 
+11. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
+
+```
+<key>NSCameraUsageDescription</key>
+<string>Your message to user when the camera is accessed for the first time</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Your message to user when the microphone is accessed for the first time</string>
+```
+
 ### Android Installation
 
 1. In you terminal, change into your project directory.
