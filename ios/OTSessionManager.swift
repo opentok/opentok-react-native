@@ -121,6 +121,9 @@ class OTSessionManager: RCTEventEmitter {
     OTRN.sharedState.publisher?.publishVideo = pubVideo;
   }
   
+  @objc func changeCameraPosition(_ cameraPosition: String) -> Void {
+    OTRN.sharedState.publisher?.cameraPosition = cameraPosition == "front" ? .front : .back;
+  }
   
   @objc func setNativeEvents(_ events: Array<String>) -> Void {
     for event in events {

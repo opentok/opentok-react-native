@@ -36,6 +36,8 @@ RCT_EXTERN_METHOD(publishAudio:
                   (BOOL)pubAudio)
 RCT_EXTERN_METHOD(publishVideo:
                   (BOOL)pubVideo)
+RCT_EXTERN_METHOD(changeCameraPosition:
+                  (NSString*)cameraPosition)
 RCT_EXTERN_METHOD(setNativeEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(removeNativeEvents:
