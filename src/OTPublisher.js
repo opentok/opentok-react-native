@@ -13,7 +13,6 @@ class OTPublisher extends Component {
       publisher: null,
     };
     this.componentEvents = {
-      streamDestroyed: Platform.OS === 'android' ? 'publisher:onStreamDestroyed' : 'publisher:streamDestroyed',
       sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
     };
     this.componentEventsArray = Object.values(this.componentEvents);    
@@ -23,7 +22,6 @@ class OTPublisher extends Component {
     setNativeEvents(publisherEvents);
     OT.setJSComponentEvents(this.componentEventsArray);
     this.sessionConnected = nativeEvents.addListener(this.componentEvents.sessionConnected, () => this.sessionConnectedHandler());
-    this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, () => this.streamDestroyedHandler());
   }
   componentDidMount() {
     this.createPublisher();    
@@ -52,7 +50,6 @@ class OTPublisher extends Component {
         handleError(error);        
       } else {
         this.sessionConnected.remove();        
-        this.streamDestroyed.remove();
         OT.removeJSComponentEvents(this.componentEventsArray);         
         const events = sanitizePublisherEvents(this.props.eventHandlers);
         removeNativeEvents(events);
@@ -62,17 +59,12 @@ class OTPublisher extends Component {
   sessionConnectedHandler = () => {
     OT.publish((publishError) => {
       if (publishError) {
-        handleError(error);
+        handleError(publishError);
       } else {
         this.setState({
           publisher: true,
         })
       }
-    });
-  }
-  streamDestroyedHandler = () => {
-    this.setState({
-      publisher: null,
     });
   }
   createPublisher() {

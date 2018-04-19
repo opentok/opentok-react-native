@@ -54,6 +54,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     private final String sessionPreface = "session:";
     private final String publisherPreface = "publisher:";
     private final String subscriberPreface = "subscriber:";
+    private boolean isPublishing = false;
     public OTRN sharedState;
 
     public OTSessionManager(ReactApplicationContext reactContext) {
@@ -245,13 +246,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 FrameLayout mPublisherViewContainer = sharedState.getPublisherViewContainer();
                 Publisher mPublisher = sharedState.getPublisher();
                 Session mSession = sharedState.getSession();
-                mPublisherViewContainer.removeAllViews();
-                mPublisherViewContainer = null;
-                sharedState.setPublisherViewContainer(mPublisherViewContainer);
-                if (mSession != null) {
+                if (mSession != null && isPublishing) {
                     mSession.unpublish(mPublisher);
                 }
-                mPublisher.destroy();                
+                mPublisher.destroy();
+                mPublisherViewContainer.removeAllViews();
+                isPublishing = false;
+                sharedState.setPublisherViewContainer(null);             
                 sharedState.setPublisher(null);
                 mCallback.invoke();
 
@@ -452,6 +453,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableMap streamInfo = prepareStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamCreated", streamInfo);
         }
+        isPublishing = true;
         Log.i(TAG, "onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
 
     }
@@ -463,6 +465,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableMap streamInfo = prepareStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamDestroyed", streamInfo);
         }
+        isPublishing = false;
         Log.i(TAG, "onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
 

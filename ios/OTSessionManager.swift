@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import OpenTok
 
 @objc(OTSessionManager)
 class OTSessionManager: RCTEventEmitter {
@@ -18,6 +17,7 @@ class OTSessionManager: RCTEventEmitter {
   var sessionPreface: String = "session:";
   var publisherPreface: String = "publisher:";
   var subscriberPreface: String = "subscriber:";
+  var isPublishing: Bool = false;
   @objc override func supportedEvents() -> [String] {
     let allEvents: [String] = ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect"];
     return allEvents
@@ -155,17 +155,19 @@ class OTSessionManager: RCTEventEmitter {
   
   @objc func destroyPublisher(_ callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
-      guard let publisher = OTRN.sharedState.publisher else { return }
-      guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
-      var error: OTError?
-      session.unpublish(publisher, error: &error)
-      if let err = error {
-        callback([err.localizedDescription as Any])
-      } else {
-        publisher.view?.removeFromSuperview()
-        publisher.delegate = nil;
-        callback([NSNull()])
+      guard let publisher = OTRN.sharedState.publisher else { callback([NSNull()]); return }
+      guard let session = OTRN.sharedState.session else {
+        self.resetPublisher(publisher);
+        callback([NSNull()]);
+        return
       }
+      var error: OTError?
+      if (self.isPublishing) {
+        session.unpublish(publisher, error: &error)
+      }
+      self.resetPublisher(publisher);
+      guard let err = error else { callback([NSNull()]); return }
+      callback([err.localizedDescription as Any])
     }
   }
   
@@ -238,6 +240,11 @@ class OTSessionManager: RCTEventEmitter {
     return errorInfo;
   }
   
+  func resetPublisher(_ publisher: OTPublisher) -> Void {
+    publisher.view?.removeFromSuperview()
+    publisher.delegate = nil;
+    self.isPublishing = false;
+  }
 }
 
 extension OTSessionManager: OTSessionDelegate {
@@ -344,6 +351,7 @@ extension OTSessionManager: OTPublisherDelegate {
   func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream) {
     if (self.jsEvents.contains("\(publisherPreface)streamCreated")) {
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
+      self.isPublishing = true;
       self.sendEvent(withName: "\(publisherPreface)streamCreated", body: streamInfo)
     }
     print("OTRN: Publisher Stream created")
@@ -352,6 +360,7 @@ extension OTSessionManager: OTPublisherDelegate {
   func publisher(_ publisher: OTPublisherKit, streamDestroyed stream: OTStream) {
     if (self.jsEvents.contains("\(publisherPreface)streamDestroyed")) {
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
+      self.isPublishing = false;
       self.sendEvent(withName: "\(publisherPreface)streamDestroyed", body: streamInfo)
     }
     print("OTRN: Publisher Stream destroyed")

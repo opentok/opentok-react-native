@@ -159,13 +159,13 @@ The `OTSession` component manages the connection to an OpenTok Session. It passe
 
   * **publishVideo** (Boolean) — Whether to publish video.
 
-  * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "320x240". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+  * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
 
   * **videoTrack** (Boolean) — If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
 
 
 
-The `OTPublisher` component will initialize a publisher and publish to a specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component.
+The `OTPublisher` component will initialize a publisher and publish to the specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component. Please keep in mind that the publisher view is not removed unless you specifically unmount the `OTPublisher` component.
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
