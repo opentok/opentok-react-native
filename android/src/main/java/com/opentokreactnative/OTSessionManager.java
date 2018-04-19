@@ -196,6 +196,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void changeCameraPosition(String cameraPosition) {
+
+        Publisher mPublisher = sharedState.getPublisher();
+        mPublisher.cycleCamera();
+        Log.i(TAG, "Changing camera to " + cameraPosition);
+    }
+
+    @ReactMethod
     public void setNativeEvents(ReadableArray events) {
 
         for (int i = 0; i < events.size(); i++) {

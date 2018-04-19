@@ -232,6 +232,7 @@ The `properties` prop is used for initial set up of the Publisher and making cha
 
 | Publisher Property | Action |
 | --- | --- |
+| cameraPosition | Calls OT.changeCameraPosition() to toggle the camera |
 | publishAudio | Calls OT.publishAudio() to toggle audio on and off |
 | publishVideo | Calls OT.publishVideo() to toggle video on and off |
 
