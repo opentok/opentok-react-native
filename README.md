@@ -106,6 +106,19 @@
 
 6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
 
+7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+
+```xml
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+```
+
+Newer versions of Android–`API Level 23` (Android 6.0)–have a different permissions model that is already handled by this lib.
+
 ## API Reference
 
 The `OpenTok React Native` library comprises of:
