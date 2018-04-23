@@ -141,7 +141,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setVideoStatsListener(this);
         mSubscriber.setVideoListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
-        mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToVideo"));
+        mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
         mSubscribers.put(streamId, mSubscriber);
         mSession.subscribe(mSubscriber);
         callback.invoke();
