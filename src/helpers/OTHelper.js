@@ -19,7 +19,7 @@ const reassignEvents = (type, customEvents, events) => {
 
 const sanitizeBooleanProperty = property => (property || property === undefined ? true : property);
 
-const getLogBody = (apiKey, sessionId, action, connectionId) => {
+const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
@@ -53,7 +53,7 @@ const logRequest = (body) => {
 };
 
 const logOT = (apiKey, sessionId, action, connectionId) => {
-  logRequest(getLogBody(apiKey, sessionId, action, connectionId));
+  logRequest(getLog(apiKey, sessionId, action, connectionId));
 };
 
 export {
