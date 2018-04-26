@@ -19,19 +19,26 @@ const reassignEvents = (type, customEvents, events) => {
 
 const sanitizeBooleanProperty = property => (property || property === undefined ? true : property);
 
-const logOT = (apiKey, sessionId) => {
+const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
       otrn_version: require('../../package.json').version,
       platform_version: Platform.Version,
     },
-    action: 'rn_initialize',
     payload_type: 'info',
+    action,
     partner_id: apiKey,
     session_id: sessionId,
     source: require('../../package.json').repository.url,
   };
+  if (connectionId) {
+    body.connectionId = connectionId;
+  }
+  return body;
+};
+
+const logRequest = (body) => {
   axios({
     url: 'https://hlg.tokbox.com/prod/logging/ClientEvent',
     method: 'post',
@@ -43,6 +50,10 @@ const logOT = (apiKey, sessionId) => {
     .catch(() => {
       handleError('logging');
     });
+};
+
+const logOT = (apiKey, sessionId, action, connectionId) => {
+  logRequest(getLog(apiKey, sessionId, action, connectionId));
 };
 
 export {

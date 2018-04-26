@@ -418,7 +418,7 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
       videoStats["videoPacketsLost"] = stats.videoPacketsLost;
       videoStats["videoBytesReceived"] = stats.videoBytesReceived;
       videoStats["videoPacketsReceived"] = stats.videoPacketsReceived;
-      self.sendEvent(withName: "\(subscriberPreface)videoNetworkStatsUpdated", body: [NSNull()])
+      self.sendEvent(withName: "\(subscriberPreface)videoNetworkStatsUpdated", body: videoStats)
     }
   }
   
