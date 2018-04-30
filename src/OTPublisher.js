@@ -54,28 +54,26 @@ class OTPublisher extends Component {
   }
   componentWillUnmount() {
     OT.destroyPublisher(this.state.publisherId, (error) => {
-        if (error) {
-          handleError(error);
-        } else {
-          this.sessionConnected.remove();        
-          OT.removeJSComponentEvents(this.componentEventsArray);         
-          const events = sanitizePublisherEvents(this.props.eventHandlers);
-          removeNativeEvents(events);
-        }
-      });
-    }
+      if (error) {
+        handleError(error);
+      } else {
+        this.sessionConnected.remove();        
+        OT.removeJSComponentEvents(this.componentEventsArray);         
+        const events = sanitizePublisherEvents(this.props.eventHandlers);
+        removeNativeEvents(events);
+      }
+    });
   }
   sessionConnectedHandler = () => {
-    OT.publish(this.state.publisherId, (publishError) => {
-        if (publishError) {
-          handle(publisherError);
-        } else {
-          this.setState({
-            publisher: true,
-          });
-        }
-      });
-    }
+    OT.publish(this.state.publisherId, (publishError, streamId) => {
+      if (publishError) {
+        handleError(publisherError);
+      } else {
+        this.setState({
+          publisher: true,
+        });
+      }
+    });
   }
   createPublisher() {
     if (Platform.OS === 'android') {
