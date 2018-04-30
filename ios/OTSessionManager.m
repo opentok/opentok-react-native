@@ -20,9 +20,11 @@ RCT_EXTERN_METHOD(connect:
                   (NSString*)token
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(initPublisher:
-                  (NSDictionary*)properties)
+                  (NSString*)publisherId
+                  properties:(NSDictionary*)properties)
 RCT_EXTERN_METHOD(publish:
-                  (RCTResponseSenderBlock*)callback)
+                  (NSString*)publisherId
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(subscribeToStream:
                   (NSString*)streamId
                   properties:(NSDictionary*)properties
@@ -33,11 +35,14 @@ RCT_EXTERN_METHOD(removeSubscriber:
 RCT_EXTERN_METHOD(disconnectSession:
                   (RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(publishAudio:
-                  (BOOL)pubAudio)
+                  (NSString*)publisherId
+                  pubAudio:(BOOL)pubAudio)
 RCT_EXTERN_METHOD(publishVideo:
-                  (BOOL)pubVideo)
+                  (NSString*)publisherId
+                  pubVideo:(BOOL)pubVideo)
 RCT_EXTERN_METHOD(changeCameraPosition:
-                  (NSString*)cameraPosition)
+                  (NSString*)publisherId
+                  cameraPosition:(NSString*)cameraPosition)
 RCT_EXTERN_METHOD(setNativeEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(removeNativeEvents:
@@ -46,7 +51,8 @@ RCT_EXTERN_METHOD(sendSignal:
                   (NSDictionary*)properties
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(destroyPublisher:
-                  (RCTResponseSenderBlock)callback)
+                  (NSString*)publisherId
+                  callback:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(setJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(removeJSComponentEvents:
@@ -54,4 +60,3 @@ RCT_EXTERN_METHOD(removeJSComponentEvents:
 RCT_EXTERN_METHOD(getSessionInfo:
                   (RCTResponseSenderBlock*)callback)
 @end
-
