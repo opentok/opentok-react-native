@@ -59,13 +59,13 @@ class OTPublisher extends Component {
       } else {
         this.sessionConnected.remove();        
         OT.removeJSComponentEvents(this.componentEventsArray);         
-        const events = sanitizePublisherEvents(this.props.eventHandlers);
+        const events = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
         removeNativeEvents(events);
       }
     });
   }
   sessionConnectedHandler = () => {
-    OT.publish(this.state.publisherId, (publishError, streamId) => {
+    OT.publish(this.state.publisherId, (publishError) => {
       if (publishError) {
         handleError(publisherError);
       } else {
