@@ -60,7 +60,7 @@ const sanitizeProperties = (properties) => {
   };
 };
 
-const sanitizePublisherEvents = (events) => {
+const sanitizePublisherEvents = (publisherId, events) => {
   if (typeof events !== 'object') {
     return {};
   }
@@ -78,7 +78,7 @@ const sanitizePublisherEvents = (events) => {
       audioLevel: 'onAudioLevelUpdated',
     },
   };
-  return reassignEvents('publisher', customEvents, events);
+  return reassignEvents('publisher', customEvents, events, publisherId);
 };
 
 export {

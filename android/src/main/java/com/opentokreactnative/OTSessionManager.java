@@ -29,6 +29,7 @@ import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 
@@ -54,7 +55,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     private final String sessionPreface = "session:";
     private final String publisherPreface = "publisher:";
     private final String subscriberPreface = "subscriber:";
-    private boolean isPublishing = false;
     public OTRN sharedState;
 
     public OTSessionManager(ReactApplicationContext reactContext) {
@@ -85,7 +85,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void initPublisher(ReadableMap properties) {
+    public void initPublisher(String publisherId, ReadableMap properties) {
 
         String name = properties.getString("name");
         Boolean videoTrack = properties.getBoolean("videoTrack");
@@ -114,14 +114,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (cameraPosition.equals("back")) {
             mPublisher.cycleCamera();
         }
-        sharedState.setPublisher(mPublisher);
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        mPublishers.put(publisherId, mPublisher);
     }
 
     @ReactMethod
-    public void publish(Callback callback) {
+    public void publish(String publisherId, Callback callback) {
 
         Session mSession = sharedState.getSession();
-        Publisher mPublisher = sharedState.getPublisher();
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
         mSession.publish(mPublisher);
         callback.invoke();
 
@@ -182,23 +184,26 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void publishAudio(Boolean publishAudio) {
+    public void publishAudio(String publisherId, Boolean publishAudio) {
 
-        Publisher mPublisher = sharedState.getPublisher();
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
         mPublisher.setPublishAudio(publishAudio);
     }
 
     @ReactMethod
-    public void publishVideo(Boolean publishVideo) {
+    public void publishVideo(String publisherId, Boolean publishVideo) {
 
-        Publisher mPublisher = sharedState.getPublisher();
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
         mPublisher.setPublishVideo(publishVideo);
     }
 
     @ReactMethod
-    public void changeCameraPosition(String cameraPosition) {
+    public void changeCameraPosition(String publisherId, String cameraPosition) {
 
-        Publisher mPublisher = sharedState.getPublisher();
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
         mPublisher.cycleCamera();
         Log.i(TAG, "Changing camera to " + cameraPosition);
     }
@@ -244,24 +249,25 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void destroyPublisher(final Callback callback) {
+    public void destroyPublisher(final String publisherId, final Callback callback) {
 
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 Callback mCallback = callback;
-                FrameLayout mPublisherViewContainer = sharedState.getPublisherViewContainer();
-                Publisher mPublisher = sharedState.getPublisher();
+                ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+                Publisher mPublisher = mPublishers.get(publisherId);
+                ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
+                FrameLayout mPublisherViewContainer = mPublisherViewContainers.get(publisherId);
                 Session mSession = sharedState.getSession();
-                if (mSession != null && isPublishing) {
+                mPublisherViewContainer.removeAllViews();
+                mPublisherViewContainers.remove(publisherId);
+                if (mSession != null) {
                     mSession.unpublish(mPublisher);
                 }
                 mPublisher.destroy();
-                mPublisherViewContainer.removeAllViews();
-                isPublishing = false;
-                sharedState.setPublisherViewContainer(null);             
-                sharedState.setPublisher(null);
+                mPublishers.remove(publisherId);
                 mCallback.invoke();
 
             }
@@ -331,6 +337,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, eventData);
+    }
+
+    private String getPublisherId(PublisherKit publisherKit) {
+
+        Map<String, Publisher> publishers = sharedState.getPublishers();
+        for (Map.Entry<String, Publisher> entry: publishers.entrySet()) {
+            Publisher mPublisher = entry.getValue();
+            if (mPublisher.equals(publisherKit)) {
+                return entry.getKey();
+            }
+        }
+        return "";
     }
 
     @Override
@@ -457,11 +475,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
 
-        if (contains(jsEvents, publisherPreface + "onStreamCreated")) {
-            WritableMap streamInfo = prepareStreamMap(stream);
-            sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamCreated", streamInfo);
+        String publisherId = getPublisherId(publisherKit);
+        if (publisherId.length() > 0) {
+            String event = publisherId + ":" + publisherPreface + "onStreamCreated";;
+            if (contains(jsEvents, event)) {
+                WritableMap streamInfo = prepareStreamMap(stream);
+                sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            }
         }
-        isPublishing = true;
         Log.i(TAG, "onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
 
     }
@@ -469,20 +490,27 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
 
-        if (contains(jsEvents, publisherPreface +  "onStreamDestroyed")) {
-            WritableMap streamInfo = prepareStreamMap(stream);
-            sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamDestroyed", streamInfo);
+        String publisherId = getPublisherId(publisherKit);
+        String event = publisherId + ":" + publisherPreface + "onStreamDestroyed";
+        if (publisherId.length() > 0) {
+            if (contains(jsEvents, event)) {
+                WritableMap streamInfo = prepareStreamMap(stream);
+                sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            }
         }
-        isPublishing = false;
         Log.i(TAG, "onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
 
     @Override
     public void onError(PublisherKit publisherKit, OpentokError opentokError) {
 
-        if (contains(jsEvents, publisherPreface +  "onError")) {
-            WritableMap errorInfo = prepareErrorMap(opentokError);
-            sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onError", errorInfo);
+        String publisherId = getPublisherId(publisherKit);
+        if (publisherId.length() > 0) {
+            String event = publisherId + ":" + publisherPreface +  "onError";
+            if (contains(jsEvents, event)) {
+                WritableMap errorInfo = prepareErrorMap(opentokError);
+                sendEventMap(this.getReactApplicationContext(), event, errorInfo);
+            }
         }
         Log.i(TAG, "onError: "+opentokError.getErrorDomain() + " : " +
                 opentokError.getErrorCode() +  " - "+opentokError.getMessage());
@@ -491,8 +519,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onAudioLevelUpdated(PublisherKit publisher, float audioLevel) {
 
-        if(contains(jsEvents, publisherPreface + "onAudioLevelUpdated")) {
-            sendEvent(this.getReactApplicationContext(), publisherPreface + "onAudioLevelUpdated", String.valueOf(audioLevel));
+        String publisherId = getPublisherId(publisher);
+        if (publisherId.length() > 0) {
+            String event = publisherId + ":" + publisherPreface + "onAudioLevelUpdated";
+            if (contains(jsEvents, event)) {
+                sendEvent(this.getReactApplicationContext(), event, String.valueOf(audioLevel));
+            }
         }
     }
 

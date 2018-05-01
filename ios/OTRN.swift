@@ -11,11 +11,11 @@ import Foundation
 class OTRN : NSObject {
   static let sharedState = OTRN()
   var session: OTSession?
-  var publisher: OTPublisher?
   var subscriberStreams = [String: OTStream]()
   var subscribers = [String: OTSubscriber]()
+  var publishers = [String: OTPublisher]()
+  var isPublishing = [String: Bool]()
   override init() {
     super.init()
   }
 }
-
