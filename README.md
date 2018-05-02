@@ -54,11 +54,11 @@
 
 5. Open XCode
 
-6. Open <YourProjectName>.xcworkspace file in XCode. This file can be found in the `ios` folder. 
+6. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
 
 7. Click `File` and `Add Files to`
 
-8. Add the following files to the project:
+8. Add the following files from `../node_modules/opentok-react-native/ios` to the project:
   * `OTPublisher.h`
   * `OTPublisher.m`
   * `OTPublisherManager.swift`
@@ -70,9 +70,19 @@
   * `OTSubscriber.m`
   * `OTSubscriberManager.swift`
   * `OTSubscriberView.swift`
-  * `<YourProjectName>-Bridging-Header.h`
 
 9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
+
+10. Add the contents from the `Bridging-Header.h` file in `../node_modules/opentok-react-native/ios` to `<YourProjectName>-Bridging-Header.h`
+
+11. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
+
+```
+<key>NSCameraUsageDescription</key>
+<string>Your message to user when the camera is accessed for the first time</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Your message to user when the microphone is accessed for the first time</string>
+```
 
 ### Android Installation
 
@@ -95,6 +105,19 @@
 5. Sync Gradle
 
 6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
+
+7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+
+```xml
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+```
+
+Newer versions of Android–`API Level 23` (Android 6.0)–have a different permissions model that is already handled by this lib.
 
 ## API Reference
 
@@ -158,13 +181,13 @@ The `OTSession` component manages the connection to an OpenTok Session. It passe
 
   * **publishVideo** (Boolean) — Whether to publish video.
 
-  * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "320x240". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+  * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
 
   * **videoTrack** (Boolean) — If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
 
 
 
-The `OTPublisher` component will initialize a publisher and publish to a specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component.
+The `OTPublisher` component will initialize a publisher and publish to the specified session upon mounting. To destroy the publisher, unmount the `OTPublisher` component. Please keep in mind that the publisher view is not removed unless you specifically unmount the `OTPublisher` component.
 
 ```html
 <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
@@ -209,6 +232,7 @@ The `properties` prop is used for initial set up of the Publisher and making cha
 
 | Publisher Property | Action |
 | --- | --- |
+| cameraPosition | Calls OT.changeCameraPosition() to toggle the camera |
 | publishAudio | Calls OT.publishAudio() to toggle audio on and off |
 | publishVideo | Calls OT.publishVideo() to toggle video on and off |
 

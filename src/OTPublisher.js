@@ -13,7 +13,6 @@ class OTPublisher extends Component {
       publisher: null,
     };
     this.componentEvents = {
-      streamDestroyed: Platform.OS === 'android' ? 'publisher:onStreamDestroyed' : 'publisher:streamDestroyed',
       sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
     };
     this.componentEventsArray = Object.values(this.componentEvents);    
@@ -23,7 +22,6 @@ class OTPublisher extends Component {
     setNativeEvents(publisherEvents);
     OT.setJSComponentEvents(this.componentEventsArray);
     this.sessionConnected = nativeEvents.addListener(this.componentEvents.sessionConnected, () => this.sessionConnectedHandler());
-    this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, () => this.streamDestroyedHandler());
   }
   componentDidMount() {
     this.createPublisher();    
@@ -39,40 +37,39 @@ class OTPublisher extends Component {
     const updatePublisherProperty = (key, defaultValue) => {
       if (shouldUpdate(key, defaultValue)) {
         const value = useDefault(this.props.properties[key], defaultValue);
-        OT[key](value);
+        if (key === 'cameraPosition') {
+          OT.changeCameraPosition(value);
+        } else {
+          OT[key](value);          
+        }
       }
     };
 
     updatePublisherProperty('publishAudio', true);
     updatePublisherProperty('publishVideo', true);
+    updatePublisherProperty('cameraPosition', 'front');
   }
   componentWillUnmount() {
     OT.destroyPublisher((error) => {
-      if (!error) {
-        this.streamDestroyed.remove();
+      if (error) {
+        handleError(error);        
+      } else {
+        this.sessionConnected.remove();        
+        OT.removeJSComponentEvents(this.componentEventsArray);         
         const events = sanitizePublisherEvents(this.props.eventHandlers);
         removeNativeEvents(events);
-      } else {
-        handleError(error);
       }
     });
-    OT.removeJSComponentEvents(this.componentEventsArray); 
-    this.sessionConnected.remove();
   }
   sessionConnectedHandler = () => {
     OT.publish((publishError) => {
       if (publishError) {
-        handleError(error);
+        handleError(publishError);
       } else {
         this.setState({
           publisher: true,
         })
       }
-    });
-  }
-  streamDestroyedHandler = () => {
-    this.setState({
-      publisher: null,
     });
   }
   createPublisher() {

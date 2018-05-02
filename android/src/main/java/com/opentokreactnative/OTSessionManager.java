@@ -54,6 +54,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     private final String sessionPreface = "session:";
     private final String publisherPreface = "publisher:";
     private final String subscriberPreface = "subscriber:";
+    private boolean isPublishing = false;
     public OTRN sharedState;
 
     public OTSessionManager(ReactApplicationContext reactContext) {
@@ -140,7 +141,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setVideoStatsListener(this);
         mSubscriber.setVideoListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
-        mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToVideo"));
+        mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
         mSubscribers.put(streamId, mSubscriber);
         mSession.subscribe(mSubscriber);
         callback.invoke();
@@ -176,6 +177,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         Session mSession = sharedState.getSession();
         mSession.disconnect();
+        sharedState.setSession(null);
         disconnectCallback = callback;
     }
 
@@ -191,6 +193,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         Publisher mPublisher = sharedState.getPublisher();
         mPublisher.setPublishVideo(publishVideo);
+    }
+
+    @ReactMethod
+    public void changeCameraPosition(String cameraPosition) {
+
+        Publisher mPublisher = sharedState.getPublisher();
+        mPublisher.cycleCamera();
+        Log.i(TAG, "Changing camera to " + cameraPosition);
     }
 
     @ReactMethod
@@ -244,11 +254,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 FrameLayout mPublisherViewContainer = sharedState.getPublisherViewContainer();
                 Publisher mPublisher = sharedState.getPublisher();
                 Session mSession = sharedState.getSession();
-                mPublisherViewContainer.removeAllViews();
-                mPublisherViewContainer = null;
-                sharedState.setPublisherViewContainer(mPublisherViewContainer);
-                mSession.unpublish(mPublisher);
+                if (mSession != null && isPublishing) {
+                    mSession.unpublish(mPublisher);
+                }
                 mPublisher.destroy();
+                mPublisherViewContainer.removeAllViews();
+                isPublishing = false;
+                sharedState.setPublisherViewContainer(null);             
+                sharedState.setPublisher(null);
                 mCallback.invoke();
 
             }
@@ -448,6 +461,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableMap streamInfo = prepareStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamCreated", streamInfo);
         }
+        isPublishing = true;
         Log.i(TAG, "onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
 
     }
@@ -459,6 +473,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableMap streamInfo = prepareStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), publisherPreface +  "onStreamDestroyed", streamInfo);
         }
+        isPublishing = false;
         Log.i(TAG, "onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
 
@@ -521,7 +536,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             signalInfo.putString("connectionId", connection.getConnectionId());
             sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
         }
-        Log.d(TAG, "onSignalReceived: Data: " + data.toString() + " Type: " + type.toString());
+        Log.d(TAG, "onSignalReceived: Data: " + data + " Type: " + type);
     }
 
     @Override

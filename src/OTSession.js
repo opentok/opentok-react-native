@@ -17,7 +17,7 @@ export default class OTSession extends Component {
     const sessionEvents = sanitizeSessionEvents(this.props.eventHandlers);
     setNativeEvents(sessionEvents);
     this.createSession();
-    logOT(this.props.apiKey, this.props.sessionId);    
+    logOT(this.props.apiKey, this.props.sessionId, 'rn_initialize');
   }
   componentDidUpdate(previousProps) {
     const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
@@ -50,6 +50,7 @@ export default class OTSession extends Component {
           this.setState({
             sessionInfo,
           });
+          logOT(this.props.apiKey, this.props.sessionId, 'rn_on_connect', sessionInfo.connection.connectionId);
           const signalData = sanitizeSignalData(this.props.signal);
           OT.sendSignal(signalData, signalData.errorHandler);
         });
@@ -59,11 +60,7 @@ export default class OTSession extends Component {
   disconnectSession() {
     OT.disconnectSession((disconnectError) => {
       if (disconnectError) {
-        this.setState({
-          sessionInfo: null,
-        });
-      } else {
-        handleError(error);
+        handleError(disconnectError);
       }
     });
   }
