@@ -1,7 +1,7 @@
 import React, { Component, Children, cloneElement } from 'react';
 import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
-import { setNativeEvents, OT } from './OT';
+import { setNativeEvents, removeNativeEvents,  OT } from './OT';
 import { sanitizeSessionEvents, sanitizeSignalData } from './helpers/OTSessionHelper';
 import { logOT } from './helpers/OTHelper';
 import { handleError } from './OTError';
@@ -61,6 +61,9 @@ export default class OTSession extends Component {
     OT.disconnectSession((disconnectError) => {
       if (disconnectError) {
         handleError(disconnectError);
+      } else { 
+        const events = sanitizeSessionEvents(this.props.eventHandlers);
+        removeNativeEvents(events);
       }
     });
   }
