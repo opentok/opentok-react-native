@@ -18,6 +18,14 @@ class OTSessionManager: RCTEventEmitter {
   var publisherPreface: String = "publisher:";
   var subscriberPreface: String = "subscriber:";
 
+  deinit {
+    OTRN.sharedState.subscriberStreams.removeAll();
+    OTRN.sharedState.session = nil;
+    OTRN.sharedState.isPublishing.removeAll();
+    OTRN.sharedState.publishers.removeAll();
+    OTRN.sharedState.subscribers.removeAll();
+  }
+  
   @objc override func supportedEvents() -> [String] {
     return jsEvents + componentEvents
   }
