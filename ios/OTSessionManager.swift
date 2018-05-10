@@ -48,15 +48,13 @@ class OTSessionManager: RCTEventEmitter {
       publisherProperties.name = properties["name"] as? String;
       OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
       guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
-      if let videoSource = properties["videoSource"] as? String {
-        if (videoSource == "screen") {
+      if let videoSource = properties["videoSource"] as? String, videoSource == "screen" {
           guard let screenView = RCTPresentedViewController()?.view else { return }
           publisher.videoType = .screen;
           publisher.videoCapture = OTScreenCapturer(withView: (screenView))
-        } else if let cameraPosition = properties["cameraPosition"] as? String {
+      } else if let cameraPosition = properties["cameraPosition"] as? String {
           publisher.cameraPosition = cameraPosition == "front" ? .front : .back;
-        }
-      }
+     }
       publisher.audioFallbackEnabled = self.sanitizeBooleanProperty(properties["audioFallbackEnabled"] as Any);
       publisher.publishAudio = self.sanitizeBooleanProperty(properties["publishAudio"] as Any);
       publisher.publishVideo = self.sanitizeBooleanProperty(properties["publishVideo"] as Any);
