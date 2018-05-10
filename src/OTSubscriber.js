@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
 import PropTypes from 'prop-types';
-import { OT, nativeEvents, setNativeEvents } from './OT';
+import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
 import { handleError } from './OTError';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
@@ -29,7 +29,9 @@ export default class OTSubscriber extends Component {
   componentWillUnmount() {
     this.streamCreated.remove();
     this.streamDestroyed.remove();
-    OT.removeJSComponentEvents(this.componentEventsArray);    
+    OT.removeJSComponentEvents(this.componentEventsArray);
+    const events = sanitizeSubscriberEvents(this.props.eventHandlers);
+    removeNativeEvents(events); 
   }
   streamCreatedHandler = (stream, subscriberProperties) => {
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
