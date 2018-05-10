@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import { requireNativeComponent, Platform, View } from 'react-native';
 
 class OTPublisherView extends Component {
@@ -8,6 +9,7 @@ class OTPublisherView extends Component {
 }
 const viewPropTypes = View.propTypes;
 OTPublisherView.propTypes = {
+  publisherId: PropTypes.string.isRequired,  
   ...viewPropTypes,
 };
 

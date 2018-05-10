@@ -25,9 +25,10 @@
     "url": "https://github.com/opentok/opentok-react-native.git"
   },
   "dependencies": {
-    "underscore": "^1.8.3",
+    "axios": "^0.18.0",
     "prop-types": "^15.6.0",
-    "axios": "^0.18.0"
+    "underscore": "^1.8.3",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "babel-jest": "22.1.0",

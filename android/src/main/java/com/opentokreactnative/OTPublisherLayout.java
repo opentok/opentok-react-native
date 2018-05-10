@@ -7,6 +7,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.Publisher;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Created by manik on 1/10/18.
  */
@@ -14,27 +16,25 @@ import com.opentok.android.Publisher;
 public class OTPublisherLayout extends FrameLayout{
 
     public OTRN sharedState;
-    private FrameLayout mPublisherViewContainer;
 
     public OTPublisherLayout(ThemedReactContext reactContext) {
 
         super(reactContext);
         sharedState = OTRN.getSharedState();
-        createPublisherView();
     }
 
-    private void createPublisherView() {
+    public void createPublisherView(String publisherId) {
 
-        Publisher mPublisher = sharedState.getPublisher();
-        mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        mPublishers.get(publisherId).setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
-        mPublisherViewContainer = new FrameLayout(getContext());
-        addView(mPublisherViewContainer, 0);
-        mPublisherViewContainer.addView(mPublisher.getView());
+        FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
+        ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
+        mPublisherViewContainers.put(publisherId, mPublisherViewContainer);
+        addView(mPublisherViewContainers.get(publisherId), 0);
+        mPublisherViewContainers.get(publisherId).addView(mPublishers.get(publisherId).getView());
         requestLayout();
-        sharedState.setPublisher(mPublisher);
-        sharedState.setPublisherViewContainer(mPublisherViewContainer);
+
     }
 
 }
-

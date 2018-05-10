@@ -17,12 +17,12 @@ public class OTRN {
 
     public static OTRN sharedState;
     private Session mSession;
-    private Publisher mPublisher;
 
     private ConcurrentHashMap<String, Stream> subscriberStreams = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Publisher> publishers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> subscriberViewContainers = new ConcurrentHashMap<>();
-    private FrameLayout publisherViewContainer;
+    private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
 
@@ -37,10 +37,6 @@ public class OTRN {
         return this.mSession;
     }
 
-    public synchronized Publisher getPublisher() {
-
-        return this.mPublisher;
-    }
 
     public ConcurrentHashMap<String, Stream> getSubscriberStreams() {
 
@@ -57,22 +53,19 @@ public class OTRN {
         return this.subscriberViewContainers;
     }
 
-    public synchronized FrameLayout getPublisherViewContainer() {
-
-        return this.publisherViewContainer;
-    }
     public synchronized void setSession(Session mSession) {
 
         this.mSession = mSession;
     }
-    public synchronized void setPublisher(Publisher mPublisher) {
 
-        this.mPublisher = mPublisher;
+    public ConcurrentHashMap<String, Publisher> getPublishers() {
+
+        return this.publishers;
     }
 
-    public synchronized void setPublisherViewContainer(FrameLayout mPublisherViewContainer) {
+    public ConcurrentHashMap<String, FrameLayout> getPublisherViewContainers() {
 
-        this.publisherViewContainer = mPublisherViewContainer;
+        return this.publisherViewContainers;
     }
 
     private OTRN() {}
