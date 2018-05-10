@@ -97,23 +97,38 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         String resolution = properties.getString("resolution");
         Boolean publishAudio = properties.getBoolean("publishAudio");
         Boolean publishVideo = properties.getBoolean("publishVideo");
-
-        Publisher mPublisher = new Publisher.Builder(this.getReactApplicationContext())
-                                    .audioTrack(audioTrack)
-                                    .videoTrack(videoTrack)
-                                    .name(name)
-                                    .audioBitrate(audioBitrate)
-                                    .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
-                                    .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
-                                    .build();
+        String videoSource = properties.getString("videoSource");
+        if (videoSource.equals("screen")) {
+            View view = getCurrentActivity().getWindow().getDecorView().getRootView();
+            OTScreenCapturer capturer = new OTScreenCapturer(view);
+            Publisher mPublisher = new Publisher.Builder(this.getReactApplicationContext())
+                                        .audioTrack(audioTrack)
+                                        .videoTrack(videoTrack)
+                                        .name(name)
+                                        .audioBitrate(audioBitrate)
+                                        .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
+                                        .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
+                                        .capturer(capturer)                                        
+                                        .build();
+            mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);                    
+        } else {
+            Publisher mPublisher = new Publisher.Builder(this.getReactApplicationContext())
+                                        .audioTrack(audioTrack)
+                                        .videoTrack(videoTrack)
+                                        .name(name)
+                                        .audioBitrate(audioBitrate)
+                                        .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
+                                        .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
+                                        .build();
+            if (cameraPosition.equals("back")) {
+                mPublisher.cycleCamera();
+            }
+        }
         mPublisher.setPublisherListener(this);
         mPublisher.setAudioLevelListener(this);
         mPublisher.setAudioFallbackEnabled(audioFallbackEnabled);
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
-        if (cameraPosition.equals("back")) {
-            mPublisher.cycleCamera();
-        }
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         mPublishers.put(publisherId, mPublisher);
     }

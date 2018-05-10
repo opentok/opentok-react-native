@@ -28,6 +28,8 @@ const sanitizeFrameRate = (frameRate) => {
 
 const sanitizeCameraPosition = (cameraPosition = 'front') => (cameraPosition === 'front' ? 'front' : cameraPosition);
 
+const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera' ? 'camera' : 'screen');
+
 const sanitizeAudioBitrate = (audioBitrate = 40000) =>
   (audioBitrate < 80000 || audioBitrate > 128000 ? 40000 : audioBitrate);
 
@@ -44,6 +46,7 @@ const sanitizeProperties = (properties) => {
       audioBitrate: 40000,
       frameRate: 30,
       resolution: sanitizeResolution(),
+      videoSource: 'camera',
     };
   }
   return {
@@ -57,6 +60,7 @@ const sanitizeProperties = (properties) => {
     audioBitrate: sanitizeAudioBitrate(properties.audioBitrate),
     frameRate: sanitizeFrameRate(properties.frameRate),
     resolution: sanitizeResolution(properties.resolution),
+    videoSource: sanitizeVideoSource(properties.videoSource),
   };
 };
 
