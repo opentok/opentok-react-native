@@ -10,6 +10,7 @@ import Foundation
 
 @objc(OTPublisherView)
 class OTPublisherView : UIView {
+  var publisherId: NSString?
   override init(frame: CGRect) {
     super.init(frame: frame)
   }
@@ -18,7 +19,7 @@ class OTPublisherView : UIView {
     fatalError("init(coder:) has not been implemented")
   }
   override func layoutSubviews() {
-    if let publisherView = OTRN.sharedState.publisher?.view {
+    if let publisherView = OTRN.sharedState.publishers[publisherId! as String]?.view {
       publisherView.frame = self.bounds
       addSubview(publisherView)
     }

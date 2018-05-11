@@ -11,6 +11,7 @@
 #import <React/RCTView.h>
 
 @interface OTPublisher : RCTView
+@property (nonatomic, assign) NSString *publisherId;
 @end
 #endif /* OTPublisher_h */
 
