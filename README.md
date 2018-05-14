@@ -70,6 +70,7 @@
   * `OTSubscriber.m`
   * `OTSubscriberManager.swift`
   * `OTSubscriberView.swift`
+  * `OTScreenCapturer.swift`
 
 9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
 
