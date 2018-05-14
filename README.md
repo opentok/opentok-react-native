@@ -64,6 +64,7 @@
   * `OTPublisherManager.swift`
   * `OTPublisherView.swift`
   * `OTRN.swift`
+  * `OTScreenCapturer.swift`
   * `OTSessionManager.m`
   * `OTSessionManager.swift`
   * `OTSubscriber.h`
