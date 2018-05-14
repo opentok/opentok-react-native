@@ -7,6 +7,7 @@ package com.opentokreactnative;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -98,10 +99,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Boolean publishAudio = properties.getBoolean("publishAudio");
         Boolean publishVideo = properties.getBoolean("publishVideo");
         String videoSource = properties.getString("videoSource");
+        Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
             OTScreenCapturer capturer = new OTScreenCapturer(view);
-            Publisher mPublisher = new Publisher.Builder(this.getReactApplicationContext())
+            mPublisher = new Publisher.Builder(this.getReactApplicationContext())
                                         .audioTrack(audioTrack)
                                         .videoTrack(videoTrack)
                                         .name(name)
@@ -112,7 +114,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                                         .build();
             mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);                    
         } else {
-            Publisher mPublisher = new Publisher.Builder(this.getReactApplicationContext())
+            mPublisher = new Publisher.Builder(this.getReactApplicationContext())
                                         .audioTrack(audioTrack)
                                         .videoTrack(videoTrack)
                                         .name(name)
