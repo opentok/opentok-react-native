@@ -11,6 +11,7 @@ React Native library for OpenTok iOS and Android SDKs
   - [OTSession Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSession.md)
   - [OTPublisher Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTPublisher.md)
   - [OTSubscriber Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSubscriber.md)
+- [Samples](#samples)
 - [Contributing](#contributing)
 
 ### In this repo, you'll find the OpenTok React Native library:
@@ -121,6 +122,10 @@ React Native library for OpenTok iOS and Android SDKs
 ```
 
 Newer versions of Android–`API Level 23` (Android 6.0)–have a different permissions model that is already handled by this library.
+
+## Samples
+
+To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo.
 
 ## Contributing
 
