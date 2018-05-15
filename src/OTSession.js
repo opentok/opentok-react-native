@@ -2,9 +2,10 @@ import React, { Component, Children, cloneElement } from 'react';
 import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { setNativeEvents, removeNativeEvents,  OT } from './OT';
-import { sanitizeSessionEvents, sanitizeSignalData } from './helpers/OTSessionHelper';
+import { sanitizeSessionEvents, sanitizeSignalData, sanitizeCredentials } from './helpers/OTSessionHelper';
 import { logOT } from './helpers/OTHelper';
 import { handleError } from './OTError';
+import { pick } from 'underscore';
 
 export default class OTSession extends Component {
   constructor(props) {
@@ -14,10 +15,14 @@ export default class OTSession extends Component {
     };
   }
   componentWillMount() {
-    const sessionEvents = sanitizeSessionEvents(this.props.eventHandlers);
-    setNativeEvents(sessionEvents);
-    this.createSession();
-    logOT(this.props.apiKey, this.props.sessionId, 'rn_initialize');
+    const credentials = pick(this.props, ['apiKey', 'sessionId', 'token']);
+    const sanitizedCredentials = sanitizeCredentials(credentials);
+    if (Object.keys(sanitizedCredentials).length === 3) {
+      const sessionEvents = sanitizeSessionEvents(this.props.eventHandlers);
+      setNativeEvents(sessionEvents);
+      this.createSession(sanitizedCredentials);
+      logOT(sanitizedCredentials.apiKey, sanitizedCredentials.sessionId, 'rn_initialize');
+    }
   }
   componentDidUpdate(previousProps) {
     const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
@@ -40,9 +45,9 @@ export default class OTSession extends Component {
   componentWillUnmount() {
     this.disconnectSession();
   }
-  createSession() {
-    OT.initSession(this.props.apiKey, this.props.sessionId);    
-    OT.connect(this.props.token, (error) => {
+  createSession(credentials) {
+    OT.initSession(credentials.apiKey, credentials.sessionId);    
+    OT.connect(credentials.token, (error) => {
       if (error) {
         handleError(error);
       } else {
@@ -50,7 +55,7 @@ export default class OTSession extends Component {
           this.setState({
             sessionInfo,
           });
-          logOT(this.props.apiKey, this.props.sessionId, 'rn_on_connect', sessionInfo.connection.connectionId);
+          logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', sessionInfo.connection.connectionId);
           const signalData = sanitizeSignalData(this.props.signal);
           OT.sendSignal(signalData, signalData.errorHandler);
         });

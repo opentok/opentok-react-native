@@ -1,5 +1,6 @@
 import { reassignEvents } from './OTHelper';
-import { handleSignalError } from '../OTError';
+import { handleSignalError, handleError } from '../OTError';
+import { each, isNull } from 'underscore';
 
 const sanitizeSessionEvents = (events) => {
   if (typeof events !== 'object') {
@@ -55,7 +56,20 @@ const sanitizeSignalData = (signal) => {
   };
 };
 
+const sanitizeCredentials = (credentials) => {
+  const _credentials = {};
+  each(credentials, (value, key) => {
+    if(typeof value !== 'string' || value === '' || isNull(value)) {
+      handleError(`Please add the ${key}`);
+    } else {
+      _credentials[key] = value;
+    }
+  });
+  return _credentials;
+};
+
 export {
   sanitizeSessionEvents,
   sanitizeSignalData,
+  sanitizeCredentials,
 };
