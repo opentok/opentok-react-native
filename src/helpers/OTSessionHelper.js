@@ -1,6 +1,6 @@
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull } from 'underscore';
+import { each, isNull, isEmpty, isString } from 'underscore';
 
 const sanitizeSessionEvents = (events) => {
   if (typeof events !== 'object') {
@@ -39,7 +39,7 @@ const sanitizeSessionEvents = (events) => {
   return reassignEvents('session', customEvents, events);
 };
 
-const isString = value => (typeof value !== 'string' ? '' : value);
+const validateString = value => (isString(value) ? value : '');
 
 const sanitizeSignalData = (signal) => {
   if (typeof signal !== 'object') {
@@ -50,8 +50,8 @@ const sanitizeSignalData = (signal) => {
     };
   }
   return {
-    type: signal.type ? isString(signal.type) : '',
-    data: signal.data ? isString(signal.data) : '',
+    type: signal.type ? validateString(signal.type) : '',
+    data: signal.data ? validateString(signal.data) : '',
     errorHandler: typeof signal.errorHandler !== 'function' ? handleSignalError : signal.errorHandler,
   };
 };
@@ -59,7 +59,7 @@ const sanitizeSignalData = (signal) => {
 const sanitizeCredentials = (credentials) => {
   const _credentials = {};
   each(credentials, (value, key) => {
-    if(typeof value !== 'string' || value === '' || isNull(value)) {
+    if(!isString(value) || isEmpty(value) || isNull(value)) {
       handleError(`Please add the ${key}`);
     } else {
       _credentials[key] = value;
