@@ -31,7 +31,7 @@ class OTSessionManager: RCTEventEmitter {
     return allEvents
   }
   @objc func initSession(_ apiKey: String, sessionId: String) -> Void {
-    OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self)!
+    OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self)
   }
   
   @objc func connect(_ token: String, callback: @escaping RCTResponseSenderBlock) -> Void {
