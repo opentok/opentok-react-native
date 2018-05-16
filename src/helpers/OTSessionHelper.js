@@ -50,8 +50,8 @@ const sanitizeSignalData = (signal) => {
     };
   }
   return {
-    type: signal.type ? validateString(signal.type) : '',
-    data: signal.data ? validateString(signal.data) : '',
+    type: validateString(signal.type),
+    data: validateString(signal.data),
     errorHandler: typeof signal.errorHandler !== 'function' ? handleSignalError : signal.errorHandler,
   };
 };
