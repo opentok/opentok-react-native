@@ -45,7 +45,6 @@ React Native library for OpenTok iOS and Android SDKs
     platform :ios, '9.0'
 
     target '<YourProjectName>' do
-      use_frameworks!
 
       # Pods for <YourProject>
         pod 'OpenTok'
@@ -55,29 +54,17 @@ React Native library for OpenTok iOS and Android SDKs
 
 4. Now run, `pod install`
 
-5. Open XCode
+5. After installing the iOS SDK, change into your root directory of your project.
 
-6. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
+6. Now run, `react-native link opentok-react-native`.
 
-7. Click `File` and `Add Files to`
+7. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
 
-8. Add the following files from `../node_modules/opentok-react-native/ios` to the project:
-  * `OTPublisher.h`
-  * `OTPublisher.m`
-  * `OTPublisherManager.swift`
-  * `OTPublisherView.swift`
-  * `OTRN.swift`
-  * `OTScreenCapturer.swift`
-  * `OTSessionManager.m`
-  * `OTSessionManager.swift`
-  * `OTSubscriber.h`
-  * `OTSubscriber.m`
-  * `OTSubscriberManager.swift`
-  * `OTSubscriberView.swift`
+7. Click `File` and `New File`
+
+8. Add an empty swift file to your project:
 
 9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
-
-10. Add the contents from the `Bridging-Header.h` file in `../node_modules/opentok-react-native/ios` to `<YourProjectName>-Bridging-Header.h`
 
 11. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
 
