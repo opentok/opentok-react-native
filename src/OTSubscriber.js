@@ -31,7 +31,27 @@ export default class OTSubscriber extends Component {
     this.streamDestroyed.remove();
     OT.removeJSComponentEvents(this.componentEventsArray);
     const events = sanitizeSubscriberEvents(this.props.eventHandlers);
-    removeNativeEvents(events); 
+    removeNativeEvents(events);
+  }
+  componentDidUpdate(previousProps) {
+    const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
+    const shouldUpdate = (key, defaultValue) => {
+      const previous = useDefault(previousProps.properties[key], defaultValue);
+      const current = useDefault(this.props.properties[key], defaultValue);
+      return previous !== current;
+    };
+
+    const updatePublisherProperty = (key, defaultValue) => {
+      if (shouldUpdate(key, defaultValue)) {
+        const value = useDefault(this.props.properties[key], defaultValue);
+        this.state.streams.forEach((stream) => {
+          OT[key](stream, value);
+        });
+      }
+    };
+
+    updatePublisherProperty('subscribeToAudio', true);
+    updatePublisherProperty('subscribeToVideo', true);
   }
   streamCreatedHandler = (stream, subscriberProperties) => {
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
