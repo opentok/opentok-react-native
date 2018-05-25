@@ -68,8 +68,29 @@ const sanitizeCredentials = (credentials) => {
   return _credentials;
 };
 
+const getConnectionStatus = (connectionStatus) => {
+  switch(connectionStatus) {
+    case 0:
+      return "not connected";
+    case 1:
+      return "connected";
+    case 2:
+      return "connecting";
+    case 3:
+      return "reconnecting";
+    case 4:
+      return "disconnecting";
+    case 5: 
+      return "failed";
+  }
+};
+
+const isConnected = (connectionStatus) => (getConnectionStatus(connectionStatus) === 'connected');
+
 export {
   sanitizeSessionEvents,
   sanitizeSignalData,
   sanitizeCredentials,
+  getConnectionStatus,
+  isConnected,
 };

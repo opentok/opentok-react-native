@@ -50,6 +50,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     private Callback connectCallback;
     private Callback disconnectCallback;
+    private int connectionStatus = 0;
     private ArrayList<String> jsEvents = new ArrayList<String>();
     private ArrayList<String> componentEvents = new ArrayList<String>();
     private static final String TAG = "OTRN";
@@ -296,8 +297,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         Session mSession = sharedState.getSession();
         WritableMap sessionInfo = Arguments.createMap();
+        int connectionStatus = getConnectionStatus();
         sessionInfo.putString("sessionId", mSession.getSessionId());
-        sessionInfo.putMap("connection", prepareConnectionMap(mSession.getConnection()));
+        if (connectionStatus == 1) {
+            sessionInfo.putMap("connection", prepareConnectionMap(mSession.getConnection()));
+        }
+        sessionInfo.putInt("connectionStatus", connectionStatus);
         callback.invoke(sessionInfo);
     }
 
@@ -368,6 +373,30 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         return "";
     }
 
+    private int getConnectionStatus() {
+
+        return this.connectionStatus;
+    }
+
+    private void setConnectionStatus(int connectionStatus) {
+
+        this.connectionStatus = connectionStatus;
+    }
+
+    private boolean didConnectionFail(OpentokError errorCode) {
+
+        switch (errorCode.getErrorCode()) {
+            case ConnectionFailed:
+                return true;
+            case ConnectionRefused:
+                return true;
+            case ConnectionTimedOut:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     public String getName() {
 
@@ -377,6 +406,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onError(Session session, OpentokError opentokError) {
 
+        if (didConnectionFail(opentokError)) {
+            setConnectionStatus(6);
+        }
         if (contains(jsEvents, sessionPreface + "onError")) {
             WritableMap errorInfo = prepareErrorMap(opentokError);
             sendEventMap(this.getReactApplicationContext(), sessionPreface + "onError", errorInfo);
@@ -386,6 +418,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @Override
     public void onDisconnected(Session session) {
+
+        setConnectionStatus(0);
         if (disconnectCallback != null) {
             disconnectCallback.invoke();
         }
@@ -414,6 +448,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onConnected(Session session) {
 
+        setConnectionStatus(1);
         connectCallback.invoke();
         if (contains(jsEvents, sessionPreface + "onConnected") || contains(componentEvents, sessionPreface + "onConnected")) {
             sendEvent(this.getReactApplicationContext(), sessionPreface + "onConnected", null);
@@ -434,6 +469,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onReconnecting(Session session) {
 
+        setConnectionStatus(3);
         if (contains(jsEvents, sessionPreface + "onReconnecting")) {
             sendEvent(this.getReactApplicationContext(), sessionPreface + "onReconnecting", null);
         }

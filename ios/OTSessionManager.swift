@@ -208,6 +208,7 @@ class OTSessionManager: RCTEventEmitter {
       sessionInfo["connection"] = self.prepareJSConnectionEventData(connection);
     }
     sessionInfo["sessionId"] = session.sessionId;
+    sessionInfo["connectionStatus"] = session.sessionConnectionStatus.rawValue;
     callback([sessionInfo]);
   }
   
