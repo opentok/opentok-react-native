@@ -5,6 +5,8 @@ import { createPublisher, checkAndroidPermissions, OT, removeNativeEvents, nativ
 import { sanitizeProperties, sanitizePublisherEvents } from './helpers/OTPublisherHelper';
 import { handleError } from './OTError';
 import OTPublisherView from './views/OTPublisherView';
+import { isNull } from 'underscore';
+import { isConnected } from './helpers/OTSessionHelper';
 
 const uuid = require('uuid/v4');
 
@@ -27,7 +29,7 @@ class OTPublisher extends Component {
     this.sessionConnected = nativeEvents.addListener(this.componentEvents.sessionConnected, () => this.sessionConnectedHandler());
   }
   componentDidMount() {
-    this.createPublisher();    
+    this.createPublisher();
   }
   componentDidUpdate(previousProps) {
     const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
@@ -65,15 +67,9 @@ class OTPublisher extends Component {
     });
   }
   sessionConnectedHandler = () => {
-    OT.publish(this.state.publisherId, (publishError) => {
-      if (publishError) {
-        handleError(publisherError);
-      } else {
-        this.setState({
-          publisher: true,
-        });
-      }
-    });
+    if (isNull(this.state.publisher)) {
+      this.publish();
+    }
   }
   createPublisher() {
     if (Platform.OS === 'android') {
@@ -91,6 +87,22 @@ class OTPublisher extends Component {
   initPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
     OT.initPublisher(this.state.publisherId, publisherProperties);
+    OT.getSessionInfo((session) => {
+      if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
+        this.publish();
+      }
+    });
+  }
+  publish() {
+    OT.publish(this.state.publisherId, (publishError) => {
+      if (publishError) {
+        handleError(publishError);
+      } else {
+        this.setState({
+          publisher: true,
+        });
+      }
+    });
   }
   render() {
     const { publisher, publisherId } = this.state;

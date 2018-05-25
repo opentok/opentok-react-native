@@ -2,10 +2,10 @@ import React, { Component, Children, cloneElement } from 'react';
 import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { setNativeEvents, removeNativeEvents,  OT } from './OT';
-import { sanitizeSessionEvents, sanitizeSignalData, sanitizeCredentials } from './helpers/OTSessionHelper';
+import { sanitizeSessionEvents, sanitizeSignalData, sanitizeCredentials, getConnectionStatus } from './helpers/OTSessionHelper';
 import { logOT } from './helpers/OTHelper';
 import { handleError } from './OTError';
-import { pick } from 'underscore';
+import { pick, isNull } from 'underscore';
 
 export default class OTSession extends Component {
   constructor(props) {
@@ -51,13 +51,16 @@ export default class OTSession extends Component {
       if (error) {
         handleError(error);
       } else {
-        OT.getSessionInfo((sessionInfo) => {
-          this.setState({
-            sessionInfo,
-          });
-          logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', sessionInfo.connection.connectionId);
-          const signalData = sanitizeSignalData(this.props.signal);
-          OT.sendSignal(signalData, signalData.errorHandler);
+        OT.getSessionInfo((session) => {
+          if (!isNull(session)) {
+            const sessionInfo = { ...session, connectionStatus: getConnectionStatus(session.connectionStatus)};
+            this.setState({
+              sessionInfo,
+            });
+            logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', session.connection.connectionId);
+            const signalData = sanitizeSignalData(this.props.signal);
+            OT.sendSignal(signalData, signalData.errorHandler);
+          }
         });
       }
     });
