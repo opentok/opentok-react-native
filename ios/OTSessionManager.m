@@ -21,7 +21,8 @@ RCT_EXTERN_METHOD(connect:
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(initPublisher:
                   (NSString*)publisherId
-                  properties:(NSDictionary*)properties)
+                  properties:(NSDictionary*)properties
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(publish:
                   (NSString*)publisherId
                   callback:(RCTResponseSenderBlock*)callback)
