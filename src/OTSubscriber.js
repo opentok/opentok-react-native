@@ -17,6 +17,7 @@ export default class OTSubscriber extends Component {
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
     };
     this.componentEventsArray = Object.values(this.componentEvents);
+    this.streamCreatedHandler = this.streamCreatedHandler.bind(this);
   }
   componentWillMount() {
     const subscriberProperties = sanitizeProperties(this.props.properties);
@@ -41,7 +42,7 @@ export default class OTSubscriber extends Component {
       return previous !== current;
     };
 
-    const updatePublisherProperty = (key, defaultValue) => {
+    const updateStreamProperty = (key, defaultValue) => {
       if (shouldUpdate(key, defaultValue)) {
         const value = useDefault(this.props.properties[key], defaultValue);
         this.state.streams.forEach((stream) => {
@@ -50,14 +51,35 @@ export default class OTSubscriber extends Component {
       }
     };
 
-    updatePublisherProperty('subscribeToAudio', true);
-    updatePublisherProperty('subscribeToVideo', true);
+    updateStreamProperty('subscribeToAudio', true);
+    updateStreamProperty('subscribeToVideo', true);
   }
   streamCreatedHandler = (stream, subscriberProperties) => {
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
       if (error) {
         handleError(error);
       } else {
+
+        const subscriberProperties2 = sanitizeProperties(this.props.properties);
+
+        // check if followed properties have changed
+        const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
+        const shouldUpdate = (key, defaultValue) => {
+          const previous = useDefault(subscriberProperties[key], defaultValue);
+          const current = useDefault(subscriberProperties2[key], defaultValue);
+          return previous !== current;
+        };
+
+        const updateStreamProperty = (key, defaultValue) => {
+          if (shouldUpdate(key, defaultValue)) {
+            const value = useDefault(subscriberProperties2[key], defaultValue);
+            OT[key](stream.streamId, value);
+          }
+        };
+        updateStreamProperty('subscribeToAudio', true);
+        updateStreamProperty('subscribeToVideo', true);
+
+
         this.setState({
           streams: [...this.state.streams, stream.streamId],
         });
