@@ -14,6 +14,7 @@ class OTPublisher extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      initError: null,
       publisher: null,
       publisherId: uuid(),
     };
@@ -67,7 +68,7 @@ class OTPublisher extends Component {
     });
   }
   sessionConnectedHandler = () => {
-    if (isNull(this.state.publisher)) {
+    if (isNull(this.state.publisher) && isNull(this.state.initError)) {
       this.publish();
     }
   }
@@ -86,10 +87,18 @@ class OTPublisher extends Component {
   }
   initPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
-    OT.initPublisher(this.state.publisherId, publisherProperties);
-    OT.getSessionInfo((session) => {
-      if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
-        this.publish();
+    OT.initPublisher(this.state.publisherId, publisherProperties, (initError) => {
+      if (initError) {
+        this.setState({
+          initError
+        });
+        handleError(initError);
+      } else {
+        OT.getSessionInfo((session) => {
+          if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
+            this.publish();
+          }
+        });
       }
     });
   }

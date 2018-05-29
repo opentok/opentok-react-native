@@ -87,7 +87,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void initPublisher(String publisherId, ReadableMap properties) {
+    public void initPublisher(String publisherId, ReadableMap properties, Callback callback) {
 
         String name = properties.getString("name");
         Boolean videoTrack = properties.getBoolean("videoTrack");
@@ -134,6 +134,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setPublishAudio(publishAudio);
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         mPublishers.put(publisherId, mPublisher);
+        callback.invoke();
     }
 
     @ReactMethod
