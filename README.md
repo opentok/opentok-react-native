@@ -34,7 +34,8 @@ React Native library for OpenTok iOS and Android SDKs
 
 ### iOS Installation
 
-**Note** Please make sure to have [CocoaPods](https://cocoapods.org/) on your computer.
+**Note:** Please make sure to have [CocoaPods](https://cocoapods.org/) on your computer.
+If you've installed this package before, you may need to edit your `Podfile` and project structure because the installation process has changed.
 1. In you terminal, change into your `ios` directory.
 
 2. Create a pod file by running: `pod init`.
