@@ -63,10 +63,11 @@ React Native library for OpenTok iOS and Android SDKs
 7. Click `File` and `New File`
 
 8. Add an empty swift file to your project:
+    * You can name this file anything i.e: `OTInstall.swift`. This is done to set some flags in XCode so the Swift code can be used.
 
 9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
 
-11. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
+10. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
 
 ```
 <key>NSCameraUsageDescription</key>
