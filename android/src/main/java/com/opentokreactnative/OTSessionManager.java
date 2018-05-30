@@ -182,7 +182,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
            ConcurrentHashMap<String, FrameLayout> mSubscriberViewContainers = sharedState.getSubscriberViewContainers();
            Subscriber mSubscriber = mSubscribers.get(mStreamId);
-           mSubscriberViewContainers.get(mStreamId).removeAllViews();
+           FrameLayout mSubscriberViewContainer = mSubscriberViewContainers.get(mStreamId);
+           if (mSubscriberViewContainer != null) {
+               mSubscriberViewContainer.removeAllViews();
+           }
            mSubscriberViewContainers.remove(mStreamId);
            mSubscriber.destroy();
            mSubscribers.remove(mStreamId);
@@ -280,7 +283,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
                 FrameLayout mPublisherViewContainer = mPublisherViewContainers.get(publisherId);
                 Session mSession = sharedState.getSession();
-                mPublisherViewContainer.removeAllViews();
+                if (mPublisherViewContainer != null) {
+                    mPublisherViewContainer.removeAllViews();
+                }
                 mPublisherViewContainers.remove(publisherId);
                 if (mSession != null) {
                     mSession.unpublish(mPublisher);
