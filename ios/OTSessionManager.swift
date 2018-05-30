@@ -44,7 +44,7 @@ class OTSessionManager: RCTEventEmitter {
     }
   }
   
-  @objc func initPublisher(_ publisherId: String, properties: Dictionary<String, Any>) -> Void {
+  @objc func initPublisher(_ publisherId: String, properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
       let publisherProperties = OTPublisherSettings()
       publisherProperties.videoTrack = self.sanitizeBooleanProperty(properties["videoTrack"] as Any);
@@ -56,9 +56,15 @@ class OTSessionManager: RCTEventEmitter {
       publisherProperties.cameraResolution = self.sanitizeCameraResolution(properties["resolution"] as Any);
       publisherProperties.name = properties["name"] as? String;
       OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
-      guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+      guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+        callback(["Error creating publisher"]);
+        return
+      }
       if let videoSource = properties["videoSource"] as? String, videoSource == "screen" {
-          guard let screenView = RCTPresentedViewController()?.view else { return }
+        guard let screenView = RCTPresentedViewController()?.view else {
+          callback(["Error setting screenshare"]);
+          return
+        }
           publisher.videoType = .screen;
           publisher.videoCapture = OTScreenCapturer(withView: (screenView))
       } else if let cameraPosition = properties["cameraPosition"] as? String {
@@ -68,13 +74,14 @@ class OTSessionManager: RCTEventEmitter {
       publisher.publishAudio = self.sanitizeBooleanProperty(properties["publishAudio"] as Any);
       publisher.publishVideo = self.sanitizeBooleanProperty(properties["publishVideo"] as Any);
       publisher.audioLevelDelegate = self;
+      callback([NSNull()]);
     }
   }
   
   @objc func publish(_ publisherId: String, callback: RCTResponseSenderBlock) -> Void {
     var error: OTError?
     guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-      callback(["Error setting publisher"])
+      callback(["Error getting publisher"]);
       return
     }
     OTRN.sharedState.session?.publish(publisher, error: &error)
