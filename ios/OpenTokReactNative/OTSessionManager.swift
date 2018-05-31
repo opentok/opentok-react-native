@@ -253,7 +253,7 @@ class OTSessionManager: RCTEventEmitter {
     streamInfo["hasAudio"] = stream.hasAudio;
     streamInfo["hasVideo"] = stream.hasVideo;
     streamInfo["name"] = stream.name;
-    streamInfo["creationTime"] = stream.creationTime;
+    streamInfo["creationTime"] = self.convertDateToString(stream.creationTime);
     streamInfo["height"] = stream.videoDimensions.height;
     streamInfo["width"] = stream.videoDimensions.width;
     return streamInfo;
@@ -262,7 +262,7 @@ class OTSessionManager: RCTEventEmitter {
   func prepareJSConnectionEventData(_ connection: OTConnection) -> Dictionary<String, Any> {
     var connectionInfo: Dictionary<String, Any> = [:];
     connectionInfo["connectionId"] = connection.connectionId;
-    connectionInfo["creationTime"] = connection.creationTime;
+    connectionInfo["creationTime"] = self.convertDateToString(connection.creationTime);
     connectionInfo["data"] = connection.data;
     return connectionInfo;
   }
@@ -284,6 +284,13 @@ class OTSessionManager: RCTEventEmitter {
     let publisherIds = OTRN.sharedState.publishers.filter {$0.value == publisher}
     guard let publisherId = publisherIds.first else { return ""; }
     return publisherId.key;
+  }
+    
+  func convertDateToString(_ creationTime: Date) -> String {
+    let dateFormatter: DateFormatter = DateFormatter();
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss";
+    dateFormatter.timeZone = TimeZone(abbreviation: "UTC");
+    return dateFormatter.string(from:creationTime);
   }
   
   func emitEvent(_ event: String, data: Any) -> Void {
