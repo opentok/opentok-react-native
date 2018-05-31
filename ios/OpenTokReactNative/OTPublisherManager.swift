@@ -13,5 +13,9 @@ class OTPublisherManager: RCTViewManager {
   override func view() -> UIView {
     return OTPublisherView();
   }
+    
+  override static func requiresMainQueueSetup() -> Bool {
+    return true;
+  }
 }
 
