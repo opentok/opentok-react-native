@@ -13,5 +13,9 @@ class OTSubscriberManager: RCTViewManager {
   override func view() -> UIView {
     return OTSubscriberView();
   }
+  
+  override static func requiresMainQueueSetup() -> Bool {
+    return true;
+  }
 }
 
