@@ -82,7 +82,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 1. In you terminal, change into your project directory.
 
 2. If you have already run `react-native link opentok-react-native` for the iOS installation, please skip this step.
-    *  Run `react-native link opentok-react-native
+    *  Run `react-native link opentok-react-native`
 
 3. Open your Android project in Android Studio.
 
