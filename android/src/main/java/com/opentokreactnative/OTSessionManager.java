@@ -222,6 +222,22 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void subscribeToAudio(String streamId, Boolean subscribeToAudio) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        mSubscriber.setSubscribeToAudio(subscribeToAudio);
+    }
+
+    @ReactMethod
+    public void subscribeToVideo(String streamId, Boolean subscribeToVideo) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        mSubscriber.setSubscribeToVideo(subscribeToVideo);
+    }
+
+    @ReactMethod
     public void changeCameraPosition(String publisherId, String cameraPosition) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();

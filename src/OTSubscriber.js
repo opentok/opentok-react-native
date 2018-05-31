@@ -19,12 +19,31 @@ export default class OTSubscriber extends Component {
     this.componentEventsArray = Object.values(this.componentEvents);
   }
   componentWillMount() {
-    const subscriberProperties = sanitizeProperties(this.props.properties);
-    this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream, subscriberProperties));
+    this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream));
     this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, stream => this.streamDestroyedHandler(stream));
     const subscriberEvents = sanitizeSubscriberEvents(this.props.eventHandlers);
     OT.setJSComponentEvents(this.componentEventsArray);
     setNativeEvents(subscriberEvents);
+  }
+  componentDidUpdate(previousProps) {
+    const useDefault = (value, defaultValue) => (value === undefined ? defaultValue : value);
+    const shouldUpdate = (key, defaultValue) => {
+      const previous = useDefault(previousProps.properties[key], defaultValue);
+      const current = useDefault(this.props.properties[key], defaultValue);
+      return previous !== current;
+    };
+
+    const updateSubscriberProperty = (key, defaultValue) => {
+      if (shouldUpdate(key, defaultValue)) {
+        const value = useDefault(this.props.properties[key], defaultValue);
+        this.state.streams.forEach((stream) => {
+          OT[key](stream, value);
+        });
+      }
+    };
+    
+    updateSubscriberProperty('subscribeToAudio', true);
+    updateSubscriberProperty('subscribeToVideo', true);
   }
   componentWillUnmount() {
     this.streamCreated.remove();
@@ -33,7 +52,8 @@ export default class OTSubscriber extends Component {
     const events = sanitizeSubscriberEvents(this.props.eventHandlers);
     removeNativeEvents(events); 
   }
-  streamCreatedHandler = (stream, subscriberProperties) => {
+  streamCreatedHandler = (stream) => {
+    const subscriberProperties = sanitizeProperties(this.props.properties);
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
       if (error) {
         handleError(error);
