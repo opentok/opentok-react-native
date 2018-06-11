@@ -226,7 +226,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
         Subscriber mSubscriber = mSubscribers.get(streamId);
-        mSubscriber.setSubscribeToAudio(subscribeToAudio);
+        if (mSubscriber != null) {
+            mSubscriber.setSubscribeToAudio(subscribeToAudio);
+        }
     }
 
     @ReactMethod
@@ -234,7 +236,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
         Subscriber mSubscriber = mSubscribers.get(streamId);
-        mSubscriber.setSubscribeToVideo(subscribeToVideo);
+        if (mSubscriber != null) {
+            mSubscriber.setSubscribeToVideo(subscribeToVideo);
+        }
     }
 
     @ReactMethod
