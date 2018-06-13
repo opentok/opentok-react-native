@@ -3,8 +3,9 @@
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | sessionId | String | No | OpenTok Session Id. This is auto populated by wrapping `OTSubscriber` with `OTSession`
-| streamId | String| No | OpenTok Subscriber streamId. This is auto populated inside the `OTSubscriber` component when `streamCreated` event is fired from the native session delegate(iOS)/ interface(Android)
+| streamId | String| No | OpenTok Subscriber streamId. This is auto populated inside the `OTSubscriber` component when `streamCreated` event is fired from the native instance
 | properties | Object | No | Properties passed into the native subscriber instance
+| streamProperties | Object | No | Used to update individual subscriber instance properties
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
 
 ## Properties 
@@ -37,3 +38,52 @@ The `OTSubscriber` component will subscribe to a specified stream from a specifi
   * **videoEnabled** (String) - This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
   
   * **videoNetworkStats** (Object) — Sent periodically to report video statistics for the subscriber.
+
+  ```js
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      streamProperties: {},
+    };
+
+    this.subscriberProperties = {
+      subscribeToAudio: false,
+      subscribeToVideo: true,
+    };
+
+    this.sessionEventHandlers = {
+      streamCreated: event => {
+        const streamProperties = {...this.state.streamProperties, [event.streamId]: {
+          subscribeToAudio: true,
+          subscribeToVideo: false,
+          style: {
+            width: 400,
+            height: 300,
+          },
+        }};
+        this.setState({ streamProperties });
+      },
+    };
+
+    this.subscriberEventHandlers = {
+      error: (error) => {
+        console.log(`There was an error with the subscriber: ${error}`);
+      },
+    };
+  }
+
+  render() {
+    return (
+      <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token" eventHandlers={this.sessionEventHandlers}>
+        <OTSubscriber
+          properties={this.subscriberProperties}
+          eventHandlers={this.subscriberEventHandlers}
+          style={{ height: 100, width: 100 }}
+          streamProperties={this.state.streamProperties}
+        />
+      </OTSession>
+    );
+  }
+}
+```

@@ -146,6 +146,16 @@ class OTSessionManager: RCTEventEmitter {
     publisher.publishVideo = pubVideo;
   }
   
+  @objc func subscribeToAudio(_ streamId: String, subAudio: Bool) -> Void {
+    guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+    subscriber.subscribeToAudio = subAudio;
+  }
+    
+  @objc func subscribeToVideo(_ streamId: String, subVideo: Bool) -> Void {
+    guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+    subscriber.subscribeToVideo = subVideo;
+  }
+  
   @objc func changeCameraPosition(_ publisherId: String, cameraPosition: String) -> Void {
     guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
     publisher.cameraPosition = cameraPosition == "front" ? .front : .back;
