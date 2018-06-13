@@ -458,7 +458,7 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
   }
   
   func subscriberVideoDisabled(_ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason) {
-    self.emitEvent("\(subscriberPreface)subscriberVideoEnabled", data: reason);
+    self.emitEvent("\(subscriberPreface)subscriberVideoDisabled", data: reason);
   }
   
   func subscriberVideoDisableWarning(_ subscriber: OTSubscriberKit) {
