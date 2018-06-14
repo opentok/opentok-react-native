@@ -30,10 +30,10 @@ class OTSessionManager: RCTEventEmitter {
     return true;
   }
     
-  @objc override func supportedEvents() -> [String] {
-    let allEvents: [String] = ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect"];
-    return allEvents + jsEvents
-  }
+    @objc override func supportedEvents() -> [String] {
+        let allEvents: [String] = ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect", "\(sessionPreface)streamPropertyChanged"];
+        return allEvents + jsEvents
+    }
   @objc func initSession(_ apiKey: String, sessionId: String) -> Void {
     OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self)
   }
@@ -115,6 +115,7 @@ class OTSessionManager: RCTEventEmitter {
   
   @objc func removeSubscriber(_ streamId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
     DispatchQueue.main.async {
+      OTRN.sharedState.streamObservers.removeValue(forKey: streamId);
       OTRN.sharedState.subscribers[streamId]?.view?.removeFromSuperview();
       OTRN.sharedState.subscribers[streamId]?.delegate = nil;
       OTRN.sharedState.subscribers[streamId] = nil;
@@ -308,7 +309,33 @@ class OTSessionManager: RCTEventEmitter {
       self.sendEvent(withName: event, body: data);
     }
   }
+    
+  func prepareStreamPropertyChangedEventData(_ changedProperty: String, oldValue: Any, newValue: Any, stream: Dictionary<String, Any>) -> Dictionary<String, Any> {
+    var streamPropertyEventData: Dictionary<String, Any> = [:];
+    streamPropertyEventData["oldValue"] = oldValue;
+    streamPropertyEventData["newValue"] = newValue;
+    streamPropertyEventData["stream"] = stream;
+    streamPropertyEventData["changedProperty"] = changedProperty;
+    return streamPropertyEventData
+  }
+
+  func convertOTSubscriberVideoEventReasonToString(_ reason: OTSubscriberVideoEventReason) -> String {
+    switch reason {
+    case OTSubscriberVideoEventReason.publisherPropertyChanged:
+        return "PublisherPropertyChanged"
+    case OTSubscriberVideoEventReason.subscriberPropertyChanged:
+        return "SubscriberPropertyChanged"
+    case OTSubscriberVideoEventReason.qualityChanged:
+        return "QualityChanged"
+    }
+  }
   
+  func checkAndEmitStreamPropertyChangeEvent(_ streamId: String, changedProperty: String, oldValue: Any, newValue: Any) {
+    guard let stream = OTRN.sharedState.subscriberStreams[streamId] else { return }
+    let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
+    let eventData: Dictionary<String, Any> = prepareStreamPropertyChangedEventData(changedProperty, oldValue: oldValue, newValue: newValue, stream: streamInfo);
+    self.emitEvent("\(sessionPreface)streamPropertyChanged", data: eventData)
+  }
 }
 
 extension OTSessionManager: OTSessionDelegate {
@@ -362,7 +389,27 @@ extension OTSessionManager: OTSessionDelegate {
     OTRN.sharedState.subscriberStreams.updateValue(stream, forKey: stream.streamId)
     let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
     self.emitEvent("\(sessionPreface)streamCreated", data: streamInfo)
-    print("OTRN: Session streamCreated with streamId: \(stream.streamId)")
+    let hasVideoObservation: NSKeyValueObservation = stream.observe(\.hasVideo, options: [.old, .new]) { object, change in
+        guard let oldValue = change.oldValue else { return }
+        guard let newValue = change.newValue else { return }
+        self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasVideo", oldValue: oldValue, newValue: newValue)
+    }
+    let hasAudioObservation: NSKeyValueObservation = stream.observe(\.hasAudio, options: [.old, .new]) { object, change in
+        guard let oldValue = change.oldValue else { return }
+        guard let newValue = change.newValue else { return }
+        self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasAudio", oldValue: oldValue, newValue: newValue)
+    }
+    let videoDimensionsObservation: NSKeyValueObservation = stream.observe(\.videoDimensions, options: [.old, .new]) { object, change in
+        guard let oldValue = change.oldValue else { return }
+        guard let newValue = change.newValue else { return }
+        self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoDimensions", oldValue: oldValue, newValue: newValue)
+    }
+    let videoTypeObservation: NSKeyValueObservation = stream.observe(\.videoType, options: [.old, .new]) { object, change in
+        guard let oldValue = change.oldValue else { return }
+        guard let newValue = change.newValue else { return }
+        self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoType", oldValue: oldValue, newValue: newValue)
+    }
+    OTRN.sharedState.streamObservers.updateValue([hasAudioObservation, hasVideoObservation, videoDimensionsObservation, videoTypeObservation], forKey: stream.streamId)
   }
   
   func session(_ session: OTSession, streamDestroyed stream: OTStream) {

@@ -20,6 +20,7 @@ const sanitizeSessionEvents = (events) => {
       sessionReconnecting: 'sessionDidBeginReconnecting',
       archiveStarted: 'archiveStartedWithId',
       archiveStopped: 'archiveStoppedWithId',
+      streamPropertyChanged: 'streamPropertyChanged',
     },
     android: {
       streamCreated: 'onStreamReceived',
@@ -34,6 +35,7 @@ const sanitizeSessionEvents = (events) => {
       sessionReconnecting: 'onReconnecting',
       archiveStarted: 'onArchiveStarted',
       archiveStopped: 'onArchiveStopped',
+      streamPropertyChanged: 'onStreamPropertyChanged',
     },
   };
   return reassignEvents('session', customEvents, events);
