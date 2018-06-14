@@ -35,7 +35,7 @@ const sanitizeSessionEvents = (events) => {
       sessionReconnecting: 'onReconnecting',
       archiveStarted: 'onArchiveStarted',
       archiveStopped: 'onArchiveStopped',
-      streamPropertyChanged: 'streamPropertyChanged',      
+      streamPropertyChanged: 'onStreamPropertyChanged',
     },
   };
   return reassignEvents('session', customEvents, events);
