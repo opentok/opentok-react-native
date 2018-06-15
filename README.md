@@ -77,6 +77,10 @@ If you've installed this package before, you may need to edit your `Podfile` and
 <string>Your message to user when the microphone is accessed for the first time</string>
 ```
 
+If you try to archive the app and it fails, please do the following:
+ ```
+    Go to Target -> Build Phases and add OpenTokReactNative under Target Dependencies. After that go to the Link Binary With Libraries section and remove the libOpenTokReactNative.a and add it again.
+```
 ### Android Installation
 
 1. In you terminal, change into your project directory.
