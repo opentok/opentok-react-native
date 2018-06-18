@@ -43,6 +43,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Session.ConnectionListener,
         Session.ReconnectionListener,
         Session.ArchiveListener,
+        Session.StreamPropertiesListener,
         SubscriberKit.AudioLevelListener,
         SubscriberKit.AudioStatsListener,
         SubscriberKit.VideoStatsListener,
@@ -75,6 +76,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSession.setConnectionListener(this);
         mSession.setReconnectionListener(this);
         mSession.setArchiveListener(this);
+        mSession.setStreamPropertiesListener(this);
         sharedState.setSession(mSession);
     }
 
@@ -222,6 +224,26 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void subscribeToAudio(String streamId, Boolean subscribeToAudio) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.setSubscribeToAudio(subscribeToAudio);
+        }
+    }
+
+    @ReactMethod
+    public void subscribeToVideo(String streamId, Boolean subscribeToVideo) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.setSubscribeToVideo(subscribeToVideo);
+        }
+    }
+
+    @ReactMethod
     public void changeCameraPosition(String publisherId, String cameraPosition) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
@@ -351,6 +373,36 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         connectionInfo.putString("creationTime", connection.getCreationTime().toString());
         connectionInfo.putString("data", connection.getData());
         return connectionInfo;
+    }
+
+    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, Boolean oldValue, Boolean newValue, WritableMap stream) {
+
+        WritableMap streamPropertyEventData = Arguments.createMap();
+        streamPropertyEventData.putString("changedProperty", changedProperty);
+        streamPropertyEventData.putBoolean("oldValue", oldValue);
+        streamPropertyEventData.putBoolean("newValue", newValue);
+        streamPropertyEventData.putMap("stream", stream);
+        return streamPropertyEventData;
+    }
+
+    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, WritableMap oldValue, WritableMap newValue, WritableMap stream) {
+
+        WritableMap streamPropertyEventData = Arguments.createMap();
+        streamPropertyEventData.putString("changedProperty", changedProperty);
+        streamPropertyEventData.putMap("oldValue", oldValue);
+        streamPropertyEventData.putMap("newValue", newValue);
+        streamPropertyEventData.putMap("stream", stream);
+        return streamPropertyEventData;
+    }
+
+    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, String oldValue, String newValue, WritableMap stream) {
+
+        WritableMap streamPropertyEventData = Arguments.createMap();
+        streamPropertyEventData.putString("changedProperty", changedProperty);
+        streamPropertyEventData.putString("oldValue", oldValue);
+        streamPropertyEventData.putString("newValue", newValue);
+        streamPropertyEventData.putMap("stream", stream);
+        return streamPropertyEventData;
     }
 
     private void sendEvent(ReactContext reactContext, String eventName, String eventData) {
@@ -701,4 +753,57 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoDataReceived", null);
         }
     }
+
+    @Override
+    public void onStreamHasAudioChanged(Session session, Stream stream, boolean Audio) {
+
+        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
+            WritableMap streamInfo = prepareStreamMap(stream);
+            WritableMap eventData = prepareStreamPropertyChangedEventData("hasAudio", !Audio, Audio, streamInfo);
+            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
+        }
+    }
+    @Override
+    public void onStreamHasVideoChanged(Session session, Stream stream, boolean Video) {
+
+        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
+            WritableMap streamInfo = prepareStreamMap(stream);
+            WritableMap eventData = prepareStreamPropertyChangedEventData("hasVideo", !Video, Video, streamInfo);
+            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
+        }
+    }
+
+    @Override
+    public void onStreamVideoDimensionsChanged(Session session, Stream stream, int width, int height) {
+
+        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
+            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+            Stream mStream = mSubscriberStreams.get(stream.getStreamId());
+            WritableMap oldVideoDimensions = Arguments.createMap();
+            oldVideoDimensions.putInt("height", mStream.getVideoHeight());
+            oldVideoDimensions.putInt("width", mStream.getVideoWidth());
+            WritableMap newVideoDimensions = Arguments.createMap();
+            newVideoDimensions.putInt("height", height);
+            newVideoDimensions.putInt("width", width);
+            WritableMap streamInfo = prepareStreamMap(stream);
+            WritableMap eventData = prepareStreamPropertyChangedEventData("videoDimensions", oldVideoDimensions, newVideoDimensions, streamInfo);
+            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
+        }
+
+    }
+
+    @Override
+    public void onStreamVideoTypeChanged(Session session, Stream stream, Stream.StreamVideoType videoType) {
+
+        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
+            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+            Stream mStream = mSubscriberStreams.get(stream.getStreamId());
+            String oldVideoType = stream.getStreamVideoType().toString();
+            WritableMap streamInfo = prepareStreamMap(stream);
+            WritableMap eventData = prepareStreamPropertyChangedEventData("videoType", oldVideoType, videoType.toString(), streamInfo);
+            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
+        }
+
+    }
+
 }

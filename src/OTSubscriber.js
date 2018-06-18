@@ -5,6 +5,7 @@ import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
 import { handleError } from './OTError';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
+import { isNull, each, isEqual, isEmpty } from 'underscore';
 
 export default class OTSubscriber extends Component {
   constructor(props) {
@@ -19,12 +20,22 @@ export default class OTSubscriber extends Component {
     this.componentEventsArray = Object.values(this.componentEvents);
   }
   componentWillMount() {
-    const subscriberProperties = sanitizeProperties(this.props.properties);
-    this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream, subscriberProperties));
+    this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream));
     this.streamDestroyed = nativeEvents.addListener(this.componentEvents.streamDestroyed, stream => this.streamDestroyedHandler(stream));
     const subscriberEvents = sanitizeSubscriberEvents(this.props.eventHandlers);
     OT.setJSComponentEvents(this.componentEventsArray);
     setNativeEvents(subscriberEvents);
+  }
+  componentDidUpdate() {
+    const { streamProperties } = this.props;    
+    if (!isEqual(this.state.streamProperties, streamProperties)) {
+      each(streamProperties, (individualStreamProperties, streamId) => {
+        const { subscribeToAudio, subscribeToVideo } = individualStreamProperties;
+        OT.subscribeToAudio(streamId, subscribeToAudio);
+        OT.subscribeToVideo(streamId, subscribeToVideo);
+      });
+      this.setState({ streamProperties });
+    }
   }
   componentWillUnmount() {
     this.streamCreated.remove();
@@ -33,7 +44,10 @@ export default class OTSubscriber extends Component {
     const events = sanitizeSubscriberEvents(this.props.eventHandlers);
     removeNativeEvents(events); 
   }
-  streamCreatedHandler = (stream, subscriberProperties) => {
+  streamCreatedHandler = (stream) => {
+    const { streamProperties, properties } = this.props;
+    const subscriberProperties = isNull(streamProperties[stream.streamId]) ? 
+                                  sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
       if (error) {
         handleError(error);
@@ -59,8 +73,11 @@ export default class OTSubscriber extends Component {
     });
   }
   render() {
-    const childrenWithStreams = this.state.streams.map(streamId =>
-      <OTSubscriberView key={streamId} streamId={streamId} style={this.props.style} />);
+    const childrenWithStreams = this.state.streams.map((streamId) => {
+      const streamProperties = this.props.streamProperties[streamId];
+      const style = isEmpty(streamProperties) ? this.props.style : isNull(streamProperties.style) ? this.props.style : streamProperties.style;
+      return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
+    });
     return <View>{ childrenWithStreams }</View>;
   }
 }
@@ -70,9 +87,11 @@ OTSubscriber.propTypes = {
   ...viewPropTypes,
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types  
 };
 
 OTSubscriber.defaultProps = {
   properties: {},
   eventHandlers: {},
+  streamProperties: {},
 };
