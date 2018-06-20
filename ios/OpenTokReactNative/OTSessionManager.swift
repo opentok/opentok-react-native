@@ -258,6 +258,7 @@ class OTSessionManager: RCTEventEmitter {
   
   func prepareJSEventData(_ stream: OTStream) -> Dictionary<String, Any> {
     var streamInfo: Dictionary<String, Any> = [:];
+    guard OTRN.sharedState.session != nil else { return streamInfo }
     streamInfo["streamId"] = stream.streamId;
     streamInfo["name"] = stream.name;
     streamInfo["connectionId"] = stream.connection.connectionId;
