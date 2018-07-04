@@ -355,6 +355,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         streamInfo.putString("name", stream.getName());
         streamInfo.putBoolean("audio", stream.hasAudio());
         streamInfo.putBoolean("video", stream.hasVideo());
+        streamInfo.putBoolean("hasAudio", stream.hasAudio());
+        streamInfo.putBoolean("hasVideo", stream.hasVideo());
         return streamInfo;
     }
 
