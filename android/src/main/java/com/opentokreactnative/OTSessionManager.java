@@ -113,9 +113,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                                         .audioBitrate(audioBitrate)
                                         .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
                                         .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
-                                        .capturer(capturer)                                        
+                                        .capturer(capturer)
                                         .build();
-            mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);                    
+            mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         } else {
             mPublisher = new Publisher.Builder(this.getReactApplicationContext())
                                         .audioTrack(audioTrack)
@@ -780,8 +780,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
             Stream mStream = mSubscriberStreams.get(stream.getStreamId());
             WritableMap oldVideoDimensions = Arguments.createMap();
-            oldVideoDimensions.putInt("height", mStream.getVideoHeight());
-            oldVideoDimensions.putInt("width", mStream.getVideoWidth());
+            if ( mStream != null ){
+                oldVideoDimensions.putInt("height", mStream.getVideoHeight());
+                oldVideoDimensions.putInt("width", mStream.getVideoWidth());
+            }
+            else {
+                oldVideoDimensions.putInt("height", -1);
+                oldVideoDimensions.putInt("width", -1);
+            }
             WritableMap newVideoDimensions = Arguments.createMap();
             newVideoDimensions.putInt("height", height);
             newVideoDimensions.putInt("width", width);
