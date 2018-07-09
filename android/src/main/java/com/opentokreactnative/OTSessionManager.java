@@ -784,10 +784,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 oldVideoDimensions.putInt("height", mStream.getVideoHeight());
                 oldVideoDimensions.putInt("width", mStream.getVideoWidth());
             }
-            else {
-                oldVideoDimensions.putInt("height", -1);
-                oldVideoDimensions.putInt("width", -1);
-            }
             WritableMap newVideoDimensions = Arguments.createMap();
             newVideoDimensions.putInt("height", height);
             newVideoDimensions.putInt("width", width);
