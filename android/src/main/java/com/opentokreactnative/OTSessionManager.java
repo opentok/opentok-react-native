@@ -780,8 +780,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
             Stream mStream = mSubscriberStreams.get(stream.getStreamId());
             WritableMap oldVideoDimensions = Arguments.createMap();
-            oldVideoDimensions.putInt("height", mStream.getVideoHeight());
-            oldVideoDimensions.putInt("width", mStream.getVideoWidth());
+            if ( mStream != null ){
+                oldVideoDimensions.putInt("height", mStream.getVideoHeight());
+                oldVideoDimensions.putInt("width", mStream.getVideoWidth());
+            }
             WritableMap newVideoDimensions = Arguments.createMap();
             newVideoDimensions.putInt("height", height);
             newVideoDimensions.putInt("width", width);
