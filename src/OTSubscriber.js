@@ -75,7 +75,7 @@ export default class OTSubscriber extends Component {
   render() {
     const childrenWithStreams = this.state.streams.map((streamId) => {
       const streamProperties = this.props.streamProperties[streamId];
-      const style = isEmpty(streamProperties) ? this.props.style : isUndefined(streamProperties.style) ? this.props.style : streamProperties.style;
+      const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
       return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
     });
     return <View>{ childrenWithStreams }</View>;
