@@ -2,6 +2,7 @@ package com.opentokreactnative;
 
 import android.view.Gravity;
 import android.widget.FrameLayout;
+import android.opengl.GLSurfaceView;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.opentok.android.BaseVideoRenderer;
@@ -26,13 +27,17 @@ public class OTPublisherLayout extends FrameLayout{
     public void createPublisherView(String publisherId) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
-        mPublishers.get(publisherId).setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
+        Publisher mPublisher = mPublishers.get(publisherId);        
+        mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
         FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
+        if (mPublisher.getView() instanceof GLSurfaceView) {
+            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+        }
         ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
         mPublisherViewContainers.put(publisherId, mPublisherViewContainer);
         addView(mPublisherViewContainers.get(publisherId), 0);
-        mPublisherViewContainers.get(publisherId).addView(mPublishers.get(publisherId).getView());
+        mPublisherViewContainers.get(publisherId).addView(mPublisher.getView());
         requestLayout();
 
     }
