@@ -51,6 +51,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     private Callback connectCallback;
     private Callback disconnectCallback;
+    private boolean wasDisconnectCallbackCalled = false;
     private int connectionStatus = 0;
     private ArrayList<String> jsEvents = new ArrayList<String>();
     private ArrayList<String> componentEvents = new ArrayList<String>();
@@ -207,6 +208,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         }
         sharedState.setSession(null);
         disconnectCallback = callback;
+        wasDisconnectCallbackCalled = false;
     }
 
     @ReactMethod
@@ -480,8 +482,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onDisconnected(Session session) {
 
         setConnectionStatus(0);
-        if (disconnectCallback != null) {
+        if (disconnectCallback != null && !wasDisconnectCallbackCalled) {
             disconnectCallback.invoke();
+            wasDisconnectCallbackCalled = true;
         }
 
         if (contains(jsEvents, sessionPreface + "onDisconnected")) {
