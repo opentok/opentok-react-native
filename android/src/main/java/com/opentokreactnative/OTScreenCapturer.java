@@ -47,7 +47,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                     canvas = new Canvas(bmp);
                     frame = new int[width * height];
                 }
-                canvas.save(Canvas.MATRIX_SAVE_FLAG);
+                canvas.save();
                 canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
                 contentView.draw(canvas);
 
