@@ -316,7 +316,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 if (mSession != null) {
                     mSession.unpublish(mPublisher);
                 }
-                mPublisher.destroy();
+                if (mPublisher != null) {
+                    mPublisher.destroy();
+                }
                 mPublishers.remove(publisherId);
                 mCallback.invoke();
 
