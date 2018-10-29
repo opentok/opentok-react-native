@@ -42,7 +42,7 @@ class OTSessionManager: RCTEventEmitter {
     var error: OTError?
     OTRN.sharedState.session?.connect(withToken: token, error: &error)
     if let err = error {
-      callback([err.localizedDescription as Any])
+      self.dispatchErrorViaCallback(callback, error: err)
     } else {
       connectCallback = callback
     }
@@ -90,7 +90,7 @@ class OTSessionManager: RCTEventEmitter {
     }
     OTRN.sharedState.session?.publish(publisher, error: &error)
     if let err = error {
-      callback([err.localizedDescription as Any])
+      dispatchErrorViaCallback(callback, error: err)
     } else {
       callback([NSNull()])
     }
@@ -106,7 +106,7 @@ class OTSessionManager: RCTEventEmitter {
       OTRN.sharedState.subscribers[streamId]?.subscribeToAudio = self.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
       OTRN.sharedState.subscribers[streamId]?.subscribeToVideo = self.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
       if let err = error {
-        callback([err.localizedDescription as Any])
+        self.dispatchErrorViaCallback(callback, error: err)
       } else {
         callback([NSNull(), streamId])
       }
@@ -129,7 +129,7 @@ class OTSessionManager: RCTEventEmitter {
     var error: OTError?
     OTRN.sharedState.session?.disconnect(&error)
     if let err = error {
-      callback([err.localizedDescription as Any])
+      dispatchErrorViaCallback(callback, error: err)
     } else {
       OTRN.sharedState.session?.delegate = nil;
       OTRN.sharedState.session = nil;
@@ -189,7 +189,7 @@ class OTSessionManager: RCTEventEmitter {
     var error: OTError?
     OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
     if let err = error {
-      callback([err.localizedDescription as Any])
+      dispatchErrorViaCallback(callback, error: err)
     } else {
       callback([NSNull()])
     }
@@ -336,6 +336,11 @@ class OTSessionManager: RCTEventEmitter {
     let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
     let eventData: Dictionary<String, Any> = prepareStreamPropertyChangedEventData(changedProperty, oldValue: oldValue, newValue: newValue, stream: streamInfo);
     self.emitEvent("\(sessionPreface)streamPropertyChanged", data: eventData)
+  }
+
+  func dispatchErrorViaCallback(_ callback: RCTResponseSenderBlock, error: OTError) {
+    let errorInfo = prepareJSErrorEventData(error);
+    callback([errorInfo]);
   }
 }
 
