@@ -11,6 +11,7 @@ React Native library for OpenTok iOS and Android SDKs
   - [OTSession Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSession.md)
   - [OTPublisher Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTPublisher.md)
   - [OTSubscriber Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSubscriber.md)
+  - [Event Data](https://github.com/opentok/opentok-react-native/tree/master/docs/EventData.md)
 - [Samples](#samples)
 - [Contributing](#contributing)
 
