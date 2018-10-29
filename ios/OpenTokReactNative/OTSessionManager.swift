@@ -377,7 +377,10 @@ extension OTSessionManager: OTSessionDelegate {
   }
   
   func session(_ session: OTSession, archiveStoppedWithId archiveId: String) {
-    self.emitEvent("\(sessionPreface)archiveStoppedWithId", data: archiveId);
+    var archiveInfo: Dictionary<String, String> = [:];
+    archiveInfo["archiveId"] = archiveId;
+    archiveInfo["name"] = "";
+    self.emitEvent("\(sessionPreface)archiveStoppedWithId", data: archiveInfo);
     print("OTRN Session: Archive stopped with \(archiveId)")
   }
   
