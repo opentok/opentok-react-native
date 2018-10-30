@@ -17,6 +17,7 @@ class OTSessionManager: RCTEventEmitter {
   var sessionPreface: String = "session:";
   var publisherPreface: String = "publisher:";
   var subscriberPreface: String = "subscriber:";
+  var logLevel: Bool = false;
 
   deinit {
     OTRN.sharedState.subscriberStreams.removeAll();
@@ -233,6 +234,10 @@ class OTSessionManager: RCTEventEmitter {
     sessionInfo["connectionStatus"] = session.sessionConnectionStatus.rawValue;
     callback([sessionInfo]);
   }
+    
+  @objc func enableLogs(_ logLevel: Bool) -> Void {
+    self.logLevel = logLevel;
+  }
   
   func sanitizeBooleanProperty(_ property: Any) -> Bool {
     guard let prop = property as? Bool else { return true; }
@@ -264,7 +269,6 @@ class OTSessionManager: RCTEventEmitter {
     streamInfo["connectionId"] = stream.connection.connectionId;
     streamInfo["hasAudio"] = stream.hasAudio;
     streamInfo["hasVideo"] = stream.hasVideo;
-    streamInfo["name"] = stream.name;
     streamInfo["creationTime"] = self.convertDateToString(stream.creationTime);
     streamInfo["height"] = stream.videoDimensions.height;
     streamInfo["width"] = stream.videoDimensions.width;
@@ -342,30 +346,36 @@ class OTSessionManager: RCTEventEmitter {
     let errorInfo = prepareJSErrorEventData(error);
     callback([errorInfo]);
   }
+    
+  func printLogs(_ message: String) {
+    if (logLevel) {
+        print(message)
+    }
+  }
 }
 
 extension OTSessionManager: OTSessionDelegate {
   func sessionDidConnect(_ session: OTSession) {
     guard let callback = connectCallback else { return }
     callback([NSNull()])
-    print("OTRN: Session connected")
     self.emitEvent("\(sessionPreface)sessionDidConnect", data: [NSNull()]);
+    printLogs("OTRN: Session connected")
   }
   
   func sessionDidDisconnect(_ session: OTSession) {
     self.emitEvent("\(sessionPreface)sessionDidDisconnect", data: [NSNull()]);
-    print("OTRN: Session disconnected")
+    printLogs("OTRN: Session disconnected")
   }
   
   func session(_ session: OTSession, connectionCreated connection: OTConnection) {
     let connectionInfo = prepareJSConnectionEventData(connection);
     self.emitEvent("\(sessionPreface)connectionCreated", data: connectionInfo)
-    print("OTRN Session: A connection was created \(connection.connectionId)")
+    printLogs("OTRN Session: A connection was created \(connection.connectionId)")
   }
   func session(_ session: OTSession, connectionDestroyed connection: OTConnection) {
     let connectionInfo = prepareJSConnectionEventData(connection);
     self.emitEvent("\(sessionPreface)connectionDestroyed", data: connectionInfo)
-    print("OTRN Session: A connection was destroyed")
+    printLogs("OTRN Session: A connection was destroyed")
   }
   
   func session(_ session: OTSession, archiveStartedWithId archiveId: String, name: String?) {
@@ -373,7 +383,7 @@ extension OTSessionManager: OTSessionDelegate {
     archiveInfo["archiveId"] = archiveId;
     archiveInfo["name"] = name;
     self.emitEvent("\(sessionPreface)archiveStartedWithId", data: archiveInfo)
-    print ("OTRN Session: Archive started with \(archiveId)")
+    printLogs("OTRN Session: Archive started with \(archiveId)")
   }
   
   func session(_ session: OTSession, archiveStoppedWithId archiveId: String) {
@@ -381,17 +391,17 @@ extension OTSessionManager: OTSessionDelegate {
     archiveInfo["archiveId"] = archiveId;
     archiveInfo["name"] = "";
     self.emitEvent("\(sessionPreface)archiveStoppedWithId", data: archiveInfo);
-    print("OTRN Session: Archive stopped with \(archiveId)")
+    printLogs("OTRN Session: Archive stopped with \(archiveId)")
   }
   
   func sessionDidBeginReconnecting(_ session: OTSession) {
     self.emitEvent("\(sessionPreface)sessionDidBeginReconnecting", data: [NSNull()])
-    print("OTRN Session: Session did begin reconnecting")
+    printLogs("OTRN Session: Session did begin reconnecting")
   }
   
   func sessionDidReconnect(_ session: OTSession) {
     self.emitEvent("\(sessionPreface)sessionDidReconnect", data: [NSNull()])
-    print("OTRN Session: Session reconnected")
+    printLogs("OTRN Session: Session reconnected")
   }
   
   func session(_ session: OTSession, streamCreated stream: OTStream) {
@@ -419,18 +429,19 @@ extension OTSessionManager: OTSessionDelegate {
         self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoType", oldValue: oldValue, newValue: newValue)
     }
     OTRN.sharedState.streamObservers.updateValue([hasAudioObservation, hasVideoObservation, videoDimensionsObservation, videoTypeObservation], forKey: stream.streamId)
-  }
+    printLogs("OTRN: Session streamCreated \(stream.streamId)")
+    }
   
   func session(_ session: OTSession, streamDestroyed stream: OTStream) {
     let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
     self.emitEvent("\(sessionPreface)streamDestroyed", data: streamInfo)
-    print("OTRN: Session streamDestroyed: \(stream.streamId)")
+    printLogs("OTRN: Session streamDestroyed: \(stream.streamId)")
   }
   
   func session(_ session: OTSession, didFailWithError error: OTError) {
     let errorInfo: Dictionary<String, Any> = prepareJSErrorEventData(error);
     self.emitEvent("\(sessionPreface)didFailWithError", data: errorInfo)
-    print("OTRN: Session Failed to connect: \(error.localizedDescription)")
+    printLogs("OTRN: Session Failed to connect: \(error.localizedDescription)")
   }
   
   func session(_ session: OTSession, receivedSignalType type: String?, from connection: OTConnection?, with string: String?) {
@@ -439,7 +450,7 @@ extension OTSessionManager: OTSessionDelegate {
     signalData["data"] = string;
     signalData["connectionId"] = connection?.connectionId;
     self.emitEvent("\(sessionPreface)signal", data: signalData)
-    print("OTRN: Session signal received")
+    printLogs("OTRN: Session signal received")
   }
 }
 
@@ -451,7 +462,7 @@ extension OTSessionManager: OTPublisherDelegate {
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
       self.emitEvent("\(publisherId):\(publisherPreface)streamCreated", data: streamInfo);
     }
-    print("OTRN: Publisher Stream created")
+    printLogs("OTRN: Publisher Stream created")
   }
   
   func publisher(_ publisher: OTPublisherKit, streamDestroyed stream: OTStream) {
@@ -461,7 +472,7 @@ extension OTSessionManager: OTPublisherDelegate {
       let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
       self.emitEvent("\(publisherId):\(publisherPreface)streamDestroyed", data: streamInfo);
     }
-    print("OTRN: Publisher Stream destroyed")
+    printLogs("OTRN: Publisher Stream destroyed")
   }
   
   func publisher(_ publisher: OTPublisherKit, didFailWithError error: OTError) {
@@ -470,7 +481,7 @@ extension OTSessionManager: OTPublisherDelegate {
       let errorInfo: Dictionary<String, Any> = prepareJSErrorEventData(error);
       self.emitEvent("\(publisherId):\(publisherPreface)didFailWithError", data: errorInfo)
     }
-    print("OTRN: Publisher failed: \(error.localizedDescription)")
+    printLogs("OTRN: Publisher failed: \(error.localizedDescription)")
   }
 }
 
@@ -486,18 +497,18 @@ extension OTSessionManager: OTPublisherKitAudioLevelDelegate {
 extension OTSessionManager: OTSubscriberDelegate {
   func subscriberDidConnect(toStream subscriberKit: OTSubscriberKit) {
     self.emitEvent("\(subscriberPreface)subscriberDidConnect", data: [NSNull()]);
-    print("OTRN: Subscriber connected")
+    printLogs("OTRN: Subscriber connected")
   }
   
   func subscriberDidDisconnect(fromStream subscriberKit: OTSubscriberKit) {
     self.emitEvent("\(subscriberPreface)subscriberDidDisconnect", data: [NSNull()]);
-    print("OTRN: Subscriber disconnected")
+    printLogs("OTRN: Subscriber disconnected")
   }
   
   func subscriber(_ subscriber: OTSubscriberKit, didFailWithError error: OTError) {
     let errorInfo: Dictionary<String, Any> = prepareJSErrorEventData(error);
     self.emitEvent("\(subscriberPreface)didFailWithError", data: errorInfo)
-    print("OTRN: Subscriber failed: \(error.localizedDescription)")
+    printLogs("OTRN: Subscriber failed: \(error.localizedDescription)")
   }
   
 }
@@ -521,18 +532,22 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
   
   func subscriberVideoEnabled(_ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason) {
     self.emitEvent("\(subscriberPreface)subscriberVideoEnabled", data: reason);
+    printLogs("OTRN: subscriberVideoEnabled")
   }
   
   func subscriberVideoDisabled(_ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason) {
     self.emitEvent("\(subscriberPreface)subscriberVideoDisabled", data: reason);
+    printLogs("OTRN: subscriberVideoDisabled")
   }
   
   func subscriberVideoDisableWarning(_ subscriber: OTSubscriberKit) {
     self.emitEvent("\(subscriberPreface)subscriberVideoDisableWarning", data: [NSNull()]);
+    printLogs("OTRN: subscriberVideoDisableWarning")
   }
   
   func subscriberVideoDisableWarningLifted(_ subscriber: OTSubscriberKit) {
     self.emitEvent("\(subscriberPreface)subscriberVideoDisableWarningLifted", data: [NSNull()]);
+    printLogs("OTRN: subscriberVideoDisableWarningLifted")
   }
   
   func subscriberVideoDataReceived(_ subscriber: OTSubscriber) {

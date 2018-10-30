@@ -98,12 +98,10 @@ If you try to archive the app and it fails, please do the following:
             url "http://tokbox.bintray.com/maven"
         }
 ```
-* It should look something like this:
-* ![](https://dha4w82d62smt.cloudfront.net/items/1W1p0Z27471J210d3M2r/Image%202018-03-08%20at%202.12.38%20PM.png?X-CloudApp-Visitor-Id=2816462&v=8ce583bb)
 
 5. Sync Gradle
 
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
+6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the greater or equal to versions specified in the OpenTok React Native library.
 
 7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
