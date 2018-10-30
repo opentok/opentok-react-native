@@ -60,7 +60,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 6. Now run, `react-native link opentok-react-native`.
 
-7. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
+7. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project. 
 
 7. Click `File` and `New File`
 
