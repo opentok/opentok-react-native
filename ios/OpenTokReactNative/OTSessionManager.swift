@@ -287,7 +287,8 @@ extension OTSessionManager: OTSessionDelegate {
     }
     
     func sessionDidDisconnect(_ session: OTSession) {
-        self.emitEvent("\(EventUtils.sessionPreface)sessionDidDisconnect", data: [NSNull()]);
+        let sessionInfo = EventUtils.prepareJSSessionEventData(session);
+        self.emitEvent("\(EventUtils.sessionPreface)sessionDidDisconnect", data: sessionInfo);
         printLogs("OTRN: Session disconnected")
     }
     
