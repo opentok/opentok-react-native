@@ -101,7 +101,7 @@ If you try to archive the app and it fails, please do the following:
 
 5. Sync Gradle
 
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the greater or equal to versions specified in the OpenTok React Native library.
+6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
 7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
