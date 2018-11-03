@@ -11,6 +11,7 @@ React Native library for OpenTok iOS and Android SDKs
   - [OTSession Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSession.md)
   - [OTPublisher Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTPublisher.md)
   - [OTSubscriber Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSubscriber.md)
+  - [Event Data](https://github.com/opentok/opentok-react-native/tree/master/docs/EventData.md)
 - [Samples](#samples)
 - [Contributing](#contributing)
 
@@ -59,7 +60,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 6. Now run, `react-native link opentok-react-native`.
 
-7. Open `<YourProjectName>.xcworkspace` file in XCode. This file can be found in the `ios` folder of your React Native project. 
+7. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project. 
 
 7. Click `File` and `New File`
 
@@ -97,12 +98,10 @@ If you try to archive the app and it fails, please do the following:
             url "http://tokbox.bintray.com/maven"
         }
 ```
-* It should look something like this:
-* ![](https://dha4w82d62smt.cloudfront.net/items/1W1p0Z27471J210d3M2r/Image%202018-03-08%20at%202.12.38%20PM.png?X-CloudApp-Visitor-Id=2816462&v=8ce583bb)
 
 5. Sync Gradle
 
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are the same in the OpenTok React Native library.
+6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
 7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
