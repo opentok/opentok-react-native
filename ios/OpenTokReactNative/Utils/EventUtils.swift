@@ -16,6 +16,7 @@ class EventUtils {
     
     static func prepareJSConnectionEventData(_ connection: OTConnection) -> Dictionary<String, Any> {
         var connectionInfo: Dictionary<String, Any> = [:];
+        guard connection != nil else { return connectionInfo }
         connectionInfo["connectionId"] = connection.connectionId;
         connectionInfo["creationTime"] = convertDateToString(connection.creationTime);
         connectionInfo["data"] = connection.data;
@@ -66,6 +67,14 @@ class EventUtils {
         audioStatsEventData["audioBytesReceived"] = audioStats.audioBytesReceived;
         audioStatsEventData["audioPacketsReceived"] = audioStats.audioPacketsReceived;
         return audioStatsEventData;
+    }
+    
+    static func prepareJSSessionEventData(_ session: OTSession) -> Dictionary<String, Any> {
+        var sessionInfo: Dictionary<String, Any> = [:];
+        sessionInfo["sessionId"] = session.sessionId;
+        guard let connection = session.connection else { return sessionInfo };
+        sessionInfo["connection"] = prepareJSConnectionEventData(connection);
+        return sessionInfo;
     }
     
     static func getSupportedEvents() -> [String] {

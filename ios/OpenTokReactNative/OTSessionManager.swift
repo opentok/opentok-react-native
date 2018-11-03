@@ -237,11 +237,7 @@ class OTSessionManager: RCTEventEmitter {
     
     @objc func getSessionInfo(_ callback: RCTResponseSenderBlock) -> Void {
         guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
-        var sessionInfo: Dictionary<String, Any> = [:];
-        if let connection = session.connection {
-            sessionInfo["connection"] = EventUtils.prepareJSConnectionEventData(connection);
-        }
-        sessionInfo["sessionId"] = session.sessionId;
+        var sessionInfo: Dictionary<String, Any> = EventUtils.prepareJSSessionEventData(session);
         sessionInfo["connectionStatus"] = session.sessionConnectionStatus.rawValue;
         callback([sessionInfo]);
     }
@@ -285,7 +281,8 @@ extension OTSessionManager: OTSessionDelegate {
     func sessionDidConnect(_ session: OTSession) {
         guard let callback = connectCallback else { return }
         callback([NSNull()])
-        self.emitEvent("\(EventUtils.sessionPreface)sessionDidConnect", data: [NSNull()]);
+        let sessionInfo = EventUtils.prepareJSSessionEventData(session);
+        self.emitEvent("\(EventUtils.sessionPreface)sessionDidConnect", data: sessionInfo);
         printLogs("OTRN: Session connected")
     }
     
