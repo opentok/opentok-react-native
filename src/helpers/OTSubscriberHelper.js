@@ -8,6 +8,7 @@ const sanitizeSubscriberEvents = (events) => {
     ios: {
       connected: 'subscriberDidConnect',
       disconnected: 'subscriberDidDisconnect',
+      reconnected: 'subscriberDidReconnect',
       error: 'didFailWithError',
       audioNetworkStats: 'audioNetworkStatsUpdated',
       videoNetworkStats: 'videoNetworkStatsUpdated',
@@ -21,6 +22,7 @@ const sanitizeSubscriberEvents = (events) => {
     android: {
       connected: 'onConnected',
       disconnected: 'onDisconnected',
+      reconnected: 'onReconnected',
       error: 'onError',
       audioNetworkStats: 'onAudioStats',
       videoNetworkStats: 'onVideoStats',

@@ -510,7 +510,16 @@ extension OTSessionManager: OTSubscriberDelegate {
     self.emitEvent("\(subscriberPreface)didFailWithError", data: errorInfo)
     printLogs("OTRN: Subscriber failed: \(error.localizedDescription)")
   }
-  
+    
+  func subscriberDidReconnect(toStream subscriber: OTSubscriberKit) {
+    if let stream = subscriber.stream {
+      let streamInfo: Dictionary<String, Any> = prepareJSEventData(stream);
+      self.emitEvent("\(subscriberPreface)subscriberDidReconnect", data: streamInfo);
+    } else {
+      self.emitEvent("\(subscriberPreface)subscriberDidReconnect", data: [NSNull()]);
+    }
+    printLogs("OTRN: subscriberDidReconnect")
+  }
 }
 
 extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
