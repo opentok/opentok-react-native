@@ -262,17 +262,6 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    func convertOTSubscriberVideoEventReasonToString(_ reason: OTSubscriberVideoEventReason) -> String {
-        switch reason {
-        case OTSubscriberVideoEventReason.publisherPropertyChanged:
-            return "PublisherPropertyChanged"
-        case OTSubscriberVideoEventReason.subscriberPropertyChanged:
-            return "SubscriberPropertyChanged"
-        case OTSubscriberVideoEventReason.qualityChanged:
-            return "QualityChanged"
-        }
-    }
-    
     func checkAndEmitStreamPropertyChangeEvent(_ streamId: String, changedProperty: String, oldValue: Any, newValue: Any) {
         guard let stream = OTRN.sharedState.subscriberStreams[streamId] else { return }
         let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
@@ -492,13 +481,12 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
         let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
         if (streamId.count > 0) {
+            subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
             guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                subscriberInfo["reason"] = reason;
                 self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoEnabled", data: subscriberInfo);
                 return
             }
             subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
-            subscriberInfo["reason"] = reason;
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoEnabled", data: subscriberInfo);
         }
         printLogs("OTRN: subscriberVideoEnabled")
@@ -508,7 +496,7 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
         let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
         if (streamId.count > 0) {
-            subscriberInfo["reason"] = reason;
+            subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
             guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
                 self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisabled", data: subscriberInfo);
                 return

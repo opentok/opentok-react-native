@@ -42,4 +42,15 @@ class Utils {
         guard let streamId = streamIds.first else { return ""; }
         return streamId.key;
     }
+    
+    static func convertOTSubscriberVideoEventReasonToString(_ reason: OTSubscriberVideoEventReason) -> String {
+        switch reason {
+        case OTSubscriberVideoEventReason.publisherPropertyChanged:
+            return "PublisherPropertyChanged"
+        case OTSubscriberVideoEventReason.subscriberPropertyChanged:
+            return "SubscriberPropertyChanged"
+        case OTSubscriberVideoEventReason.qualityChanged:
+            return "QualityChanged"
+        }
+    }
 }
