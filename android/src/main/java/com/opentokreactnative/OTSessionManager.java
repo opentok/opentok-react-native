@@ -47,7 +47,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         SubscriberKit.AudioLevelListener,
         SubscriberKit.AudioStatsListener,
         SubscriberKit.VideoStatsListener,
-        SubscriberKit.VideoListener{
+        SubscriberKit.VideoListener,
+        SubscriberKit.StreamListener{
 
     private Callback connectCallback;
     private Callback disconnectCallback;
@@ -164,6 +165,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setAudioStatsListener(this);
         mSubscriber.setVideoStatsListener(this);
         mSubscriber.setVideoListener(this);
+        mSubscriber.setStreamListener(this);        
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
         mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
         mSubscribers.put(streamId, mSubscriber);
@@ -675,6 +677,15 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             sendEvent(this.getReactApplicationContext(), subscriberPreface +  "onDisconnected", null);
         }
         printLogs("onDisconnected: Subscriber disconnected. Stream: "+subscriberKit.getStream().getStreamId());
+    }
+
+    @Override
+    public void onReconnected(SubscriberKit subscriberKit) {
+
+        if (contains(jsEvents, subscriberPreface +  "onReconnected")) {
+            sendEvent(this.getReactApplicationContext(), subscriberPreface +  "onReconnected", null);
+        }
+        printLogs("onReconnected: Subscriber reconnected. Stream: "+subscriberKit.getStream().getStreamId());
     }
 
     @Override
