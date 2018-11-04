@@ -19,6 +19,8 @@
 		9C6F95D420ACE90E00FEAD68 /* OTScreenCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C920ACE90E00FEAD68 /* OTScreenCapturer.swift */; };
 		9C6F95D520ACE90E00FEAD68 /* OTRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */; };
 		9C6F95D620ACE90E00FEAD68 /* OTPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */; };
+		9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86849C218E2B5A004679BA /* EventUtils.swift */; };
+		9C86850F218E3433004679BA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86850E218E3433004679BA /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +53,8 @@
 		9C6F95CA20ACE90E00FEAD68 /* OTPublisher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTPublisher.h; sourceTree = "<group>"; };
 		9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTRN.swift; sourceTree = "<group>"; };
 		9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTPublisher.m; sourceTree = "<group>"; };
+		9C86849C218E2B5A004679BA /* EventUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUtils.swift; sourceTree = "<group>"; };
+		9C86850E218E3433004679BA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,7 @@
 		9C6F95B620ACE8BE00FEAD68 /* OpenTokReactNative */ = {
 			isa = PBXGroup;
 			children = (
+				9C86849B218E2B31004679BA /* Utils */,
 				9C6F95CA20ACE90E00FEAD68 /* OTPublisher.h */,
 				9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */,
 				9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */,
@@ -100,6 +105,15 @@
 				9C6F95C020ACE90D00FEAD68 /* OpenTokReactNative-Bridging-Header.h */,
 			);
 			path = OpenTokReactNative;
+			sourceTree = "<group>";
+		};
+		9C86849B218E2B31004679BA /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9C86849C218E2B5A004679BA /* EventUtils.swift */,
+				9C86850E218E3433004679BA /* Utils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,8 +176,10 @@
 			files = (
 				9C6F95D020ACE90E00FEAD68 /* OTSubscriber.m in Sources */,
 				9C6F95D120ACE90E00FEAD68 /* OTPublisherManager.swift in Sources */,
+				9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */,
 				9C6F95D220ACE90E00FEAD68 /* OTSessionManager.swift in Sources */,
 				9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */,
+				9C86850F218E3433004679BA /* Utils.swift in Sources */,
 				9C6F95CF20ACE90E00FEAD68 /* OTPublisherView.swift in Sources */,
 				9C6F95CE20ACE90E00FEAD68 /* OTSubscriberManager.swift in Sources */,
 				9C6F95B920ACE8BE00FEAD68 /* OpenTokReactNative.m in Sources */,
@@ -225,7 +241,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -274,7 +290,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
