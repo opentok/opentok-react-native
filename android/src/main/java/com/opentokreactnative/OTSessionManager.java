@@ -29,6 +29,8 @@ import com.opentok.android.Stream;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
+import com.opentokreactnative.utils.EventUtils;
+import com.opentokreactnative.utils.Utils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -147,8 +149,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Session mSession = sharedState.getSession();
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
-        mSession.publish(mPublisher);
-        callback.invoke();
+        if (mSession != null && mPublisher != null) {
+            mSession.publish(mPublisher);
+            callback.invoke();
+        } else {
+            callback.invoke("There was an error publishing");
+        }
 
     }
 
@@ -196,7 +202,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 mSubscribers.remove(mStreamId);
                 mSubscriberStreams.remove(mStreamId);
                 mCallback.invoke();
-     
+
             }
           });
     }
@@ -329,13 +335,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void getSessionInfo(Callback callback) {
 
         Session mSession = sharedState.getSession();
-        WritableMap sessionInfo = Arguments.createMap();
-        int connectionStatus = getConnectionStatus();
+        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(mSession);
         sessionInfo.putString("sessionId", mSession.getSessionId());
-        if (connectionStatus == 1) {
-            sessionInfo.putMap("connection", prepareConnectionMap(mSession.getConnection()));
-        }
-        sessionInfo.putInt("connectionStatus", connectionStatus);
+        sessionInfo.putInt("connectionStatus", getConnectionStatus());
         callback.invoke(sessionInfo);
     }
 
@@ -348,101 +350,22 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         this.logLevel = logLevel;
     }
 
-    private boolean contains(ArrayList array, String value) {
-
-        for (int i = 0; i < array.size(); i++) {
-            if (array.get(i).equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private WritableMap prepareStreamMap(Stream stream) {
-
-        WritableMap streamInfo = Arguments.createMap();
-        streamInfo.putString("streamId", stream.getStreamId());
-        streamInfo.putInt("height", stream.getVideoHeight());
-        streamInfo.putInt("width", stream.getVideoWidth());
-        streamInfo.putString("creationTime", stream.getCreationTime().toString());
-        streamInfo.putString("connectionId", stream.getConnection().getConnectionId());
-        streamInfo.putString("name", stream.getName());
-        streamInfo.putBoolean("hasAudio", stream.hasAudio());
-        streamInfo.putBoolean("hasVideo", stream.hasVideo());
-        return streamInfo;
-    }
-
-    private WritableMap prepareErrorMap(OpentokError error) {
-
-        WritableMap errorInfo = Arguments.createMap();
-        errorInfo.putString("message", error.getMessage());
-        errorInfo.putString("code", error.getErrorCode().toString());
-        return errorInfo;
-    }
-
-    private WritableMap prepareConnectionMap(Connection connection) {
-
-        WritableMap connectionInfo = Arguments.createMap();
-        connectionInfo.putString("connectionId", connection.getConnectionId());
-        connectionInfo.putString("creationTime", connection.getCreationTime().toString());
-        connectionInfo.putString("data", connection.getData());
-        return connectionInfo;
-    }
-
-    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, Boolean oldValue, Boolean newValue, WritableMap stream) {
-
-        WritableMap streamPropertyEventData = Arguments.createMap();
-        streamPropertyEventData.putString("changedProperty", changedProperty);
-        streamPropertyEventData.putBoolean("oldValue", oldValue);
-        streamPropertyEventData.putBoolean("newValue", newValue);
-        streamPropertyEventData.putMap("stream", stream);
-        return streamPropertyEventData;
-    }
-
-    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, WritableMap oldValue, WritableMap newValue, WritableMap stream) {
-
-        WritableMap streamPropertyEventData = Arguments.createMap();
-        streamPropertyEventData.putString("changedProperty", changedProperty);
-        streamPropertyEventData.putMap("oldValue", oldValue);
-        streamPropertyEventData.putMap("newValue", newValue);
-        streamPropertyEventData.putMap("stream", stream);
-        return streamPropertyEventData;
-    }
-
-    private WritableMap prepareStreamPropertyChangedEventData(String changedProperty, String oldValue, String newValue, WritableMap stream) {
-
-        WritableMap streamPropertyEventData = Arguments.createMap();
-        streamPropertyEventData.putString("changedProperty", changedProperty);
-        streamPropertyEventData.putString("oldValue", oldValue);
-        streamPropertyEventData.putString("newValue", newValue);
-        streamPropertyEventData.putMap("stream", stream);
-        return streamPropertyEventData;
-    }
-
-    private void sendEvent(ReactContext reactContext, String eventName, String eventData) {
-
-        reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, eventData);
-    }
-
     private void sendEventMap(ReactContext reactContext, String eventName, @Nullable WritableMap eventData) {
 
-        reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, eventData);
+        if (Utils.contains(jsEvents, eventName) || Utils.contains(componentEvents, eventName)) {
+            reactContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(eventName, eventData);
+        }
     }
 
-    private String getPublisherId(PublisherKit publisherKit) {
+    private void sendEventWithString(ReactContext reactContext, String eventName, String eventString) {
 
-        Map<String, Publisher> publishers = sharedState.getPublishers();
-        for (Map.Entry<String, Publisher> entry: publishers.entrySet()) {
-            Publisher mPublisher = entry.getValue();
-            if (mPublisher.equals(publisherKit)) {
-                return entry.getKey();
-            }
+        if (Utils.contains(jsEvents, eventName) || Utils.contains(componentEvents, eventName)) {
+            reactContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(eventName, eventString);
         }
-        return "";
     }
 
     private int getConnectionStatus() {
@@ -455,19 +378,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         this.connectionStatus = connectionStatus;
     }
 
-    private boolean didConnectionFail(OpentokError errorCode) {
-
-        switch (errorCode.getErrorCode()) {
-            case ConnectionFailed:
-                return true;
-            case ConnectionRefused:
-                return true;
-            case ConnectionTimedOut:
-                return true;
-            default:
-                return false;
-        }
-    }
 
     private void printLogs(String message) {
         if (this.logLevel) {
@@ -484,13 +394,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onError(Session session, OpentokError opentokError) {
 
-        if (didConnectionFail(opentokError)) {
+        if (Utils.didConnectionFail(opentokError)) {
             setConnectionStatus(6);
         }
-        if (contains(jsEvents, sessionPreface + "onError")) {
-            WritableMap errorInfo = prepareErrorMap(opentokError);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onError", errorInfo);
-        }
+        WritableMap errorInfo = EventUtils.prepareJSErrorMap(opentokError);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onError", errorInfo);
         printLogs("There was an error");
     }
 
@@ -501,23 +409,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (disconnectCallback != null) {
             disconnectCallback.invoke();
         }
-
-        if (contains(jsEvents, sessionPreface + "onDisconnected")) {
-            sendEvent(this.getReactApplicationContext(), sessionPreface + "onDisconnected", null);
-
-        }
+        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(session);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onDisconnected", sessionInfo);
         printLogs("onDisconnected: Disconnected from session: " + session.getSessionId());
     }
 
     @Override
     public void onStreamReceived(Session session, Stream stream) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamReceived") || contains(componentEvents, sessionPreface + "onStreamReceived")) {
-            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
-            mSubscriberStreams.put(stream.getStreamId(), stream);
-            WritableMap streamInfo = prepareStreamMap(stream);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamReceived", streamInfo);
-        }
+        ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+        mSubscriberStreams.put(stream.getStreamId(), stream);
+        WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamReceived", streamInfo);
         printLogs("onStreamReceived: New Stream Received " + stream.getStreamId() + " in session: " + session.getSessionId());
 
     }
@@ -527,19 +430,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         setConnectionStatus(1);
         connectCallback.invoke();
-        if (contains(jsEvents, sessionPreface + "onConnected") || contains(componentEvents, sessionPreface + "onConnected")) {
-            sendEvent(this.getReactApplicationContext(), sessionPreface + "onConnected", null);
-        }
-        printLogs("onConnected: Connected to session: "+session.getSessionId());
+        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(session);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnected", sessionInfo);
         connectCallback = null;
+        printLogs("onConnected: Connected to session: "+session.getSessionId());
     }
 
     @Override
     public void onReconnected(Session session) {
 
-        if (contains(jsEvents, sessionPreface + "onReconnected")) {
-            sendEvent(this.getReactApplicationContext(), sessionPreface + "onReconnected", null);
-        }
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onReconnected", null);
         printLogs("Reconnected");
     }
 
@@ -547,74 +447,60 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onReconnecting(Session session) {
 
         setConnectionStatus(3);
-        if (contains(jsEvents, sessionPreface + "onReconnecting")) {
-            sendEvent(this.getReactApplicationContext(), sessionPreface + "onReconnecting", null);
-        }
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onReconnecting", null);
         printLogs("Reconnecting");
     }
 
     @Override
     public void onArchiveStarted(Session session, String id, String name) {
 
-        if (contains(jsEvents, sessionPreface + "onArchiveStarted")) {
-            WritableMap archiveInfo = Arguments.createMap();
-            archiveInfo.putString("archiveId", id);
-            archiveInfo.putString("name", name);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onArchiveStarted", archiveInfo);
-        }
+        WritableMap archiveInfo = Arguments.createMap();
+        archiveInfo.putString("archiveId", id);
+        archiveInfo.putString("name", name);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onArchiveStarted", archiveInfo);
         printLogs("Archive Started: " + id);
     }
 
     @Override
     public void onArchiveStopped(Session session, String id) {
 
-        if (contains(jsEvents, sessionPreface + "onArchiveStopped")) {
-            WritableMap archiveInfo = Arguments.createMap();
-            archiveInfo.putString("archiveId", id);
-            archiveInfo.putString("name", "");
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onArchiveStopped", archiveInfo);
-        }
+        WritableMap archiveInfo = Arguments.createMap();
+        archiveInfo.putString("archiveId", id);
+        archiveInfo.putString("name", "");
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onArchiveStopped", archiveInfo);
         printLogs("Archive Stopped: " + id);
     }
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
 
-        if (contains(jsEvents, sessionPreface + "onConnectionCreated")) {
-            WritableMap connectionInfo = prepareConnectionMap(connection);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionCreated", connectionInfo);
-        }
+        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(connection);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionCreated", connectionInfo);
         printLogs("onConnectionCreated: Connection Created: "+connection.getConnectionId());
     }
 
     @Override
     public void onConnectionDestroyed(Session session, Connection connection) {
 
-        if (contains(jsEvents, sessionPreface + "onConnectionDestroyed")) {
-            WritableMap connectionInfo = prepareConnectionMap(connection);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionDestroyed", connectionInfo);
-        }
+        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(connection);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionDestroyed", connectionInfo);
         printLogs("onConnectionDestroyed: Connection Destroyed: "+connection.getConnectionId());
     }
     @Override
     public void onStreamDropped(Session session, Stream stream) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamDropped") || contains(componentEvents, sessionPreface + "onStreamDropped")) {
-            WritableMap streamInfo = prepareStreamMap(stream);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamDropped", streamInfo);
-        }
+        WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamDropped", streamInfo);
         printLogs("onStreamDropped: Stream Dropped: "+stream.getStreamId() +" in session: "+session.getSessionId());
     }
 
     @Override
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
 
-        String publisherId = getPublisherId(publisherKit);
+        String publisherId = Utils.getPublisherId(publisherKit);
         if (publisherId.length() > 0) {
             String event = publisherId + ":" + publisherPreface + "onStreamCreated";;
-            if (contains(jsEvents, event)) {
-                WritableMap streamInfo = prepareStreamMap(stream);
-                sendEventMap(this.getReactApplicationContext(), event, streamInfo);
-            }
+            WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
+            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
         }
         printLogs("onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
 
@@ -623,13 +509,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
 
-        String publisherId = getPublisherId(publisherKit);
+        String publisherId = Utils.getPublisherId(publisherKit);
         String event = publisherId + ":" + publisherPreface + "onStreamDestroyed";
         if (publisherId.length() > 0) {
-            if (contains(jsEvents, event)) {
-                WritableMap streamInfo = prepareStreamMap(stream);
-                sendEventMap(this.getReactApplicationContext(), event, streamInfo);
-            }
+            WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
+            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
         }
         printLogs("onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
@@ -637,13 +521,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onError(PublisherKit publisherKit, OpentokError opentokError) {
 
-        String publisherId = getPublisherId(publisherKit);
+        String publisherId = Utils.getPublisherId(publisherKit);
         if (publisherId.length() > 0) {
             String event = publisherId + ":" + publisherPreface +  "onError";
-            if (contains(jsEvents, event)) {
-                WritableMap errorInfo = prepareErrorMap(opentokError);
-                sendEventMap(this.getReactApplicationContext(), event, errorInfo);
-            }
+            WritableMap errorInfo = EventUtils.prepareJSErrorMap(opentokError);
+            sendEventMap(this.getReactApplicationContext(), event, errorInfo);
         }
         printLogs("onError: "+opentokError.getErrorDomain() + " : " +
                 opentokError.getErrorCode() +  " - "+opentokError.getMessage());
@@ -652,20 +534,23 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onAudioLevelUpdated(PublisherKit publisher, float audioLevel) {
 
-        String publisherId = getPublisherId(publisher);
+        String publisherId = Utils.getPublisherId(publisher);
         if (publisherId.length() > 0) {
             String event = publisherId + ":" + publisherPreface + "onAudioLevelUpdated";
-            if (contains(jsEvents, event)) {
-                sendEvent(this.getReactApplicationContext(), event, String.valueOf(audioLevel));
-            }
+            sendEventWithString(this.getReactApplicationContext(), event, String.valueOf(audioLevel));
         }
     }
 
     @Override
     public void onConnected(SubscriberKit subscriberKit) {
 
-        if (contains(jsEvents, subscriberPreface +  "onConnected")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface +  "onConnected", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriberKit);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onConnected", subscriberInfo);
         }
         printLogs("onConnected: Subscriber connected. Stream: "+subscriberKit.getStream().getStreamId());
     }
@@ -673,8 +558,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onDisconnected(SubscriberKit subscriberKit) {
 
-        if (contains(jsEvents, subscriberPreface +  "onDisconnected")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface +  "onDisconnected", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriberKit);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onDisconnected", subscriberInfo);
         }
         printLogs("onDisconnected: Subscriber disconnected. Stream: "+subscriberKit.getStream().getStreamId());
     }
@@ -682,8 +572,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onReconnected(SubscriberKit subscriberKit) {
 
-        if (contains(jsEvents, subscriberPreface +  "onReconnected")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface +  "onReconnected", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriberKit);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onReconnected", subscriberInfo);
         }
         printLogs("onReconnected: Subscriber reconnected. Stream: "+subscriberKit.getStream().getStreamId());
     }
@@ -691,9 +586,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onError(SubscriberKit subscriberKit, OpentokError opentokError) {
 
-        if (contains(jsEvents, subscriberPreface +  "onError")) {
-            WritableMap errorInfo = prepareErrorMap(opentokError);
-            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onError", errorInfo);
+        String streamId = Utils.getStreamIdBySubscriber(subscriberKit);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putMap("error", EventUtils.prepareJSErrorMap(opentokError));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onError", subscriberInfo);
         }
         printLogs("onError: "+opentokError.getErrorDomain() + " : " +
                 opentokError.getErrorCode() +  " - "+opentokError.getMessage());
@@ -703,53 +603,67 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onSignalReceived(Session session, String type, String data, Connection connection) {
 
-        if (contains(jsEvents, sessionPreface + "onSignalReceived")) {
-            WritableMap signalInfo = Arguments.createMap();
-            signalInfo.putString("type", type);
-            signalInfo.putString("data", data);
-            signalInfo.putString("connectionId", connection.getConnectionId());
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
-        }
+        WritableMap signalInfo = Arguments.createMap();
+        signalInfo.putString("type", type);
+        signalInfo.putString("data", data);
+        signalInfo.putString("connectionId", connection.getConnectionId());
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
         printLogs("onSignalReceived: Data: " + data + " Type: " + type);
     }
 
     @Override
     public void onAudioStats(SubscriberKit subscriber, SubscriberKit.SubscriberAudioStats stats) {
 
-        if (contains(jsEvents, subscriberPreface + "onAudioStats")) {
-            WritableMap audioStats = Arguments.createMap();
-            audioStats.putInt("audioPacketsLost", stats.audioPacketsLost);
-            audioStats.putInt("audioBytesReceived", stats.audioBytesReceived);
-            audioStats.putInt("audioPacketsReceived", stats.audioPacketsReceived);
-            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onAudioStats", audioStats);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putMap("audioStats", EventUtils.prepareAudioNetworkStats(stats));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onAudioStats", subscriberInfo);
         }
     }
 
     @Override
     public void onVideoStats(SubscriberKit subscriber, SubscriberKit.SubscriberVideoStats stats) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoStats")) {
-            WritableMap audioStats = Arguments.createMap();
-            audioStats.putInt("videoPacketsLost", stats.videoPacketsLost);
-            audioStats.putInt("videoBytesReceived", stats.videoBytesReceived);
-            audioStats.putInt("videoPacketsReceived", stats.videoPacketsReceived);
-            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoStats", audioStats);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putMap("videoStats", EventUtils.prepareVideoNetworkStats(stats));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoStats", subscriberInfo);
         }
     }
 
     @Override
     public void onAudioLevelUpdated(SubscriberKit subscriber, float audioLevel) {
 
-        if (contains(jsEvents, subscriberPreface + "onAudioLevelUpdated")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onAudioLevelUpdated", String.valueOf(audioLevel));
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putString("audioLevel", String.valueOf(audioLevel));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onAudioLevelUpdated", subscriberInfo);
         }
     }
 
     @Override
     public void onVideoDisabled(SubscriberKit subscriber, String reason) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoDisabled")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoDisabled", reason);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putString("reason", reason);
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoDisabled", subscriberInfo);
         }
         printLogs("onVideoDisabled " + reason);
     }
@@ -757,8 +671,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onVideoEnabled(SubscriberKit subscriber, String reason) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoEnabled")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoEnabled", reason);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            subscriberInfo.putString("reason", reason);
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoEnabled", subscriberInfo);
         }
         printLogs("onVideoEnabled " + reason);
     }
@@ -766,8 +686,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onVideoDisableWarning(SubscriberKit subscriber) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoDisableWarning")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoDisableWarning", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoDisableWarning", subscriberInfo);
         }
         printLogs("onVideoDisableWarning");
     }
@@ -775,8 +700,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onVideoDisableWarningLifted(SubscriberKit subscriber) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoDisableWarningLifted")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoDisableWarningLifted", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoDisableWarningLifted", subscriberInfo);
         }
         printLogs("onVideoDisableWarningLifted");
     }
@@ -784,50 +714,46 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onVideoDataReceived(SubscriberKit subscriber) {
 
-        if (contains(jsEvents, subscriberPreface + "onVideoDataReceived")) {
-            sendEvent(this.getReactApplicationContext(), subscriberPreface + "onVideoDataReceived", null);
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream));
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onVideoDataReceived", subscriberInfo);
         }
     }
 
     @Override
     public void onStreamHasAudioChanged(Session session, Stream stream, boolean Audio) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
-            WritableMap streamInfo = prepareStreamMap(stream);
-            WritableMap eventData = prepareStreamPropertyChangedEventData("hasAudio", !Audio, Audio, streamInfo);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
-        }
+        WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("hasAudio", !Audio, Audio, stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamHasAudioChanged");
     }
     @Override
     public void onStreamHasVideoChanged(Session session, Stream stream, boolean Video) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
-            WritableMap streamInfo = prepareStreamMap(stream);
-            WritableMap eventData = prepareStreamPropertyChangedEventData("hasVideo", !Video, Video, streamInfo);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
-        }
+        WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("hasVideo", !Video, Video, stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamHasVideoChanged");
     }
 
     @Override
     public void onStreamVideoDimensionsChanged(Session session, Stream stream, int width, int height) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
-            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
-            Stream mStream = mSubscriberStreams.get(stream.getStreamId());
-            WritableMap oldVideoDimensions = Arguments.createMap();
-            if ( mStream != null ){
-                oldVideoDimensions.putInt("height", mStream.getVideoHeight());
-                oldVideoDimensions.putInt("width", mStream.getVideoWidth());
-            }
-            WritableMap newVideoDimensions = Arguments.createMap();
-            newVideoDimensions.putInt("height", height);
-            newVideoDimensions.putInt("width", width);
-            WritableMap streamInfo = prepareStreamMap(stream);
-            WritableMap eventData = prepareStreamPropertyChangedEventData("videoDimensions", oldVideoDimensions, newVideoDimensions, streamInfo);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
+        ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+        Stream mStream = mSubscriberStreams.get(stream.getStreamId());
+        WritableMap oldVideoDimensions = Arguments.createMap();
+        if ( mStream != null ){
+            oldVideoDimensions.putInt("height", mStream.getVideoHeight());
+            oldVideoDimensions.putInt("width", mStream.getVideoWidth());
         }
+        WritableMap newVideoDimensions = Arguments.createMap();
+        newVideoDimensions.putInt("height", height);
+        newVideoDimensions.putInt("width", width);
+        WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("videoDimensions", oldVideoDimensions, newVideoDimensions, stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamVideoDimensionsChanged");
 
     }
@@ -835,14 +761,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onStreamVideoTypeChanged(Session session, Stream stream, Stream.StreamVideoType videoType) {
 
-        if (contains(jsEvents, sessionPreface + "onStreamPropertyChanged")) {
-            ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
-            Stream mStream = mSubscriberStreams.get(stream.getStreamId());
-            String oldVideoType = stream.getStreamVideoType().toString();
-            WritableMap streamInfo = prepareStreamMap(stream);
-            WritableMap eventData = prepareStreamPropertyChangedEventData("videoType", oldVideoType, videoType.toString(), streamInfo);
-            sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
-        }
+        ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+        Stream mStream = mSubscriberStreams.get(stream.getStreamId());
+        String oldVideoType = stream.getStreamVideoType().toString();
+        WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("videoType", oldVideoType, videoType.toString(), stream);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamVideoTypeChanged");
     }
 
