@@ -32,7 +32,7 @@ public class OTPublisherLayout extends FrameLayout{
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
         FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
         if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+            ((GLSurfaceView) mPublisher.getView()).setZOrderMediaOverlay(false);
         }
         ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
         mPublisherViewContainers.put(publisherId, mPublisherViewContainer);
