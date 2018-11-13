@@ -66,4 +66,6 @@ RCT_EXTERN_METHOD(removeJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(getSessionInfo:
                   (RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(enableLogs:
+                  (BOOL)logLevel)
 @end
