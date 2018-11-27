@@ -36,12 +36,7 @@ class Utils {
         guard let publisherId = publisherIds.first else { return ""; }
         return publisherId.key;
     }
-    
-    static func getStreamIdBySubscriber(_ subscriber: OTSubscriber) -> String {
-        let streamIds = OTRN.sharedState.subscribers.filter {$0.value == subscriber}
-        guard let streamId = streamIds.first else { return ""; }
-        return streamId.key;
-    }
+
     
     static func convertOTSubscriberVideoEventReasonToString(_ reason: OTSubscriberVideoEventReason) -> String {
         switch reason {
