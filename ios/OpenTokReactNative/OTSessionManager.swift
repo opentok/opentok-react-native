@@ -431,119 +431,95 @@ extension OTSessionManager: OTSubscriberDelegate {
     }
     
     func subscriber(_ subscriber: OTSubscriberKit, didFailWithError error: OTError) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["error"] = EventUtils.prepareJSErrorEventData(error);
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)didFailWithError", data: subscriberInfo)
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["error"] = EventUtils.prepareJSErrorEventData(error);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)didFailWithError", data: subscriberInfo)
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)didFailWithError", data: subscriberInfo)
         printLogs("OTRN: Subscriber failed: \(error.localizedDescription)")
     }
 }
 
 extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
     func subscriber(_ subscriber: OTSubscriberKit, videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["videoStats"] = EventUtils.prepareSubscriberVideoNetworkStatsEventData(stats);
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)videoNetworkStatsUpdated", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["videoStats"] = EventUtils.prepareSubscriberVideoNetworkStatsEventData(stats);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)videoNetworkStatsUpdated", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)videoNetworkStatsUpdated", data: subscriberInfo);
     }
     
     func subscriber(_ subscriber: OTSubscriberKit, audioNetworkStatsUpdated stats: OTSubscriberKitAudioNetworkStats) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["audioStats"] = EventUtils.prepareSubscriberAudioNetworkStatsEventData(stats);
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)audioNetworkStatsUpdated", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["audioStats"] = EventUtils.prepareSubscriberAudioNetworkStatsEventData(stats);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)audioNetworkStatsUpdated", data: subscriberInfo);
+            return
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)audioNetworkStatsUpdated", data: subscriberInfo);
     }
     
     func subscriberVideoEnabled(_ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoEnabled", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoEnabled", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoEnabled", data: subscriberInfo);
         printLogs("OTRN: subscriberVideoEnabled")
     }
     
     func subscriberVideoDisabled(_ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisabled", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["reason"] = Utils.convertOTSubscriberVideoEventReasonToString(reason);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisabled", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisabled", data: subscriberInfo);
         printLogs("OTRN: subscriberVideoDisabled")
     }
     
     func subscriberVideoDisableWarning(_ subscriber: OTSubscriberKit) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarning", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarning", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarning", data: subscriberInfo);
         printLogs("OTRN: subscriberVideoDisableWarning")
     }
     
     func subscriberVideoDisableWarningLifted(_ subscriber: OTSubscriberKit) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarningLifted", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarningLifted", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDisableWarningLifted", data: subscriberInfo);
         printLogs("OTRN: subscriberVideoDisableWarningLifted")
     }
     
     func subscriberVideoDataReceived(_ subscriber: OTSubscriber) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDataReceived", data: subscriberInfo);
-                return
-            }
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDataReceived", data: subscriberInfo);
+            return
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberVideoDataReceived", data: subscriberInfo);
     }
     
     func subscriberDidReconnect(toStream subscriber: OTSubscriberKit) {
@@ -574,17 +550,13 @@ extension OTSessionManager: OTSubscriberKitNetworkStatsDelegate {
 
 extension OTSessionManager: OTSubscriberKitAudioLevelDelegate {
     func subscriber(_ subscriber: OTSubscriberKit, audioLevelUpdated audioLevel: Float) {
-        let streamId = Utils.getStreamIdBySubscriber(subscriber as! OTSubscriber);
         var subscriberInfo: Dictionary<String, Any> = [:];
-        if (streamId.count > 0) {
-            subscriberInfo["audioLevel"] = audioLevel;
-            guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
-                return
-            }
-            var subscriberInfo: Dictionary<String, Any> = [:];
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        subscriberInfo["audioLevel"] = audioLevel;
+        guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
+            return;
         }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
     }
 }
