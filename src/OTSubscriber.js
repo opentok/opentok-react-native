@@ -52,9 +52,15 @@ export default class OTSubscriber extends Component {
       if (error) {
         handleError(error);
       } else {
-        this.setState({
-          streams: [stream.streamId, ...this.state.streams],
-        });
+        if(stream.name === 'screen-share') {
+          this.setState({
+            streams: [stream.streamId, ...this.state.streams],
+          });
+        } else {
+          this.setState({
+            streams: [...this.state.streams, stream.streamId],
+          });
+        }  
       }
     });
   }
@@ -73,6 +79,7 @@ export default class OTSubscriber extends Component {
     });
   }
   render() {
+    console.log(JSON.stringify(this.state.streams));
     const childrenWithStreams = this.state.streams.map((streamId) => {
       const streamProperties = this.props.streamProperties[streamId];
       const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
