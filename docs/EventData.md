@@ -63,6 +63,26 @@ You can find the structure of the object below:
   };
 ```
 
+### Stream Property Changed event
+
+```javascript
+  event = {
+    stream = {
+      streamId: '',
+      name: '',
+      connectionId: '',
+      hasAudio: '',
+      hasVideo: '',
+      creationTime: '',
+      height: '',
+      width: '',
+    },
+    oldValue: '',
+    newValue: '',
+    changedProperty: '',
+  }
+```
+
 ### Video Network Stats
 You can find the structure of the object below:
 
