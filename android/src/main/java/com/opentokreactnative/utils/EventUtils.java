@@ -30,6 +30,7 @@ public final class EventUtils {
             streamInfo.putInt("width", stream.getVideoWidth());
             streamInfo.putString("creationTime", stream.getCreationTime().toString());
             streamInfo.putString("connectionId", stream.getConnection().getConnectionId());
+            streamInfo.putMap("connection", prepareJSConnectionMap(stream.getConnection()));
             streamInfo.putString("name", stream.getName());
             streamInfo.putBoolean("hasAudio", stream.hasAudio());
             streamInfo.putBoolean("hasVideo", stream.hasVideo());
