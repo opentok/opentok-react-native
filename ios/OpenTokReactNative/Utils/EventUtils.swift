@@ -29,6 +29,7 @@ class EventUtils {
         streamInfo["streamId"] = stream.streamId;
         streamInfo["name"] = stream.name;
         streamInfo["connectionId"] = stream.connection.connectionId;
+        streamInfo["connection"] = prepareJSConnectionEventData(stream.connection);
         streamInfo["hasAudio"] = stream.hasAudio;
         streamInfo["hasVideo"] = stream.hasVideo;
         streamInfo["creationTime"] = convertDateToString(stream.creationTime);

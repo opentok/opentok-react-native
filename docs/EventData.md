@@ -33,6 +33,7 @@ You can find the structure of the object below:
   connection = {
     connectionId: '',
     creationTime: '',
+    data: '',
   };
 ```
 
@@ -54,7 +55,12 @@ You can find the structure of the object below:
   stream = {
     streamId: '',
     name: '',
-    connectionId: '',
+    connectionId: '', // This will be removed after v0.11.0 because it's exposed via the connection object
+    connection: {
+      connectionId: '',
+      creationTime: '',
+      data: '',
+    },
     hasAudio: '',
     hasVideo: '',
     creationTime: '',
@@ -70,13 +76,18 @@ You can find the structure of the object below:
     stream = {
       streamId: '',
       name: '',
-      connectionId: '',
+      connectionId: '', // This will be removed after v0.11.0 because it's exposed via the connection object
+      connection: {
+        connectionId: '',
+        creationTime: '',
+        data: '',
+     },
       hasAudio: '',
       hasVideo: '',
       creationTime: '',
       height: '',
       width: '',
-    },
+     },
     oldValue: '',
     newValue: '',
     changedProperty: '',
