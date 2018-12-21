@@ -289,9 +289,7 @@ extension OTSessionManager: OTSessionDelegate {
         let sessionInfo = EventUtils.prepareJSSessionEventData(session);
         self.emitEvent("\(EventUtils.sessionPreface)sessionDidDisconnect", data: sessionInfo);
         guard let callback = disconnectCallback else { return }
-        print("OTRN: dispatching disconnect calllback via native thread")
         callback([NSNull()]);
-        print("OTRN: setting session to nil")
         OTRN.sharedState.session?.delegate = nil;
         OTRN.sharedState.session = nil;
         printLogs("OTRN: Session disconnected")

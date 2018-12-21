@@ -517,7 +517,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             sendEventMap(this.getReactApplicationContext(), event, streamInfo);
         }
         Callback mCallback = sharedState.getPublisherDestroyedCallbacks().get(publisherId);
-        mCallback.invoke();
+        if (mCallback != null) {
+            mCallback.invoke();
+        }
         sharedState.getPublishers().remove(publisherId);
         printLogs("onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
