@@ -12,6 +12,7 @@ import Foundation
 class OTSessionManager: RCTEventEmitter {
     
     var connectCallback: RCTResponseSenderBlock?
+    var disconnectCallback: RCTResponseSenderBlock?
     var jsEvents: [String] = [];
     var componentEvents: [String] = [];
     var logLevel: Bool = false;
@@ -22,7 +23,7 @@ class OTSessionManager: RCTEventEmitter {
         OTRN.sharedState.isPublishing.removeAll();
         OTRN.sharedState.publishers.removeAll();
         OTRN.sharedState.subscribers.removeAll();
-        
+        OTRN.sharedState.publisherDestroyedCallbacks.removeAll();
     }
     
     override static func requiresMainQueueSetup() -> Bool {
@@ -137,15 +138,13 @@ class OTSessionManager: RCTEventEmitter {
         
     }
     
-    @objc func disconnectSession(_ callback: RCTResponseSenderBlock) -> Void {
+    @objc func disconnectSession(_ callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
         OTRN.sharedState.session?.disconnect(&error)
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
         } else {
-            OTRN.sharedState.session?.delegate = nil;
-            OTRN.sharedState.session = nil;
-            callback([NSNull()])
+            disconnectCallback = callback;
         }
     }
     
@@ -211,19 +210,20 @@ class OTSessionManager: RCTEventEmitter {
         DispatchQueue.main.async {
             guard let publisher = OTRN.sharedState.publishers[publisherId] else { callback([NSNull()]); return }
             guard let session = OTRN.sharedState.session else {
-                self.resetPublisher(publisherId, publisher: publisher);
                 callback([NSNull()]);
                 return
             }
             var error: OTError?
             if let isPublishing = OTRN.sharedState.isPublishing[publisherId] {
-                if (isPublishing) {
+                if (isPublishing && session.sessionConnectionStatus.rawValue == 1) {
                     session.unpublish(publisher, error: &error)
                 }
             }
-            self.resetPublisher(publisherId, publisher: publisher);
-            guard let err = error else { callback([NSNull()]); return }
-            callback([err.localizedDescription as Any])
+            guard let err = error else {
+                OTRN.sharedState.publisherDestroyedCallbacks[publisherId] = callback;
+                return
+            }
+            self.dispatchErrorViaCallback(callback, error: err)
         }
     }
     
@@ -248,7 +248,6 @@ class OTSessionManager: RCTEventEmitter {
     
     func resetPublisher(_ publisherId: String, publisher: OTPublisher) -> Void {
         publisher.view?.removeFromSuperview()
-        publisher.delegate = nil;
         OTRN.sharedState.isPublishing[publisherId] = false;
     }
     
@@ -289,6 +288,12 @@ extension OTSessionManager: OTSessionDelegate {
     func sessionDidDisconnect(_ session: OTSession) {
         let sessionInfo = EventUtils.prepareJSSessionEventData(session);
         self.emitEvent("\(EventUtils.sessionPreface)sessionDidDisconnect", data: sessionInfo);
+        guard let callback = disconnectCallback else { return }
+        print("OTRN: dispatching disconnect calllback via native thread")
+        callback([NSNull()]);
+        print("OTRN: setting session to nil")
+        OTRN.sharedState.session?.delegate = nil;
+        OTRN.sharedState.session = nil;
         printLogs("OTRN: Session disconnected")
     }
     
@@ -392,11 +397,19 @@ extension OTSessionManager: OTPublisherDelegate {
     
     func publisher(_ publisher: OTPublisherKit, streamDestroyed stream: OTStream) {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        OTRN.sharedState.isPublishing[publisherId] = false;
         if (publisherId.count > 0) {
             OTRN.sharedState.isPublishing[publisherId] = false;
             let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)streamDestroyed", data: streamInfo);
         }
+        OTRN.sharedState.publishers[publisherId] = nil;
+        OTRN.sharedState.isPublishing[publisherId] = nil;
+        guard let callback = OTRN.sharedState.publisherDestroyedCallbacks[publisherId] else {
+            printLogs("OTRN: Publisher Stream destroyed")
+            return
+        };
+        callback([NSNull()]);
         printLogs("OTRN: Publisher Stream destroyed")
     }
     

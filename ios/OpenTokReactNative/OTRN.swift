@@ -14,6 +14,7 @@ class OTRN : NSObject {
   var subscriberStreams = [String: OTStream]()
   var subscribers = [String: OTSubscriber]()
   var publishers = [String: OTPublisher]()
+  var publisherDestroyedCallbacks = [String: RCTResponseSenderBlock]()
   var isPublishing = [String: Bool]()
   var streamObservers = [String: [NSKeyValueObservation]]()
   override init() {

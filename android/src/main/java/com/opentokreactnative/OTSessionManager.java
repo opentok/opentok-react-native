@@ -87,9 +87,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @ReactMethod
     public void connect(String token, Callback callback) {
 
+        connectCallback = callback;
         Session mSession = sharedState.getSession();
         mSession.connect(token);
-        connectCallback = callback;
     }
 
     @ReactMethod
@@ -111,24 +111,24 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
             OTScreenCapturer capturer = new OTScreenCapturer(view);
             mPublisher = new Publisher.Builder(this.getReactApplicationContext())
-                                        .audioTrack(audioTrack)
-                                        .videoTrack(videoTrack)
-                                        .name(name)
-                                        .audioBitrate(audioBitrate)
-                                        .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
-                                        .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
-                                        .capturer(capturer)
-                                        .build();
+                    .audioTrack(audioTrack)
+                    .videoTrack(videoTrack)
+                    .name(name)
+                    .audioBitrate(audioBitrate)
+                    .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
+                    .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
+                    .capturer(capturer)
+                    .build();
             mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         } else {
             mPublisher = new Publisher.Builder(this.getReactApplicationContext())
-                                        .audioTrack(audioTrack)
-                                        .videoTrack(videoTrack)
-                                        .name(name)
-                                        .audioBitrate(audioBitrate)
-                                        .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
-                                        .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
-                                        .build();
+                    .audioTrack(audioTrack)
+                    .videoTrack(videoTrack)
+                    .name(name)
+                    .audioBitrate(audioBitrate)
+                    .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
+                    .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
+                    .build();
             if (cameraPosition.equals("back")) {
                 mPublisher.cycleCamera();
             }
@@ -171,7 +171,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setAudioStatsListener(this);
         mSubscriber.setVideoStatsListener(this);
         mSubscriber.setVideoListener(this);
-        mSubscriber.setStreamListener(this);        
+        mSubscriber.setStreamListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
         mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
         mSubscribers.put(streamId, mSubscriber);
@@ -186,7 +186,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-     
+
                 String mStreamId = streamId;
                 Callback mCallback = callback;
                 ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
@@ -204,18 +204,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 mCallback.invoke();
 
             }
-          });
+        });
     }
 
     @ReactMethod
     public void disconnectSession(Callback callback) {
 
         Session mSession = sharedState.getSession();
+        disconnectCallback = callback;
         if (mSession != null) {
             mSession.disconnect();
         }
         sharedState.setSession(null);
-        disconnectCallback = callback;
     }
 
     @ReactMethod
@@ -310,7 +310,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             @Override
             public void run() {
 
-                Callback mCallback = callback;
+                ConcurrentHashMap<String, Callback> mPublisherDestroyedCallbacks = sharedState.getPublisherDestroyedCallbacks();
+                mPublisherDestroyedCallbacks.put(publisherId, callback);
                 ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
                 Publisher mPublisher = mPublishers.get(publisherId);
                 ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
@@ -320,13 +321,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     mPublisherViewContainer.removeAllViews();
                 }
                 mPublisherViewContainers.remove(publisherId);
-                if (mSession != null) {
+                if (mSession != null && mPublisher != null) {
                     mSession.unpublish(mPublisher);
                 }
-                mPublisher.destroy();
-                mPublishers.remove(publisherId);
-                mCallback.invoke();
-
+                if (mPublisher != null) {
+                    mPublisher.destroy();
+                }
             }
         });
     }
@@ -405,12 +405,15 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onDisconnected(Session session) {
 
+        Log.i("OTRN", "disconnected");
+        Log.i("OTRN", jsEvents.toString());
         setConnectionStatus(0);
+        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(session);
+        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onDisconnected", sessionInfo);
         if (disconnectCallback != null) {
             disconnectCallback.invoke();
         }
-        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(session);
-        sendEventMap(this.getReactApplicationContext(), sessionPreface + "onDisconnected", sessionInfo);
+        disconnectCallback = null;
         printLogs("onDisconnected: Disconnected from session: " + session.getSessionId());
     }
 
@@ -515,6 +518,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), event, streamInfo);
         }
+        Callback mCallback = sharedState.getPublisherDestroyedCallbacks().get(publisherId);
+        mCallback.invoke();
+        sharedState.getPublishers().remove(publisherId);
         printLogs("onStreamDestroyed: Publisher Stream Destroyed. Own stream "+stream.getStreamId());
     }
 
