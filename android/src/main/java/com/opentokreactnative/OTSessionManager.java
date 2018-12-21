@@ -405,8 +405,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onDisconnected(Session session) {
 
-        Log.i("OTRN", "disconnected");
-        Log.i("OTRN", jsEvents.toString());
         setConnectionStatus(0);
         WritableMap sessionInfo = EventUtils.prepareJSSessionMap(session);
         sendEventMap(this.getReactApplicationContext(), sessionPreface + "onDisconnected", sessionInfo);
