@@ -9,6 +9,7 @@ import com.opentok.android.Subscriber;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.facebook.react.bridge.Callback;
 /**
  * Created by manik on 1/10/18.
  */
@@ -23,6 +24,7 @@ public class OTRN {
     private ConcurrentHashMap<String, Publisher> publishers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> subscriberViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Callback> publisherDestroyedCallbacks = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
 
@@ -66,6 +68,11 @@ public class OTRN {
     public ConcurrentHashMap<String, FrameLayout> getPublisherViewContainers() {
 
         return this.publisherViewContainers;
+    }
+
+    public ConcurrentHashMap<String, Callback> getPublisherDestroyedCallbacks() {
+
+        return this.publisherDestroyedCallbacks;
     }
 
     private OTRN() {}
