@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.facebook.react:react-native:${_reactNativeVersion}"  // From node_modules
-    compile 'com.opentok.android:opentok-android-sdk:2.15.0'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.facebook.react:react-native:${_reactNativeVersion}"  // From node_modules
+    implementation 'com.opentok.android:opentok-android-sdk:2.15.2'
 }

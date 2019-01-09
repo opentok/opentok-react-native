@@ -49,7 +49,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OpenTok', '2.15.0'
+        pod 'OpenTok', '2.15.2'
     end
 
 ```
