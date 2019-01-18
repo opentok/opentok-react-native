@@ -612,7 +612,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         WritableMap signalInfo = Arguments.createMap();
         signalInfo.putString("type", type);
         signalInfo.putString("data", data);
-        signalInfo.putString("connectionId", connection.getConnectionId());
+        if(connection != null) {
+            signalInfo.putString("connectionId", connection.getConnectionId());
+        }
         sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
         printLogs("onSignalReceived: Data: " + data + " Type: " + type);
     }
