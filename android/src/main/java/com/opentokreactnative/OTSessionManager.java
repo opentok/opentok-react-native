@@ -749,7 +749,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @Override
     public void onStreamVideoDimensionsChanged(Session session, Stream stream, int width, int height) {
-
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         Stream mStream = mSubscriberStreams.get(stream.getStreamId());
         WritableMap oldVideoDimensions = Arguments.createMap();
