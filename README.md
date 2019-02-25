@@ -37,7 +37,7 @@ React Native library for OpenTok iOS and Android SDKs
 
 **Note:** Please make sure to have [CocoaPods](https://cocoapods.org/) on your computer.
 If you've installed this package before, you may need to edit your `Podfile` and project structure because the installation process has changed.
-1. In you terminal, change into your `ios` directory.
+1. In you terminal, change into the `ios` directory of your React Native project.
 
 2. Create a pod file by running: `pod init`.
 
@@ -56,7 +56,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 4. Now run, `pod install`
 
-5. After installing the iOS SDK, change into your root directory of your project.
+5. After installing the OpenTok iOS SDK, change into your root directory of your project.
 
 6. Now run, `react-native link opentok-react-native`.
 
@@ -79,12 +79,14 @@ If you've installed this package before, you may need to edit your `Podfile` and
 ```
 
 If you try to archive the app and it fails, please do the following:
- ```
-    Go to Target -> Build Phases and add OpenTokReactNative under Target Dependencies. After that go to the Link Binary With Libraries section and remove the libOpenTokReactNative.a and add it again.
-```
+
+1. Go to Target
+2. Click on Build Phases
+3. Under the Link Binary With Libraries section, remove the libOpenTokReactNative.a and add it again 
+
 ### Android Installation
 
-1. In you terminal, change into your project directory.
+1. In your terminal, change into your project directory.
 
 2. If you have already run `react-native link opentok-react-native` for the iOS installation, please skip this step.
     *  Run `react-native link opentok-react-native`

@@ -46,14 +46,18 @@ const validateString = value => (isString(value) ? value : '');
 const sanitizeSignalData = (signal) => {
   if (typeof signal !== 'object') {
     return {
-      type: '',
-      data: '',
+      signal: {
+        type: '',
+        data: '',
+      },
       errorHandler: handleSignalError,
     };
   }
   return {
-    type: validateString(signal.type),
-    data: validateString(signal.data),
+    signal: {
+      type: validateString(signal.type),
+      data: validateString(signal.data),
+    },
     errorHandler: typeof signal.errorHandler !== 'function' ? handleSignalError : signal.errorHandler,
   };
 };
@@ -82,7 +86,7 @@ const getConnectionStatus = (connectionStatus) => {
       return "reconnecting";
     case 4:
       return "disconnecting";
-    case 5: 
+    case 5:
       return "failed";
   }
 };

@@ -91,7 +91,7 @@ You can find the structure of the object below:
     oldValue: '',
     newValue: '',
     changedProperty: '',
-  }
+  };
 ```
 
 ### Video Network Stats
