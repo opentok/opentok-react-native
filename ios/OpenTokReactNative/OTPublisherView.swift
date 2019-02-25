@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OTPublisherView)
 class OTPublisherView : UIView {
-  var publisherId: NSString?
+  @objc var publisherId: NSString?
   override init(frame: CGRect) {
     super.init(frame: frame)
   }
