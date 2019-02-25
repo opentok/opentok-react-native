@@ -9,13 +9,29 @@
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native session instance.
 
 The `OTSession` component manages the connection to an OpenTok Session. It passes the sessionId to the `sessionId` prop to its child components. To disconnect the session, unmount the `OTSession` component. To publish and subscribe, you must nest `OTPublisher` and `OTSubscriber` inside `OTSession`:
+```javascript
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.sessionEventHandlers = {
+      streamCreated: event => {
+        console.log('Stream created!', event);
+      },
+      streamDestroyed: event => {
+        console.log('Stream destroyed!', event);
+      },
+    };
+  }
 
-
-```html
-<OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
-  <OTPublisher style={{ width: 100, height: 100 }}/>
-  <OTSubscriber style={{ width: 100, height: 100 }} />
-</OTSession>
+  render() {
+    return (
+      <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token" eventHandlers={this.sesssionEventHandlers}>
+        <OTPublisher style={{ width: 100, height: 100 }}/>
+        <OTSubscriber style={{ width: 100, height: 100 }} />
+      </OTSession>
+    );
+  }
+}
 ```
 
 ## Events 
