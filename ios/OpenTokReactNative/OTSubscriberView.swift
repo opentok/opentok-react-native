@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OTSubscriberView)
 class OTSubscriberView: UIView {
-  var streamId: NSString?
+  @objc var streamId: NSString?
   override init(frame: CGRect) {
     super.init(frame: frame)
   }

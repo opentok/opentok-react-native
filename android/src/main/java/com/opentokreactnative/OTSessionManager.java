@@ -620,7 +620,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         WritableMap signalInfo = Arguments.createMap();
         signalInfo.putString("type", type);
         signalInfo.putString("data", data);
-        signalInfo.putString("connectionId", connection.getConnectionId());
+        if(connection != null) {
+            signalInfo.putString("connectionId", connection.getConnectionId());
+        }
         sendEventMap(this.getReactApplicationContext(), sessionPreface + "onSignalReceived", signalInfo);
         printLogs("onSignalReceived: Data: " + data + " Type: " + type);
     }
@@ -755,7 +757,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @Override
     public void onStreamVideoDimensionsChanged(Session session, Stream stream, int width, int height) {
-
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         Stream mStream = mSubscriberStreams.get(stream.getStreamId());
         WritableMap oldVideoDimensions = Arguments.createMap();
