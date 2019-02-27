@@ -301,8 +301,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Session mSession = sharedState.getSession();
         if (mSession != null){
             mSession.sendSignal(signal.getString("type"), signal.getString("data"));
+            callback.invoke();
+        } else {
+            callback.invoke("There was an error to send signal. Session not exists");
         }
-        callback.invoke();
+        
     }
 
     @ReactMethod
