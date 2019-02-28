@@ -7,20 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C064D78220A3E0900226592 /* OTRNSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C064D77220A3E0900226592 /* OTRNSubscriber.swift */; };
 		9C6F95B920ACE8BE00FEAD68 /* OpenTokReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */; };
 		9C6F95BA20ACE8BE00FEAD68 /* OpenTokReactNative.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */; };
-		9C6F95CD20ACE90E00FEAD68 /* OTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C120ACE90D00FEAD68 /* OTSessionManager.m */; };
+		9C6F95CD20ACE90E00FEAD68 /* OTRNService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C120ACE90D00FEAD68 /* OTRNService.m */; };
 		9C6F95CE20ACE90E00FEAD68 /* OTSubscriberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */; };
 		9C6F95CF20ACE90E00FEAD68 /* OTPublisherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C320ACE90E00FEAD68 /* OTPublisherView.swift */; };
 		9C6F95D020ACE90E00FEAD68 /* OTSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */; };
 		9C6F95D120ACE90E00FEAD68 /* OTPublisherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */; };
-		9C6F95D220ACE90E00FEAD68 /* OTSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */; };
+		9C6F95D220ACE90E00FEAD68 /* OTRNService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C620ACE90E00FEAD68 /* OTRNService.swift */; };
 		9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */; };
-		9C6F95D420ACE90E00FEAD68 /* OTScreenCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C920ACE90E00FEAD68 /* OTScreenCapturer.swift */; };
+		9C6F95D420ACE90E00FEAD68 /* OTRNScreenCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C920ACE90E00FEAD68 /* OTRNScreenCapturer.swift */; };
 		9C6F95D520ACE90E00FEAD68 /* OTRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */; };
 		9C6F95D620ACE90E00FEAD68 /* OTPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */; };
 		9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86849C218E2B5A004679BA /* EventUtils.swift */; };
 		9C86850F218E3433004679BA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86850E218E3433004679BA /* Utils.swift */; };
+		9C9C196421FF6DFA00E0E693 /* OTRNSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9C196321FF6DFA00E0E693 /* OTRNSession.swift */; };
+		9C9C196621FF71E500E0E693 /* OTRNPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9C196521FF71E500E0E693 /* OTRNPublisher.swift */; };
+		AF32B5DD2225F26C007CD7AA /* OTRNEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF32B5DC2225F26C007CD7AA /* OTRNEventEmitter.swift */; };
+		AF32B5DF22261061007CD7AA /* OTRNEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF32B5DE22261061007CD7AA /* OTRNEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,24 +42,29 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9C064D77220A3E0900226592 /* OTRNSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTRNSubscriber.swift; sourceTree = "<group>"; };
 		9C6F95B420ACE8BE00FEAD68 /* libOpenTokReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOpenTokReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenTokReactNative.h; sourceTree = "<group>"; };
 		9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenTokReactNative.m; sourceTree = "<group>"; };
 		9C6F95C020ACE90D00FEAD68 /* OpenTokReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenTokReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
-		9C6F95C120ACE90D00FEAD68 /* OTSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTSessionManager.m; sourceTree = "<group>"; };
+		9C6F95C120ACE90D00FEAD68 /* OTRNService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTRNService.m; sourceTree = "<group>"; };
 		9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSubscriberManager.swift; sourceTree = "<group>"; };
 		9C6F95C320ACE90E00FEAD68 /* OTPublisherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPublisherView.swift; sourceTree = "<group>"; };
 		9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTSubscriber.m; sourceTree = "<group>"; };
 		9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPublisherManager.swift; sourceTree = "<group>"; };
-		9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSessionManager.swift; sourceTree = "<group>"; };
+		9C6F95C620ACE90E00FEAD68 /* OTRNService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTRNService.swift; sourceTree = "<group>"; };
 		9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSubscriberView.swift; sourceTree = "<group>"; };
 		9C6F95C820ACE90E00FEAD68 /* OTSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTSubscriber.h; sourceTree = "<group>"; };
-		9C6F95C920ACE90E00FEAD68 /* OTScreenCapturer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTScreenCapturer.swift; sourceTree = "<group>"; };
+		9C6F95C920ACE90E00FEAD68 /* OTRNScreenCapturer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTRNScreenCapturer.swift; sourceTree = "<group>"; };
 		9C6F95CA20ACE90E00FEAD68 /* OTPublisher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTPublisher.h; sourceTree = "<group>"; };
 		9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTRN.swift; sourceTree = "<group>"; };
 		9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTPublisher.m; sourceTree = "<group>"; };
 		9C86849C218E2B5A004679BA /* EventUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUtils.swift; sourceTree = "<group>"; };
 		9C86850E218E3433004679BA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		9C9C196321FF6DFA00E0E693 /* OTRNSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTRNSession.swift; sourceTree = "<group>"; };
+		9C9C196521FF71E500E0E693 /* OTRNPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTRNPublisher.swift; sourceTree = "<group>"; };
+		AF32B5DC2225F26C007CD7AA /* OTRNEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTRNEventEmitter.swift; sourceTree = "<group>"; };
+		AF32B5DE22261061007CD7AA /* OTRNEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTRNEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,19 +97,9 @@
 		9C6F95B620ACE8BE00FEAD68 /* OpenTokReactNative */ = {
 			isa = PBXGroup;
 			children = (
+				AF32B5DB2225EED1007CD7AA /* Views */,
+				AF32B5DA2225EEB2007CD7AA /* OTRN */,
 				9C86849B218E2B31004679BA /* Utils */,
-				9C6F95CA20ACE90E00FEAD68 /* OTPublisher.h */,
-				9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */,
-				9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */,
-				9C6F95C320ACE90E00FEAD68 /* OTPublisherView.swift */,
-				9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */,
-				9C6F95C920ACE90E00FEAD68 /* OTScreenCapturer.swift */,
-				9C6F95C120ACE90D00FEAD68 /* OTSessionManager.m */,
-				9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */,
-				9C6F95C820ACE90E00FEAD68 /* OTSubscriber.h */,
-				9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */,
-				9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */,
-				9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */,
 				9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */,
 				9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */,
 				9C6F95C020ACE90D00FEAD68 /* OpenTokReactNative-Bridging-Header.h */,
@@ -114,6 +114,37 @@
 				9C86850E218E3433004679BA /* Utils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		AF32B5DA2225EEB2007CD7AA /* OTRN */ = {
+			isa = PBXGroup;
+			children = (
+				9C9C196321FF6DFA00E0E693 /* OTRNSession.swift */,
+				9C064D77220A3E0900226592 /* OTRNSubscriber.swift */,
+				9C9C196521FF71E500E0E693 /* OTRNPublisher.swift */,
+				AF32B5DE22261061007CD7AA /* OTRNEvent.swift */,
+				AF32B5DC2225F26C007CD7AA /* OTRNEventEmitter.swift */,
+				9C6F95C920ACE90E00FEAD68 /* OTRNScreenCapturer.swift */,
+				9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */,
+				9C6F95C120ACE90D00FEAD68 /* OTRNService.m */,
+				9C6F95C620ACE90E00FEAD68 /* OTRNService.swift */,
+			);
+			path = OTRN;
+			sourceTree = "<group>";
+		};
+		AF32B5DB2225EED1007CD7AA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9C6F95CA20ACE90E00FEAD68 /* OTPublisher.h */,
+				9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */,
+				9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */,
+				9C6F95C320ACE90E00FEAD68 /* OTPublisherView.swift */,
+				9C6F95C820ACE90E00FEAD68 /* OTSubscriber.h */,
+				9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */,
+				9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */,
+				9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,19 +205,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF32B5DD2225F26C007CD7AA /* OTRNEventEmitter.swift in Sources */,
 				9C6F95D020ACE90E00FEAD68 /* OTSubscriber.m in Sources */,
 				9C6F95D120ACE90E00FEAD68 /* OTPublisherManager.swift in Sources */,
 				9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */,
-				9C6F95D220ACE90E00FEAD68 /* OTSessionManager.swift in Sources */,
+				9C6F95D220ACE90E00FEAD68 /* OTRNService.swift in Sources */,
 				9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */,
 				9C86850F218E3433004679BA /* Utils.swift in Sources */,
+				9C064D78220A3E0900226592 /* OTRNSubscriber.swift in Sources */,
 				9C6F95CF20ACE90E00FEAD68 /* OTPublisherView.swift in Sources */,
 				9C6F95CE20ACE90E00FEAD68 /* OTSubscriberManager.swift in Sources */,
 				9C6F95B920ACE8BE00FEAD68 /* OpenTokReactNative.m in Sources */,
-				9C6F95CD20ACE90E00FEAD68 /* OTSessionManager.m in Sources */,
+				9C9C196421FF6DFA00E0E693 /* OTRNSession.swift in Sources */,
+				9C6F95CD20ACE90E00FEAD68 /* OTRNService.m in Sources */,
+				AF32B5DF22261061007CD7AA /* OTRNEvent.swift in Sources */,
 				9C6F95D620ACE90E00FEAD68 /* OTPublisher.m in Sources */,
+				9C9C196621FF71E500E0E693 /* OTRNPublisher.swift in Sources */,
 				9C6F95D520ACE90E00FEAD68 /* OTRN.swift in Sources */,
-				9C6F95D420ACE90E00FEAD68 /* OTScreenCapturer.swift in Sources */,
+				9C6F95D420ACE90E00FEAD68 /* OTRNScreenCapturer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +281,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -293,6 +330,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -313,7 +351,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenTokReactNative/OpenTokReactNative-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -333,7 +371,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenTokReactNative/OpenTokReactNative-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

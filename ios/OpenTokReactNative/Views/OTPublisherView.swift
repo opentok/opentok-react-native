@@ -19,10 +19,10 @@ class OTPublisherView : UIView {
     fatalError("init(coder:) has not been implemented")
   }
   override func layoutSubviews() {
-    if let publisherView = OTRN.sharedState.publishers[publisherId! as String]?.view {
-      publisherView.frame = self.bounds
-      addSubview(publisherView)
-    }
+    guard let otrnPublisher = OTRN.sharedState.otrnPublishers[publisherId! as String] else { return }
+    guard let publisherView = otrnPublisher.publisher?.view else { return }
+    publisherView.frame = self.frame
+    addSubview(publisherView)
   }
 }
 

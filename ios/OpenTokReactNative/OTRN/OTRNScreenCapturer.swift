@@ -7,7 +7,7 @@
 
 import Foundation
 
-class OTScreenCapturer: NSObject, OTVideoCapture {
+class OTRNScreenCapturer: NSObject, OTVideoCapture {
   var videoCaptureConsumer: OTVideoCaptureConsumer?
   
   let MAX_EDGE_SIZE_LIMIT: CGFloat = 1280.0
@@ -121,7 +121,7 @@ class OTScreenCapturer: NSObject, OTVideoCapture {
 }
 
 // MARK: - Image Utils
-extension OTScreenCapturer {
+extension OTRNScreenCapturer {
   fileprivate func pixelBuffer(fromCGImage img: CGImage) -> CVPixelBuffer {
     let frameSize = CGSize(width: img.width, height: img.height)
     CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))

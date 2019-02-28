@@ -26,17 +26,16 @@ class Utils {
         return OTCameraCaptureFrameRate(rawValue: cameraFrameRate)!;
     }
     
+    static func sanitizeSessionSettings(_ settings: Dictionary<String, Any>) -> OTSessionSettings {
+        let sessionSettings = OTSessionSettings()
+        sessionSettings.connectionEventsSuppressed = self.sanitizeBooleanProperty(property: settings["connectionEventsSuppressed"] as Any)
+        return sessionSettings
+    }
+    
     static func sanitizeBooleanProperty(_ property: Any) -> Bool {
         guard let prop = property as? Bool else { return true; }
         return prop;
     }
-    
-    static func getPublisherId(_ publisher: OTPublisher) -> String {
-        let publisherIds = OTRN.sharedState.publishers.filter {$0.value == publisher}
-        guard let publisherId = publisherIds.first else { return ""; }
-        return publisherId.key;
-    }
-
     
     static func convertOTSubscriberVideoEventReasonToString(_ reason: OTSubscriberVideoEventReason) -> String {
         switch reason {
@@ -46,6 +45,17 @@ class Utils {
             return "SubscriberPropertyChanged"
         case OTSubscriberVideoEventReason.qualityChanged:
             return "QualityChanged"
+        }
+    }
+    
+    static func dispatchCallbackWithError(callback: RCTResponseSenderBlock, error: OTError) {
+        let errorEventData = EventUtils.prepareJSErrorEventData(error)
+        callback([errorEventData])
+    }
+    
+   static func printLogs(_ message: String) {
+        if (OTRN.sharedState.logLevel) {
+            print(message)
         }
     }
 }

@@ -20,10 +20,10 @@ class OTSubscriberView: UIView {
   }
   
   override func layoutSubviews() {
-    if let subscriberView = OTRN.sharedState.subscribers[streamId! as String]?.view {
-      subscriberView.frame = self.bounds
-      addSubview(subscriberView)
-    }
+    guard let otrnSubscriber = OTRN.sharedState.otrnSubscribers[streamId! as String] else { return }
+    guard let subscriberView = otrnSubscriber.subscriber?.view else { return }
+    subscriberView.frame = self.frame
+    addSubview(subscriberView)
   }
 }
 
