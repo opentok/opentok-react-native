@@ -299,8 +299,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void sendSignal(ReadableMap signal, Callback callback) {
 
         Session mSession = sharedState.getSession();
-        mSession.sendSignal(signal.getString("type"), signal.getString("data"));
-        callback.invoke();
+        if (mSession != null){
+            mSession.sendSignal(signal.getString("type"), signal.getString("data"));
+            callback.invoke();
+        } else {
+            callback.invoke("There was an error to send signal. Session not exists");
+        }
+        
     }
 
     @ReactMethod
@@ -335,9 +340,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void getSessionInfo(Callback callback) {
 
         Session mSession = sharedState.getSession();
-        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(mSession);
-        sessionInfo.putString("sessionId", mSession.getSessionId());
-        sessionInfo.putInt("connectionStatus", getConnectionStatus());
+        WritableMap sessionInfo = null;
+        if (mSession != null){
+            sessionInfo = EventUtils.prepareJSSessionMap(mSession);
+            sessionInfo.putString("sessionId", mSession.getSessionId());
+            sessionInfo.putInt("connectionStatus", getConnectionStatus());
+        }
         callback.invoke(sessionInfo);
     }
 
