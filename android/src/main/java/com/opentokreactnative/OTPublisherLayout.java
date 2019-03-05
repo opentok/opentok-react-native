@@ -27,18 +27,20 @@ public class OTPublisherLayout extends FrameLayout{
     public void createPublisherView(String publisherId) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
-        Publisher mPublisher = mPublishers.get(publisherId);        
-        mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
-                BaseVideoRenderer.STYLE_VIDEO_FILL);
-        FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
-        if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
+                    BaseVideoRenderer.STYLE_VIDEO_FILL);
+            FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
+            if (mPublisher.getView() instanceof GLSurfaceView) {
+                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+            }
+            ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
+            mPublisherViewContainers.put(publisherId, mPublisherViewContainer);
+            addView(mPublisherViewContainer, 0);
+            mPublisherViewContainer.addView(mPublisher.getView());
+            requestLayout();
         }
-        ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
-        mPublisherViewContainers.put(publisherId, mPublisherViewContainer);
-        addView(mPublisherViewContainers.get(publisherId), 0);
-        mPublisherViewContainers.get(publisherId).addView(mPublisher.getView());
-        requestLayout();
 
     }
 
