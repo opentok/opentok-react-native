@@ -89,7 +89,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         connectCallback = callback;
         Session mSession = sharedState.getSession();
-        mSession.connect(token);
+        if (mSession != null) {
+            mSession.connect(token);
+        }
     }
 
     @ReactMethod
@@ -175,8 +177,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
         mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
         mSubscribers.put(streamId, mSubscriber);
-        mSession.subscribe(mSubscriber);
-        callback.invoke();
+        if (mSession != null) {
+            mSession.subscribe(mSubscriber);
+            callback.invoke(null, streamId);
+        } else {
+            callback.invoke("Error subscribring. The native session instance could not be found.");
+        }
 
     }
 
@@ -198,7 +204,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     mSubscriberViewContainer.removeAllViews();
                 }
                 mSubscriberViewContainers.remove(mStreamId);
-                mSubscriber.destroy();
+                if (mSubscriber != null) {
+                    mSubscriber.destroy();
+                }
                 mSubscribers.remove(mStreamId);
                 mSubscriberStreams.remove(mStreamId);
                 mCallback.invoke();
@@ -223,7 +231,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
-        mPublisher.setPublishAudio(publishAudio);
+        if (mPublisher != null) {
+            mPublisher.setPublishAudio(publishAudio);
+        }
     }
 
     @ReactMethod
@@ -231,7 +241,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
-        mPublisher.setPublishVideo(publishVideo);
+        if (mPublisher != null) {
+            mPublisher.setPublishVideo(publishVideo);
+        }
     }
 
     @ReactMethod
@@ -259,8 +271,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
-        mPublisher.cycleCamera();
-        Log.i(TAG, "Changing camera to " + cameraPosition);
+        if (mPublisher != null) {
+            mPublisher.cycleCamera();
+        }
     }
 
     @ReactMethod
@@ -299,8 +312,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void sendSignal(ReadableMap signal, Callback callback) {
 
         Session mSession = sharedState.getSession();
-        mSession.sendSignal(signal.getString("type"), signal.getString("data"));
-        callback.invoke();
+        if (mSession != null){
+            mSession.sendSignal(signal.getString("type"), signal.getString("data"));
+            callback.invoke();
+        } else {
+            callback.invoke("There was an error sending the signal. The native session instance could not be found.");
+        }
+        
     }
 
     @ReactMethod
@@ -327,6 +345,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 if (mPublisher != null) {
                     mPublisher.destroy();
                 }
+                mPublishers.remove(publisherId);
+                callback.invoke();
             }
         });
     }
@@ -335,9 +355,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void getSessionInfo(Callback callback) {
 
         Session mSession = sharedState.getSession();
-        WritableMap sessionInfo = EventUtils.prepareJSSessionMap(mSession);
-        sessionInfo.putString("sessionId", mSession.getSessionId());
-        sessionInfo.putInt("connectionStatus", getConnectionStatus());
+        WritableMap sessionInfo = null;
+        if (mSession != null){
+            sessionInfo = EventUtils.prepareJSSessionMap(mSession);
+            sessionInfo.putString("sessionId", mSession.getSessionId());
+            sessionInfo.putInt("connectionStatus", getConnectionStatus());
+        }
         callback.invoke(sessionInfo);
     }
 
