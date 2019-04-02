@@ -89,10 +89,12 @@ OTSubscriber.propTypes = {
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 OTSubscriber.defaultProps = {
   properties: {},
   eventHandlers: {},
   streamProperties: {},
+  containerStyle: {},
 };
