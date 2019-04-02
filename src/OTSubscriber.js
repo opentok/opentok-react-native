@@ -73,12 +73,13 @@ export default class OTSubscriber extends Component {
     });
   }
   render() {
+    const containerStyle = this.props.containerStyle;
     const childrenWithStreams = this.state.streams.map((streamId) => {
       const streamProperties = this.props.streamProperties[streamId];
       const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
       return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
     });
-    return <View>{ childrenWithStreams }</View>;
+    return <View style={containerStyle}>{ childrenWithStreams }</View>;
   }
 }
 
@@ -88,10 +89,12 @@ OTSubscriber.propTypes = {
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 OTSubscriber.defaultProps = {
   properties: {},
   eventHandlers: {},
   streamProperties: {},
+  containerStyle: {},
 };
