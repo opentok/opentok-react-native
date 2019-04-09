@@ -155,7 +155,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mSession.publish(mPublisher);
             callback.invoke();
         } else {
-            callback.invoke("There was an error publishing");
+            WritableMap errorInfo = EventUtils.createError("Error publishing. Could not find native publisher instance.");
+            callback.invoke(errorInfo);
         }
 
     }
@@ -181,7 +182,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mSession.subscribe(mSubscriber);
             callback.invoke(null, streamId);
         } else {
-            callback.invoke("Error subscribring. The native session instance could not be found.");
+            WritableMap errorInfo = EventUtils.createError("Error subscribing. The native session instance could not be found.");
+            callback.invoke(errorInfo);
         }
 
     }
@@ -316,7 +318,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mSession.sendSignal(signal.getString("type"), signal.getString("data"));
             callback.invoke();
         } else {
-            callback.invoke("There was an error sending the signal. The native session instance could not be found.");
+            WritableMap errorInfo = EventUtils.createError("There was an error sending the signal. The native session instance could not be found.");
+            callback.invoke(errorInfo);
         }
         
     }

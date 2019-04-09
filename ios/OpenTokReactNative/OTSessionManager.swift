@@ -62,12 +62,14 @@ class OTSessionManager: RCTEventEmitter {
             publisherProperties.name = properties["name"] as? String;
             OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
             guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-                callback(["Error creating publisher"]);
+                let errorInfo = EventUtils.createErrorMessage("There was an error creating the native publisher instance")
+                callback([errorInfo]);
                 return
             }
             if let videoSource = properties["videoSource"] as? String, videoSource == "screen" {
                 guard let screenView = RCTPresentedViewController()?.view else {
-                    callback(["Error setting screenshare"]);
+                    let errorInfo = EventUtils.createErrorMessage("There was an error setting the videoSource as screen")
+                    callback([errorInfo]);
                     return
                 }
                 publisher.videoType = .screen;
@@ -86,7 +88,8 @@ class OTSessionManager: RCTEventEmitter {
     @objc func publish(_ publisherId: String, callback: RCTResponseSenderBlock) -> Void {
         var error: OTError?
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-            callback(["Error getting publisher"]);
+            let errorInfo = EventUtils.createErrorMessage("Error publishing. Could not find native publisher instance")
+            callback([errorInfo]);
             return
         }
         OTRN.sharedState.session?.publish(publisher, error: &error)
@@ -101,11 +104,13 @@ class OTSessionManager: RCTEventEmitter {
         var error: OTError?
         DispatchQueue.main.async {
             guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-                callback(["Error getting stream while subscribing"]);
+                let errorInfo = EventUtils.createErrorMessage("Error subscribing. Could not find native stream for subscriber.")
+                callback([errorInfo]);
                 return
             }
             guard let subscriber = OTSubscriber(stream: stream, delegate: self) else {
-                callback(["Error creating subscriber"]);
+                let errorInfo = EventUtils.createErrorMessage("Error subscribing. Could not create subscriber.")
+                callback([errorInfo]);
                 return
             }
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
@@ -126,7 +131,8 @@ class OTSessionManager: RCTEventEmitter {
         DispatchQueue.main.async {
             OTRN.sharedState.streamObservers.removeValue(forKey: streamId);
             guard let subscriber = OTRN.sharedState.subscribers[streamId] else {
-                callback(["There was an error finding the subscriber"])
+                let errorInfo = EventUtils.createErrorMessage("Error removing subscriber. Could not find the native subscriber instance.")
+                callback([errorInfo]);
                 return
             }
             subscriber.view?.removeFromSuperview();

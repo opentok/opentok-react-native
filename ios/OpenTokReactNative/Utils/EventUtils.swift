@@ -88,5 +88,11 @@ class EventUtils {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC");
         return dateFormatter.string(from:creationTime);
     }
+
+    static func createErrorMessage(_ message: String) -> Dictionary<String, String> {
+        var errorInfo: Dictionary<String, String> = [:]
+        errorInfo["message"] = message
+        return errorInfo
+    }
     
 }
