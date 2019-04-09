@@ -131,14 +131,13 @@ class OTSessionManager: RCTEventEmitter {
         DispatchQueue.main.async {
             OTRN.sharedState.streamObservers.removeValue(forKey: streamId);
             guard let subscriber = OTRN.sharedState.subscribers[streamId] else {
-                let errorInfo = EventUtils.createErrorMessage("Error removing subscriber. Could not find the native subscriber instance.")
-                callback([errorInfo]);
+                self.removeStream(streamId)
+                callback([NSNull()])
                 return
             }
             subscriber.view?.removeFromSuperview();
             subscriber.delegate = nil;
-            OTRN.sharedState.subscribers[streamId] = nil;
-            OTRN.sharedState.subscriberStreams[streamId] = nil;
+            self.removeStream(streamId)
             callback([NSNull()])
         }
         
@@ -255,6 +254,11 @@ class OTSessionManager: RCTEventEmitter {
     func resetPublisher(_ publisherId: String, publisher: OTPublisher) -> Void {
         publisher.view?.removeFromSuperview()
         OTRN.sharedState.isPublishing[publisherId] = false;
+    }
+    
+    func removeStream(_ streamId: String) -> Void {
+        OTRN.sharedState.subscribers.removeValue(forKey: streamId)
+        OTRN.sharedState.subscriberStreams.removeValue(forKey: streamId)
     }
     
     func emitEvent(_ event: String, data: Any) -> Void {
