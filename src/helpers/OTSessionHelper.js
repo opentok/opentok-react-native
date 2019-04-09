@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
 import { each, isNull, isEmpty, isString } from 'underscore';
@@ -46,11 +47,11 @@ const sanitizeSessionOptions = (options) => {
   const platform = Platform.OS;
   let sessionOptions;
 
-  if (platform === 'Android') {
+  if (platform === 'android') {
     sessionOptions = {
       isCamera2Capable: false,
       connectionEventsSuppressed: false,
-      useTextureViews: false,
+      useTextureViews: false
     }
   } else {
     sessionOptions = {
