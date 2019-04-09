@@ -41,6 +41,50 @@ const sanitizeSessionEvents = (events) => {
   return reassignEvents('session', customEvents, events);
 };
 
+
+const sanitizeSessionOptions = (options) => {
+  const platform = Platform.OS;
+  let sessionOptions;
+
+  if (platform === 'Android') {
+    sessionOptions = {
+      isCamera2Capable: false,
+      connectionEventsSuppressed: false,
+      useTextureViews: false,
+    }
+  } else {
+    sessionOptions = {
+      connectionEventsSuppressed: false
+    }
+  }
+
+  if (typeof options !== 'object') {
+    return sessionOptions;
+  }
+  
+  const validSessionOptions = {
+    ios: {
+      connectionEventsSuppressed: 'connectionEventsSuppressed',
+    },
+    android: {
+      connectionEventsSuppressed: 'connectionEventsSuppressed',
+      useTextureViews: 'useTextureViews',
+      isCamera2Capable: 'isCamera2Capable',
+    },
+  };
+
+
+  each(options, (sessionOptionValue, sessionOption) => {
+    if (validSessionOptions[platform][sessionOption] !== undefined) {
+      sessionOptions[validSessionOptions[platform][sessionOption]] = sessionOptionValue;
+    } else {
+      handleError(`${sessionOption} is not a valid option`);
+    }
+  });
+
+  return sessionOptions;
+};
+
 const validateString = value => (isString(value) ? value : '');
 
 const sanitizeSignalData = (signal) => {
@@ -95,6 +139,7 @@ const isConnected = (connectionStatus) => (getConnectionStatus(connectionStatus)
 
 export {
   sanitizeSessionEvents,
+  sanitizeSessionOptions,
   sanitizeSignalData,
   sanitizeCredentials,
   getConnectionStatus,

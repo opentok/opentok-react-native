@@ -72,7 +72,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void initSession(String apiKey, String sessionId) {
+    public void initSession(String apiKey, String sessionId, ReadableMap sessionOptions) {
 
         Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId).build();
         mSession.setSessionListener(this);

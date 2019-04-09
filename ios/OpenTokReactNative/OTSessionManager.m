@@ -15,7 +15,8 @@
 
 RCT_EXTERN_METHOD(initSession:
                   (NSString*)apiKey
-                  sessionId:(NSString*)sessionId)
+                  sessionId:(NSString*)sessionId
+                  sessionOptions:(NSDictionary*)sessionOptions)
 RCT_EXTERN_METHOD(connect:
                   (NSString*)token
                   callback:(RCTResponseSenderBlock*)callback)
