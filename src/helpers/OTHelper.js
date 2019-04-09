@@ -12,6 +12,8 @@ const reassignEvents = (type, customEvents, events, publisherId) => {
       newEvents[`${publisherId}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else if(customEvents[platform][eventType] !== undefined ) {    
       newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
+    } else if(events['otrnError']) {
+      // ignore otrnError event because it's for the js layer
     } else {
       handleError(`${eventType} is not a supported event`);
     }
@@ -20,6 +22,18 @@ const reassignEvents = (type, customEvents, events, publisherId) => {
 };
 
 const sanitizeBooleanProperty = property => (property || property === undefined ? true : property);
+
+const getOtrnErrorEventHandler = (events) => {
+  let otrnEventHandler = event => {
+    handleError(event);
+  }
+  if (typeof events !== 'object') {
+    return otrnEventHandler;
+  } else if (events['otrnError']) {
+    otrnEventHandler = events['otrnError'];
+  }
+  return otrnEventHandler;
+};
 
 const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
@@ -62,4 +76,5 @@ export {
   sanitizeBooleanProperty,
   reassignEvents,
   logOT,
+  getOtrnErrorEventHandler,
 };

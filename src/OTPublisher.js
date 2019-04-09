@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
-import { createPublisher, checkAndroidPermissions, OT, removeNativeEvents, nativeEvents, setNativeEvents } from './OT';
-import { sanitizeProperties, sanitizePublisherEvents } from './helpers/OTPublisherHelper';
-import { handleError } from './OTError';
-import OTPublisherView from './views/OTPublisherView';
 import { isNull } from 'underscore';
+import { checkAndroidPermissions, OT, removeNativeEvents, nativeEvents, setNativeEvents } from './OT';
+import { sanitizeProperties, sanitizePublisherEvents } from './helpers/OTPublisherHelper';
+import OTPublisherView from './views/OTPublisherView';
+import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
 
 const uuid = require('uuid/v4');
@@ -21,7 +21,8 @@ class OTPublisher extends Component {
     this.componentEvents = {
       sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
     };
-    this.componentEventsArray = Object.values(this.componentEvents);    
+    this.componentEventsArray = Object.values(this.componentEvents);   
+    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers); 
   }
   componentWillMount() {
     const publisherEvents = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
@@ -58,7 +59,7 @@ class OTPublisher extends Component {
   componentWillUnmount() {
     OT.destroyPublisher(this.state.publisherId, (error) => {
       if (error) {
-        handleError(error);
+        this.otrnEventHandler(error);
       } else {
         this.sessionConnected.remove();        
         OT.removeJSComponentEvents(this.componentEventsArray);         
@@ -79,7 +80,7 @@ class OTPublisher extends Component {
           this.initPublisher();
         })
         .catch((error) => {
-          handleError(error);
+          this.otrnEventHandler(error);
         });
     } else {
       this.initPublisher();
@@ -92,7 +93,7 @@ class OTPublisher extends Component {
         this.setState({
           initError
         });
-        handleError(initError);
+        this.otrnEventHandler(initError);
       } else {
         OT.getSessionInfo((session) => {
           if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
@@ -105,7 +106,7 @@ class OTPublisher extends Component {
   publish() {
     OT.publish(this.state.publisherId, (publishError) => {
       if (publishError) {
-        handleError(publishError);
+        this.otrnEventHandler(publishError);
       } else {
         this.setState({
           publisher: true,

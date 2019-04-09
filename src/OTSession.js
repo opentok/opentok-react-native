@@ -3,8 +3,7 @@ import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { setNativeEvents, removeNativeEvents,  OT } from './OT';
 import { sanitizeSessionEvents, sanitizeSignalData, sanitizeCredentials, getConnectionStatus } from './helpers/OTSessionHelper';
-import { logOT } from './helpers/OTHelper';
-import { handleError } from './OTError';
+import { logOT, getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { pick, isNull } from 'underscore';
 
 export default class OTSession extends Component {
@@ -13,6 +12,7 @@ export default class OTSession extends Component {
     this.state = {
       sessionInfo: null,
     };
+    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
   }
   componentWillMount() {
     const credentials = pick(this.props, ['apiKey', 'sessionId', 'token']);
@@ -49,7 +49,7 @@ export default class OTSession extends Component {
     OT.initSession(credentials.apiKey, credentials.sessionId);
     OT.connect(credentials.token, (error) => {
       if (error) {
-        handleError(error);
+        this.otrnEventHandler(error);
       } else {
         OT.getSessionInfo((session) => {
           if (!isNull(session)) {
@@ -68,7 +68,7 @@ export default class OTSession extends Component {
   disconnectSession() {
     OT.disconnectSession((disconnectError) => {
       if (disconnectError) {
-        handleError(disconnectError);
+        this.otrnEventHandler(disconnectError);
       } else {
         const events = sanitizeSessionEvents(this.props.eventHandlers);
         removeNativeEvents(events);

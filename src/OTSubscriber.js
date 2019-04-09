@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
 import PropTypes from 'prop-types';
+import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
-import { handleError } from './OTError';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
-import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
+import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 
 export default class OTSubscriber extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ export default class OTSubscriber extends Component {
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
     };
     this.componentEventsArray = Object.values(this.componentEvents);
+    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers); 
   }
   componentWillMount() {
     this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream));
@@ -50,7 +51,7 @@ export default class OTSubscriber extends Component {
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
       if (error) {
-        handleError(error);
+        this.otrnEventHandler(error);
       } else {
         this.setState({
           streams: [...this.state.streams, stream.streamId],
@@ -61,7 +62,7 @@ export default class OTSubscriber extends Component {
   streamDestroyedHandler = (stream) => {
     OT.removeSubscriber(stream.streamId, (error) => {
       if (error) {
-        handleError(error);
+        this.otrnEventHandler(error);
       } else {
         const indexOfStream = this.state.streams.indexOf(stream.streamId);
         const newState = this.state.streams.slice();

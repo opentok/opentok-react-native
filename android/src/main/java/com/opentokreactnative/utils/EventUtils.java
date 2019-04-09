@@ -104,4 +104,11 @@ public final class EventUtils {
         videoStats.putInt("videoPacketsReceived", stats.videoPacketsReceived);
         return videoStats;
     }
+
+    public static WritableMap createError(String message) {
+
+        WritableMap errorInfo = Arguments.createMap();
+        errorInfo.putString("message", message);
+        return errorInfo;
+    }
 }
