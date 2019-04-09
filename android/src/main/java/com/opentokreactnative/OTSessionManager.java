@@ -74,7 +74,23 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @ReactMethod
     public void initSession(String apiKey, String sessionId, ReadableMap sessionOptions) {
 
-        Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId).build();
+        final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
+        final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
+        final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
+        Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
+                .sessionOptions(new Session.SessionOptions() {
+                    @Override
+                    public boolean useTextureViews() {
+                        return useTextureViews;
+                    }
+
+                    @Override
+                    public boolean isCamera2Capable() {
+                        return isCamera2Capable;
+                    }
+                })
+                .connectionEventsSuppressed(connectionEventsSuppressed)
+                .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);
         mSession.setConnectionListener(this);
