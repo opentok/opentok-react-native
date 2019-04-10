@@ -24,6 +24,7 @@ class OTSessionManager: RCTEventEmitter {
         OTRN.sharedState.publishers.removeAll();
         OTRN.sharedState.subscribers.removeAll();
         OTRN.sharedState.publisherDestroyedCallbacks.removeAll();
+        OTRN.sharedState.connections.removeAll();
     }
     
     override static func requiresMainQueueSetup() -> Bool {
@@ -201,9 +202,14 @@ class OTSessionManager: RCTEventEmitter {
     }
     
     @objc func sendSignal(_ signal: Dictionary<String, String>, callback: RCTResponseSenderBlock ) -> Void {
-        let connection: OTConnection? = nil
         var error: OTError?
-        OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
+        if let connectionId = signal["to"] {
+            let connection = OTRN.sharedState.connections[connectionId]
+            OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
+        } else {
+            let connection: OTConnection? = nil
+            OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
+        }
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
         } else {
@@ -306,11 +312,13 @@ extension OTSessionManager: OTSessionDelegate {
     }
     
     func session(_ session: OTSession, connectionCreated connection: OTConnection) {
+        OTRN.sharedState.connections.updateValue(connection, forKey: connection.connectionId)
         let connectionInfo = EventUtils.prepareJSConnectionEventData(connection);
         self.emitEvent("\(EventUtils.sessionPreface)connectionCreated", data: connectionInfo)
         printLogs("OTRN Session: A connection was created \(connection.connectionId)")
     }
     func session(_ session: OTSession, connectionDestroyed connection: OTConnection) {
+        OTRN.sharedState.connections.removeValue(forKey: connection.connectionId)
         let connectionInfo = EventUtils.prepareJSConnectionEventData(connection);
         self.emitEvent("\(EventUtils.sessionPreface)connectionDestroyed", data: connectionInfo)
         printLogs("OTRN Session: A connection was destroyed")
