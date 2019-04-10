@@ -77,6 +77,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
         final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
+        String androidOnTop = sessionOptions.getString("androidOnTop");
+        String androidZOrder = sessionOptions.getString("androidZOrder");
+
         Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
                 .sessionOptions(new Session.SessionOptions() {
                     @Override
@@ -97,6 +100,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSession.setReconnectionListener(this);
         mSession.setArchiveListener(this);
         mSession.setStreamPropertiesListener(this);
+        sharedState.setAndroidOnTop(androidOnTop);
+        sharedState.setAndroidZOrder(androidZOrder);
         sharedState.setSession(mSession);
     }
 
