@@ -35,7 +35,7 @@ export default class OTSession extends Component {
     const updateSessionProperty = (key, defaultValue) => {
       if (shouldUpdate(key, defaultValue)) {
         const value = useDefault(this.props[key], defaultValue);
-        this.sendSignal(value);
+        this.signal(value);
       }
     };
 
@@ -57,7 +57,7 @@ export default class OTSession extends Component {
               sessionInfo,
             });
             logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', session.connection.connectionId);
-            this.sendSignal(this.props.signal);
+            this.signal(this.props.signal);
           }
         });
       }
@@ -76,7 +76,7 @@ export default class OTSession extends Component {
   getSessionInfo() {
     return this.state.sessionInfo;
   }
-  sendSignal(signal) {
+  signal(signal) {
     const signalData = sanitizeSignalData(signal);
     OT.sendSignal(signalData.signal, signalData.errorHandler);
   }
