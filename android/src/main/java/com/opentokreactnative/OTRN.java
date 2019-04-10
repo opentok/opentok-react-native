@@ -18,6 +18,8 @@ public class OTRN {
 
     public static OTRN sharedState;
     private Session mSession;
+    private String mAndroidOnTop;
+    private String mAndroidZOrder;
 
     private ConcurrentHashMap<String, Stream> subscriberStreams = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
@@ -39,6 +41,31 @@ public class OTRN {
         return this.mSession;
     }
 
+    public synchronized void setSession(Session mSession) {
+
+        this.mSession = mSession;
+    }
+
+    public synchronized String getAndroidOnTop() {
+
+        return this.mAndroidOnTop;
+    }
+
+    public synchronized void setAndroidOnTop(String androidOnTop) {
+
+        this.mAndroidOnTop = androidOnTop;
+    }
+
+    public synchronized String getAndroidZOrder() {
+
+        return this.mAndroidZOrder;
+    }
+
+    public synchronized void setAndroidZOrder(String androidZOrder) {
+
+        this.mAndroidZOrder = androidZOrder;
+    }
+
 
     public ConcurrentHashMap<String, Stream> getSubscriberStreams() {
 
@@ -53,11 +80,6 @@ public class OTRN {
     public ConcurrentHashMap<String, FrameLayout> getSubscriberViewContainers() {
 
         return this.subscriberViewContainers;
-    }
-
-    public synchronized void setSession(Session mSession) {
-
-        this.mSession = mSession;
     }
 
     public ConcurrentHashMap<String, Publisher> getPublishers() {

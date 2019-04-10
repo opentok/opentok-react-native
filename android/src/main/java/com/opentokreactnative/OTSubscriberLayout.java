@@ -25,11 +25,20 @@ public class OTSubscriberLayout extends FrameLayout{
     public void createSubscriberView(String streamId) {
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        String pubOrSub = sharedState.getAndroidOnTop();
+        String zOrder = sharedState.getAndroidZOrder();
         Subscriber mSubscriber = mSubscribers.get(streamId);
         FrameLayout mSubscriberViewContainer = new FrameLayout(getContext());
         if (mSubscriber != null) {
             mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
+            if (pubOrSub.equals("subscriber") && mSubscriber.getView() instanceof GLSurfaceView) {
+                if (zOrder.equals("mediaOverlay")) {
+                    ((GLSurfaceView) mSubscriber.getView()).setZOrderMediaOverlay(true);
+                } else {
+                    ((GLSurfaceView) mSubscriber.getView()).setZOrderOnTop(true);
+                }
+            }
             ConcurrentHashMap<String, FrameLayout> mSubscriberViewContainers = sharedState.getSubscriberViewContainers();
             mSubscriberViewContainers.put(streamId, mSubscriberViewContainer);
             addView(mSubscriberViewContainer, 0);

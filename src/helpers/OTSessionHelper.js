@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString } from 'underscore';
+import { each, isNull, isEmpty, isString, isBoolean } from 'underscore';
 
 const sanitizeSessionEvents = (events) => {
   if (typeof events !== 'object') {
@@ -51,35 +51,39 @@ const sanitizeSessionOptions = (options) => {
     sessionOptions = {
       isCamera2Capable: false,
       connectionEventsSuppressed: false,
-      useTextureViews: false
+      useTextureViews: false,
+      androidOnTop: '', // 'publisher' || 'subscriber'
+      androidZOrder: '', // 'mediaOverlay' || 'onTop'
     }
   } else {
     sessionOptions = {
-      connectionEventsSuppressed: false
+      connectionEventsSuppressed: false,
     }
   }
 
   if (typeof options !== 'object') {
     return sessionOptions;
   }
-  
+
   const validSessionOptions = {
     ios: {
-      connectionEventsSuppressed: 'connectionEventsSuppressed',
+      connectionEventsSuppressed: 'boolean',
     },
     android: {
-      connectionEventsSuppressed: 'connectionEventsSuppressed',
-      useTextureViews: 'useTextureViews',
-      isCamera2Capable: 'isCamera2Capable',
+      connectionEventsSuppressed: 'boolean',
+      useTextureViews: 'boolean',
+      isCamera2Capable: 'boolean',
+      androidOnTop: 'string',
+      androidZOrder: 'string',
     },
   };
 
-
-  each(options, (sessionOptionValue, sessionOption) => {
-    if (validSessionOptions[platform][sessionOption] !== undefined) {
-      sessionOptions[validSessionOptions[platform][sessionOption]] = sessionOptionValue;
+  each(options, (value, key) => {
+    const optionType = validSessionOptions[platform][key];
+    if (optionType !== undefined) {
+      sessionOptions[key] = optionType === 'boolean' ? validateBoolean(value) : validateString(value);
     } else {
-      handleError(`${sessionOption} is not a valid option`);
+      handleError(`${key} is not a valid option`);
     }
   });
 
@@ -87,6 +91,8 @@ const sanitizeSessionOptions = (options) => {
 };
 
 const validateString = value => (isString(value) ? value : '');
+
+const validateBoolean = value => (isBoolean(value) ? value : false);
 
 const sanitizeSignalData = (signal) => {
   if (typeof signal !== 'object') {
