@@ -2,6 +2,7 @@ package com.opentokreactnative;
 
 import android.widget.FrameLayout;
 
+import com.opentok.android.Connection;
 import com.opentok.android.Publisher;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
@@ -25,6 +26,7 @@ public class OTRN {
     private ConcurrentHashMap<String, FrameLayout> subscriberViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Callback> publisherDestroyedCallbacks = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
 
@@ -73,6 +75,11 @@ public class OTRN {
     public ConcurrentHashMap<String, Callback> getPublisherDestroyedCallbacks() {
 
         return this.publisherDestroyedCallbacks;
+    }
+
+    public ConcurrentHashMap<String, Connection> getConnections() {
+
+        return this.connections;
     }
 
     private OTRN() {}
