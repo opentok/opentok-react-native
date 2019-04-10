@@ -3,6 +3,10 @@ import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
 import { each, isNull, isEmpty, isString, isBoolean } from 'underscore';
 
+const validateString = value => (isString(value) ? value : '');
+
+const validateBoolean = value => (isBoolean(value) ? value : false);
+
 const sanitizeSessionEvents = (events) => {
   if (typeof events !== 'object') {
     return {};
@@ -89,10 +93,6 @@ const sanitizeSessionOptions = (options) => {
 
   return sessionOptions;
 };
-
-const validateString = value => (isString(value) ? value : '');
-
-const validateBoolean = value => (isBoolean(value) ? value : false);
 
 const sanitizeSignalData = (signal) => {
   if (typeof signal !== 'object') {
