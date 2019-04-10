@@ -3,7 +3,7 @@ import OTPublisher from './OTPublisher';
 import OTSubscriber from './OTSubscriber';
 import { OT } from './OT';
 
-export { 
+export {
   OTSession,
   OTPublisher,
   OTSubscriber,

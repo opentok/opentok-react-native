@@ -1,7 +1,9 @@
 import { Platform } from 'react-native';
+import {
+  each, isNull, isEmpty, isString, isBoolean,
+} from 'underscore';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString, isBoolean } from 'underscore';
 
 const validateString = value => (isString(value) ? value : '');
 
@@ -58,11 +60,11 @@ const sanitizeSessionOptions = (options) => {
       useTextureViews: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
-    }
+    };
   } else {
     sessionOptions = {
       connectionEventsSuppressed: false,
-    }
+    };
   }
 
   if (typeof options !== 'object') {
@@ -114,35 +116,37 @@ const sanitizeSignalData = (signal) => {
 };
 
 const sanitizeCredentials = (credentials) => {
-  const _credentials = {};
+  const sanitizedCredentials = {};
   each(credentials, (value, key) => {
-    if(!isString(value) || isEmpty(value) || isNull(value)) {
+    if (!isString(value) || isEmpty(value) || isNull(value)) {
       handleError(`Please add the ${key}`);
     } else {
-      _credentials[key] = value;
+      sanitizedCredentials[key] = value;
     }
   });
-  return _credentials;
+  return sanitizedCredentials;
 };
 
 const getConnectionStatus = (connectionStatus) => {
-  switch(connectionStatus) {
+  switch (connectionStatus) {
     case 0:
-      return "not connected";
+      return 'not connected';
     case 1:
-      return "connected";
+      return 'connected';
     case 2:
-      return "connecting";
+      return 'connecting';
     case 3:
-      return "reconnecting";
+      return 'reconnecting';
     case 4:
-      return "disconnecting";
+      return 'disconnecting';
     case 5:
-      return "failed";
+      return 'failed';
+    default:
+      return null;
   }
 };
 
-const isConnected = (connectionStatus) => (getConnectionStatus(connectionStatus) === 'connected');
+const isConnected = connectionStatus => (getConnectionStatus(connectionStatus) === 'connected');
 
 export {
   sanitizeSessionEvents,

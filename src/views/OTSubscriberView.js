@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 import { requireNativeComponent, Platform, View } from 'react-native';
 
-class OTSubscriberView extends Component {
-  render() {
-    return <ReactSubscriber {...this.props} />;
-  }
-}
+const OTSubscriberView = props => (<ReactSubscriber {...props} />);
+
 const viewPropTypes = View.propTypes;
 OTSubscriberView.propTypes = {
   streamId: PropTypes.string.isRequired,

@@ -30,8 +30,9 @@ const sanitizeCameraPosition = (cameraPosition = 'front') => (cameraPosition ===
 
 const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera' ? 'camera' : 'screen');
 
-const sanitizeAudioBitrate = (audioBitrate = 40000) =>
-  (audioBitrate < 80000 || audioBitrate > 128000 ? 40000 : audioBitrate);
+const sanitizeAudioBitrate = (audioBitrate = 40000) => (
+  audioBitrate < 80000 || audioBitrate > 128000 ? 40000 : audioBitrate
+);
 
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {

@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "rules": {
+        "no-confusing-arrow": ["error", {"allowParens": true}],
+        "react/jsx-filename-extension": "off",
+        "react/no-did-update-set-state": ["enabled"]
+    },
+    "env": {
+        "es6": true
+    }
+}
