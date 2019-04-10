@@ -1,5 +1,6 @@
 package com.opentokreactnative;
 
+import android.opengl.GLSurfaceView;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 
