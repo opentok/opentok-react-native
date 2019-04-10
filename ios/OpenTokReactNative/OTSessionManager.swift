@@ -36,8 +36,10 @@ class OTSessionManager: RCTEventEmitter {
         return allEvents + jsEvents
     }
     
-    @objc func initSession(_ apiKey: String, sessionId: String) -> Void {
-        OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self)
+    @objc func initSession(_ apiKey: String, sessionId: String, sessionOptions: Dictionary<String, Any>) -> Void {
+        let settings = OTSessionSettings()
+        settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(sessionOptions["connectionEventsSuppressed"] as Any);
+        OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)
     }
     
     @objc func connect(_ token: String, callback: @escaping RCTResponseSenderBlock) -> Void {
