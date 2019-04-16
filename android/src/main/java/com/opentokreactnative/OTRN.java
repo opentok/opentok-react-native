@@ -2,6 +2,7 @@ package com.opentokreactnative;
 
 import android.widget.FrameLayout;
 
+import com.opentok.android.Connection;
 import com.opentok.android.Publisher;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
@@ -18,6 +19,8 @@ public class OTRN {
 
     public static OTRN sharedState;
     private Session mSession;
+    private String mAndroidOnTop;
+    private String mAndroidZOrder;
 
     private ConcurrentHashMap<String, Stream> subscriberStreams = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
@@ -25,6 +28,7 @@ public class OTRN {
     private ConcurrentHashMap<String, FrameLayout> subscriberViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Callback> publisherDestroyedCallbacks = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
 
@@ -37,6 +41,31 @@ public class OTRN {
     public synchronized Session getSession() {
 
         return this.mSession;
+    }
+
+    public synchronized void setSession(Session mSession) {
+
+        this.mSession = mSession;
+    }
+
+    public synchronized String getAndroidOnTop() {
+
+        return this.mAndroidOnTop;
+    }
+
+    public synchronized void setAndroidOnTop(String androidOnTop) {
+
+        this.mAndroidOnTop = androidOnTop;
+    }
+
+    public synchronized String getAndroidZOrder() {
+
+        return this.mAndroidZOrder;
+    }
+
+    public synchronized void setAndroidZOrder(String androidZOrder) {
+
+        this.mAndroidZOrder = androidZOrder;
     }
 
 
@@ -55,11 +84,6 @@ public class OTRN {
         return this.subscriberViewContainers;
     }
 
-    public synchronized void setSession(Session mSession) {
-
-        this.mSession = mSession;
-    }
-
     public ConcurrentHashMap<String, Publisher> getPublishers() {
 
         return this.publishers;
@@ -73,6 +97,11 @@ public class OTRN {
     public ConcurrentHashMap<String, Callback> getPublisherDestroyedCallbacks() {
 
         return this.publisherDestroyedCallbacks;
+    }
+
+    public ConcurrentHashMap<String, Connection> getConnections() {
+
+        return this.connections;
     }
 
     private OTRN() {}

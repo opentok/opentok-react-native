@@ -72,15 +72,36 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void initSession(String apiKey, String sessionId) {
+    public void initSession(String apiKey, String sessionId, ReadableMap sessionOptions) {
 
-        Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId).build();
+        final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
+        final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
+        final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
+        String androidOnTop = sessionOptions.getString("androidOnTop");
+        String androidZOrder = sessionOptions.getString("androidZOrder");
+
+        Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
+                .sessionOptions(new Session.SessionOptions() {
+                    @Override
+                    public boolean useTextureViews() {
+                        return useTextureViews;
+                    }
+
+                    @Override
+                    public boolean isCamera2Capable() {
+                        return isCamera2Capable;
+                    }
+                })
+                .connectionEventsSuppressed(connectionEventsSuppressed)
+                .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);
         mSession.setConnectionListener(this);
         mSession.setReconnectionListener(this);
         mSession.setArchiveListener(this);
         mSession.setStreamPropertiesListener(this);
+        sharedState.setAndroidOnTop(androidOnTop);
+        sharedState.setAndroidZOrder(androidZOrder);
         sharedState.setSession(mSession);
     }
 
@@ -155,7 +176,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mSession.publish(mPublisher);
             callback.invoke();
         } else {
-            callback.invoke("There was an error publishing");
+            WritableMap errorInfo = EventUtils.createError("Error publishing. Could not find native publisher instance.");
+            callback.invoke(errorInfo);
         }
 
     }
@@ -181,7 +203,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             mSession.subscribe(mSubscriber);
             callback.invoke(null, streamId);
         } else {
-            callback.invoke("Error subscribring. The native session instance could not be found.");
+            WritableMap errorInfo = EventUtils.createError("Error subscribing. The native session instance could not be found.");
+            callback.invoke(errorInfo);
         }
 
     }
@@ -312,13 +335,23 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void sendSignal(ReadableMap signal, Callback callback) {
 
         Session mSession = sharedState.getSession();
-        if (mSession != null){
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        String connectionId = signal.getString("to");
+        Connection mConnection = null;
+        if (connectionId != null) {
+            mConnection = mConnections.get(connectionId);
+        }
+        if (mConnection != null && mSession != null) {
+            mSession.sendSignal(signal.getString("type"), signal.getString("data"), mConnection);
+            callback.invoke();
+        } else if (mSession != null) {
             mSession.sendSignal(signal.getString("type"), signal.getString("data"));
             callback.invoke();
         } else {
-            callback.invoke("There was an error sending the signal. The native session instance could not be found.");
+            WritableMap errorInfo = EventUtils.createError("There was an error sending the signal. The native session instance could not be found.");
+            callback.invoke(errorInfo);
         }
-        
+
     }
 
     @ReactMethod
@@ -497,6 +530,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
 
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        mConnections.put(connection.getConnectionId(), connection);
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(connection);
         sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionCreated", connectionInfo);
         printLogs("onConnectionCreated: Connection Created: "+connection.getConnectionId());
@@ -505,6 +540,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     @Override
     public void onConnectionDestroyed(Session session, Connection connection) {
 
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        mConnections.remove(connection.getConnectionId());
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(connection);
         sendEventMap(this.getReactApplicationContext(), sessionPreface + "onConnectionDestroyed", connectionInfo);
         printLogs("onConnectionDestroyed: Connection Destroyed: "+connection.getConnectionId());

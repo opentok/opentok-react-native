@@ -27,6 +27,8 @@ The `OTSubscriber` component will subscribe to a specified stream from a specifi
   
   * **error** (Object) — Sent if the subscriber fails to connect to its stream.
 
+  * **otrnError** (Object) — Sent if there is an error with the communication between the native subscriber instance and the JS component.
+
   * **videoDataReceived** () - Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the `connected` message is sent.
   
   * **videoDisabled** (String) — This message is sent when the subscriber stops receiving video. Check the reason parameter for the reason why the video stopped.

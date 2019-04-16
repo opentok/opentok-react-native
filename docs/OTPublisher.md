@@ -95,6 +95,8 @@ Please keep in mind that `OT` is not the same as `OT` in the JS SDK, the `OT` in
 
   * **error** (Object) — Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
 
+  * **otrnError** (Object) — Sent if there is an error with the communication between the native publisher instance and the JS component.
+
   * **streamCreated** (Object) — Sent when the publisher starts streaming.
 
   * **streamDestroyed** (Object) - Sent when the publisher stops streaming.
