@@ -81,7 +81,8 @@ class App extends Component {
   * **streamCreated** (Object) — Sent when a new stream is created in this session.
 
   * **streamDestroyed** (Object) - Sent when a stream is no longer published to the session.
-
+  
+  * **streamPropertyChanged** (Object) - Sent when a stream has started or stopped publishing audio or video or if the video dimensions of the stream have changed.
 
   ### Setting Session options:
 
