@@ -59,4 +59,4 @@ class App extends Component {
 
   * **streamDestroyed** (Object) - Sent when a stream is no longer published to the session.
   
-  * **streamPropertyChanged** (Object) - Sent when a stream's properties have changed, such as video or audio becoming available or unavailable.
+  * **streamPropertyChanged** (Object) - Sent when a stream has started or stopped publishing audio or video or if the video dimensions of the stream have changed.
