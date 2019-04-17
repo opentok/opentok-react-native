@@ -108,6 +108,7 @@ const sanitizeSignalData = (signal) => {
     signal: {
       type: validateString(signal.type),
       data: validateString(signal.data),
+      to: validateString(signal.to),
     },
     errorHandler: typeof signal.errorHandler !== 'function' ? handleSignalError : signal.errorHandler,
   };
