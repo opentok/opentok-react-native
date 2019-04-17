@@ -100,6 +100,7 @@ const sanitizeSignalData = (signal) => {
       signal: {
         type: '',
         data: '',
+        to: '',
       },
       errorHandler: handleSignalError,
     };
