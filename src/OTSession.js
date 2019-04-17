@@ -48,6 +48,7 @@ export default class OTSession extends Component {
     this.disconnectSession();
   }
   createSession(credentials, sessionOptions) {
+    const { signal } = this.props;
     OT.initSession(credentials.apiKey, credentials.sessionId, sessionOptions);
     OT.connect(credentials.token, (error) => {
       if (error) {
@@ -60,7 +61,9 @@ export default class OTSession extends Component {
               sessionInfo,
             });
             logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', session.connection.connectionId);
-            this.signal(this.props.signal);
+            if (Object.keys(signal).length > 0) {
+              this.signal(signal);
+            }
           }
         });
       }
