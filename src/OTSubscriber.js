@@ -49,7 +49,7 @@ export default class OTSubscriber extends Component {
     const { streamProperties, properties } = this.props;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
-    OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
+    OT.subscribeToStream(this.props.sessionId, stream.streamId, subscriberProperties, (error) => {
       if (error) {
         this.otrnEventHandler(error);
       } else {

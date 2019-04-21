@@ -19,7 +19,7 @@ class OTSessionManager: RCTEventEmitter {
     
     deinit {
         OTRN.sharedState.subscriberStreams.removeAll();
-        OTRN.sharedState.session = nil;
+        OTRN.sharedState.sessions.removeAll();
         OTRN.sharedState.isPublishing.removeAll();
         OTRN.sharedState.publishers.removeAll();
         OTRN.sharedState.subscribers.removeAll();
@@ -39,12 +39,17 @@ class OTSessionManager: RCTEventEmitter {
     @objc func initSession(_ apiKey: String, sessionId: String, sessionOptions: Dictionary<String, Any>) -> Void {
         let settings = OTSessionSettings()
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(sessionOptions["connectionEventsSuppressed"] as Any);
-        OTRN.sharedState.session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)
+        let session = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)
+        OTRN.sharedState.sessions.updateValue(forKey: sessionId, session)
     }
     
-    @objc func connect(_ token: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func connect(_ sessionId: String, token: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
-        OTRN.sharedState.session?.connect(withToken: token, error: &error)
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            callback(["Error connecting. Native session instance not found"])
+            return
+        }
+        session.connect(withToken: token, error: &error)
         if let err = error {
             self.dispatchErrorViaCallback(callback, error: err)
         } else {
@@ -88,14 +93,18 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func publish(_ publisherId: String, callback: RCTResponseSenderBlock) -> Void {
+    @objc func publish(_ sessionId: String, publisherId: String, callback: RCTResponseSenderBlock) -> Void {
         var error: OTError?
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
             let errorInfo = EventUtils.createErrorMessage("Error publishing. Could not find native publisher instance")
             callback([errorInfo]);
             return
         }
-        OTRN.sharedState.session?.publish(publisher, error: &error)
+        guard let session = OTRN.sharedState.sessions[sessionId] else { 
+            callback(["Error publishing. Could not find native session instance"])
+            return
+        }
+        session.publish(publisher, error: &error)
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
         } else {
@@ -103,7 +112,7 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func subscribeToStream(_ streamId: String, properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func subscribeToStream(_ sessionId: String, streamId: String, properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
         DispatchQueue.main.async {
             guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
@@ -119,9 +128,13 @@ class OTSessionManager: RCTEventEmitter {
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
             subscriber.networkStatsDelegate = self;
             subscriber.audioLevelDelegate = self;
-            OTRN.sharedState.session?.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
+            guard let session = OTRN.sharedState.sessions[sessionId] else { 
+                callback(["Error subscribing to stream. Could not find native session instance"])
+                return
+            }
+            session.subscribe(subscriber, error: &error)
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -146,9 +159,13 @@ class OTSessionManager: RCTEventEmitter {
         
     }
     
-    @objc func disconnectSession(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func disconnectSession(_ sessionId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
-        OTRN.sharedState.session?.disconnect(&error)
+        guard let session = OTRN.sharedState.sessions[sessionId] else { 
+            callback(["Error disconnecting session. Could not find native session instance"])
+            return
+        }
+        session.disconnect(&error)
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
         } else {
@@ -203,14 +220,18 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func sendSignal(_ signal: Dictionary<String, String>, callback: RCTResponseSenderBlock ) -> Void {
+    @objc func sendSignal(_ sessionId: String, signal: Dictionary<String, String>, callback: RCTResponseSenderBlock ) -> Void {
+        guard let session = OTRN.sharedState.sessions[sessionId] else { 
+            callback(["Error sending signal. Could not find native session instance"])
+            return
+        }
         var error: OTError?
         if let connectionId = signal["to"] {
             let connection = OTRN.sharedState.connections[connectionId]
-            OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
+            session.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
         } else {
             let connection: OTConnection? = nil
-            OTRN.sharedState.session?.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
+            session.signal(withType: signal["type"], string: signal["data"], connection: connection, error: &error)
         }
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
@@ -219,10 +240,10 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func destroyPublisher(_ publisherId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func destroyPublisher(_ sessionId: String, publisherId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         DispatchQueue.main.async {
             guard let publisher = OTRN.sharedState.publishers[publisherId] else { callback([NSNull()]); return }
-            guard let session = OTRN.sharedState.session else {
+            guard let session = OTRN.sharedState.sessions[sessionId] else {
                 callback([NSNull()]);
                 return
             }
@@ -248,8 +269,8 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func getSessionInfo(_ callback: RCTResponseSenderBlock) -> Void {
-        guard let session = OTRN.sharedState.session else { callback([NSNull()]); return }
+    @objc func getSessionInfo(_ sessionId: String, callback: RCTResponseSenderBlock) -> Void {
+        guard let session = OTRN.sharedState.sessions[sessionId] else { callback([NSNull()]); return }
         var sessionInfo: Dictionary<String, Any> = EventUtils.prepareJSSessionEventData(session);
         sessionInfo["connectionStatus"] = session.sessionConnectionStatus.rawValue;
         callback([sessionInfo]);
@@ -308,8 +329,11 @@ extension OTSessionManager: OTSessionDelegate {
         self.emitEvent("\(EventUtils.sessionPreface)sessionDidDisconnect", data: sessionInfo);
         guard let callback = disconnectCallback else { return }
         callback([NSNull()]);
-        OTRN.sharedState.session?.delegate = nil;
-        OTRN.sharedState.session = nil;
+        guard let session = OTRN.shared.sessions[session.sessionId] else { 
+            return
+        }
+        session.delegate = nil
+        OTRN.sharedState.sessions.removeValue(forKey: session.connectionId)
         printLogs("OTRN: Session disconnected")
     }
     

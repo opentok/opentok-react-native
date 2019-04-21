@@ -57,7 +57,7 @@ class OTPublisher extends Component {
     updatePublisherProperty('cameraPosition', 'front');
   }
   componentWillUnmount() {
-    OT.destroyPublisher(this.state.publisherId, (error) => {
+    OT.destroyPublisher(this.props.sessionId, this.state.publisherId, (error) => {
       if (error) {
         this.otrnEventHandler(error);
       } else {
@@ -88,14 +88,14 @@ class OTPublisher extends Component {
   }
   initPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
-    OT.initPublisher(this.state.publisherId, publisherProperties, (initError) => {
+    OT.initPublisher(this.props.sessionId, this.state.publisherId, publisherProperties, (initError) => {
       if (initError) {
         this.setState({
           initError
         });
         this.otrnEventHandler(initError);
       } else {
-        OT.getSessionInfo((session) => {
+        OT.getSessionInfo(this.props.sessionId, (session) => {
           if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
             this.publish();
           }
@@ -104,7 +104,7 @@ class OTPublisher extends Component {
     });
   }
   publish() {
-    OT.publish(this.state.publisherId, (publishError) => {
+    OT.publish(this.props.sessionId, this.state.publisherId, (publishError) => {
       if (publishError) {
         this.otrnEventHandler(publishError);
       } else {

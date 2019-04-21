@@ -18,7 +18,6 @@ import com.facebook.react.bridge.Callback;
 public class OTRN {
 
     public static OTRN sharedState;
-    private Session mSession;
     private String mAndroidOnTop;
     private String mAndroidZOrder;
 
@@ -29,6 +28,7 @@ public class OTRN {
     private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Callback> publisherDestroyedCallbacks = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
 
@@ -36,11 +36,6 @@ public class OTRN {
             sharedState = new OTRN();
         }
         return sharedState;
-    }
-
-    public synchronized Session getSession() {
-
-        return this.mSession;
     }
 
     public synchronized void setSession(Session mSession) {
@@ -102,6 +97,11 @@ public class OTRN {
     public ConcurrentHashMap<String, Connection> getConnections() {
 
         return this.connections;
+    }
+
+    public ConcurrentHashMap<String, Session> getSessions() {
+
+        return this.sessions;
     }
 
     private OTRN() {}

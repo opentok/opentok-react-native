@@ -106,10 +106,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void connect(String token, Callback callback) {
+    public void connect(String sessionId, String token, Callback callback) {
 
         connectCallback = callback;
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         if (mSession != null) {
             mSession.connect(token);
         }
@@ -167,9 +168,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void publish(String publisherId, Callback callback) {
+    public void publish(String sessionId, String publisherId, Callback callback) {
 
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mSession != null && mPublisher != null) {
@@ -183,11 +185,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void subscribeToStream(String streamId, ReadableMap properties, Callback callback) {
+    public void subscribeToStream(String sessionId, String streamId, ReadableMap properties, Callback callback) {
 
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         Stream stream = mSubscriberStreams.get(streamId);
         Subscriber mSubscriber = new Subscriber.Builder(getReactApplicationContext(), stream).build();
         mSubscriber.setSubscriberListener(this);
@@ -239,9 +242,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void disconnectSession(Callback callback) {
+    public void disconnectSession(String sessionId, Callback callback) {
 
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         disconnectCallback = callback;
         if (mSession != null) {
             mSession.disconnect();
@@ -332,9 +336,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void sendSignal(ReadableMap signal, Callback callback) {
+    public void sendSignal(String sessionId, ReadableMap signal, Callback callback) {
 
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
         String connectionId = signal.getString("to");
         Connection mConnection = null;
@@ -355,7 +360,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void destroyPublisher(final String publisherId, final Callback callback) {
+    public void destroyPublisher(final String sessionId, final String publisherId, final Callback callback) {
 
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
@@ -367,7 +372,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 Publisher mPublisher = mPublishers.get(publisherId);
                 ConcurrentHashMap<String, FrameLayout> mPublisherViewContainers = sharedState.getPublisherViewContainers();
                 FrameLayout mPublisherViewContainer = mPublisherViewContainers.get(publisherId);
-                Session mSession = sharedState.getSession();
+                ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+                Session mSession = mSessions.get(sessionId);
                 if (mPublisherViewContainer != null) {
                     mPublisherViewContainer.removeAllViews();
                 }
@@ -385,9 +391,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void getSessionInfo(Callback callback) {
+    public void getSessionInfo(String sessionId, Callback callback) {
 
-        Session mSession = sharedState.getSession();
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         WritableMap sessionInfo = null;
         if (mSession != null){
             sessionInfo = EventUtils.prepareJSSessionMap(mSession);
