@@ -46,8 +46,6 @@ If you've installed this package before, you may need to edit your `Podfile` and
 3. Add the following to your pod file:
 
 ```
-    platform :ios, '9.0'
-
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
