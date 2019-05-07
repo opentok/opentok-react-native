@@ -31,7 +31,9 @@ React Native library for OpenTok iOS and Android SDKs
 
 1. In your terminal, change into your React Native project's directory
 
-2. In your terminal, run `npm install opentok-react-native`
+2. Add the library using `npm` or `yarn`.
+* `npm install opentok-react-native`
+* `yarn add opentok-react-native`
 
 ### iOS Installation
 
@@ -44,12 +46,10 @@ If you've installed this package before, you may need to edit your `Podfile` and
 3. Add the following to your pod file:
 
 ```
-    platform :ios, '9.0'
-
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OpenTok', '2.15.3'
+        pod 'OpenTok', '2.16.0'
     end
 
 ```

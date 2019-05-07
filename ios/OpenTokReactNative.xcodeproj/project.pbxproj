@@ -303,6 +303,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y6ZF2U3QJC;
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../../ios/Pods/OpenTok";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${SRCROOT}/../../../ios/Pods/Headers/Public/**",
@@ -324,6 +325,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y6ZF2U3QJC;
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../../ios/Pods/OpenTok";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${SRCROOT}/../../../ios/Pods/Headers/Public/**",
