@@ -289,6 +289,30 @@ class OTSessionManager: RCTEventEmitter {
         callback([errorInfo]);
     }
     
+    func setStreamObservers(stream: OTStream, isPublisherStream: Bool) {
+        let hasVideoObservation: NSKeyValueObservation = stream.observe(\.hasVideo, options: [.old, .new]) { object, change in
+            guard let oldValue = change.oldValue else { return }
+            guard let newValue = change.newValue else { return }
+            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasVideo", oldValue: oldValue, newValue: newValue, isPublisherStream: isPublisherStream)
+        }
+        let hasAudioObservation: NSKeyValueObservation = stream.observe(\.hasAudio, options: [.old, .new]) { object, change in
+            guard let oldValue = change.oldValue else { return }
+            guard let newValue = change.newValue else { return }
+            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasAudio", oldValue: oldValue, newValue: newValue, isPublisherStream: isPublisherStream)
+        }
+        let videoDimensionsObservation: NSKeyValueObservation = stream.observe(\.videoDimensions, options: [.old, .new]) { object, change in
+            guard let oldValue = change.oldValue else { return }
+            guard let newValue = change.newValue else { return }
+            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoDimensions", oldValue: oldValue, newValue: newValue, isPublisherStream: isPublisherStream)
+        }
+        let videoTypeObservation: NSKeyValueObservation = stream.observe(\.videoType, options: [.old, .new]) { object, change in
+            guard let oldValue = change.oldValue else { return }
+            guard let newValue = change.newValue else { return }
+            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoType", oldValue: oldValue, newValue: newValue, isPublisherStream: isPublisherStream)
+        }
+        OTRN.sharedState.streamObservers.updateValue([hasAudioObservation, hasVideoObservation, videoDimensionsObservation, videoTypeObservation], forKey: stream.streamId)
+    }
+    
     func printLogs(_ message: String) {
         if (logLevel) {
             print(message)
@@ -358,27 +382,7 @@ extension OTSessionManager: OTSessionDelegate {
         OTRN.sharedState.subscriberStreams.updateValue(stream, forKey: stream.streamId)
         let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream)
         self.emitEvent("\(EventUtils.sessionPreface)streamCreated", data: streamInfo)
-        let hasVideoObservation: NSKeyValueObservation = stream.observe(\.hasVideo, options: [.old, .new]) { object, change in
-            guard let oldValue = change.oldValue else { return }
-            guard let newValue = change.newValue else { return }
-            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasVideo", oldValue: oldValue, newValue: newValue, isPublisherStream: false)
-        }
-        let hasAudioObservation: NSKeyValueObservation = stream.observe(\.hasAudio, options: [.old, .new]) { object, change in
-            guard let oldValue = change.oldValue else { return }
-            guard let newValue = change.newValue else { return }
-            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasAudio", oldValue: oldValue, newValue: newValue, isPublisherStream: false)
-        }
-        let videoDimensionsObservation: NSKeyValueObservation = stream.observe(\.videoDimensions, options: [.old, .new]) { object, change in
-            guard let oldValue = change.oldValue else { return }
-            guard let newValue = change.newValue else { return }
-            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoDimensions", oldValue: oldValue, newValue: newValue, isPublisherStream: false)
-        }
-        let videoTypeObservation: NSKeyValueObservation = stream.observe(\.videoType, options: [.old, .new]) { object, change in
-            guard let oldValue = change.oldValue else { return }
-            guard let newValue = change.newValue else { return }
-            self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoType", oldValue: oldValue, newValue: newValue, isPublisherStream: false)
-        }
-        OTRN.sharedState.streamObservers.updateValue([hasAudioObservation, hasVideoObservation, videoDimensionsObservation, videoTypeObservation], forKey: stream.streamId)
+        setStreamObservers(stream: stream, isPublisherStream: false)
         printLogs("OTRN: Session streamCreated \(stream.streamId)")
     }
     
@@ -412,27 +416,7 @@ extension OTSessionManager: OTPublisherDelegate {
             OTRN.sharedState.isPublishing[publisherId] = true;
             let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)streamCreated", data: streamInfo);
-            let hasVideoObservation: NSKeyValueObservation = stream.observe(\.hasVideo, options: [.old, .new]) { object, change in
-                guard let oldValue = change.oldValue else { return }
-                guard let newValue = change.newValue else { return }
-                self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasVideo", oldValue: oldValue, newValue: newValue, isPublisherStream: true)
-            }
-            let hasAudioObservation: NSKeyValueObservation = stream.observe(\.hasAudio, options: [.old, .new]) { object, change in
-                guard let oldValue = change.oldValue else { return }
-                guard let newValue = change.newValue else { return }
-                self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "hasAudio", oldValue: oldValue, newValue: newValue, isPublisherStream: true)
-            }
-            let videoDimensionsObservation: NSKeyValueObservation = stream.observe(\.videoDimensions, options: [.old, .new]) { object, change in
-                guard let oldValue = change.oldValue else { return }
-                guard let newValue = change.newValue else { return }
-                self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoDimensions", oldValue: oldValue, newValue: newValue, isPublisherStream: true)
-            }
-            let videoTypeObservation: NSKeyValueObservation = stream.observe(\.videoType, options: [.old, .new]) { object, change in
-                guard let oldValue = change.oldValue else { return }
-                guard let newValue = change.newValue else { return }
-                self.checkAndEmitStreamPropertyChangeEvent(stream.streamId, changedProperty: "videoType", oldValue: oldValue, newValue: newValue, isPublisherStream: true)
-            }
-            OTRN.sharedState.streamObservers.updateValue([hasAudioObservation, hasVideoObservation, videoDimensionsObservation, videoTypeObservation], forKey: stream.streamId)
+            setStreamObservers(stream: stream, isPublisherStream: true)
         }
         printLogs("OTRN: Publisher Stream created")
     }
