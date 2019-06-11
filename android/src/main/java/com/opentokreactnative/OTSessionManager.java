@@ -558,6 +558,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
 
         String publisherId = Utils.getPublisherId(publisherKit);
+        ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+        mSubscriberStreams.put(stream.getStreamId(), stream);
         if (publisherId.length() > 0) {
             String event = publisherId + ":" + publisherPreface + "onStreamCreated";;
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
@@ -572,6 +574,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         String publisherId = Utils.getPublisherId(publisherKit);
         String event = publisherId + ":" + publisherPreface + "onStreamDestroyed";
+        ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
+        String mStreamId = stream.getStreamId();
+        mSubscriberStreams.remove(mStreamId);
         if (publisherId.length() > 0) {
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream);
             sendEventMap(this.getReactApplicationContext(), event, streamInfo);
