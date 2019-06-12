@@ -12,6 +12,7 @@ export default class OTSubscriber extends Component {
     super(props);
     this.state = {
       streams: [],
+      subscribeToSelf: props.subscribeToSelf || false
     };
     this.componentEvents = {
       streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
@@ -46,18 +47,23 @@ export default class OTSubscriber extends Component {
     removeNativeEvents(events);
   }
   streamCreatedHandler = (stream) => {
-    const { streamProperties, properties } = this.props;
+    const { subscribeToSelf } = this.state;  
+    const { streamProperties, properties, sessionInfo } = this.props;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
-    OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
-      if (error) {
-        this.otrnEventHandler(error);
-      } else {
-        this.setState({
-          streams: [...this.state.streams, stream.streamId],
-        });
-      }
-    });
+    // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
+    if ((subscribeToSelf && sessionInfo && sessionInfo.connection && sessionInfo.connection.connectionId === stream.connectionId ) ||
+    (sessionInfo && sessionInfo.connection && sessionInfo.connection.connectionId !== stream.connectionId) ){
+        OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
+            if (error) {
+                this.otrnEventHandler(error);
+            } else {
+                this.setState({
+                streams: [...this.state.streams, stream.streamId],
+                });
+            }
+            });
+        }                             
   }
   streamDestroyedHandler = (stream) => {
     OT.removeSubscriber(stream.streamId, (error) => {
@@ -91,6 +97,7 @@ OTSubscriber.propTypes = {
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  sessionInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 OTSubscriber.defaultProps = {
@@ -98,4 +105,5 @@ OTSubscriber.defaultProps = {
   eventHandlers: {},
   streamProperties: {},
   containerStyle: {},
+  sessionInfo: {}
 };
