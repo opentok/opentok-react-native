@@ -98,6 +98,7 @@ OTSubscriber.propTypes = {
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   sessionInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  subscribeToSelf: PropTypes.bool
 };
 
 OTSubscriber.defaultProps = {
@@ -105,5 +106,6 @@ OTSubscriber.defaultProps = {
   eventHandlers: {},
   streamProperties: {},
   containerStyle: {},
-  sessionInfo: {}
+  sessionInfo: {},
+  subscribeToSelf: false
 };
