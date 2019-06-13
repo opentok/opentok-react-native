@@ -66,6 +66,7 @@ You can find the structure of the object below:
     creationTime: '',
     height: '',
     width: '',
+    videoType: '', // camera or screen
   };
 ```
 
@@ -87,6 +88,7 @@ You can find the structure of the object below:
       creationTime: '',
       height: '',
       width: '',
+      videoType: '', // camera or screen
      },
     oldValue: '',
     newValue: '',
