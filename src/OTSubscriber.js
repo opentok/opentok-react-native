@@ -53,7 +53,7 @@ export default class OTSubscriber extends Component {
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
     const sessionInfoConnectionId = sessionInfo && sessionInfo.connection ? sessionInfo.connection.connectionId : null;
-    if (subscribeToSelf || (sessionInfoConnectionId !== stream.connectionId) ){
+    if (subscribeToSelf || (sessionInfoConnectionId !== stream.connectionId)){
         OT.subscribeToStream(stream.streamId, subscriberProperties, (error) => {
             if (error) {
                 this.otrnEventHandler(error);
