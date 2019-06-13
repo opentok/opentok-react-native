@@ -411,6 +411,7 @@ extension OTSessionManager: OTSessionDelegate {
 extension OTSessionManager: OTPublisherDelegate {
     func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream) {
         OTRN.sharedState.publisherStreams.updateValue(stream, forKey: stream.streamId)
+        OTRN.sharedState.subscriberStreams.updateValue(stream, forKey: stream.streamId)
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             OTRN.sharedState.isPublishing[publisherId] = true;
@@ -424,6 +425,7 @@ extension OTSessionManager: OTPublisherDelegate {
     func publisher(_ publisher: OTPublisherKit, streamDestroyed stream: OTStream) {
         OTRN.sharedState.streamObservers.removeValue(forKey: stream.streamId)
         OTRN.sharedState.publisherStreams.removeValue(forKey: stream.streamId)
+        OTRN.sharedState.subscriberStreams.removeValue(forKey: stream.streamId)
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         OTRN.sharedState.isPublishing[publisherId] = false;
         if (publisherId.count > 0) {

@@ -7,6 +7,7 @@
 | properties | Object | No | Properties passed into the native subscriber instance
 | streamProperties | Object | No | Used to update individual subscriber instance properties
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
+| subscribeToSelf | Boolean | No | If true, subscribe to his own stream (default: false)
 
 ## Properties 
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.

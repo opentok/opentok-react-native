@@ -35,6 +35,7 @@ class EventUtils {
         streamInfo["creationTime"] = convertDateToString(stream.creationTime);
         streamInfo["height"] = stream.videoDimensions.height;
         streamInfo["width"] = stream.videoDimensions.width;
+        streamInfo["videoType"] = stream.videoType == OTStreamVideoType.screen ? "screen" : "camera"
         return streamInfo;
     }
     

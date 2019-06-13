@@ -97,6 +97,7 @@ export default class OTSession extends Component {
           child,
           {
             sessionId: this.props.sessionId,
+            sessionInfo: this.state.sessionInfo
           },
         ) : child),
       );
