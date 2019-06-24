@@ -433,7 +433,8 @@ extension OTSessionManager: OTPublisherDelegate {
             let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)streamDestroyed", data: streamInfo);
         }
-        OTRN.sharedState.publishers[publisherId] = nil;
+        // No need to create new publisher 
+        // OTRN.sharedState.publishers[publisherId] = nil;
         OTRN.sharedState.isPublishing[publisherId] = nil;
         guard let callback = OTRN.sharedState.publisherDestroyedCallbacks[publisherId] else {
             printLogs("OTRN: Publisher Stream destroyed")
