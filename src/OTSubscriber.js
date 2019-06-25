@@ -96,7 +96,7 @@ export default class OTSubscriber extends Component {
 const viewPropTypes = View.propTypes;
 OTSubscriber.propTypes = {
   ...viewPropTypes,
-  children: React.PropTypes.func,
+  children: PropTypes.func,
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
