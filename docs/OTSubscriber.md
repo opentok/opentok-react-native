@@ -116,7 +116,7 @@ renderSubscribers = (subscribers) => {
       key={streamId}
       style={subscriberWrapperStyle}
     >
-    <OTSubscriberView streamId={streamId} style={subscriberStyle} />
+      <OTSubscriberView streamId={streamId} style={subscriberStyle} />
     </TouchableOpacity>
   ))}
 }
