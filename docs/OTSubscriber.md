@@ -8,6 +8,7 @@
 | streamProperties | Object | No | Used to update individual subscriber instance properties
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
 | subscribeToSelf | Boolean | No | If set to true, the subscriber can subscribe to it's own publisher stream (default: false)
+| children | Function | No | A render prop allowing individual rendering of each `OTSubscriberView`
 
 ## Properties 
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
@@ -88,5 +89,34 @@ class App extends Component {
       </OTSession>
     );
   }
+}
+```
+
+## Manual rendering of streams
+
+It's possible to manually render streams, i.e. to allow touch interaction or provide individual styling for each `OTSubscriberView`.
+
+By using children as a render prop function, we can take care of rendering each `OTSubscriberView` individually, i.e.: 
+
+```js
+<OTSubscriber
+	streamProperties={streamProperties}>
+    {this.renderSubscribers}
+</OTSubscriber>
+```
+
+The render prop function could be written as follows:
+
+```js
+renderSubscribers = (subscribers) => {
+  {subscribers.map(streamId => (
+    <TouchableOpacity
+      onPress={() => this.handleStreamPress(streamId)}
+      key={streamId}
+      style={subscriberWrapperStyle}
+    >
+	  <OTSubscriberView streamId={streamId} style={subscriberStyle} />
+    </TouchableOpacity>
+  ))}
 }
 ```
