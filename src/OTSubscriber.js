@@ -80,8 +80,8 @@ export default class OTSubscriber extends Component {
     });
   }
   render() {
-    const containerStyle = this.props.containerStyle;
     if (!this.props.children) {
+      const containerStyle = this.props.containerStyle;
       const childrenWithStreams = this.state.streams.map((streamId) => {
         const streamProperties = this.props.streamProperties[streamId];
         const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
@@ -89,7 +89,7 @@ export default class OTSubscriber extends Component {
       });
       return <View style={containerStyle}>{ childrenWithStreams }</View>;
     }
-    return this.props.children(this.state.streams);
+    return this.props.children(this.state.streams) || null;
   }
 }
 
