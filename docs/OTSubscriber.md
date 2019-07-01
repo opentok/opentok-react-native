@@ -8,7 +8,7 @@
 | streamProperties | Object | No | Used to update individual subscriber instance properties
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
 | subscribeToSelf | Boolean | No | If set to true, the subscriber can subscribe to it's own publisher stream (default: false)
-| children | Function | No | A render prop allowing individual rendering of each `OTSubscriberView`
+| children | Function | No | A render prop allowing individual rendering of each stream
 
 ## Properties
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
@@ -92,25 +92,26 @@ class App extends Component {
 }
 ```
 
-## Manual rendering of streams
+## Custom rendering of streams
 
-It's possible to manually render streams, i.e. to allow touch interaction or provide individual styling for each `OTSubscriberView`.
+`OTSubscriber` accepts a render prop function that enables custom rendering of individual streams, e.g. to allow touch interaction or provide individual styling for each `OTSubscriberView`.
+An array of stream IDs is passed to the render prop function as its only argument.
 
-By using children as a render prop function, we can take care of rendering each `OTSubscriberView` individually, i.e.:
+For example, to display the stream, pass its ID as `streamId` prop to the `OTSubscriberView` component:
 
 ```js
-<OTSubscriber
-  streamProperties={streamProperties}
-  >
-    {this.renderSubscribers}
+import { OTSubscriberView } from 'opentok-react-native'
+
+// Render method
+
+<OTSubscriber>
+  {this.renderSubscribers}
 </OTSubscriber>
-```
 
-The render prop function could be written as follows:
+// Render prop function
 
-```js
 renderSubscribers = (subscribers) => {
-  {subscribers.map(streamId => (
+  return subscribers.map((streamId) => (
     <TouchableOpacity
       onPress={() => this.handleStreamPress(streamId)}
       key={streamId}
@@ -118,6 +119,11 @@ renderSubscribers = (subscribers) => {
     >
       <OTSubscriberView streamId={streamId} style={subscriberStyle} />
     </TouchableOpacity>
-  ))}
-}
+  ));
+};
 ```
+
+Note: `streamProperties` prop is ignored if a children prop is passed.
+
+
+
