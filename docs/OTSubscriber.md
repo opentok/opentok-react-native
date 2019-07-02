@@ -8,8 +8,9 @@
 | streamProperties | Object | No | Used to update individual subscriber instance properties
 | eventHandlers | Object&lt;Function&gt; | No | Event handlers passed into the native subscriber instance
 | subscribeToSelf | Boolean | No | If set to true, the subscriber can subscribe to it's own publisher stream (default: false)
+| children | Function | No | A render prop allowing individual rendering of each stream
 
-## Properties 
+## Properties
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
 
   * **subscribeToVideo** (Boolean) — Whether to subscribe video.
@@ -25,13 +26,13 @@ The `OTSubscriber` component will subscribe to a specified stream from a specifi
   * **connected** () — Sent when the subscriber successfully connects to the stream.
 
   * **disconnected** () — Called when the subscriber’s stream has been interrupted.
-  
+
   * **error** (Object) — Sent if the subscriber fails to connect to its stream.
 
   * **otrnError** (Object) — Sent if there is an error with the communication between the native subscriber instance and the JS component.
 
   * **videoDataReceived** () - Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the `connected` message is sent.
-  
+
   * **videoDisabled** (String) — This message is sent when the subscriber stops receiving video. Check the reason parameter for the reason why the video stopped.
 
   * **videoDisableWarning** () - This message is sent when the OpenTok Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the `videoDisabled` message is sent. If the stream quality improves, the `videoDisableWarningLifted` message is sent.
@@ -39,7 +40,7 @@ The `OTSubscriber` component will subscribe to a specified stream from a specifi
   * **videoDisableWarningLifted** () — This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
 
   * **videoEnabled** (String) - This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
-  
+
   * **videoNetworkStats** (Object) — Sent periodically to report video statistics for the subscriber.
 
   ```js
@@ -90,3 +91,39 @@ class App extends Component {
   }
 }
 ```
+
+## Custom rendering of streams
+
+`OTSubscriber` accepts a render prop function that enables custom rendering of individual streams, e.g. to allow touch interaction or provide individual styling for each `OTSubscriberView`.
+An array of stream IDs is passed to the render prop function as its only argument.
+
+For example, to display the stream, pass its ID as `streamId` prop to the `OTSubscriberView` component:
+
+```js
+import { OTSubscriberView } from 'opentok-react-native'
+
+// Render method
+
+<OTSubscriber>
+  {this.renderSubscribers}
+</OTSubscriber>
+
+// Render prop function
+
+renderSubscribers = (subscribers) => {
+  return subscribers.map((streamId) => (
+    <TouchableOpacity
+      onPress={() => this.handleStreamPress(streamId)}
+      key={streamId}
+      style={subscriberWrapperStyle}
+    >
+      <OTSubscriberView streamId={streamId} style={subscriberStyle} />
+    </TouchableOpacity>
+  ));
+};
+```
+
+Note: `streamProperties` prop is ignored if a children prop is passed.
+
+
+
