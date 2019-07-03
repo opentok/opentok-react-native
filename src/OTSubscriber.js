@@ -19,7 +19,7 @@ export default class OTSubscriber extends Component {
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
     };
     this.componentEventsArray = Object.values(this.componentEvents);
-    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers); 
+    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
   }
   componentWillMount() {
     this.streamCreated = nativeEvents.addListener(this.componentEvents.streamCreated, stream => this.streamCreatedHandler(stream));
@@ -47,7 +47,7 @@ export default class OTSubscriber extends Component {
     removeNativeEvents(events);
   }
   streamCreatedHandler = (stream) => {
-    const { subscribeToSelf } = this.state;  
+    const { subscribeToSelf } = this.state;
     const { streamProperties, properties, sessionInfo } = this.props;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
@@ -63,7 +63,7 @@ export default class OTSubscriber extends Component {
                 });
             }
             });
-        }                             
+        }
   }
   streamDestroyedHandler = (stream) => {
     OT.removeSubscriber(stream.streamId, (error) => {
@@ -80,19 +80,23 @@ export default class OTSubscriber extends Component {
     });
   }
   render() {
-    const containerStyle = this.props.containerStyle;
-    const childrenWithStreams = this.state.streams.map((streamId) => {
-      const streamProperties = this.props.streamProperties[streamId];
-      const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
-      return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
-    });
-    return <View style={containerStyle}>{ childrenWithStreams }</View>;
+    if (!this.props.children) {
+      const containerStyle = this.props.containerStyle;
+      const childrenWithStreams = this.state.streams.map((streamId) => {
+        const streamProperties = this.props.streamProperties[streamId];
+        const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
+        return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
+      });
+      return <View style={containerStyle}>{ childrenWithStreams }</View>;
+    }
+    return this.props.children(this.state.streams) || null;
   }
 }
 
 const viewPropTypes = View.propTypes;
 OTSubscriber.propTypes = {
   ...viewPropTypes,
+  children: PropTypes.func,
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
