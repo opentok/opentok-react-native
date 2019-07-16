@@ -18,16 +18,18 @@ import com.facebook.react.bridge.Callback;
 public class OTRN {
 
     public static OTRN sharedState;
-    private Session mSession;
-    private String mAndroidOnTop;
-    private String mAndroidZOrder;
 
     private ConcurrentHashMap<String, Stream> subscriberStreams = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Publisher> publishers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> androidOnTopMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> androidZOrderMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> subscriberViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, FrameLayout> publisherViewContainers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Callback> publisherDestroyedCallbacks = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Callback> sessionConnectCallbacks = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Callback> sessionDisconnectCallbacks = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
@@ -38,36 +40,15 @@ public class OTRN {
         return sharedState;
     }
 
-    public synchronized Session getSession() {
+    public ConcurrentHashMap<String, String> getAndroidOnTopMap() {
 
-        return this.mSession;
+        return this.androidOnTopMap;
     }
 
-    public synchronized void setSession(Session mSession) {
+    public ConcurrentHashMap<String, String> getAndroidZOrderMap() {
 
-        this.mSession = mSession;
+        return this.androidZOrderMap;
     }
-
-    public synchronized String getAndroidOnTop() {
-
-        return this.mAndroidOnTop;
-    }
-
-    public synchronized void setAndroidOnTop(String androidOnTop) {
-
-        this.mAndroidOnTop = androidOnTop;
-    }
-
-    public synchronized String getAndroidZOrder() {
-
-        return this.mAndroidZOrder;
-    }
-
-    public synchronized void setAndroidZOrder(String androidZOrder) {
-
-        this.mAndroidZOrder = androidZOrder;
-    }
-
 
     public ConcurrentHashMap<String, Stream> getSubscriberStreams() {
 
@@ -99,9 +80,24 @@ public class OTRN {
         return this.publisherDestroyedCallbacks;
     }
 
+    public ConcurrentHashMap<String, Callback> getSessionConnectCallbacks() {
+
+        return this.sessionConnectCallbacks;
+    }
+
+    public ConcurrentHashMap<String, Callback> getSessionDisconnectCallbacks() {
+
+        return this.sessionDisconnectCallbacks;
+    }
+
     public ConcurrentHashMap<String, Connection> getConnections() {
 
         return this.connections;
+    }
+
+    public ConcurrentHashMap<String, Session> getSessions() {
+
+        return this.sessions;
     }
 
     private OTRN() {}

@@ -3,13 +3,16 @@ import { handleError } from '../OTError';
 import { each } from 'underscore';
 import axios from 'axios';
 
-const reassignEvents = (type, customEvents, events, publisherId) => {
+const reassignEvents = (type, customEvents, events, publisherId, sessionId) => {
   const newEvents = {};
   const preface = `${type}:`;
   const platform = Platform.OS;
+
   each(events, (eventHandler, eventType) => {
     if (customEvents[platform][eventType] !== undefined && publisherId !== undefined) {
       newEvents[`${publisherId}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
+    } else if (customEvents[platform][eventType] !== undefined && sessionId !== undefined) {
+      newEvents[`${sessionId}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else if(customEvents[platform][eventType] !== undefined ) {    
       newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else if(events['otrnError']) {
