@@ -83,7 +83,7 @@ class OTSessionManager: RCTEventEmitter {
                     return
                 }
                 publisher.videoType = .screen;
-                publisher.videoCapture = OTScreenCapturer(withView: (screenView))
+                publisher.videoCapture = OTScreenCapture(view: (screenView))
             } else if let cameraPosition = properties["cameraPosition"] as? String {
                 publisher.cameraPosition = cameraPosition == "front" ? .front : .back;
             }
