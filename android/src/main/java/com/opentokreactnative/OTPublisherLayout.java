@@ -33,8 +33,10 @@ public class OTPublisherLayout extends FrameLayout{
         String zOrder = "";
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
-            if (mPublisher.getSession() != null) {
+            if (androidOnTopMap.get(mPublisher.getSession().getSessionId()) != null) {
                 pubOrSub = androidOnTopMap.get(mPublisher.getSession().getSessionId());
+            }
+            if (androidZOrderMap.get(mPublisher.getSession().getSessionId()) != null) {
                 zOrder = androidZOrderMap.get(mPublisher.getSession().getSessionId());
             }
             mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
