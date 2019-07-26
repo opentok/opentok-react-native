@@ -21,6 +21,16 @@ const reassignEvents = (type, customEvents, events, publisherId, sessionId) => {
       handleError(`${eventType} is not a supported event`);
     }
   });
+
+  // Set a default handler
+  each(customEvents[platform], (event) => {
+    if (publisherId !== undefined && !newEvents[`${publisherId}:${preface}${event}`]) {
+      newEvents[`${publisherId}:${preface}${event}`] = () => { };
+    } else if (sessionId !== undefined && !newEvents[`${sessionId}:${preface}${event}`]) {
+      newEvents[`${sessionId}:${preface}${event}`] = () => { };
+    }
+  });
+
   return newEvents;
 };
 
