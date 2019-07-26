@@ -246,7 +246,7 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func destroyPublisher(publisherId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func destroyPublisher(_ publisherId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         DispatchQueue.main.async {
             guard let publisher = OTRN.sharedState.publishers[publisherId] else { callback([NSNull()]); return }
             var error: OTError?
