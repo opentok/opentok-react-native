@@ -119,7 +119,7 @@ class OTPublisher extends Component {
   render() {
     const { publisher, publisherId } = this.state;
     if (publisher && publisherId) {
-      return <OTPublisherView publisherId={publisherId} pepe={"hola!!!"} {...this.props} />;
+      return <OTPublisherView publisherId={publisherId} {...this.props} />;
     }
     return <View />;
   }
