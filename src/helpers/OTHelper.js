@@ -3,16 +3,14 @@ import { handleError } from '../OTError';
 import { each } from 'underscore';
 import axios from 'axios';
 
-const reassignEvents = (type, customEvents, events, publisherId, sessionId) => {
+const reassignEvents = (type, customEvents, events, eventKey) => {
   const newEvents = {};
   const preface = `${type}:`;
   const platform = Platform.OS;
 
   each(events, (eventHandler, eventType) => {
-    if (customEvents[platform][eventType] !== undefined && publisherId !== undefined) {
-      newEvents[`${publisherId}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
-    } else if (customEvents[platform][eventType] !== undefined && sessionId !== undefined) {
-      newEvents[`${sessionId}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
+    if (customEvents[platform][eventType] !== undefined && eventKey !== undefined) {
+      newEvents[`${eventKey}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else if(customEvents[platform][eventType] !== undefined ) {    
       newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
     } else if(events['otrnError']) {
@@ -24,10 +22,8 @@ const reassignEvents = (type, customEvents, events, publisherId, sessionId) => {
 
   // Set a default handler
   each(customEvents[platform], (event) => {
-    if (publisherId !== undefined && !newEvents[`${publisherId}:${preface}${event}`]) {
-      newEvents[`${publisherId}:${preface}${event}`] = () => { };
-    } else if (sessionId !== undefined && !newEvents[`${sessionId}:${preface}${event}`]) {
-      newEvents[`${sessionId}:${preface}${event}`] = () => { };
+    if (eventKey !== undefined && !newEvents[`${eventKey}:${preface}${event}`]) {
+      newEvents[`${eventKey}:${preface}${event}`] = () => { };
     }
   });
 

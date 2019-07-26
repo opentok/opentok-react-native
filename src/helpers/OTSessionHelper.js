@@ -43,7 +43,7 @@ const sanitizeSessionEvents = (sessionId, events) => {
       streamPropertyChanged: 'onStreamPropertyChanged',
     },
   };
-  return reassignEvents('session', customEvents, events, undefined, sessionId);
+  return reassignEvents('session', customEvents, events, sessionId);
 };
 
 
