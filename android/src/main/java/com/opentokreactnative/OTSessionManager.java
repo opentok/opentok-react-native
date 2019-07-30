@@ -379,7 +379,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 Session mSession = null;
 
                 mPublisherDestroyedCallbacks.put(publisherId, callback);
-                if (mPublisher.getSession() != null) {
+                if (mPublisher != null && mPublisher.getSession() != null) {
                     mSession = mSessions.get(mPublisher.getSession().getSessionId());
                 }
 
@@ -888,7 +888,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onStreamVideoTypeChanged(Session session, Stream stream, Stream.StreamVideoType videoType) {
 
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
-        Stream mStream = mSubscriberStreams.get(stream.getStreamId());
         String oldVideoType = stream.getStreamVideoType().toString();
         WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("videoType", oldVideoType, videoType.toString(), stream);
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamPropertyChanged", eventData);
