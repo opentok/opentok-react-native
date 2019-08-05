@@ -18,14 +18,16 @@ RCT_EXTERN_METHOD(initSession:
                   sessionId:(NSString*)sessionId
                   sessionOptions:(NSDictionary*)sessionOptions)
 RCT_EXTERN_METHOD(connect:
-                  (NSString*)token
+                  (NSString*)sessionId
+                  token:(NSString*)token
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(initPublisher:
                   (NSString*)publisherId
                   properties:(NSDictionary*)properties
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(publish:
-                  (NSString*)publisherId
+                  (NSString*)sessionId
+                  publisherId:(NSString*)publisherId
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(subscribeToStream:
                   (NSString*)streamId
@@ -35,7 +37,8 @@ RCT_EXTERN_METHOD(removeSubscriber:
                   (NSString*)streamId
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(disconnectSession:
-                  (RCTResponseSenderBlock*)callback)
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(publishAudio:
                   (NSString*)publisherId
                   pubAudio:(BOOL)pubAudio)
@@ -56,7 +59,8 @@ RCT_EXTERN_METHOD(setNativeEvents:
 RCT_EXTERN_METHOD(removeNativeEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(sendSignal:
-                  (NSDictionary*)properties
+                  (NSString*)sessionId
+                  signal:(NSDictionary*)signal
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(destroyPublisher:
                   (NSString*)publisherId
@@ -66,7 +70,8 @@ RCT_EXTERN_METHOD(setJSComponentEvents:
 RCT_EXTERN_METHOD(removeJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(getSessionInfo:
-                  (RCTResponseSenderBlock*)callback)
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end

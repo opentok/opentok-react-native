@@ -25,12 +25,13 @@ class EventUtils {
     
     static func prepareJSStreamEventData(_ stream: OTStream) -> Dictionary<String, Any> {
         var streamInfo: Dictionary<String, Any> = [:];
-        guard OTRN.sharedState.session != nil else { return streamInfo }
+        guard OTRN.sharedState.sessions[stream.session.sessionId] != nil else { return streamInfo }
         streamInfo["streamId"] = stream.streamId;
         streamInfo["name"] = stream.name;
         streamInfo["connectionId"] = stream.connection.connectionId;
         streamInfo["connection"] = prepareJSConnectionEventData(stream.connection);
         streamInfo["hasAudio"] = stream.hasAudio;
+        streamInfo["sessionId"] = stream.session.sessionId;
         streamInfo["hasVideo"] = stream.hasVideo;
         streamInfo["creationTime"] = convertDateToString(stream.creationTime);
         streamInfo["height"] = stream.videoDimensions.height;

@@ -10,6 +10,7 @@ You can find the structure of the object below:
   archive = {
     archiveId: '',
     name: '',
+    sessionId: '',
   };
 ```
 
@@ -63,6 +64,7 @@ You can find the structure of the object below:
     },
     hasAudio: '',
     hasVideo: '',
+    sessionId: '',
     creationTime: '',
     height: '',
     width: '',
@@ -85,6 +87,7 @@ You can find the structure of the object below:
      },
       hasAudio: '',
       hasVideo: '',
+      sessionId: '',
       creationTime: '',
       height: '',
       width: '',

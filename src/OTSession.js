@@ -20,7 +20,7 @@ export default class OTSession extends Component {
     const credentials = pick(this.props, ['apiKey', 'sessionId', 'token']);
     const sanitizedCredentials = sanitizeCredentials(credentials);
     if (Object.keys(sanitizedCredentials).length === 3) {
-      const sessionEvents = sanitizeSessionEvents(this.props.eventHandlers);
+      const sessionEvents = sanitizeSessionEvents(sanitizedCredentials.sessionId, this.props.eventHandlers);
       const sessionOptions = sanitizeSessionOptions(this.props.options);
       setNativeEvents(sessionEvents);
       this.createSession(sanitizedCredentials, sessionOptions);
@@ -49,18 +49,19 @@ export default class OTSession extends Component {
   }
   createSession(credentials, sessionOptions) {
     const { signal } = this.props;
-    OT.initSession(credentials.apiKey, credentials.sessionId, sessionOptions);
-    OT.connect(credentials.token, (error) => {
+    const { apiKey, sessionId, token } = credentials;
+    OT.initSession(apiKey, sessionId, sessionOptions);
+    OT.connect(sessionId, token, (error) => {
       if (error) {
         this.otrnEventHandler(error);
       } else {
-        OT.getSessionInfo((session) => {
+        OT.getSessionInfo(sessionId, (session) => {
           if (!isNull(session)) {
             const sessionInfo = { ...session, connectionStatus: getConnectionStatus(session.connectionStatus)};
             this.setState({
               sessionInfo,
             });
-            logOT(credentials.apiKey, credentials.sessionId, 'rn_on_connect', session.connection.connectionId);
+            logOT(apiKey, sessionId, 'rn_on_connect', session.connection.connectionId);
             if (Object.keys(signal).length > 0) {
               this.signal(signal);
             }
@@ -70,11 +71,11 @@ export default class OTSession extends Component {
     });
   }
   disconnectSession() {
-    OT.disconnectSession((disconnectError) => {
+    OT.disconnectSession(this.props.sessionId, (disconnectError) => {
       if (disconnectError) {
         this.otrnEventHandler(disconnectError);
       } else {
-        const events = sanitizeSessionEvents(this.props.eventHandlers);
+        const events = sanitizeSessionEvents(this.props.sessionId, this.props.eventHandlers);
         removeNativeEvents(events);
       }
     });
@@ -84,12 +85,10 @@ export default class OTSession extends Component {
   }
   signal(signal) {
     const signalData = sanitizeSignalData(signal);
-    OT.sendSignal(signalData.signal, signalData.errorHandler);
+    OT.sendSignal(this.props.sessionId, signalData.signal, signalData.errorHandler);
   }
   render() {
-
     const { style } = this.props;
-
     if (this.props.children) {
       const childrenWithProps = Children.map(
         this.props.children,

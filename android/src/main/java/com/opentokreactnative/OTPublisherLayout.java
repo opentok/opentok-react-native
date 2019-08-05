@@ -27,10 +27,18 @@ public class OTPublisherLayout extends FrameLayout{
     public void createPublisherView(String publisherId) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
-        String pubOrSub = sharedState.getAndroidOnTop();
-        String zOrder = sharedState.getAndroidZOrder();
+        ConcurrentHashMap<String, String> androidOnTopMap = sharedState.getAndroidOnTopMap();
+        ConcurrentHashMap<String, String> androidZOrderMap = sharedState.getAndroidZOrderMap();
+        String pubOrSub = "";
+        String zOrder = "";
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
+            if (androidOnTopMap.get(mPublisher.getSession().getSessionId()) != null) {
+                pubOrSub = androidOnTopMap.get(mPublisher.getSession().getSessionId());
+            }
+            if (androidZOrderMap.get(mPublisher.getSession().getSessionId()) != null) {
+                zOrder = androidZOrderMap.get(mPublisher.getSession().getSessionId());
+            }
             mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                     BaseVideoRenderer.STYLE_VIDEO_FILL);
             FrameLayout mPublisherViewContainer = new FrameLayout(getContext());

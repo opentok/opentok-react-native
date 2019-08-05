@@ -10,12 +10,14 @@ import Foundation
 
 class OTRN : NSObject {
   static let sharedState = OTRN()
-  var session: OTSession?
+  var sessions = [String: OTSession]()
   var subscriberStreams = [String: OTStream]()
   var subscribers = [String: OTSubscriber]()
   var publishers = [String: OTPublisher]()
   var publisherStreams = [String: OTStream]()
   var publisherDestroyedCallbacks = [String: RCTResponseSenderBlock]()
+  var sessionConnectCallbacks = [String: RCTResponseSenderBlock]()
+  var sessionDisconnectCallbacks = [String: RCTResponseSenderBlock]()
   var isPublishing = [String: Bool]()
   var streamObservers = [String: [NSKeyValueObservation]]()
   var connections = [String: OTConnection]()
