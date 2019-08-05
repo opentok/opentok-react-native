@@ -28,7 +28,7 @@ class OTPublisher extends Component {
     const publisherEvents = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
     setNativeEvents(publisherEvents);
     OT.setJSComponentEvents(this.componentEventsArray);
-    this.sessionConnected = nativeEvents.addListener(this.componentEvents.sessionConnected, () => this.sessionConnectedHandler());
+    this.sessionConnected = nativeEvents.addListener(`${this.props.sessionId}:${this.componentEvents.sessionConnected}`, () => this.sessionConnectedHandler());
   }
   componentDidMount() {
     this.createPublisher();
@@ -95,16 +95,18 @@ class OTPublisher extends Component {
         });
         this.otrnEventHandler(initError);
       } else {
-        OT.getSessionInfo((session) => {
-          if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
-            this.publish();
-          }
-        });
+        if (this.props.sessionId) {
+          OT.getSessionInfo(this.props.sessionId, (session) => {
+            if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
+             this.publish();
+            }
+          });
+        }
       }
     });
   }
   publish() {
-    OT.publish(this.state.publisherId, (publishError) => {
+    OT.publish(this.props.sessionId, this.state.publisherId, (publishError) => {
       if (publishError) {
         this.otrnEventHandler(publishError);
       } else {

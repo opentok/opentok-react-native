@@ -7,7 +7,7 @@ const validateString = value => (isString(value) ? value : '');
 
 const validateBoolean = value => (isBoolean(value) ? value : false);
 
-const sanitizeSessionEvents = (events) => {
+const sanitizeSessionEvents = (sessionId, events) => {
   if (typeof events !== 'object') {
     return {};
   }
@@ -43,7 +43,7 @@ const sanitizeSessionEvents = (events) => {
       streamPropertyChanged: 'onStreamPropertyChanged',
     },
   };
-  return reassignEvents('session', customEvents, events);
+  return reassignEvents('session', customEvents, events, sessionId);
 };
 
 
