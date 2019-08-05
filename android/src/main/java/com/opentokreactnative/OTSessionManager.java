@@ -100,7 +100,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSession.setReconnectionListener(this);
         mSession.setArchiveListener(this);
         mSession.setStreamPropertiesListener(this);
-
         mSessions.put(sessionId, mSession);
         mAndroidOnTopMap.put(sessionId, androidOnTop);
         mAndroidZOrderMap.put(sessionId, androidZOrder);
@@ -377,7 +376,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 FrameLayout mPublisherViewContainer = mPublisherViewContainers.get(publisherId);
                 Publisher mPublisher = mPublishers.get(publisherId);
                 Session mSession = null;
-
                 mPublisherDestroyedCallbacks.put(publisherId, callback);
                 if (mPublisher != null && mPublisher.getSession() != null) {
                     mSession = mSessions.get(mPublisher.getSession().getSessionId());

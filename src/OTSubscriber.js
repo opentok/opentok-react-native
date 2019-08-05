@@ -7,7 +7,6 @@ import OTSubscriberView from './views/OTSubscriberView';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 
-
 export default class OTSubscriber extends Component {
   constructor(props) {
     super(props);
