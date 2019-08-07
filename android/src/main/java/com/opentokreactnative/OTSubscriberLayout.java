@@ -41,8 +41,18 @@ public class OTSubscriberLayout extends FrameLayout{
                     zOrder = androidZOrderMap.get(mSubscriber.getSession().getSessionId());
                 }
             }
-            mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
-                BaseVideoRenderer.STYLE_VIDEO_FILL);
+
+            if (mSubscriber.getView().getParent() != null) {
+                ((ViewGroup)mSubscriber.getView().getParent()).removeView(mSubscriber.getView());
+            }
+
+            ConcurrentHashMap<String, FrameLayout> mSubscriberViewContainers = sharedState.getSubscriberViewContainers();
+            FrameLayout mOldSubscriberViewContainer = mSubscriberViewContainers.get(streamId);
+            if (mOldSubscriberViewContainer == null) {
+                mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
+                        BaseVideoRenderer.STYLE_VIDEO_FILL);
+            }
+            
             if (pubOrSub.equals("subscriber") && mSubscriber.getView() instanceof GLSurfaceView) {
                 if (zOrder.equals("mediaOverlay")) {
                     ((GLSurfaceView) mSubscriber.getView()).setZOrderMediaOverlay(true);
@@ -50,7 +60,7 @@ public class OTSubscriberLayout extends FrameLayout{
                     ((GLSurfaceView) mSubscriber.getView()).setZOrderOnTop(true);
                 }
             }
-            ConcurrentHashMap<String, FrameLayout> mSubscriberViewContainers = sharedState.getSubscriberViewContainers();
+            
             mSubscriberViewContainers.put(streamId, mSubscriberViewContainer);
             addView(mSubscriberViewContainer, 0);
             mSubscriberViewContainer.addView(mSubscriber.getView());
