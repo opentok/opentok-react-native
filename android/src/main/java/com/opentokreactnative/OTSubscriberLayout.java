@@ -41,6 +41,9 @@ public class OTSubscriberLayout extends FrameLayout{
                     zOrder = androidZOrderMap.get(mSubscriber.getSession().getSessionId());
                 }
             }
+            if (mSubscriber.getView().getParent() != null) {
+                ((ViewGroup)mSubscriber.getView().getParent()).removeView(mSubscriber.getView());
+            }
             mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
             if (pubOrSub.equals("subscriber") && mSubscriber.getView() instanceof GLSurfaceView) {
