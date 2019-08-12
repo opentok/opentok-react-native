@@ -2,6 +2,7 @@ package com.opentokreactnative;
 
 import android.opengl.GLSurfaceView;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.facebook.react.uimanager.ThemedReactContext;
