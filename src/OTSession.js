@@ -1,12 +1,13 @@
 import React, { Component, Children, cloneElement } from 'react';
 import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
+import { pick, isNull } from 'underscore';
 import { setNativeEvents, removeNativeEvents,  OT } from './OT';
 import { sanitizeSessionEvents, sanitizeSessionOptions, sanitizeSignalData,
    sanitizeCredentials, getConnectionStatus } from './helpers/OTSessionHelper';
 import { handleError } from './OTError';
 import { logOT, getOtrnErrorEventHandler } from './helpers/OTHelper';
-import { pick, isNull } from 'underscore';
+import OTContext from './contexts/OTContext';
 
 export default class OTSession extends Component {
   constructor(props) {
@@ -88,19 +89,16 @@ export default class OTSession extends Component {
     OT.sendSignal(this.props.sessionId, signalData.signal, signalData.errorHandler);
   }
   render() {
-    const { style } = this.props;
-    if (this.props.children) {
-      const childrenWithProps = Children.map(
-        this.props.children,
-        child => (child ? cloneElement(
-          child,
-          {
-            sessionId: this.props.sessionId,
-            sessionInfo: this.state.sessionInfo
-          },
-        ) : child),
+    const { style, children, sessionId } = this.props;
+    const { sessionInfo } = this.state;
+    if (children) {
+      return (
+        <OTContext.Provider value={{ sessionId, sessionInfo }}>
+          <View style={style}>
+            { children }
+          </View>
+        </OTContext.Provider>
       );
-      return <View style={style}>{ childrenWithProps }</View>;
     }
     return <View />;
   }

@@ -6,6 +6,7 @@ import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
+import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
   constructor(props) {
@@ -22,7 +23,8 @@ export default class OTSubscriber extends Component {
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
   }
   componentWillMount() {
-    const { sessionId, eventHandlers } = this.props;
+    const { eventHandlers } = this.props;
+    const { sessionId } = this.context;
     this.streamCreated = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamCreated}`,
       stream => this.streamCreatedHandler(stream));
     this.streamDestroyed = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamDestroyed}`,
@@ -51,7 +53,8 @@ export default class OTSubscriber extends Component {
   }
   streamCreatedHandler = (stream) => {
     const { subscribeToSelf } = this.state;
-    const { streamProperties, properties, sessionInfo } = this.props;
+    const { streamProperties, properties } = this.props;
+    const { sessionInfo } = this.context;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
@@ -104,7 +107,6 @@ OTSubscriber.propTypes = {
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  sessionInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   subscribeToSelf: PropTypes.bool
 };
 
@@ -113,6 +115,7 @@ OTSubscriber.defaultProps = {
   eventHandlers: {},
   streamProperties: {},
   containerStyle: {},
-  sessionInfo: {},
   subscribeToSelf: false
 };
+
+OTSubscriber.contextType = OTContext;
