@@ -2,6 +2,7 @@ package com.opentokreactnative;
 
 import android.opengl.GLSurfaceView;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -40,6 +41,9 @@ public class OTSubscriberLayout extends FrameLayout{
                 if (androidZOrderMap.get(mSubscriber.getSession().getSessionId()) != null) {
                     zOrder = androidZOrderMap.get(mSubscriber.getSession().getSessionId());
                 }
+            }
+            if (mSubscriber.getView().getParent() != null) {
+                ((ViewGroup)mSubscriber.getView().getParent()).removeView(mSubscriber.getView());
             }
             mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
