@@ -22,16 +22,18 @@ export default class OTSubscriber extends Component {
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
   }
-  componentWillMount() {
+  componentDidMount() {
     const { eventHandlers } = this.props;
     const { sessionId } = this.context;
-    this.streamCreated = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamCreated}`,
-      stream => this.streamCreatedHandler(stream));
-    this.streamDestroyed = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamDestroyed}`,
-      stream => this.streamDestroyedHandler(stream));
-    const subscriberEvents = sanitizeSubscriberEvents(eventHandlers);
-    OT.setJSComponentEvents(this.componentEventsArray);
-    setNativeEvents(subscriberEvents);
+    if (sessionId) {
+      this.streamCreated = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamCreated}`,
+        stream => this.streamCreatedHandler(stream));
+      this.streamDestroyed = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamDestroyed}`,
+        stream => this.streamDestroyedHandler(stream));
+      const subscriberEvents = sanitizeSubscriberEvents(eventHandlers);
+      OT.setJSComponentEvents(this.componentEventsArray);
+      setNativeEvents(subscriberEvents);
+    }
   }
   componentDidUpdate() {
     const { streamProperties } = this.props;
