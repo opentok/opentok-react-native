@@ -9,8 +9,8 @@ import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       streams: [],
       subscribeToSelf: props.subscribeToSelf || false
@@ -21,8 +21,9 @@ export default class OTSubscriber extends Component {
     };
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
+    this.initComponent();
   }
-  componentDidMount() {
+  initComponent = () => {
     const { eventHandlers } = this.props;
     const { sessionId } = this.context;
     if (sessionId) {
