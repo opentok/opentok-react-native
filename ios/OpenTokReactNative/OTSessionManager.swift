@@ -305,8 +305,8 @@ class OTSessionManager: RCTEventEmitter {
     }
     
     func emitEvent(_ event: String, data: Any) -> Void {
-        if (self.jsEvents.contains(event) || self.componentEvents.contains(event)) {
-            self.sendEvent(withName: event, body: data);
+        if (self.bridge != nil && (self.jsEvents.contains(event) || self.componentEvents.contains(event))) {
+           self.sendEvent(withName: event, body: data);
         }
     }
     
