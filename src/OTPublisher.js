@@ -7,28 +7,32 @@ import { sanitizeProperties, sanitizePublisherEvents } from './helpers/OTPublish
 import OTPublisherView from './views/OTPublisherView';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
+import OTContext from './contexts/OTContext';
 
 const uuid = require('uuid/v4');
 
 class OTPublisher extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       initError: null,
       publisher: null,
       publisherId: uuid(),
     };
+    this.initComponent();
+  }
+  initComponent = () => {
     this.componentEvents = {
       sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
     };
     this.componentEventsArray = Object.values(this.componentEvents);   
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers); 
-  }
-  componentWillMount() {
-    const publisherEvents = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
-    setNativeEvents(publisherEvents);
+    this.publisherEvents = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
+    setNativeEvents(this.publisherEvents);
     OT.setJSComponentEvents(this.componentEventsArray);
-    this.sessionConnected = nativeEvents.addListener(`${this.props.sessionId}:${this.componentEvents.sessionConnected}`, () => this.sessionConnectedHandler());
+    if (this.context.sessionId) {
+      this.sessionConnected = nativeEvents.addListener(`${this.context.sessionId}:${this.componentEvents.sessionConnected}`, () => this.sessionConnectedHandler());
+    }
   }
   componentDidMount() {
     this.createPublisher();
@@ -61,10 +65,9 @@ class OTPublisher extends Component {
       if (error) {
         this.otrnEventHandler(error);
       } else {
-        this.sessionConnected.remove();        
-        OT.removeJSComponentEvents(this.componentEventsArray);         
-        const events = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
-        removeNativeEvents(events);
+        this.sessionConnected.remove();
+        OT.removeJSComponentEvents(this.componentEventsArray);
+        removeNativeEvents(this.publisherEvents);
       }
     });
   }
@@ -95,8 +98,8 @@ class OTPublisher extends Component {
         });
         this.otrnEventHandler(initError);
       } else {
-        if (this.props.sessionId) {
-          OT.getSessionInfo(this.props.sessionId, (session) => {
+        if (this.context.sessionId) {
+          OT.getSessionInfo(this.context.sessionId, (session) => {
             if (!isNull(session) && isNull(this.state.publisher) && isConnected(session.connectionStatus)) {
              this.publish();
             }
@@ -106,7 +109,7 @@ class OTPublisher extends Component {
     });
   }
   publish() {
-    OT.publish(this.props.sessionId, this.state.publisherId, (publishError) => {
+    OT.publish(this.context.sessionId, this.state.publisherId, (publishError) => {
       if (publishError) {
         this.otrnEventHandler(publishError);
       } else {
@@ -118,8 +121,9 @@ class OTPublisher extends Component {
   }
   render() {
     const { publisher, publisherId } = this.state;
+    const { sessionId } = this.context;
     if (publisher && publisherId) {
-      return <OTPublisherView publisherId={publisherId} {...this.props} />;
+      return <OTPublisherView publisherId={publisherId} sessionId={sessionId} {...this.props} />;
     }
     return <View />;
   }
@@ -134,4 +138,5 @@ OTPublisher.defaultProps = {
   properties: {},
   eventHandlers: {},
 };
+OTPublisher.contextType = OTContext;
 export default OTPublisher;

@@ -6,10 +6,11 @@ import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
 import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
+import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       streams: [],
       subscribeToSelf: props.subscribeToSelf || false
@@ -20,16 +21,20 @@ export default class OTSubscriber extends Component {
     };
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
+    this.initComponent();
   }
-  componentWillMount() {
-    const { sessionId, eventHandlers } = this.props;
-    this.streamCreated = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamCreated}`,
-      stream => this.streamCreatedHandler(stream));
-    this.streamDestroyed = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamDestroyed}`,
-      stream => this.streamDestroyedHandler(stream));
-    const subscriberEvents = sanitizeSubscriberEvents(eventHandlers);
-    OT.setJSComponentEvents(this.componentEventsArray);
-    setNativeEvents(subscriberEvents);
+  initComponent = () => {
+    const { eventHandlers } = this.props;
+    const { sessionId } = this.context;
+    if (sessionId) {
+      this.streamCreated = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamCreated}`,
+        stream => this.streamCreatedHandler(stream));
+      this.streamDestroyed = nativeEvents.addListener(`${sessionId}:${this.componentEvents.streamDestroyed}`,
+        stream => this.streamDestroyedHandler(stream));
+      const subscriberEvents = sanitizeSubscriberEvents(eventHandlers);
+      OT.setJSComponentEvents(this.componentEventsArray);
+      setNativeEvents(subscriberEvents);
+    }
   }
   componentDidUpdate() {
     const { streamProperties } = this.props;
@@ -51,7 +56,8 @@ export default class OTSubscriber extends Component {
   }
   streamCreatedHandler = (stream) => {
     const { subscribeToSelf } = this.state;
-    const { streamProperties, properties, sessionInfo } = this.props;
+    const { streamProperties, properties } = this.props;
+    const { sessionInfo } = this.context;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
                                   sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
@@ -104,7 +110,6 @@ OTSubscriber.propTypes = {
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  sessionInfo: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   subscribeToSelf: PropTypes.bool
 };
 
@@ -113,6 +118,7 @@ OTSubscriber.defaultProps = {
   eventHandlers: {},
   streamProperties: {},
   containerStyle: {},
-  sessionInfo: {},
   subscribeToSelf: false
 };
+
+OTSubscriber.contextType = OTContext;
