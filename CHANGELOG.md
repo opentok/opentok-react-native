@@ -5,7 +5,7 @@
 -   **[Fix]**: Use Context API for passing props down the component tree (merged from [PR333](https://github.com/opentok/opentok-react-native/pull/333)). Adheres to: [#329](https://github.com/opentok/opentok-react-native/issues/329), [#335](https://github.com/opentok/opentok-react-native/issues/335)
 -   **[Fix]**: Fix `Attempted to register RCTBridgeModule class OTSessionManager` issue after opening/reloading app (merged from [PR336](https://github.com/opentok/opentok-react-native/pull/336)).
 -   **[Fix]**: Fix reload in iOS (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/339)).
--   **[Fix]**: Fix security vulnerabilities on deps (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/340)).
+-   **[Fix]**: Fix security vulnerabilities on dependencies (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/340)).
 
 
 # 0.12.0 (Aug 5, 2019)
