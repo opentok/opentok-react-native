@@ -36,7 +36,7 @@ class App extends Component {
   sendSignal = () => {
     const { isConnected } = this.state;
     if (isConnected) {
-      this.otSessionRef.signal({
+      this.otSessionRef.current.signal({
         data: '',
         to: '', // optional - connectionId of connected client you want to send the signal to
         type: '', // optional
