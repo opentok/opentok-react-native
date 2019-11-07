@@ -43,6 +43,7 @@ const removeNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.removeNativeEvents(eventNames);
   each(events, (eventHandler, eventType) => {
+    nativeEvents.removeAllListeners(eventType);
     nativeEvents.removeListener(eventType, eventHandler);
   });
 };
