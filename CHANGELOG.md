@@ -1,4 +1,10 @@
 
+# 0.12.2 (Dec 4, 2019)
+
+-   **[Fix]**: Prevent to unpublish on disconnected sessions (merged from [PR356](https://github.com/opentok/opentok-react-native/pull/356)). Adheres to: [#337](https://github.com/opentok/opentok-react-native/issues/337)
+-   **[Feature]**: Add podspec for autolinking support in RN 0.6x (merged from [PR358](https://github.com/opentok/opentok-react-native/pull/358)). Adheres to: [#332](https://github.com/opentok/opentok-react-native/issues/332)
+-   Android SDK updated to `2.16.3`
+
 # 0.12.1 (Aug 30, 2019)
 
 -   **[Fix]**: Fix an error when updating streamId for subscriber component (merged from [PR326](https://github.com/opentok/opentok-react-native/pull/326)). Adheres to: [#315](https://github.com/opentok/opentok-react-native/issues/315), [#324](https://github.com/opentok/opentok-react-native/issues/324)
