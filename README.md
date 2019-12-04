@@ -43,7 +43,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 2. Create a pod file by running: `pod init`.
 
-3. Add the following to your pod file:
+**For React Native < 0.60**, add this to your Podfile:
 
 ```
     target '<YourProjectName>' do
@@ -54,22 +54,22 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 ```
 
-4. Now run, `pod install`
+3. Now run, `pod install`
 
-5. After installing the OpenTok iOS SDK, change into your root directory of your project.
+4. After installing the OpenTok iOS SDK, change into your root directory of your project.
 
-6. Now run, `react-native link opentok-react-native`.
+**For React Native < 0.60**, now run `react-native link opentok-react-native`.
 
-7. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project. 
+5. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project.
 
-7. Click `File` and `New File`
+6. Click `File` and `New File`
 
-8. Add an empty swift file to your project:
+7. Add an empty swift file to your project:
     * You can name this file anything i.e: `OTInstall.swift`. This is done to set some flags in XCode so the Swift code can be used.
 
-9. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
+8. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
 
-10. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
+9. Ensure you have enabled both camera and microphone usage by adding the following entries to your `Info.plist` file:
 
 ```
 <key>NSCameraUsageDescription</key>
@@ -82,7 +82,7 @@ If you try to archive the app and it fails, please do the following:
 
 1. Go to Target
 2. Click on Build Phases
-3. Under the Link Binary With Libraries section, remove the libOpenTokReactNative.a and add it again 
+3. Under the Link Binary With Libraries section, remove the libOpenTokReactNative.a and add it again
 
 ### Android Installation
 
@@ -93,7 +93,7 @@ If you try to archive the app and it fails, please do the following:
 
 3. Open your Android project in Android Studio.
 
-4. Add the following to your project `build.gradle` file: 
+4. Add the following to your project `build.gradle` file:
 
 ```
         maven {
