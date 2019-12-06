@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OTSubscriber.h"
 #import <React/RCTViewManager.h>
 
 @interface RCT_EXTERN_MODULE(OTSubscriberSwift, RCTViewManager)
