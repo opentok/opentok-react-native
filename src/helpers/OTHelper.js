@@ -45,7 +45,7 @@ const getOtrnErrorEventHandler = (events) => {
   return otrnEventHandler;
 };
 
-const getLog = (apiKey, sessionId, action, connectionId, proxyUrl) => {
+const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
@@ -79,8 +79,8 @@ const logRequest = (body, proxyUrl) => {
     });
 };
 
-const logOT = (apiKey, sessionId, action, connectionId, proxyUrl) => {
-  logRequest(getLog(apiKey, sessionId, action, connectionId, proxyUrl));
+const logOT = ({apiKey, sessionId, action, connectionId, proxyUrl}) => {
+  logRequest(getLog(apiKey, sessionId, action, connectionId), proxyUrl);
 };
 
 export {
