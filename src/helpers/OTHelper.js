@@ -7,7 +7,6 @@ const reassignEvents = (type, customEvents, events, eventKey) => {
   const newEvents = {};
   const preface = `${type}:`;
   const platform = Platform.OS;
-  const hlgUrl = 'hlg.tokbox.com/prod/logging/ClientEvent';
 
   each(events, (eventHandler, eventType) => {
     if (customEvents[platform][eventType] !== undefined && eventKey !== undefined) {
@@ -65,6 +64,7 @@ const getLog = (apiKey, sessionId, action, connectionId) => {
 };
 
 const logRequest = (body, proxyUrl) => {
+  const hlgUrl = 'hlg.tokbox.com/prod/logging/ClientEvent';	
   const url = proxyUrl ? `${proxyUrl}/${hlgUrl}` : `https://${hlgUrl}`;
   axios({
     url,
