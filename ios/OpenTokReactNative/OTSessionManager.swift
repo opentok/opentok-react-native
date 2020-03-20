@@ -44,7 +44,7 @@ class OTSessionManager: RCTEventEmitter {
         // Note: IceConfig is an additional property not supported at the moment. We need to add a sanitize function
         // to validate the input from settings.iceConfig.
         // settings.iceConfig = sessionOptions["iceConfig"];
-        settings.proxyUrl = Utils.sanitizeStringProperty(sessionOptions["proxyUrl"] as Any);
+        settings.proxyURL = Utils.sanitizeStringProperty(sessionOptions["proxyUrl"] as Any);
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(sessionOptions["ipWhitelist"] as Any);
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
