@@ -41,6 +41,9 @@ class OTSessionManager: RCTEventEmitter {
     @objc func initSession(_ apiKey: String, sessionId: String, sessionOptions: Dictionary<String, Any>) -> Void {
         let settings = OTSessionSettings()
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(sessionOptions["connectionEventsSuppressed"] as Any);
+        // settings.iceConfig = sessionOptions["iceConfig"];
+        settings.proxyUrl = Utils.sanitizeStringProperty(sessionOptions["proxyUrl"] as Any);
+        settings.ipWhitelist = Utils.sanitizeBooleanProperty(sessionOptions["ipWhitelist"] as Any);
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
     

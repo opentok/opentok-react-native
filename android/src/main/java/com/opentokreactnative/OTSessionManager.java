@@ -34,6 +34,7 @@ import com.opentokreactnative.utils.Utils;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OTSessionManager extends ReactContextBaseJavaModule
         implements Session.SessionListener,
@@ -73,6 +74,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
         final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
+        final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
+        // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
+        // final List<Session.Builder.IceServer> iceConfigServerList = (List<Session.Builder.IceServer>) iceConfig.getArray("customServers");
+        // final Session.Builder.IncludeServers iceConfigServerConfig; // = iceConfig.getString("includeServers");
+        final String proxyUrl = sessionOptions.getString("proxyUrl");
         String androidOnTop = sessionOptions.getString("androidOnTop");
         String androidZOrder = sessionOptions.getString("androidZOrder");
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
@@ -93,6 +99,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     }
                 })
                 .connectionEventsSuppressed(connectionEventsSuppressed)
+                // .setCustomIceServers(serverList, config)
+                .setIpWhitelist(ipWhitelist)
+                .setProxyUrl(proxyUrl)
                 .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);

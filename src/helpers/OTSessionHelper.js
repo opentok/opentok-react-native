@@ -1,11 +1,13 @@
 import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString, isBoolean } from 'underscore';
+import { each, isNull, isEmpty, isString, isBoolean, isObject } from 'underscore';
 
 const validateString = value => (isString(value) ? value : '');
 
 const validateBoolean = value => (isBoolean(value) ? value : false);
+
+const validateObject = value => (isObject(value) ? value : {});
 
 const sanitizeSessionEvents = (sessionId, events) => {
   if (typeof events !== 'object') {
@@ -54,14 +56,20 @@ const sanitizeSessionOptions = (options) => {
   if (platform === 'android') {
     sessionOptions = {
       isCamera2Capable: false,
-      connectionEventsSuppressed: false,
+	  connectionEventsSuppressed: false,
+	  ipWhitelist: false,
+	  iceConfig: {},
+	  proxyUrl: '',
       useTextureViews: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
     }
   } else {
     sessionOptions = {
-      connectionEventsSuppressed: false,
+	  connectionEventsSuppressed: false,
+	  ipWhitelist: false,
+	  iceConfig: {},
+	  proxyUrl: '',
     }
   }
 
@@ -71,21 +79,33 @@ const sanitizeSessionOptions = (options) => {
 
   const validSessionOptions = {
     ios: {
-      connectionEventsSuppressed: 'boolean',
+	  connectionEventsSuppressed: 'boolean',
+	  ipWhitelist: 'boolean',
+	  iceConfig: 'object',
+	  proxyUrl: 'string',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
       useTextureViews: 'boolean',
       isCamera2Capable: 'boolean',
       androidOnTop: 'string',
-      androidZOrder: 'string',
+	  androidZOrder: 'string',
+	  ipWhitelist: 'boolean',
+	  iceConfig: 'object',
+	  proxyUrl: 'string',
     },
   };
 
   each(options, (value, key) => {
     const optionType = validSessionOptions[platform][key];
     if (optionType !== undefined) {
-      sessionOptions[key] = optionType === 'boolean' ? validateBoolean(value) : validateString(value);
+	  if (optionType === 'boolean')	{
+		validateBoolean(value);
+	  } else if (optionType === 'string') {
+		validateString(value);
+	  } else if (optionType === 'object') {
+		validateObject(value)
+	  }
     } else {
       handleError(`${key} is not a valid option`);
     }

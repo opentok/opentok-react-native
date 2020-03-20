@@ -30,6 +30,11 @@ class Utils {
         guard let prop = property as? Bool else { return true; }
         return prop;
     }
+
+    static func sanitizeStringProperty(_ property: Any) -> String {
+        guard let prop = property as? String else { return ""; }
+        return prop;
+    }
     
     static func getPublisherId(_ publisher: OTPublisher) -> String {
         let publisherIds = OTRN.sharedState.publishers.filter {$0.value == publisher}
