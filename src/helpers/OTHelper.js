@@ -7,6 +7,7 @@ const reassignEvents = (type, customEvents, events, eventKey) => {
   const newEvents = {};
   const preface = `${type}:`;
   const platform = Platform.OS;
+  const hlgUrl = 'hlg.tokbox.com/prod/logging/ClientEvent';
 
   each(events, (eventHandler, eventType) => {
     if (customEvents[platform][eventType] !== undefined && eventKey !== undefined) {
@@ -44,7 +45,7 @@ const getOtrnErrorEventHandler = (events) => {
   return otrnEventHandler;
 };
 
-const getLog = (apiKey, sessionId, action, connectionId) => {
+const getLog = (apiKey, sessionId, action, connectionId, proxyUrl) => {
   const body = {
     payload: {
       platform: Platform.OS,
@@ -63,9 +64,10 @@ const getLog = (apiKey, sessionId, action, connectionId) => {
   return body;
 };
 
-const logRequest = (body) => {
+const logRequest = (body, proxyUrl) => {
+  const url = proxyUrl ? `${proxyUrl}/${hlgUrl}` : `https://${hlgUrl}`;
   axios({
-    url: 'https://hlg.tokbox.com/prod/logging/ClientEvent',
+    url,
     method: 'post',
     data: JSON.stringify(body),
   })
@@ -77,8 +79,8 @@ const logRequest = (body) => {
     });
 };
 
-const logOT = (apiKey, sessionId, action, connectionId) => {
-  logRequest(getLog(apiKey, sessionId, action, connectionId));
+const logOT = (apiKey, sessionId, action, connectionId, proxyUrl) => {
+  logRequest(getLog(apiKey, sessionId, action, connectionId, proxyUrl));
 };
 
 export {

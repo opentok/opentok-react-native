@@ -31,7 +31,7 @@ export default class OTSession extends Component {
     const { apiKey, sessionId, token } = this.sanitizedCredentials;
     if (apiKey && sessionId && token) {
       this.createSession(this.sanitizedCredentials, sessionOptions);
-      logOT(this.sanitizedCredentials.apiKey, this.sanitizedCredentials.sessionId, 'rn_initialize');
+      logOT(this.sanitizedCredentials.apiKey, this.sanitizedCredentials.sessionId, 'rn_initialize', sessionOptions.proxyUrl);
     } else {
       handleError('Please check your OpenTok credentials.');
     }
