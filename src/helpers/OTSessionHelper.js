@@ -100,11 +100,11 @@ const sanitizeSessionOptions = (options) => {
     const optionType = validSessionOptions[platform][key];
     if (optionType !== undefined) {
 	  if (optionType === 'boolean')	{
-		validateBoolean(value);
+		sessionOptions[key] = validateBoolean(value);
 	  } else if (optionType === 'string') {
-		validateString(value);
+		sessionOptions[key] = validateString(value);
 	  } else if (optionType === 'object') {
-		validateObject(value)
+		sessionOptions[key] = validateObject(value)
 	  }
     } else {
       handleError(`${key} is not a valid option`);
