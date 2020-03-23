@@ -1,11 +1,13 @@
 import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString, isBoolean } from 'underscore';
+import { each, isNull, isEmpty, isString, isBoolean, isObject } from 'underscore';
 
 const validateString = value => (isString(value) ? value : '');
 
 const validateBoolean = value => (isBoolean(value) ? value : false);
+
+const validateObject = value => (isObject(value) ? value : {});
 
 const sanitizeSessionEvents = (sessionId, events) => {
   if (typeof events !== 'object') {
@@ -55,6 +57,9 @@ const sanitizeSessionOptions = (options) => {
     sessionOptions = {
       isCamera2Capable: false,
       connectionEventsSuppressed: false,
+      ipWhitelist: false,
+      iceConfig: {},
+      proxyUrl: '',
       useTextureViews: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
@@ -62,6 +67,9 @@ const sanitizeSessionOptions = (options) => {
   } else {
     sessionOptions = {
       connectionEventsSuppressed: false,
+      ipWhitelist: false,
+      iceConfig: {},
+      proxyUrl: '',
     }
   }
 
@@ -72,6 +80,9 @@ const sanitizeSessionOptions = (options) => {
   const validSessionOptions = {
     ios: {
       connectionEventsSuppressed: 'boolean',
+      ipWhitelist: 'boolean',
+      iceConfig: 'object',
+      proxyUrl: 'string',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
@@ -79,13 +90,22 @@ const sanitizeSessionOptions = (options) => {
       isCamera2Capable: 'boolean',
       androidOnTop: 'string',
       androidZOrder: 'string',
+      ipWhitelist: 'boolean',
+      iceConfig: 'object',
+      proxyUrl: 'string',
     },
   };
 
   each(options, (value, key) => {
     const optionType = validSessionOptions[platform][key];
     if (optionType !== undefined) {
-      sessionOptions[key] = optionType === 'boolean' ? validateBoolean(value) : validateString(value);
+      if (optionType === 'boolean') {
+        sessionOptions[key] = validateBoolean(value);
+      } else if (optionType === 'string') {
+        sessionOptions[key] = validateString(value);
+      } else if (optionType === 'object') {
+        sessionOptions[key] = validateObject(value)
+      }
     } else {
       handleError(`${key} is not a valid option`);
     }
@@ -118,7 +138,7 @@ const sanitizeSignalData = (signal) => {
 const sanitizeCredentials = (credentials) => {
   const _credentials = {};
   each(credentials, (value, key) => {
-    if(!isString(value) || isEmpty(value) || isNull(value)) {
+    if (!isString(value) || isEmpty(value) || isNull(value)) {
       handleError(`Please add the ${key}`);
     } else {
       _credentials[key] = value;
@@ -128,7 +148,7 @@ const sanitizeCredentials = (credentials) => {
 };
 
 const getConnectionStatus = (connectionStatus) => {
-  switch(connectionStatus) {
+  switch (connectionStatus) {
     case 0:
       return "not connected";
     case 1:

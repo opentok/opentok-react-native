@@ -97,6 +97,7 @@ class App extends Component {
       androidOnTop: '',  // Android only - valid options are 'publisher' or 'subscriber'
       useTextureViews: true,  // Android only - default is false
       isCamera2Capable: false, // Android only - default is false
+      ipWhitelist: false, // https://tokbox.com/developer/sdks/js/reference/OT.html#initSession - ipWhitelist
     };
   }
 
