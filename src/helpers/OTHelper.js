@@ -79,7 +79,7 @@ const logRequest = (body, proxyUrl) => {
     });
 };
 
-const logOT = ({apiKey, sessionId, action, connectionId, proxyUrl}) => {
+const logOT = ({ apiKey, sessionId, action, connectionId, proxyUrl }) => {
   logRequest(getLog(apiKey, sessionId, action, connectionId), proxyUrl);
 };
 
