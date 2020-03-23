@@ -1,3 +1,8 @@
+# 0.13.0 (Mar 23, 2020)
+
+- **[Feature]**: Add Session Options support, both [iOS](https://tokbox.com/developer/sdks/ios/reference/Classes/OTSessionSettings.html) and [Android](https://tokbox.com/developer/sdks/android/reference/). Note: iceConfig option is not currently supported
+- **[Feature]**: Update of iOS SDK to `2.16.5` and Android SDK to `2.16.5`
+
 
 # 0.12.2 (Dec 4, 2019)
 
