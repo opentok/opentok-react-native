@@ -11,9 +11,9 @@ const reassignEvents = (type, customEvents, events, eventKey) => {
   each(events, (eventHandler, eventType) => {
     if (customEvents[platform][eventType] !== undefined && eventKey !== undefined) {
       newEvents[`${eventKey}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
-    } else if(customEvents[platform][eventType] !== undefined ) {    
+    } else if (customEvents[platform][eventType] !== undefined) {
       newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
-    } else if(events['otrnError']) {
+    } else if (events['otrnError']) {
       // ignore otrnError event because it's for the js layer
     } else {
       handleError(`${eventType} is not a supported event`);
@@ -64,7 +64,7 @@ const getLog = (apiKey, sessionId, action, connectionId) => {
 };
 
 const logRequest = (body, proxyUrl) => {
-  const hlgUrl = 'hlg.tokbox.com/prod/logging/ClientEvent';	
+  const hlgUrl = 'hlg.tokbox.com/prod/logging/ClientEvent';
   const url = proxyUrl ? `${proxyUrl}/${hlgUrl}` : `https://${hlgUrl}`;
   axios({
     url,
