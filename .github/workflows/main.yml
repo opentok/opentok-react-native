@@ -1,0 +1,17 @@
+name: Aggregit
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  recordMetrics:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: michaeljolley/aggregit@v1.3
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        project_id: ${{ secrets.project_id }}
+        private_key: ${{ secrets.private_key }}
+        client_email: ${{ secrets.client_email }}
+        firebaseDbUrl: ${{ secrets.firebaseDbUrl }}
