@@ -142,7 +142,3 @@ We love to hear from you so if you have questions, comments or find a bug in the
 - See <https://support.tokbox.com/> for support options
 - Tweet at us! We're [@VonageDev](https://twitter.com/VonageDev) on Twitter
 - Or [join the Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
-
-## Further Reading
-
-- Check out the Developer Documentation at <https://tokbox.com/developer/>
