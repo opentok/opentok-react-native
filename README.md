@@ -1,5 +1,6 @@
 # opentok-react-native
-![OpenTok Labs](https://d26dzxoao6i3hh.cloudfront.net/items/0U1R0a0e2g1E361H0x3c/Image%202017-11-22%20at%2012.16.38%20PM.png?v=2507a2df)
+
+<img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
 React Native library for OpenTok iOS and Android SDKs
 
@@ -22,23 +23,27 @@ React Native library for OpenTok iOS and Android SDKs
 1. Install [node.js](https://nodejs.org/)
 
 2. Install and update [Xcode](https://developer.apple.com/xcode/) (you will need a Mac)
-* React Native iOS installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
+
+- React Native iOS installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
 
 3. Install and update [Android Studio](https://developer.android.com/studio/index.html)
-* React Native Android installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
+
+- React Native Android installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
 
 ## Installation:
 
 1. In your terminal, change into your React Native project's directory
 
 2. Add the library using `npm` or `yarn`.
-* `npm install opentok-react-native`
-* `yarn add opentok-react-native`
+
+- `npm install opentok-react-native`
+- `yarn add opentok-react-native`
 
 ### iOS Installation
 
 **Note:** Please make sure to have [CocoaPods](https://cocoapods.org/) on your computer.
 If you've installed this package before, you may need to edit your `Podfile` and project structure because the installation process has changed.
+
 1. In you terminal, change into the `ios` directory of your React Native project.
 
 2. Create a pod file by running: `pod init`.
@@ -65,7 +70,8 @@ If you've installed this package before, you may need to edit your `Podfile` and
 6. Click `File` and `New File`
 
 7. Add an empty swift file to your project:
-    * You can name this file anything i.e: `OTInstall.swift`. This is done to set some flags in XCode so the Swift code can be used.
+
+   - You can name this file anything i.e: `OTInstall.swift`. This is done to set some flags in XCode so the Swift code can be used.
 
 8. Click `Create Bridging Header` when you're prompted with the following modal: `Would you like to configure an Objective-C bridging header?`
 
@@ -89,7 +95,8 @@ If you try to archive the app and it fails, please do the following:
 1. In your terminal, change into your project directory.
 
 2. If you have already run `react-native link opentok-react-native` for the iOS installation, please skip this step.
-    *  Run `react-native link opentok-react-native`
+
+   - Run `react-native link opentok-react-native`
 
 3. Open your Android project in Android Studio.
 
@@ -122,6 +129,16 @@ Newer versions of Android–`API Level 23` (Android 6.0)–have a different perm
 
 To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo.
 
-## Contributing
+## Development and Contributing
 
-If you make changes to the project that you would like to contribute back then please follow the [contributing guidelines](CONTRIBUTING.md). All contributions are greatly appreciated!
+Interested in contributing? We :heart: pull requests! See the
+[Contribution](CONTRIBUTING.md) guidelines.
+
+## Getting Help
+
+We love to hear from you so if you have questions, comments or find a bug in the project, let us know! You can either:
+
+- Open an issue on this repository
+- See <https://support.tokbox.com/> for support options
+- Tweet at us! We're [@VonageDev](https://twitter.com/VonageDev) on Twitter
+- Or [join the Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
