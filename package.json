@@ -43,5 +43,6 @@
     "react": "^16.8.6",
     "react-native": "^0.60.5",
     "react-test-renderer": "^16.9.0"
-  }
+  },
+  "types": "@types/index.d.ts"
 }
