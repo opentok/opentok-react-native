@@ -120,7 +120,7 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
-    @objc func subscribeToStream(_ streamId: String, properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc func subscribeToStream(_ streamId: String, sessionId: String, properties: Dictionary<String, Any>, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
         DispatchQueue.main.async {
             guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
@@ -133,7 +133,7 @@ class OTSessionManager: RCTEventEmitter {
                 callback([errorInfo]);
                 return
             }
-            guard let session = OTRN.sharedState.sessions[stream.session.sessionId] else {
+            guard let session = OTRN.sharedState.sessions[sessionId] else {
                 let errorInfo = EventUtils.createErrorMessage("Error subscribing to stream. Could not find native session instance")
                 callback([errorInfo]);
                 return

@@ -21,7 +21,7 @@ public final class EventUtils {
         return connectionInfo;
     }
 
-    public static WritableMap prepareJSStreamMap(Stream stream) {
+    public static WritableMap prepareJSStreamMap(Stream stream, Session session) {
 
         WritableMap streamInfo = Arguments.createMap();
         if (stream != null) {
@@ -30,7 +30,7 @@ public final class EventUtils {
             streamInfo.putInt("width", stream.getVideoWidth());
             streamInfo.putString("creationTime", stream.getCreationTime().toString());
             streamInfo.putString("connectionId", stream.getConnection().getConnectionId());
-            streamInfo.putString("sessionId", stream.getSession().getSessionId());
+            streamInfo.putString("sessionId", session.getSessionId());
             streamInfo.putMap("connection", prepareJSConnectionMap(stream.getConnection()));
             streamInfo.putString("name", stream.getName());
             streamInfo.putBoolean("hasAudio", stream.hasAudio());
@@ -63,33 +63,33 @@ public final class EventUtils {
         return sessionInfo;
     }
 
-    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, String oldValue, String newValue, Stream stream) {
+    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, String oldValue, String newValue, Stream stream, Session session) {
 
         WritableMap streamPropertyEventData = Arguments.createMap();
         streamPropertyEventData.putString("changedProperty", changedProperty);
         streamPropertyEventData.putString("oldValue", oldValue);
         streamPropertyEventData.putString("newValue", newValue);
-        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream));
+        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream, session));
         return streamPropertyEventData;
     }
 
-    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, WritableMap oldValue, WritableMap newValue, Stream stream) {
+    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, WritableMap oldValue, WritableMap newValue, Stream stream, Session session) {
 
         WritableMap streamPropertyEventData = Arguments.createMap();
         streamPropertyEventData.putString("changedProperty", changedProperty);
         streamPropertyEventData.putMap("oldValue", oldValue);
         streamPropertyEventData.putMap("newValue", newValue);
-        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream));
+        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream, session));
         return streamPropertyEventData;
     }
 
-    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, Boolean oldValue, Boolean newValue, Stream stream) {
+    public static WritableMap prepareStreamPropertyChangedEventData(String changedProperty, Boolean oldValue, Boolean newValue, Stream stream, Session session) {
 
         WritableMap streamPropertyEventData = Arguments.createMap();
         streamPropertyEventData.putString("changedProperty", changedProperty);
         streamPropertyEventData.putBoolean("oldValue", oldValue);
         streamPropertyEventData.putBoolean("newValue", newValue);
-        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream));
+        streamPropertyEventData.putMap("stream", prepareJSStreamMap(stream, session));
         return streamPropertyEventData;
     }
 
