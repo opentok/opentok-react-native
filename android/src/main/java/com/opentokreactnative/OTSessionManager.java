@@ -388,7 +388,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 Publisher mPublisher = mPublishers.get(publisherId);
                 Session mSession = null;
                 mPublisherDestroyedCallbacks.put(publisherId, callback);
-                if (mPublisher != null && mPublisher.getSession() != null) {
+                if (mPublisher != null && mPublisher.getSession() != null && mPublisher.getSession().getSessionId() != null) {
                     mSession = mSessions.get(mPublisher.getSession().getSessionId());
                 }
 
