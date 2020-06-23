@@ -403,7 +403,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     mPublisher.getCapturer().stopCapture();
                 }
                 mPublishers.remove(publisherId);
-                callback.invoke();
             }
         });
     }
