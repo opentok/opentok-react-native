@@ -1,6 +1,7 @@
 # 0.14.0 (May 22, 2020)
 
 - **[Feature]**: Update of iOS SDK to `2.17.0` and Android SDK to `2.17.1`
+- OTSessionManager.java#248 mSubscriber.destroy() removed as from 2.17.x, resources will be automatically released by the garbage collector.
 
 # 0.13.0 (Mar 23, 2020)
 
@@ -32,6 +33,6 @@
 
 -   **[Feature]**: Enable `OTSubscriber` children custom render (merged from [PR306](https://github.com/opentok/opentok-react-native/pull/306)). Adheres to: [#289](https://github.com/opentok/opentok-react-native/issues/289), [#174](https://github.com/opentok/opentok-react-native/issues/174)
 -  iOS SDK updated to `2.16.1`
--   Android SDK updated to `2.16.1`
+-  Android SDK updated to `2.16.1`
   
 # 0.x.x (todo)

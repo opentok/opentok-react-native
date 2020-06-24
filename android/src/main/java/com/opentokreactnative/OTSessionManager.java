@@ -246,9 +246,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     mSubscriberViewContainer.removeAllViews();
                 }
                 mSubscriberViewContainers.remove(mStreamId);
-                if (mSubscriber != null) {
-                    // mSubscriber.destroy(); From 2.17.0, resources will be automatically released by the garbage collector.
-                }
                 mSubscribers.remove(mStreamId);
                 mSubscriberStreams.remove(mStreamId);
                 mCallback.invoke();
