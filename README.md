@@ -4,17 +4,15 @@
 
 React Native library for OpenTok iOS and Android SDKs
 
-- [Pre-Requisites](#pre-requisites)
-- [Installation](#installation)
-  - [iOS Installation](#ios-installation)
-  - [Android Installation](#android-installation)
-- API Reference
-  - [OTSession Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSession.md)
-  - [OTPublisher Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTPublisher.md)
-  - [OTSubscriber Component](https://github.com/opentok/opentok-react-native/tree/master/docs/OTSubscriber.md)
-  - [Event Data](https://github.com/opentok/opentok-react-native/tree/master/docs/EventData.md)
-- [Samples](#samples)
-- [Contributing](#contributing)
+- [opentok-react-native](#opentok-react-native)
+    - [In this repo, you'll find the OpenTok React Native library:](#in-this-repo-youll-find-the-opentok-react-native-library)
+  - [Pre-Requisites:](#pre-requisites)
+  - [Installation:](#installation)
+    - [iOS Installation](#ios-installation)
+    - [Android Installation](#android-installation)
+  - [Samples](#samples)
+  - [Development and Contributing](#development-and-contributing)
+  - [Getting Help](#getting-help)
 
 ### In this repo, you'll find the OpenTok React Native library:
 
@@ -54,7 +52,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OpenTok', '2.16.3'
+        pod 'OpenTok', '2.17.0'
     end
 
 ```

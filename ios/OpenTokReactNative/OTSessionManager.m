@@ -31,6 +31,8 @@ RCT_EXTERN_METHOD(publish:
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(subscribeToStream:
                   (NSString*)streamId
+                  sessionId:
+                  (NSString*)sessionId
                   properties:(NSDictionary*)properties
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(removeSubscriber:
