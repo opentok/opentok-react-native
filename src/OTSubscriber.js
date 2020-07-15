@@ -40,9 +40,11 @@ export default class OTSubscriber extends Component {
     const { streamProperties } = this.props;
     if (!isEqual(this.state.streamProperties, streamProperties)) {
       each(streamProperties, (individualStreamProperties, streamId) => {
-        const { subscribeToAudio, subscribeToVideo } = individualStreamProperties;
+        const { subscribeToAudio, subscribeToVideo, preferredResolution, preferredFrameRate } = individualStreamProperties;
         OT.subscribeToAudio(streamId, subscribeToAudio);
         OT.subscribeToVideo(streamId, subscribeToVideo);
+        OT.setPreferredFrameRate(preferredFrameRate);
+        OT.setPreferredResolution(preferredResolution);
       });
       this.setState({ streamProperties });
     }

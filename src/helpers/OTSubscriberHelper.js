@@ -37,16 +37,24 @@ const sanitizeSubscriberEvents = (events) => {
   return reassignEvents('subscriber', customEvents, events);
 };
 
+const sanitizeResolution = resolution => (resolution && resolution.width && resolution.height ) ? resolution : {};
+
+const sanitizeFrameRate = preferredFrameRate => (preferredFrameRate && !isNaN(preferredFrameRate)? parseFloat(preferredFrameRate) : 0);
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
       subscribeToAudio: true,
       subscribeToVideo: true,
+      preferredResolution: {},
+      preferredFrameRate: 0
     };
   }
   return {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
+    preferredResolution: sanitizeResolution(properties.preferredResolution),
+    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate)
   };
 };
 
