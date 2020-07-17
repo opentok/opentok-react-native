@@ -6,8 +6,9 @@ package com.opentokreactnative;
 
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.support.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -342,11 +343,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
         Subscriber mSubscriber = mSubscribers.get(streamId);
         if (mSubscriber != null) {
-            if (frameRate == 0){
-                mSubscriber.setPreferredFrameRate(SubscriberKit.NO_PREFERRED_FRAMERATE);
-            } else {
-                mSubscriber.setPreferredFrameRate(frameRate);
-            }
+            mSubscriber.setPreferredFrameRate(frameRate);
         }
     }
 
