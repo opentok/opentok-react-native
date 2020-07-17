@@ -26,6 +26,16 @@ class Utils {
         return OTCameraCaptureFrameRate(rawValue: cameraFrameRate)!;
     }
     
+    static func sanitizePreferredFrameRate(_ frameRate: Any) -> Float {
+        guard let sanitizedFrameRate = frameRate as? Float else { return Float.greatestFiniteMagnitude; }
+        return sanitizedFrameRate;
+    }
+    
+    static func sanitizePreferredResolution(_ resolution: Any) -> CGSize {
+        guard let preferredRes = resolution as? Dictionary<String, Any> else { return CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude) };
+        return CGSize(width: preferredRes["width"] as! CGFloat, height: preferredRes["height"] as! CGFloat);
+    }
+    
     static func sanitizeBooleanProperty(_ property: Any) -> Bool {
         guard let prop = property as? Bool else { return true; }
         return prop;

@@ -144,6 +144,8 @@ class OTSessionManager: RCTEventEmitter {
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
+            subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
+            subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -201,6 +203,16 @@ class OTSessionManager: RCTEventEmitter {
     @objc func subscribeToVideo(_ streamId: String, subVideo: Bool) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.subscribeToVideo = subVideo;
+    }
+    
+    @objc func setPreferredResolution(_ streamId: String, resolution: NSDictionary) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.preferredResolution = Utils.sanitizePreferredResolution(resolution);
+    }
+    
+    @objc func setPreferredFrameRate(_ streamId: String, frameRate: Float) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(frameRate);
     }
     
     @objc func changeCameraPosition(_ publisherId: String, cameraPosition: String) -> Void {
