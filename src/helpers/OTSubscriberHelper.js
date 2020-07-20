@@ -88,4 +88,6 @@ const sanitizeProperties = (properties) => {
 export {
     sanitizeSubscriberEvents,
     sanitizeProperties,
+    sanitizeFrameRate,
+    sanitizeResolution
 };

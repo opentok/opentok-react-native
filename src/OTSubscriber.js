@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
-import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
-import { getOtrnErrorEventHandler } from './helpers/OTHelper';
+import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution } from './helpers/OTSubscriberHelper';
+import { getOtrnErrorEventHandler, sanitizeBooleanProperty } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
@@ -41,11 +41,18 @@ export default class OTSubscriber extends Component {
         if (!isEqual(this.state.streamProperties, streamProperties)) {
             each(streamProperties, (individualStreamProperties, streamId) => {
                 const { subscribeToAudio, subscribeToVideo, preferredResolution, preferredFrameRate } = individualStreamProperties;
-                const properties = sanitizeProperties({ subscribeToAudio, subscribeToVideo, preferredFrameRate, preferredResolution })
-                OT.subscribeToAudio(streamId, properties.subscribeToAudio);
-                OT.subscribeToVideo(streamId, properties.subscribeToVideo);
-                OT.setPreferredFrameRate(streamId, properties.preferredFrameRate);
-                OT.setPreferredResolution(streamId, properties.preferredResolution);
+                if (subscribeToAudio !== undefined) {
+                    OT.subscribeToAudio(streamId, sanitizeBooleanProperty(subscribeToAudio));
+                }
+                if (subscribeToAudio !== undefined) {
+                    OT.subscribeToVideo(streamId, sanitizeBooleanProperty(subscribeToVideo));
+                }
+                if (preferredResolution !== undefined) {
+                    OT.setPreferredResolution(streamId, sanitizeResolution(preferredResolution));
+                }
+                if (preferredFrameRate !== undefined) {
+                    OT.setPreferredFrameRate(streamId, sanitizeFrameRate(preferredFrameRate));
+                }
             });
             this.setState({ streamProperties });
         }
