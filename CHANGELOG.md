@@ -1,3 +1,7 @@
+# 0.15.0 (Jul 21, 2020)
+
+- **[Feature]**: OTSubscriber: added [preferredResolution](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredResolution) and [preferredFrameRate](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredFrameRate) properties.
+
 # 0.14.0 (May 22, 2020)
 
 - **[Feature]**: Update of iOS SDK to `2.17.0` and Android SDK to `2.17.1`
