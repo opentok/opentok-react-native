@@ -1,5 +1,13 @@
 import { sanitizeBooleanProperty, reassignEvents } from './OTHelper';
 
+/**
+ * This is the smallest positive int value for 2 bytes. Using Number.MAX_SAFE_INTEGER at JS level,
+ * could drive to problems when coverted to the native layer (Android & iOS).
+ * Since `32767` is a very high value for resolution and frame rate for all use case,
+ * we won't have any problem for the foreseeable future
+ */
+const MAX_SAFE_INTEGER = 32767;
+
 const sanitizeSubscriberEvents = (events) => {
     if (typeof events !== 'object') {
         return {};
@@ -40,7 +48,7 @@ const sanitizeSubscriberEvents = (events) => {
 const sanitizeResolution = (resolution) => {
     switch (resolution) {
         case null:
-            return { width: Number.MAX_SAFE_INTEGER, height: Number.MAX_SAFE_INTEGER }
+            return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER }
         case '160x120':
             return { width: 160, height: 120 };
         case '320x240':
@@ -56,7 +64,7 @@ const sanitizeResolution = (resolution) => {
 const sanitizeFrameRate = (frameRate) => {
     switch (frameRate) {
         case null:
-            return Number.MAX_SAFE_INTEGER;
+            return MAX_SAFE_INTEGER;
         case 1:
             return 1;
         case 7:
@@ -73,8 +81,8 @@ const sanitizeProperties = (properties) => {
         return {
             subscribeToAudio: true,
             subscribeToVideo: true,
-            preferredResolution: {},
-            preferredFrameRate: Number.MAX_SAFE_INTEGER
+            preferredResolution: sanitizeResolution(null),
+            preferredFrameRate: sanitizeFrameRate(null)
         };
     }
     return {
