@@ -9,93 +9,93 @@ import { sanitizeBooleanProperty, reassignEvents } from './OTHelper';
 const MAX_SAFE_INTEGER = 32767;
 
 const sanitizeSubscriberEvents = (events) => {
-    if (typeof events !== 'object') {
-        return {};
-    }
-    const customEvents = {
-        ios: {
-            connected: 'subscriberDidConnect',
-            disconnected: 'subscriberDidDisconnect',
-            reconnected: 'subscriberDidReconnect',
-            error: 'didFailWithError',
-            audioNetworkStats: 'audioNetworkStatsUpdated',
-            videoNetworkStats: 'videoNetworkStatsUpdated',
-            audioLevel: 'audioLevelUpdated',
-            videoDisabled: 'subscriberVideoDisabled',
-            videoEnabled: 'subscriberVideoEnabled',
-            videoDisableWarning: 'subscriberVideoDisableWarning',
-            videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
-            videoDataReceived: 'subscriberVideoDataReceived',
-        },
-        android: {
-            connected: 'onConnected',
-            disconnected: 'onDisconnected',
-            reconnected: 'onReconnected',
-            error: 'onError',
-            audioNetworkStats: 'onAudioStats',
-            videoNetworkStats: 'onVideoStats',
-            audioLevel: 'onAudioLevelUpdated',
-            videoDisabled: 'onVideoDisabled',
-            videoEnabled: 'onVideoEnabled',
-            videoDisableWarning: 'onVideoDisableWarning',
-            videoDisableWarningLifted: 'onVideoDisableWarningLifted',
-            videoDataReceived: 'onVideoDataReceived',
-        },
-    };
-    return reassignEvents('subscriber', customEvents, events);
+  if (typeof events !== 'object') {
+    return {};
+  }
+  const customEvents = {
+    ios: {
+      connected: 'subscriberDidConnect',
+      disconnected: 'subscriberDidDisconnect',
+      reconnected: 'subscriberDidReconnect',
+      error: 'didFailWithError',
+      audioNetworkStats: 'audioNetworkStatsUpdated',
+      videoNetworkStats: 'videoNetworkStatsUpdated',
+      audioLevel: 'audioLevelUpdated',
+      videoDisabled: 'subscriberVideoDisabled',
+      videoEnabled: 'subscriberVideoEnabled',
+      videoDisableWarning: 'subscriberVideoDisableWarning',
+      videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
+      videoDataReceived: 'subscriberVideoDataReceived',
+    },
+    android: {
+      connected: 'onConnected',
+      disconnected: 'onDisconnected',
+      reconnected: 'onReconnected',
+      error: 'onError',
+      audioNetworkStats: 'onAudioStats',
+      videoNetworkStats: 'onVideoStats',
+      audioLevel: 'onAudioLevelUpdated',
+      videoDisabled: 'onVideoDisabled',
+      videoEnabled: 'onVideoEnabled',
+      videoDisableWarning: 'onVideoDisableWarning',
+      videoDisableWarningLifted: 'onVideoDisableWarningLifted',
+      videoDataReceived: 'onVideoDataReceived',
+    },
+  };
+  return reassignEvents('subscriber', customEvents, events);
 };
 
 const sanitizeResolution = (resolution) => {
-    switch (resolution) {
-        case null:
-            return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER }
-        case '160x120':
-            return { width: 160, height: 120 };
-        case '320x240':
-            return { width: 320, height: 240 };
-        case '1280x720':
-            return { width: 1280, height: 720 };
-        case '640x480':
-        default:
-            return { width: 640, height: 480 };
-    }
+  switch (resolution) {
+    case null:
+      return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER }
+    case '160x120':
+      return { width: 160, height: 120 };
+    case '320x240':
+      return { width: 320, height: 240 };
+    case '1280x720':
+      return { width: 1280, height: 720 };
+    case '640x480':
+    default:
+      return { width: 640, height: 480 };
+  }
 };
 
 const sanitizeFrameRate = (frameRate) => {
-    switch (frameRate) {
-        case null:
-            return MAX_SAFE_INTEGER;
-        case 1:
-            return 1;
-        case 7:
-            return 7;
-        case 15:
-            return 15;
-        default:
-            return 30;
-    }
+  switch (frameRate) {
+    case null:
+      return MAX_SAFE_INTEGER;
+    case 1:
+      return 1;
+    case 7:
+      return 7;
+    case 15:
+      return 15;
+    default:
+      return 30;
+  }
 };
 
 const sanitizeProperties = (properties) => {
-    if (typeof properties !== 'object') {
-        return {
-            subscribeToAudio: true,
-            subscribeToVideo: true,
-            preferredResolution: sanitizeResolution(null),
-            preferredFrameRate: sanitizeFrameRate(null)
-        };
-    }
+  if (typeof properties !== 'object') {
     return {
-        subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
-        subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
-        preferredResolution: sanitizeResolution(properties.preferredResolution),
-        preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate)
+      subscribeToAudio: true,
+      subscribeToVideo: true,
+      preferredResolution: sanitizeResolution(null),
+      preferredFrameRate: sanitizeFrameRate(null)
     };
+  }
+  return {
+    subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
+    subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
+    preferredResolution: sanitizeResolution(properties.preferredResolution),
+    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate)
+  };
 };
 
 export {
-    sanitizeSubscriberEvents,
-    sanitizeProperties,
-    sanitizeFrameRate,
-    sanitizeResolution
+  sanitizeSubscriberEvents,
+  sanitizeProperties,
+  sanitizeFrameRate,
+  sanitizeResolution
 };
