@@ -49,10 +49,8 @@ const sanitizeResolution = (resolution) => {
   switch (resolution) {
     case null:
       return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER }
-    case '160x120':
-      return { width: 160, height: 120 };
-    case '320x240':
-      return { width: 320, height: 240 };
+    case '352x288':
+      return { width: 352, height: 288 };
     case '1280x720':
       return { width: 1280, height: 720 };
     case '640x480':
