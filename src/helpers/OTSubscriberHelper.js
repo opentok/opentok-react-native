@@ -46,17 +46,32 @@ const sanitizeSubscriberEvents = (events) => {
 };
 
 const sanitizeResolution = (resolution) => {
-  switch (resolution) {
-    case null:
-      return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER }
-    case '352x288':
-      return { width: 352, height: 288 };
-    case '1280x720':
-      return { width: 1280, height: 720 };
-    case '640x480':
-    default:
-      return { width: 640, height: 480 };
+  if ((typeof resolution !== 'object') || (resolution &&
+    resolution.width === void 0 &&
+    resolution.height === void 0) || 
+    (resolution === null)) {
+    return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER };
   }
+  const videoDimensions = {};
+  if (resolution && resolution.height) {
+    if (isNaN(parseInt(resolution.height, 10))) {
+      videoDimensions.height = void 0;
+    }
+
+    videoDimensions.height = parseInt(resolution.height, 10);
+  } else {
+    videoDimensions.height = void 0;
+  }
+  if (resolution && resolution.width) {
+    if (isNaN(parseInt(resolution.width, 10))) {
+      videoDimensions.width = void 0;
+    }
+
+    videoDimensions.width = parseInt(resolution.width, 10);
+  } else {
+    videoDimensions.width = void 0;
+  }
+  return videoDimensions;
 };
 
 const sanitizeFrameRate = (frameRate) => {
