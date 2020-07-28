@@ -44,7 +44,7 @@ export default class OTSubscriber extends Component {
         if (subscribeToAudio !== undefined) {
           OT.subscribeToAudio(streamId, sanitizeBooleanProperty(subscribeToAudio));
         }
-        if (subscribeToAudio !== undefined) {
+        if (subscribeToVideo !== undefined) {
           OT.subscribeToVideo(streamId, sanitizeBooleanProperty(subscribeToVideo));
         }
         if (preferredResolution !== undefined) {
