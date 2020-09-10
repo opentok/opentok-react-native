@@ -13,6 +13,7 @@ React Native library for OpenTok iOS and Android SDKs
     - [Android Installation](#android-installation)
   - [Samples](#samples)
   - [Development and Contributing](#development-and-contributing)
+  - [Tests](#tests)
   - [Getting Help](#getting-help)
 
 ### In this repo, you'll find the OpenTok React Native library:
@@ -132,6 +133,23 @@ To see this library in action, check out the [opentok-react-native-samples](http
 
 Interested in contributing? We :heart: pull requests! See the
 [Contribution](CONTRIBUTING.md) guidelines.
+
+## Tests
+
+Before running tests, install dependencies first:
+```
+npm install
+```
+
+Run the tests locally with the following command:
+```
+npm test
+```
+
+If a change is expected in a snapshot, run:
+```
+npm test -- -u
+```
 
 ## Getting Help
 

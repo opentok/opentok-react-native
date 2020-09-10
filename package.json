@@ -5,7 +5,17 @@
   "main": "src/index.js",
   "homepage": "https://www.tokbox.com",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "jest-enzyme"
+    ],
+    "testEnvironment": "enzyme",
+    "testEnvironmentOptions": {
+      "enzymeAdapter": "react16"
+    }
   },
   "keywords": [
     "opentok",
@@ -32,6 +42,9 @@
   },
   "devDependencies": {
     "babel-jest": "24.9.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
+    "enzyme-to-json": "^3.5.0",
     "eslint": "^6.2.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",
@@ -39,9 +52,12 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "24.9.0",
+    "jest-environment-enzyme": "^7.1.2",
+    "jest-enzyme": "^7.1.2",
     "metro-react-native-babel-preset": "0.56.0",
     "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-native": "^0.60.5",
-    "react-test-renderer": "^16.9.0"
+    "react-test-renderer": "^16.8.6"
   }
 }
