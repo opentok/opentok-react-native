@@ -17,7 +17,9 @@ declare module "opentok-react-native" {
     sessionId: string;
   }
 
-  interface ConnectionCreatedEvent extends Connection {}
+  interface ConnectionCreatedEvent extends Connection {
+    sessionId: string;
+  }
 
   interface StreamCreatedEvent extends Stream {}
 
