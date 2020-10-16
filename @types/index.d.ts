@@ -48,7 +48,6 @@ declare module "opentok-react-native" {
     creationTime: string;
     data: string;
     connectionId: string;
-    sessionId?: string;
   }
 
   interface StreamPropertyChangedEvent {
