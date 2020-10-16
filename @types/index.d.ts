@@ -21,6 +21,10 @@ declare module "opentok-react-native" {
     sessionId: string;
   }
 
+  interface ConnectionDestroyedEvent extends Connection {
+    sessionId: string;
+  }
+
   interface StreamCreatedEvent extends Stream {}
 
   interface StreamDestroyedEvent extends Stream {}
@@ -140,7 +144,7 @@ declare module "opentok-react-native" {
     /**
      * Sent when another client disconnects from the session. The connection object represents the connection that the client had to the session.
      */
-    connectionDestroyed?: CallbackWithParam<ConnectionCreatedEvent, any>;
+    connectionDestroyed?: CallbackWithParam<ConnectionDestroyedEvent, any>;
 
     /**
      * Sent if the attempt to connect to the session fails or if the connection to the session drops due to an error after a successful connection.
