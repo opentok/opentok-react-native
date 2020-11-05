@@ -107,11 +107,21 @@ If you try to archive the app and it fails, please do the following:
         }
 ```
 
-5. Sync Gradle
+5. Add the following to the `AndroidManifest.xml` file (needed for Screen Sharing to work):
 
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
+```xml
+    <service
+      android:name="com.opentokreactnative.OTForegroundService"
+      android:foregroundServiceType="mediaProjection"
+      android:enabled="true"
+      android:exported="false" />
+```
 
-7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+6. Sync Gradle
+
+7. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
+
+8. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
 ```xml
     <uses-permission android:name="android.permission.CAMERA" />

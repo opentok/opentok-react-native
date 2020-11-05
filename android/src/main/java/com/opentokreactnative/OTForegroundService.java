@@ -44,7 +44,7 @@ public class OTForegroundService extends Service {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private String createNotificationChannel(NotificationManager notificationManager){
+    private String createNotificationChannel(NotificationManager notificationManager) {
         String channelId = "ot_service_channelid";
         String channelName = "OT Foreground Service";
         NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
