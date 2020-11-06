@@ -86,7 +86,7 @@ public class OTNativeScreenRecorder extends ReactContextBaseJavaModule {
                 projectManager = (MediaProjectionManager) this.getReactApplicationContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
             }
 
-            imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
+            imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 1);
             imageReader.setOnImageAvailableListener(listener, null);
 
             Intent captureIntent = projectManager.createScreenCaptureIntent();
