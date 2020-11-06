@@ -50,7 +50,7 @@ public class OTScreenCapturer extends BaseVideoCapturer implements ImageReader.O
         settings.fps = 15;
         settings.width = nativeScreenRecorder.screenWidth;
         settings.height = nativeScreenRecorder.screenHeight;
-        settings.format = RGB;
+        settings.format = ARGB;
         return settings;
     }
 
