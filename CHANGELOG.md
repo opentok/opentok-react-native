@@ -1,6 +1,10 @@
-# 0.15.0 (Jul 21, 2020)
+# 0.15.0 (Jan 26, 2021)
 
 - **[Feature]**: OTSubscriber: added [preferredResolution](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredResolution) and [preferredFrameRate](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredFrameRate) properties.
+- **[Fix]**: Fixed android app crash with API level 29 (merged from [PR456](https://github.com/opentok/opentok-react-native/pull/456)). Adheres to: [#455](https://github.com/opentok/opentok-react-native/issues/455)
+- iOS SDK updated to `2.18.1`
+- Android SDK updated to `2.18.1`
+- Added typescript support 
 
 # 0.14.0 (May 22, 2020)
 
