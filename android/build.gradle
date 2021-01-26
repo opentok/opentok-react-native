@@ -22,5 +22,5 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:${_reactNativeVersion}"  // From node_modules
-    implementation 'com.opentok.android:opentok-android-sdk:2.17.1'
+    implementation 'com.opentok.android:opentok-android-sdk:2.18.1'
 }

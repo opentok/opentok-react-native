@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
-import { sanitizeSubscriberEvents, sanitizeProperties } from './helpers/OTSubscriberHelper';
-import { getOtrnErrorEventHandler } from './helpers/OTHelper';
+import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution } from './helpers/OTSubscriberHelper';
+import { getOtrnErrorEventHandler, sanitizeBooleanProperty } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
@@ -40,9 +40,19 @@ export default class OTSubscriber extends Component {
     const { streamProperties } = this.props;
     if (!isEqual(this.state.streamProperties, streamProperties)) {
       each(streamProperties, (individualStreamProperties, streamId) => {
-        const { subscribeToAudio, subscribeToVideo } = individualStreamProperties;
-        OT.subscribeToAudio(streamId, subscribeToAudio);
-        OT.subscribeToVideo(streamId, subscribeToVideo);
+        const { subscribeToAudio, subscribeToVideo, preferredResolution, preferredFrameRate } = individualStreamProperties;
+        if (subscribeToAudio !== undefined) {
+          OT.subscribeToAudio(streamId, sanitizeBooleanProperty(subscribeToAudio));
+        }
+        if (subscribeToVideo !== undefined) {
+          OT.subscribeToVideo(streamId, sanitizeBooleanProperty(subscribeToVideo));
+        }
+        if (preferredResolution !== undefined) {
+          OT.setPreferredResolution(streamId, sanitizeResolution(preferredResolution));
+        }
+        if (preferredFrameRate !== undefined) {
+          OT.setPreferredFrameRate(streamId, sanitizeFrameRate(preferredFrameRate));
+        }
       });
       this.setState({ streamProperties });
     }
@@ -59,10 +69,10 @@ export default class OTSubscriber extends Component {
     const { streamProperties, properties } = this.props;
     const { sessionId, sessionInfo } = this.context;
     const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
-                                  sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
+      sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
     // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
     const sessionInfoConnectionId = sessionInfo && sessionInfo.connection ? sessionInfo.connection.connectionId : null;
-    if (subscribeToSelf || (sessionInfoConnectionId !== stream.connectionId)){
+    if (subscribeToSelf || (sessionInfoConnectionId !== stream.connectionId)) {
       OT.subscribeToStream(stream.streamId, sessionId, subscriberProperties, (error) => {
         if (error) {
           this.otrnEventHandler(error);
@@ -96,7 +106,7 @@ export default class OTSubscriber extends Component {
         const style = isEmpty(streamProperties) ? this.props.style : (isUndefined(streamProperties.style) || isNull(streamProperties.style)) ? this.props.style : streamProperties.style;
         return <OTSubscriberView key={streamId} streamId={streamId} style={style} />
       });
-      return <View style={containerStyle}>{ childrenWithStreams }</View>;
+      return <View style={containerStyle}>{childrenWithStreams}</View>;
     }
     return this.props.children(this.state.streams) || null;
   }
