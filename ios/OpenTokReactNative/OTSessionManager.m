@@ -47,6 +47,12 @@ RCT_EXTERN_METHOD(publishAudio:
 RCT_EXTERN_METHOD(publishVideo:
                   (NSString*)publisherId
                   pubVideo:(BOOL)pubVideo)
+RCT_EXTERN_METHOD(setPublisherScaleBehavior:
+                  (NSString*)publisherId
+                  scaleBehavior:(NSString*)scaleBehavior)
+RCT_EXTERN_METHOD(setSubscriberScaleBehavior:
+                  (NSString*)streamId
+                  scaleBehavior:(NSString*)scaleBehavior)
 RCT_EXTERN_METHOD(subscribeToAudio:
                   (NSString*)streamId
                   subAudio:(BOOL)subAudio)

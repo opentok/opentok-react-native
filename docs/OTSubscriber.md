@@ -11,6 +11,8 @@
 | children | Function | No | A render prop allowing individual rendering of each stream
 
 ## Properties
+  * **scaleBehavior** (String) - The scale behavior of the subscriber view. By default, the value is "fill" which will scale the video to fill the entire view, with cropping as needed. The value "fit" will shrink the video (pillarboxing), so that the entire video is contained in the view.
+
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
 
   * **subscribeToVideo** (Boolean) — Whether to subscribe video.
