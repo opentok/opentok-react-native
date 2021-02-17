@@ -22,6 +22,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 
+import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.Session;
 import com.opentok.android.Connection;
 import com.opentok.android.Publisher;
@@ -77,7 +78,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
-        // Note: IceConfig is an additional property not supported at the moment. 
+        // Note: IceConfig is an additional property not supported at the moment.
         // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
         // final List<Session.Builder.IceServer> iceConfigServerList = (List<Session.Builder.IceServer>) iceConfig.getArray("customServers");
         // final Session.Builder.IncludeServers iceConfigServerConfig; // = iceConfig.getString("includeServers");
@@ -102,7 +103,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     }
                 })
                 .connectionEventsSuppressed(connectionEventsSuppressed)
-                // Note: setCustomIceServers is an additional property not supported at the moment. 
+                // Note: setCustomIceServers is an additional property not supported at the moment.
                 // .setCustomIceServers(serverList, config)
                 .setIpWhitelist(ipWhitelist)
                 .setProxyUrl(proxyUrl)
@@ -145,6 +146,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         String resolution = properties.getString("resolution");
         Boolean publishAudio = properties.getBoolean("publishAudio");
         Boolean publishVideo = properties.getBoolean("publishVideo");
+        String scaleBehavior = properties.getString("scaleBehavior");
         String videoSource = properties.getString("videoSource");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
@@ -178,6 +180,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setAudioFallbackEnabled(audioFallbackEnabled);
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
+        mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, scaleBehavior.equals("fill") ?
+            BaseVideoRenderer.STYLE_VIDEO_FILL : BaseVideoRenderer.STYLE_VIDEO_FIT);
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         mPublishers.put(publisherId, mPublisher);
         callback.invoke();
@@ -220,6 +224,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setStreamListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
         mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
+        mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, properties.getString("scaleBehavior").equals("fill") ?
+            BaseVideoRenderer.STYLE_VIDEO_FILL : BaseVideoRenderer.STYLE_VIDEO_FIT);
         if (properties.hasKey("preferredFrameRate")) {
             mSubscriber.setPreferredFrameRate((float) properties.getDouble("preferredFrameRate"));
         }
@@ -296,6 +302,28 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
             mPublisher.setPublishVideo(publishVideo);
+        }
+    }
+
+    @ReactMethod
+    public void setPublisherScaleBehavior(String publisherId, String scaleBehavior) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, scaleBehavior.equals("fill") ?
+                BaseVideoRenderer.STYLE_VIDEO_FILL : BaseVideoRenderer.STYLE_VIDEO_FIT);
+        }
+    }
+
+    @ReactMethod
+    public void setSubscriberScaleBehavior(String streamId, String scaleBehavior) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, scaleBehavior.equals("fill") ?
+                BaseVideoRenderer.STYLE_VIDEO_FILL : BaseVideoRenderer.STYLE_VIDEO_FIT);
         }
     }
 
