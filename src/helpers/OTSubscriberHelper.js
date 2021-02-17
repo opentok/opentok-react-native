@@ -48,7 +48,7 @@ const sanitizeSubscriberEvents = (events) => {
 const sanitizeResolution = (resolution) => {
   if ((typeof resolution !== 'object') || (resolution &&
     resolution.width === void 0 &&
-    resolution.height === void 0) || 
+    resolution.height === void 0) ||
     (resolution === null)) {
     return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER };
   }
@@ -89,9 +89,12 @@ const sanitizeFrameRate = (frameRate) => {
   }
 };
 
+const sanitizeScaleBehavior = (scaleBehavior = 'fill') => (scaleBehavior === 'fill' ? 'fill' : 'fit');
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
+      scaleBehavior: 'fill',
       subscribeToAudio: true,
       subscribeToVideo: true,
       preferredResolution: sanitizeResolution(null),
@@ -99,6 +102,7 @@ const sanitizeProperties = (properties) => {
     };
   }
   return {
+    scaleBehavior: sanitizeScaleBehavior(properties.scaleBehavior),
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
@@ -107,6 +111,7 @@ const sanitizeProperties = (properties) => {
 };
 
 export {
+  sanitizeScaleBehavior,
   sanitizeSubscriberEvents,
   sanitizeProperties,
   sanitizeFrameRate,

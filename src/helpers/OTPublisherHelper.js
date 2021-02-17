@@ -33,9 +33,12 @@ const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera
 const sanitizeAudioBitrate = (audioBitrate = 40000) =>
   (audioBitrate < 80000 || audioBitrate > 128000 ? 40000 : audioBitrate);
 
+const sanitizeScaleBehavior = (scaleBehavior = 'fill') => (scaleBehavior === 'fill' ? 'fill' : 'fit');
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
+      scaleBehavior: 'fill',
       videoTrack: true,
       audioTrack: true,
       publishAudio: true,
@@ -50,6 +53,7 @@ const sanitizeProperties = (properties) => {
     };
   }
   return {
+    scaleBehavior: sanitizeScaleBehavior(properties.scaleBehavior),
     videoTrack: sanitizeBooleanProperty(properties.videoTrack),
     audioTrack: sanitizeBooleanProperty(properties.audioTrack),
     publishAudio: sanitizeBooleanProperty(properties.publishAudio),
@@ -86,6 +90,7 @@ const sanitizePublisherEvents = (publisherId, events) => {
 };
 
 export {
+  sanitizeScaleBehavior,
   sanitizeProperties,
   sanitizePublisherEvents,
 };

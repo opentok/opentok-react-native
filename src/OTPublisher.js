@@ -25,8 +25,8 @@ class OTPublisher extends Component {
     this.componentEvents = {
       sessionConnected: Platform.OS === 'android' ? 'session:onConnected' : 'session:sessionDidConnect',
     };
-    this.componentEventsArray = Object.values(this.componentEvents);   
-    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers); 
+    this.componentEventsArray = Object.values(this.componentEvents);
+    this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
     this.publisherEvents = sanitizePublisherEvents(this.state.publisherId, this.props.eventHandlers);
     setNativeEvents(this.publisherEvents);
     OT.setJSComponentEvents(this.componentEventsArray);
@@ -50,12 +50,15 @@ class OTPublisher extends Component {
         const value = useDefault(this.props.properties[key], defaultValue);
         if (key === 'cameraPosition') {
           OT.changeCameraPosition(this.state.publisherId, value);
+        } else if (key === 'scaleBehavior') {
+          OT.setPublisherScaleBehavior(this.state.publisherId, value);
         } else {
-          OT[key](this.state.publisherId, value);          
+          OT[key](this.state.publisherId, value);
         }
       }
     };
 
+    updatePublisherProperty('scaleBehavior', 'fill');
     updatePublisherProperty('publishAudio', true);
     updatePublisherProperty('publishVideo', true);
     updatePublisherProperty('cameraPosition', 'front');

@@ -267,6 +267,11 @@ declare module "opentok-react-native" {
     resolution?: "1280x720" | "640x480" | "352x288";
 
     /**
+     * Publisher view scale behavior. Defaults to "fill".
+     */
+    scaleBehavior?: "fill" | "fit";
+
+    /**
      * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
      */
     videoTrack?: boolean;
@@ -342,6 +347,11 @@ declare module "opentok-react-native" {
   }
 
   interface OTSubscriberProperties {
+    /**
+     * Subscriber view scale behavior. Defaults to "fill".
+     */
+    scaleBehavior?: "fill" | "fit";
+
     /**
      * Whether to subscribe to audio.
      */
