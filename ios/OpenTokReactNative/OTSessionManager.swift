@@ -39,7 +39,12 @@ class OTSessionManager: RCTEventEmitter {
     }
     
     @objc func initSession(_ apiKey: String, sessionId: String, sessionOptions: Dictionary<String, Any>) -> Void {
-        let settings = OTSessionSettings()
+        let enableStereoOutput: Bool = Utils.sanitizeBooleanProperty(sessionOptions["enableStereoOutput"] as Any);
+        if enableStereoOutput == true {
+            let customAudioDevice = OTCustomAudioDriver()
+            OTAudioDeviceManager.setAudioDevice(customAudioDevice)
+        }
+        let settings = OTSessionSettings();
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(sessionOptions["connectionEventsSuppressed"] as Any);
         // Note: IceConfig is an additional property not supported at the moment. We need to add a sanitize function
         // to validate the input from settings.iceConfig.
