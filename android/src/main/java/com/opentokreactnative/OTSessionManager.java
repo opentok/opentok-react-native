@@ -80,8 +80,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
         final boolean enableStereoOutput = sessionOptions.getBool("enableStereoOutput");
         if (enableStereoOutput) {
-            OTCustomAudioDevice otCustomAudioDevice = new OTCustomAudioDevice(this);
-            AudioDeviceManager.setAudioDevice(otCustomAudioDevice);
+            OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
+            AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
         }
         // Note: IceConfig is an additional property not supported at the moment. 
         // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
