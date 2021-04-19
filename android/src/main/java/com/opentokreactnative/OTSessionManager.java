@@ -78,7 +78,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
-        final boolean enableStereoOutput = sessionOptions.getBool("enableStereoOutput");
+        final boolean enableStereoOutput = sessionOptions.getBoolean("enableStereoOutput");
         if (enableStereoOutput) {
             OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
             AudioDeviceManager.setAudioDevice(otCustomAudioDriver);

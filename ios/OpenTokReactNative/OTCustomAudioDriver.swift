@@ -257,7 +257,11 @@ class OTCustomAudioDriver: NSObject {
         let session = AVAudioSession.sharedInstance()
         do {
             guard let previousAVAudioSessionCategory = previousAVAudioSessionCategory else { return }
-            try session.setCategory(previousAVAudioSessionCategory, mode: .default)
+            if #available(iOS 10.0, *) {
+                try session.setCategory(previousAVAudioSessionCategory, mode: .default)
+            } else {
+                try session.setCategory(previousAVAudioSessionCategory)
+            }
             guard let avAudioSessionMode = avAudioSessionMode else { return }
             try session.setMode(avAudioSessionMode)
             try session.setPreferredSampleRate(avAudioSessionPreffSampleRate)
@@ -533,7 +537,11 @@ extension OTCustomAudioDriver {
             let audioOptions = AVAudioSession.CategoryOptions.mixWithOthers.rawValue |
                 AVAudioSession.CategoryOptions.allowBluetooth.rawValue |
                 AVAudioSession.CategoryOptions.defaultToSpeaker.rawValue
-            try session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.videoChat, options: AVAudioSession.CategoryOptions(rawValue: audioOptions))
+            if #available(iOS 10.0, *) {
+                try session.setCategory(.playAndRecord, mode: .videoChat, options: AVAudioSession.CategoryOptions(rawValue: audioOptions))
+            } else {
+                try session.setCategory(.playAndRecord, options: AVAudioSession.CategoryOptions(rawValue: audioOptions))
+            }
             setupListenerBlocks()
             
             try session.setActive(true)
