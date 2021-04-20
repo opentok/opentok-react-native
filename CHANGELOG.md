@@ -1,3 +1,9 @@
+# 1.0.0 (Apr 20, 2021)
+
+- **[Feature]**: Updated to react-native 0.64.0
+- **[Fix]**: Updated npm dependencies
+- **[Fix]**: Fixed react-native 0.64.0 `nativeEvents.listeners()` crash [PR485](https://github.com/opentok/opentok-react-native/pull/485)
+
 # 0.16.0 (Apr 19, 2021)
 
 - **[Feature]**: Added support for `stereo` output on `iOS` and `Android` using `CustomAudioDevice`
