@@ -1,6 +1,6 @@
-import { Platform } from "react-native";
-import { reassignEvents } from "./OTHelper";
-import { handleSignalError, handleError } from "../OTError";
+import { Platform } from 'react-native';
+import { reassignEvents } from './OTHelper';
+import { handleSignalError, handleError } from '../OTError';
 import {
   each,
   isNull,
@@ -8,112 +8,112 @@ import {
   isString,
   isBoolean,
   isObject,
-} from "underscore";
+} from 'underscore';
 
-const validateString = (value) => (isString(value) ? value : "");
+const validateString = value => (isString(value) ? value : '');
 
-const validateBoolean = (value) => (isBoolean(value) ? value : false);
+const validateBoolean = value => (isBoolean(value) ? value : false);
 
-const validateObject = (value) => (isObject(value) ? value : {});
+const validateObject = value => (isObject(value) ? value : {});
 
 const sanitizeSessionEvents = (sessionId, events) => {
-  if (typeof events !== "object") {
+  if (typeof events !== 'object') {
     return {};
   }
   const customEvents = {
     ios: {
-      streamCreated: "streamCreated",
-      streamDestroyed: "streamDestroyed",
-      sessionConnected: "sessionDidConnect",
-      sessionDisconnected: "sessionDidDisconnect",
-      signal: "signal",
-      connectionCreated: "connectionCreated",
-      connectionDestroyed: "connectionDestroyed",
-      error: "didFailWithError",
-      sessionReconnected: "sessionDidReconnect",
-      sessionReconnecting: "sessionDidBeginReconnecting",
-      archiveStarted: "archiveStartedWithId",
-      archiveStopped: "archiveStoppedWithId",
-      streamPropertyChanged: "streamPropertyChanged",
+      streamCreated: 'streamCreated',
+      streamDestroyed: 'streamDestroyed',
+      sessionConnected: 'sessionDidConnect',
+      sessionDisconnected: 'sessionDidDisconnect',
+      signal: 'signal',
+      connectionCreated: 'connectionCreated',
+      connectionDestroyed: 'connectionDestroyed',
+      error: 'didFailWithError',
+      sessionReconnected: 'sessionDidReconnect',
+      sessionReconnecting: 'sessionDidBeginReconnecting',
+      archiveStarted: 'archiveStartedWithId',
+      archiveStopped: 'archiveStoppedWithId',
+      streamPropertyChanged: 'streamPropertyChanged',
     },
     android: {
-      streamCreated: "onStreamReceived",
-      streamDestroyed: "onStreamDropped",
-      sessionConnected: "onConnected",
-      sessionDisconnected: "onDisconnected",
-      signal: "onSignalReceived",
-      connectionCreated: "onConnectionCreated",
-      connectionDestroyed: "onConnectionDestroyed",
-      error: "onError",
-      sessionReconnected: "onReconnected",
-      sessionReconnecting: "onReconnecting",
-      archiveStarted: "onArchiveStarted",
-      archiveStopped: "onArchiveStopped",
-      streamPropertyChanged: "onStreamPropertyChanged",
+      streamCreated: 'onStreamReceived',
+      streamDestroyed: 'onStreamDropped',
+      sessionConnected: 'onConnected',
+      sessionDisconnected: 'onDisconnected',
+      signal: 'onSignalReceived',
+      connectionCreated: 'onConnectionCreated',
+      connectionDestroyed: 'onConnectionDestroyed',
+      error: 'onError',
+      sessionReconnected: 'onReconnected',
+      sessionReconnecting: 'onReconnecting',
+      archiveStarted: 'onArchiveStarted',
+      archiveStopped: 'onArchiveStopped',
+      streamPropertyChanged: 'onStreamPropertyChanged',
     },
   };
-  return reassignEvents("session", customEvents, events, sessionId);
+  return reassignEvents('session', customEvents, events, sessionId);
 };
 
-const sanitizeSessionOptions = (options) => {
+const sanitizeSessionOptions = options => {
   const platform = Platform.OS;
   let sessionOptions;
 
-  if (platform === "android") {
+  if (platform === 'android') {
     sessionOptions = {
       isCamera2Capable: false,
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
-      proxyUrl: "",
+      proxyUrl: '',
       useTextureViews: false,
       enableStereoOutput: false,
-      androidOnTop: "", // 'publisher' || 'subscriber'
-      androidZOrder: "", // 'mediaOverlay' || 'onTop'
+      androidOnTop: '', // 'publisher' || 'subscriber'
+      androidZOrder: '', // 'mediaOverlay' || 'onTop'
     };
   } else {
     sessionOptions = {
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
-      proxyUrl: "",
+      proxyUrl: '',
       enableStereoOutput: false,
     };
   }
 
-  if (typeof options !== "object") {
+  if (typeof options !== 'object') {
     return sessionOptions;
   }
 
   const validSessionOptions = {
     ios: {
-      connectionEventsSuppressed: "boolean",
-      ipWhitelist: "boolean",
-      iceConfig: "object",
-      proxyUrl: "string",
-      enableStereoOutput: "boolean",
+      connectionEventsSuppressed: 'boolean',
+      ipWhitelist: 'boolean',
+      iceConfig: 'object',
+      proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
     },
     android: {
-      connectionEventsSuppressed: "boolean",
-      useTextureViews: "boolean",
-      isCamera2Capable: "boolean",
-      androidOnTop: "string",
-      androidZOrder: "string",
-      ipWhitelist: "boolean",
-      iceConfig: "object",
-      proxyUrl: "string",
-      enableStereoOutput: "boolean",
+      connectionEventsSuppressed: 'boolean',
+      useTextureViews: 'boolean',
+      isCamera2Capable: 'boolean',
+      androidOnTop: 'string',
+      androidZOrder: 'string',
+      ipWhitelist: 'boolean',
+      iceConfig: 'object',
+      proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
     },
   };
 
   each(options, (value, key) => {
     const optionType = validSessionOptions[platform][key];
     if (optionType !== undefined) {
-      if (optionType === "boolean") {
+      if (optionType === 'boolean') {
         sessionOptions[key] = validateBoolean(value);
-      } else if (optionType === "string") {
+      } else if (optionType === 'string') {
         sessionOptions[key] = validateString(value);
-      } else if (optionType === "object") {
+      } else if (optionType === 'object') {
         sessionOptions[key] = validateObject(value);
       }
     } else {
@@ -124,13 +124,13 @@ const sanitizeSessionOptions = (options) => {
   return sessionOptions;
 };
 
-const sanitizeSignalData = (signal) => {
-  if (typeof signal !== "object") {
+const sanitizeSignalData = signal => {
+  if (typeof signal !== 'object') {
     return {
       signal: {
-        type: "",
-        data: "",
-        to: "",
+        type: '',
+        data: '',
+        to: '',
       },
       errorHandler: handleSignalError,
     };
@@ -142,13 +142,13 @@ const sanitizeSignalData = (signal) => {
       to: validateString(signal.to),
     },
     errorHandler:
-      typeof signal.errorHandler !== "function"
+      typeof signal.errorHandler !== 'function'
         ? handleSignalError
         : signal.errorHandler,
   };
 };
 
-const sanitizeCredentials = (credentials) => {
+const sanitizeCredentials = credentials => {
   const _credentials = {};
   each(credentials, (value, key) => {
     if (!isString(value) || isEmpty(value) || isNull(value)) {
@@ -160,25 +160,25 @@ const sanitizeCredentials = (credentials) => {
   return _credentials;
 };
 
-const getConnectionStatus = (connectionStatus) => {
+const getConnectionStatus = connectionStatus => {
   switch (connectionStatus) {
     case 0:
-      return "not connected";
+      return 'not connected';
     case 1:
-      return "connected";
+      return 'connected';
     case 2:
-      return "connecting";
+      return 'connecting';
     case 3:
-      return "reconnecting";
+      return 'reconnecting';
     case 4:
-      return "disconnecting";
+      return 'disconnecting';
     case 5:
-      return "failed";
+      return 'failed';
   }
 };
 
-const isConnected = (connectionStatus) =>
-  getConnectionStatus(connectionStatus) === "connected";
+const isConnected = connectionStatus =>
+  getConnectionStatus(connectionStatus) === 'connected';
 
 export {
   sanitizeSessionEvents,
