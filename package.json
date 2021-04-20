@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "0.16.0",
+  "version": "1.0.0",
   "description": "React Native components for OpenTok iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "https://www.tokbox.com",
@@ -18,7 +18,7 @@
     "video",
     "react"
   ],
-  "author": "Manik Sachdeva <msach22gmail.com>",
+  "author": "Vonage <devrel@vonage.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
