@@ -10,11 +10,11 @@ import {
   isObject,
 } from 'underscore';
 
-const validateString = value => (isString(value) ? value : '');
+const validateString = (value) => (isString(value) ? value : '');
 
-const validateBoolean = value => (isBoolean(value) ? value : false);
+const validateBoolean = (value) => (isBoolean(value) ? value : false);
 
-const validateObject = value => (isObject(value) ? value : {});
+const validateObject = (value) => (isObject(value) ? value : {});
 
 const sanitizeSessionEvents = (sessionId, events) => {
   if (typeof events !== 'object') {
@@ -55,7 +55,7 @@ const sanitizeSessionEvents = (sessionId, events) => {
   return reassignEvents('session', customEvents, events, sessionId);
 };
 
-const sanitizeSessionOptions = options => {
+const sanitizeSessionOptions = (options) => {
   const platform = Platform.OS;
   let sessionOptions;
 
@@ -124,7 +124,7 @@ const sanitizeSessionOptions = options => {
   return sessionOptions;
 };
 
-const sanitizeSignalData = signal => {
+const sanitizeSignalData = (signal) => {
   if (typeof signal !== 'object') {
     return {
       signal: {
@@ -148,7 +148,7 @@ const sanitizeSignalData = signal => {
   };
 };
 
-const sanitizeCredentials = credentials => {
+const sanitizeCredentials = (credentials) => {
   const _credentials = {};
   each(credentials, (value, key) => {
     if (!isString(value) || isEmpty(value) || isNull(value)) {
@@ -160,7 +160,7 @@ const sanitizeCredentials = credentials => {
   return _credentials;
 };
 
-const getConnectionStatus = connectionStatus => {
+const getConnectionStatus = (connectionStatus) => {
   switch (connectionStatus) {
     case 0:
       return 'not connected';
@@ -177,7 +177,7 @@ const getConnectionStatus = connectionStatus => {
   }
 };
 
-const isConnected = connectionStatus =>
+const isConnected = (connectionStatus) =>
   getConnectionStatus(connectionStatus) === 'connected';
 
 export {
