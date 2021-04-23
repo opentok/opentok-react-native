@@ -123,6 +123,11 @@ declare module "opentok-react-native" {
      * Android only - default is false
      */
     ipWhitelist?: boolean;
+    
+    /**
+     * Enable Stereo output
+     */
+    enableStereoOutput: boolean;
   }
 
   interface OTSessionEventHandlers {

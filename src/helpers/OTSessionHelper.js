@@ -1,7 +1,14 @@
 import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString, isBoolean, isObject } from 'underscore';
+import {
+  each,
+  isNull,
+  isEmpty,
+  isString,
+  isBoolean,
+  isObject,
+} from 'underscore';
 
 const validateString = value => (isString(value) ? value : '');
 
@@ -48,8 +55,7 @@ const sanitizeSessionEvents = (sessionId, events) => {
   return reassignEvents('session', customEvents, events, sessionId);
 };
 
-
-const sanitizeSessionOptions = (options) => {
+const sanitizeSessionOptions = options => {
   const platform = Platform.OS;
   let sessionOptions;
 
@@ -61,16 +67,18 @@ const sanitizeSessionOptions = (options) => {
       iceConfig: {},
       proxyUrl: '',
       useTextureViews: false,
+      enableStereoOutput: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
-    }
+    };
   } else {
     sessionOptions = {
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
       proxyUrl: '',
-    }
+      enableStereoOutput: false,
+    };
   }
 
   if (typeof options !== 'object') {
@@ -83,6 +91,7 @@ const sanitizeSessionOptions = (options) => {
       ipWhitelist: 'boolean',
       iceConfig: 'object',
       proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
@@ -93,6 +102,7 @@ const sanitizeSessionOptions = (options) => {
       ipWhitelist: 'boolean',
       iceConfig: 'object',
       proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
     },
   };
 
@@ -104,7 +114,7 @@ const sanitizeSessionOptions = (options) => {
       } else if (optionType === 'string') {
         sessionOptions[key] = validateString(value);
       } else if (optionType === 'object') {
-        sessionOptions[key] = validateObject(value)
+        sessionOptions[key] = validateObject(value);
       }
     } else {
       handleError(`${key} is not a valid option`);
@@ -114,7 +124,7 @@ const sanitizeSessionOptions = (options) => {
   return sessionOptions;
 };
 
-const sanitizeSignalData = (signal) => {
+const sanitizeSignalData = signal => {
   if (typeof signal !== 'object') {
     return {
       signal: {
@@ -131,11 +141,14 @@ const sanitizeSignalData = (signal) => {
       data: validateString(signal.data),
       to: validateString(signal.to),
     },
-    errorHandler: typeof signal.errorHandler !== 'function' ? handleSignalError : signal.errorHandler,
+    errorHandler:
+      typeof signal.errorHandler !== 'function'
+        ? handleSignalError
+        : signal.errorHandler,
   };
 };
 
-const sanitizeCredentials = (credentials) => {
+const sanitizeCredentials = credentials => {
   const _credentials = {};
   each(credentials, (value, key) => {
     if (!isString(value) || isEmpty(value) || isNull(value)) {
@@ -147,24 +160,25 @@ const sanitizeCredentials = (credentials) => {
   return _credentials;
 };
 
-const getConnectionStatus = (connectionStatus) => {
+const getConnectionStatus = connectionStatus => {
   switch (connectionStatus) {
     case 0:
-      return "not connected";
+      return 'not connected';
     case 1:
-      return "connected";
+      return 'connected';
     case 2:
-      return "connecting";
+      return 'connecting';
     case 3:
-      return "reconnecting";
+      return 'reconnecting';
     case 4:
-      return "disconnecting";
+      return 'disconnecting';
     case 5:
-      return "failed";
+      return 'failed';
   }
 };
 
-const isConnected = (connectionStatus) => (getConnectionStatus(connectionStatus) === 'connected');
+const isConnected = connectionStatus =>
+  getConnectionStatus(connectionStatus) === 'connected';
 
 export {
   sanitizeSessionEvents,
