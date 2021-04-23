@@ -32,7 +32,7 @@ const setNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.setNativeEvents(eventNames);
   each(events, (eventHandler, eventType) => {
-    const allEvents = nativeEvents.listeners();
+    const allEvents = Object.keys(nativeEvents['_nativeModule']);
     if (!allEvents.includes(eventType)) {
       nativeEvents.addListener(eventType, eventHandler);
     }
