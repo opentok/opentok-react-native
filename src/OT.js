@@ -31,9 +31,17 @@ const checkAndroidPermissions = () => new Promise((resolve, reject) => {
 const setNativeEvents = (events) => {
   const eventNames = Object.keys(events);
   OT.setNativeEvents(eventNames);
-  each(events, (eventHandler, eventType) => {
+  
+  let hasRegisteredEvents;
+  if (nativeEvents.listeners) {
     const allEvents = nativeEvents.listeners();
-    if (!allEvents.includes(eventType)) {
+    hasRegisteredEvents = (eventType) => allEvents.includes(eventType);
+  } else {
+    hasRegisteredEvents = (eventType) => nativeEvents.listenerCount(eventType) > 0;
+  }
+
+  each(events, (eventHandler, eventType) => {
+    if (!hasRegisteredEvents(eventType)) {
       nativeEvents.addListener(eventType, eventHandler);
     }
   });
