@@ -428,6 +428,10 @@ declare module "opentok-react-native" {
   }
 
   /**
+   * https://github.com/opentok/opentok-react-native/blob/main/docs/OTSubscriber.md#custom-rendering-of-streams
+   */
+  export class OTSubscriberView extends React.Component<OTSubscriberViewProps> {}
+  /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps> {}
