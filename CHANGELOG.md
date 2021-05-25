@@ -1,6 +1,7 @@
 # 0.17.1 (May 25, 2021)
 
 - **[Fix]**: Fixed @opentok/types (merged from [PR505](https://github.com/opentok/opentok-react-native/pull/505))
+- **[Fix]**: Fixed double listeners [#271](https://github.com/opentok/opentok-react-native/issues/271) (merged from [PR307](https://github.com/opentok/opentok-react-native/pull/307))
 
 
 # 0.17.0 (Apr 29, 2021)
