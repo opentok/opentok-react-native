@@ -662,7 +662,7 @@ func updatePlayoutDelay(withAudioDevice audioDevice: OTCustomAudioDriver) {
         // HW output latency
         let interval = session.outputLatency
         audioDevice.playoutDelay += UInt32(interval * 1000000)
-        // HW buffer duration 
+        // HW buffer duration
         let ioInterval = session.ioBufferDuration
         audioDevice.playoutDelay += UInt32(ioInterval * 1000000)
         audioDevice.playoutDelay += UInt32(audioDevice.playoutAudioUnitPropertyLatency * 1000000)
