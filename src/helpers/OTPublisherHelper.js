@@ -1,4 +1,4 @@
-import { sanitizeBooleanProperty, reassignEvents } from './OTHelper'
+import { sanitizeBooleanProperty, reassignEvents } from './OTHelper';
 
 const sanitizeResolution = (resolution) => {
   switch (resolution) {
