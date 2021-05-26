@@ -354,10 +354,12 @@ extension OTCustomAudioDriver: OTAudioDevice {
         
         playing = false
         
-        let result = AudioOutputUnitStop(playoutVoiceUnit!)
-        if result != noErr {
-            print("Error creaing playout unit")
-            return false
+        if playoutVoiceUnit != nil {
+            let result = AudioOutputUnitStop(playoutVoiceUnit!)
+            if result != noErr {
+                print("Error creaing playout unit")
+                return false
+            }
         }
         
         if !recording && !isPlayerInterrupted && !isResetting {
