@@ -32,6 +32,7 @@ import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.opentok.android.VideoUtils;
+import com.opentok.android.AudioDeviceManager;
 import com.opentokreactnative.utils.EventUtils;
 import com.opentokreactnative.utils.Utils;
 
@@ -78,7 +79,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
-        // Note: IceConfig is an additional property not supported at the moment.
+        final boolean enableStereoOutput = sessionOptions.getBoolean("enableStereoOutput");
+        if (enableStereoOutput) {
+            OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
+            AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
+        }
+        // Note: IceConfig is an additional property not supported at the moment. 
         // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
         // final List<Session.Builder.IceServer> iceConfigServerList = (List<Session.Builder.IceServer>) iceConfig.getArray("customServers");
         // final Session.Builder.IncludeServers iceConfigServerConfig; // = iceConfig.getString("includeServers");

@@ -76,7 +76,7 @@ You can find the structure of the object below:
 
 ```javascript
   event = {
-    stream = {
+    stream: {
       streamId: '',
       name: '',
       connectionId: '', // This will be removed after v0.11.0 because it's exposed via the connection object
@@ -84,7 +84,7 @@ You can find the structure of the object below:
         connectionId: '',
         creationTime: '',
         data: '',
-     },
+      },
       hasAudio: '',
       hasVideo: '',
       sessionId: '',
@@ -92,7 +92,7 @@ You can find the structure of the object below:
       height: '',
       width: '',
       videoType: '', // camera or screen
-     },
+    },
     oldValue: '',
     newValue: '',
     changedProperty: '',
