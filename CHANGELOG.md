@@ -1,3 +1,7 @@
+# 0.17.2 (May 27, 2021)
+- **[Fix]**: Fixed incorrect audio bitrate sanitization [#473](https://github.com/opentok/opentok-react-native/pull/473)
+- **[Fix]**: Fix audio crash on teardown [#495](https://github.com/opentok/opentok-react-native/pull/495)
+
 # 0.17.1 (May 25, 2021)
 
 - **[Fix]**: Fixed @opentok/types (merged from [PR505](https://github.com/opentok/opentok-react-native/pull/505))
