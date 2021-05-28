@@ -36,6 +36,11 @@ class Utils {
         return CGSize(width: preferredRes["width"] as! CGFloat, height: preferredRes["height"] as! CGFloat);
     }
     
+    static func sanitizeScaleBehavior(_ scaleBehavior: Any) -> OTVideoViewScaleBehavior {
+        guard let sanitizedScaleBehavior = scaleBehavior as? String else { return .fill; }
+        return sanitizedScaleBehavior == "fill" ? .fill : .fit;
+    }
+    
     static func sanitizeBooleanProperty(_ property: Any) -> Bool {
         guard let prop = property as? Bool else { return true; }
         return prop;

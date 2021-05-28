@@ -5,7 +5,6 @@ import android.widget.FrameLayout;
 import android.opengl.GLSurfaceView;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.Publisher;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,8 +38,6 @@ public class OTPublisherLayout extends FrameLayout{
             if (androidZOrderMap.get(mPublisher.getSession().getSessionId()) != null) {
                 zOrder = androidZOrderMap.get(mPublisher.getSession().getSessionId());
             }
-            mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
-                    BaseVideoRenderer.STYLE_VIDEO_FILL);
             FrameLayout mPublisherViewContainer = new FrameLayout(getContext());
             if (pubOrSub.equals("publisher") && mPublisher.getView() instanceof GLSurfaceView) {
                 if (zOrder.equals("mediaOverlay")) {

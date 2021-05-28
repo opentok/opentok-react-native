@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
-import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution } from './helpers/OTSubscriberHelper';
+import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution, sanitizeScaleBehavior } from './helpers/OTSubscriberHelper';
 import { getOtrnErrorEventHandler, sanitizeBooleanProperty } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
@@ -40,7 +40,10 @@ export default class OTSubscriber extends Component {
     const { streamProperties } = this.props;
     if (!isEqual(this.state.streamProperties, streamProperties)) {
       each(streamProperties, (individualStreamProperties, streamId) => {
-        const { subscribeToAudio, subscribeToVideo, preferredResolution, preferredFrameRate } = individualStreamProperties;
+        const { scaleBehavior, subscribeToAudio, subscribeToVideo, preferredResolution, preferredFrameRate } = individualStreamProperties;
+        if (scaleBehavior !== undefined) {
+          OT.setSubscriberScaleBehavior(streamId, sanitizeScaleBehavior(scaleBehavior));
+        }
         if (subscribeToAudio !== undefined) {
           OT.subscribeToAudio(streamId, sanitizeBooleanProperty(subscribeToAudio));
         }

@@ -101,6 +101,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.audioLevelDelegate = self;
+            publisher.viewScaleBehavior = Utils.sanitizeScaleBehavior(properties["scaleBehavior"] as Any);
             callback([NSNull()]);
         }
     }
@@ -151,6 +152,7 @@ class OTSessionManager: RCTEventEmitter {
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
+            subscriber.viewScaleBehavior = Utils.sanitizeScaleBehavior(properties["scaleBehavior"] as Any);
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -198,6 +200,16 @@ class OTSessionManager: RCTEventEmitter {
     @objc func publishVideo(_ publisherId: String, pubVideo: Bool) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.publishVideo = pubVideo;
+    }
+    
+    @objc func setPublisherScaleBehavior(_ publisherId: String, scaleBehavior: NSString) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.viewScaleBehavior = Utils.sanitizeScaleBehavior(scaleBehavior);
+    }
+    
+    @objc func setSubscriberScaleBehavior(_ streamId: String, scaleBehavior: NSString) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.viewScaleBehavior = Utils.sanitizeScaleBehavior(scaleBehavior);
     }
     
     @objc func subscribeToAudio(_ streamId: String, subAudio: Bool) -> Void {
