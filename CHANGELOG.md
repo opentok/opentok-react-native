@@ -1,3 +1,9 @@
+# 0.18.0 (Jun 24, 2021)
+- [Update]: update SDKs iOS to 2.20.0 and Android to 2.20.1
+- [Fix]: fix crash in OTPublisherLayout when sessionId is null
+- [Fix]: Update uuidv4 module
+- [Fix]: OTCustomAudioDrive added file in project.pbxproj
+
 # 0.17.2 (May 27, 2021)
 - **[Fix]**: Fixed incorrect audio bitrate sanitization [#473](https://github.com/opentok/opentok-react-native/pull/473)
 - **[Fix]**: Fix audio crash on teardown [#495](https://github.com/opentok/opentok-react-native/pull/495)
