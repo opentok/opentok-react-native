@@ -17,7 +17,7 @@ import OTPublisherView from './views/OTPublisherView';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
 import OTContext from './contexts/OTContext';
-
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 class OTPublisher extends Component {
