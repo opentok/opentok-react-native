@@ -27,7 +27,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "prop-types": "^15.7.2",
-    "react-native-get-random-values": "^1.7.0",
     "underscore": "^1.13.0",
     "uuid": "^3.4.0"
   },
