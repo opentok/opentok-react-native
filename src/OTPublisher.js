@@ -17,8 +17,7 @@ import OTPublisherView from './views/OTPublisherView';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
 import OTContext from './contexts/OTContext';
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+const uuid = require('uuid/v4');
 
 class OTPublisher extends Component {
   constructor(props, context) {
@@ -26,7 +25,7 @@ class OTPublisher extends Component {
     this.state = {
       initError: null,
       publisher: null,
-      publisherId: uuidv4(),
+      publisherId: uuid(),
     };
     this.initComponent();
   }
