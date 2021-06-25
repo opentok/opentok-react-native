@@ -4,7 +4,6 @@
 - [Fix]: Downgrade uuidv4 module to `3.4.0` due to [UUID#375](https://github.com/uuidjs/uuid/issues/375)
 - [Fix]: OTCustomAudioDrive added file in project.pbxproj
 - [Fix]: Update Github Actions 
-- 
 
 # 0.17.2 (May 27, 2021)
 - **[Fix]**: Fixed incorrect audio bitrate sanitization [#473](https://github.com/opentok/opentok-react-native/pull/473)
