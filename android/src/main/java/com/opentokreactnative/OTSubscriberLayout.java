@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.opentok.android.BaseVideoRenderer;
+import com.opentok.android.Session;
 import com.opentok.android.Subscriber;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,12 +35,16 @@ public class OTSubscriberLayout extends FrameLayout{
         String pubOrSub = "";
         String zOrder = "";
         if (mSubscriber != null) {
-            if (mSubscriber.getSession() != null) {
-                if (androidOnTopMap.get(mSubscriber.getSession().getSessionId()) != null) {
-                    pubOrSub = androidOnTopMap.get(mSubscriber.getSession().getSessionId());
-                }
-                if (androidZOrderMap.get(mSubscriber.getSession().getSessionId()) != null) {
-                    zOrder = androidZOrderMap.get(mSubscriber.getSession().getSessionId());
+            Session session = mSubscriber.getSession();
+            if (session != null) {
+                String sessionId = session.getSessionId();
+                if (sessionId != null) {
+                    if (androidOnTopMap.get(sessionId) != null) {
+                        pubOrSub = androidOnTopMap.get(sessionId);
+                    }
+                    if (androidZOrderMap.get(sessionId) != null) {
+                        zOrder = androidZOrderMap.get(sessionId);
+                    }
                 }
             }
             if (mSubscriber.getView().getParent() != null) {
