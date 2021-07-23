@@ -12,7 +12,7 @@ import Foundation
 class OTPublisherView : UIView {
   @objc var publisherId: NSString? {
     didSet {
-      if let publisherView = OTRN.sharedState.publishers[publisherId! as String]?.view{
+      if let publisherView = OTRN.sharedState.publishers[publisherId! as String]?.view {
         publisherView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(publisherView)
       }
