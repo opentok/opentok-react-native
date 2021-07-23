@@ -10,20 +10,21 @@ import Foundation
 
 @objc(OTSubscriberView)
 class OTSubscriberView: UIView {
-  @objc var streamId: NSString?
+  @objc var streamId: NSString? {
+    didSet {
+      if let subscriberView = OTRN.sharedState.subscribers[streamId! as String]?.view {
+        subscriberView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        addSubview(subscriberView)
+      }
+    }
+  }
+
   override init(frame: CGRect) {
     super.init(frame: frame)
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-  
-  override func layoutSubviews() {
-    if let subscriberView = OTRN.sharedState.subscribers[streamId! as String]?.view {
-      subscriberView.frame = self.bounds
-      addSubview(subscriberView)
-    }
   }
 }
 
