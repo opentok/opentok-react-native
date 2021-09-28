@@ -65,4 +65,31 @@ class Utils {
             return "CodecNotSupported"
         }
     }
+    
+    static func sanitizeIncludeServer(_ value: String)  -> OTSessionICEIncludeServers {
+        var includeServers = OTSessionICEIncludeServers.all;
+        if value == "custom" {
+            includeServers = OTSessionICEIncludeServers.custom;
+        }
+        return includeServers;
+    }
+    
+    static func sanitizeTransportPolicy(_ value: String)  -> OTSessionICETransportPolicy {
+        var transportPolicy = OTSessionICETransportPolicy.all;
+        if value == "relay" {
+            transportPolicy = OTSessionICETransportPolicy.relay;
+        }
+        return transportPolicy;
+    }
+    
+    static func sanitizeIceServer(_ serverList: NSArray, _ transportPolicy: String, _ includeServer: String) -> OTSessionICEConfig {
+        var myICEServerConfiguration: OTSessionICEConfig;
+        myICEServerConfiguration.includeServers = Utils.sanitizeIncludeServer(includeServer);
+        myICEServerConfiguration.transportPolicy = Utils.sanitizeTransportPolicy(transportPolicy);
+        for s in serverList {
+            myICEServerConfiguration.addICEServer(withURL: s.url, userName: s.username, credential: s.credential, error: <#T##AutoreleasingUnsafeMutablePointer<NSError>?#>)
+        }
+        return myICEServerConfiguration;
+    }
+    
 }

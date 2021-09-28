@@ -5,10 +5,16 @@ import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
+import com.opentok.android.Session.Builder.TransportPolicy;
+import com.opentok.android.Session.Builder.IncludeServers;
+import com.opentok.android.Session.Builder.IceServer;
 import com.opentokreactnative.OTRN;
+
+import com.facebook.react.bridge.ReadableArray;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 public final class Utils {
 
@@ -58,5 +64,37 @@ public final class Utils {
             }
         }
         return "";
+    }
+
+    public static IncludeServers sanitizeIncludeServer(String value) {
+        IncludeServers includeServers =  IncludeServers.All;
+        switch (value) {
+            case "custom":
+                includeServers =  IncludeServers.Custom;
+                break;
+        }
+        return includeServers;
+    }
+
+    public static TransportPolicy sanitizeTransportPolicy(String value) {
+        TransportPolicy transportPolicy =  TransportPolicy.All;
+        switch (value) {
+            case "relay":
+                transportPolicy =  TransportPolicy.Relay;
+                break;
+        }
+        return transportPolicy;
+    }
+
+    public static List<IceServer> sanitizeIceServer(ReadableArray serverList) {
+        List<IceServer> iceServer = new ArrayList<>();
+        for (int i = 0; i < serverList.size(); i++) {
+            iceServer.add(new IceServer(
+                    serverList.getMap(i).getString("credential"),
+                    serverList.getMap(i).getString("url"),
+                    serverList.getMap(i).getString("user")
+            ));
+        }
+        return iceServer;
     }
 }

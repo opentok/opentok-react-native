@@ -39,13 +39,19 @@ class OTSessionManager: RCTEventEmitter {
     }
     
     @objc func initSession(_ apiKey: String, sessionId: String, sessionOptions: Dictionary<String, Any>) -> Void {
-        let settings = OTSessionSettings()
+        let enableStereoOutput: Bool = Utils.sanitizeBooleanProperty(sessionOptions["enableStereoOutput"] as Any);
+        if enableStereoOutput == true {
+            let customAudioDevice = OTCustomAudioDriver()
+            OTAudioDeviceManager.setAudioDevice(customAudioDevice)
+        }
+        let settings = OTSessionSettings();
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(sessionOptions["connectionEventsSuppressed"] as Any);
         // Note: IceConfig is an additional property not supported at the moment. We need to add a sanitize function
         // to validate the input from settings.iceConfig.
         // settings.iceConfig = sessionOptions["iceConfig"];
         settings.proxyURL = Utils.sanitizeStringProperty(sessionOptions["proxyUrl"] as Any);
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(sessionOptions["ipWhitelist"] as Any);
+        settings.iceConfig = Utils.sanitizeIceServer(sessionOptions["customServers"], sessionOptions["transportPolicy"] as String, sessionOptions["includeServers"] as String);
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
     
