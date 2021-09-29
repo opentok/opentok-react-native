@@ -66,30 +66,32 @@ class Utils {
         }
     }
     
-    static func sanitizeIncludeServer(_ value: String)  -> OTSessionICEIncludeServers {
+    static func sanitizeIncludeServer(_ value: Any)  -> OTSessionICEIncludeServers {
         var includeServers = OTSessionICEIncludeServers.all;
-        if value == "custom" {
+        if let includeServer = value as? String, includeServer == "custom" {
             includeServers = OTSessionICEIncludeServers.custom;
         }
         return includeServers;
     }
     
-    static func sanitizeTransportPolicy(_ value: String)  -> OTSessionICETransportPolicy {
+    static func sanitizeTransportPolicy(_ value: Any)  -> OTSessionICETransportPolicy {
         var transportPolicy = OTSessionICETransportPolicy.all;
-        if value == "relay" {
+        if let policy = value as? String, policy == "relay" {
             transportPolicy = OTSessionICETransportPolicy.relay;
         }
         return transportPolicy;
     }
     
-    static func sanitizeIceServer(_ serverList: NSArray, _ transportPolicy: String, _ includeServer: String) -> OTSessionICEConfig {
+    static func sanitizeIceServer(_ serverList: Any, _ transportPolicy: Any, _ includeServer: Any) -> OTSessionICEConfig {
         var myICEServerConfiguration: OTSessionICEConfig;
         myICEServerConfiguration.includeServers = Utils.sanitizeIncludeServer(includeServer);
         myICEServerConfiguration.transportPolicy = Utils.sanitizeTransportPolicy(transportPolicy);
-        for s in serverList {
+        for s in serverList { //ToFix, add servers from serverList to myICEServerConfiguration
             myICEServerConfiguration.addICEServer(withURL: s.url, userName: s.username, credential: s.credential, error: <#T##AutoreleasingUnsafeMutablePointer<NSError>?#>)
         }
         return myICEServerConfiguration;
     }
+    
+    
     
 }
