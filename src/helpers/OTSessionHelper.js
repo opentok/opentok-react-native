@@ -1,7 +1,14 @@
 import { Platform } from 'react-native';
 import { reassignEvents } from './OTHelper';
 import { handleSignalError, handleError } from '../OTError';
-import { each, isNull, isEmpty, isString, isBoolean, isObject } from 'underscore';
+import {
+  each,
+  isNull,
+  isEmpty,
+  isString,
+  isBoolean,
+  isObject,
+} from 'underscore';
 
 const validateString = (value) => (isString(value) ? value : '');
 
@@ -94,15 +101,17 @@ const sanitizeSessionOptions = (options) => {
       iceConfig: {},
       proxyUrl: '',
       useTextureViews: false,
+      enableStereoOutput: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
-      androidZOrder: '' // 'mediaOverlay' || 'onTop'
+      androidZOrder: '', // 'mediaOverlay' || 'onTop'
     };
   } else {
     sessionOptions = {
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
-      proxyUrl: ''
+      proxyUrl: '',
+      enableStereoOutput: false,
     };
   }
 
@@ -115,7 +124,8 @@ const sanitizeSessionOptions = (options) => {
       connectionEventsSuppressed: 'boolean',
       ipWhitelist: 'boolean',
       iceConfig: 'object',
-      proxyUrl: 'string'
+      proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
@@ -125,8 +135,9 @@ const sanitizeSessionOptions = (options) => {
       androidZOrder: 'string',
       ipWhitelist: 'boolean',
       iceConfig: 'object',
-      proxyUrl: 'string'
-    }
+      proxyUrl: 'string',
+      enableStereoOutput: 'boolean',
+    },
   };
 
   each(options, (value, key) => {
@@ -176,7 +187,7 @@ const sanitizeSignalData = (signal) => {
     errorHandler:
       typeof signal.errorHandler !== 'function'
         ? handleSignalError
-        : signal.errorHandler
+        : signal.errorHandler,
   };
 };
 

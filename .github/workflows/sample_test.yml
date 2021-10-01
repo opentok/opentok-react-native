@@ -1,0 +1,53 @@
+name: Test Sample apps
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        project: [BasicVideoChat, Signaling]
+        platform: [ios, android]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Pack Library
+        run: |
+            npm pack
+            find . -name "opentok-react-native-*.tgz" | while read -r file; do mv $file new.tgz; done
+      - name: Checkout samples
+        uses: actions/checkout@v2
+        with:
+          repository: opentok/opentok-react-native-samples
+          path: samples
+      - name: Set up JDK 1.8
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: NPM install ${{ matrix.project }}
+        run: |
+          cd samples/${{ matrix.project }}
+          npm install
+          npm install ../../new.tgz
+          cat package.json
+      - name: Build ${{ matrix.project }} ${{ matrix.platform }}
+        run: |
+          cd samples/${{ matrix.project }}/${{ matrix.platform }}
+          if test -f Podfile
+          then
+            pod update opentok-react-native
+            pod install
+            cat Podfile.lock
+            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.4'
+          else
+            ./gradlew app:assembleRelease
+          fi
+          
+          
+  

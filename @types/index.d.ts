@@ -61,7 +61,7 @@ declare module "opentok-react-native" {
     stream: Stream;
   }
 
-  interface OTSessionViewProps extends ViewProps {
+  interface OTSessionProps extends ViewProps {
     /**
      * TokBox API Key
      */
@@ -123,6 +123,11 @@ declare module "opentok-react-native" {
      * Android only - default is false
      */
     ipWhitelist?: boolean;
+    
+    /**
+     * Enable Stereo output
+     */
+    enableStereoOutput: boolean;
   }
 
   interface OTSessionEventHandlers {
@@ -200,9 +205,9 @@ declare module "opentok-react-native" {
   /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSession.md
    */
-  export class OTSession extends React.Component<OTSessionViewProps> {}
+  export class OTSession extends React.Component<OTSessionProps> {}
 
-  interface OTPublisherViewProps extends ViewProps {
+  interface OTPublisherProps extends ViewProps {
     /**
      * Properties passed into the native publisher instance
      */
@@ -307,9 +312,9 @@ declare module "opentok-react-native" {
   /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTPublisher.md
    */
-  export class OTPublisher extends React.Component<OTPublisherViewProps> {}
+  export class OTPublisher extends React.Component<OTPublisherProps> {}
 
-  interface OTSubscriberViewProps extends ViewProps {
+  interface OTSubscriberProps extends ViewProps {
     /**
      * OpenTok Session Id. This is auto populated by wrapping OTSubscriber with OTSession
      */
@@ -415,7 +420,7 @@ declare module "opentok-react-native" {
     videoNetworkStats?: CallbackWithParam<any, any>;
   }
 
-  interface OTSubscriberView extends ViewProps {
+  interface OTSubscriberViewProps extends ViewProps {
     /**
      * OpenTok Subscriber streamId.
      */
@@ -423,7 +428,11 @@ declare module "opentok-react-native" {
   }
 
   /**
+   * https://github.com/opentok/opentok-react-native/blob/main/docs/OTSubscriber.md#custom-rendering-of-streams
+   */
+  export class OTSubscriberView extends React.Component<OTSubscriberViewProps> {}
+  /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
    */
-  export class OTSubscriber extends React.Component<OTSubscriberViewProps> {}
+  export class OTSubscriber extends React.Component<OTSubscriberProps> {}
 }

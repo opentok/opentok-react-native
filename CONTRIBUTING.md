@@ -23,6 +23,7 @@ For a contribution to be accepted:
 
 - Code must follow existing styling conventions
 - Commit messages must be descriptive. Related issues should be mentioned by number.
+- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
 
 If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the Issue. You can still continue to add more commits to the branch you have sent the Pull Request from.
 
@@ -32,8 +33,9 @@ If the contribution doesn't meet these criteria, a maintainer will discuss it wi
 2. Clone/fetch your fork to your local development machine.
 3. Create a new branch (e.g. `issue-12`, `feat.add_foo`, etc) and check it out.
 4. Make your changes and commit them.
-5. Push your new branch to your fork. (e.g. `git push myname issue-12`)
-6. Open a Pull Request from your new branch to the original fork's `master` branch.
+5. Test your changes with the [sample applications](https://github.com/opentok/opentok-react-native-samples). (you can use `npm pack` and `npm install` to install a local version of the library.)
+6. Push your new branch to your fork. (e.g. `git push myname issue-12`)
+7. Open a Pull Request from your new branch to the original fork's `master` branch.
 
 ## Development Guidelines
 

@@ -1,3 +1,30 @@
+# 0.18.0 (Jun 24, 2021)
+- [Update]: update SDKs iOS to 2.20.0 and Android to 2.20.1
+- [Fix]: fix crash in OTPublisherLayout when sessionId is null. Fix: https://github.com/opentok/opentok-react-native/issues/462#issuecomment-752171962
+- [Fix]: Downgrade uuidv4 module to `3.4.0` due to [UUID#375](https://github.com/uuidjs/uuid/issues/375)
+- [Fix]: OTCustomAudioDrive added file in project.pbxproj
+- [Fix]: Update Github Actions 
+
+# 0.17.2 (May 27, 2021)
+- **[Fix]**: Fixed incorrect audio bitrate sanitization [#473](https://github.com/opentok/opentok-react-native/pull/473)
+- **[Fix]**: Fix audio crash on teardown [#495](https://github.com/opentok/opentok-react-native/pull/495)
+
+# 0.17.1 (May 25, 2021)
+
+- **[Fix]**: Fixed @opentok/types (merged from [PR505](https://github.com/opentok/opentok-react-native/pull/505))
+- **[Fix]**: Fixed double listeners [#271](https://github.com/opentok/opentok-react-native/issues/271) (merged from [PR307](https://github.com/opentok/opentok-react-native/pull/307))
+
+
+# 0.17.0 (Apr 29, 2021)
+
+- **[Feature]**: Updated to react-native 0.64.0
+- **[Fix]**: Updated npm dependencies
+- **[Fix]**: Fixed react-native 0.64.0 `nativeEvents.listeners()` crash [PR493](https://github.com/opentok/opentok-react-native/pull/493)
+
+# 0.16.0 (Apr 19, 2021)
+
+- **[Feature]**: Added support for `stereo` output on `iOS` and `Android` using `CustomAudioDevice`
+
 # 0.15.0 (Jan 26, 2021)
 
 - **[Feature]**: OTSubscriber: added [preferredResolution](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredResolution) and [preferredFrameRate](https://tokbox.com/developer/sdks/js/reference/Subscriber.html#setPreferredFrameRate) properties.

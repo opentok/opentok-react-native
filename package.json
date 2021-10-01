@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "0.15.0",
+  "version": "0.18.0",
   "description": "React Native components for OpenTok iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "https://www.tokbox.com",
@@ -18,31 +18,31 @@
     "video",
     "react"
   ],
-  "author": "Manik Sachdeva <msach22gmail.com>",
+  "author": "Vonage <devrel@vonage.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/opentok/opentok-react-native.git"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "prop-types": "^15.7.2",
-    "underscore": "^1.9.1",
-    "uuid": "^3.3.3"
+    "underscore": "^1.13.0",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
-    "babel-jest": "24.9.0",
-    "eslint": "^6.2.2",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-react-hooks": "^1.7.0",
-    "jest": "24.9.0",
-    "metro-react-native-babel-preset": "0.56.0",
-    "react": "^16.8.6",
-    "react-native": "^0.60.5",
-    "react-test-renderer": "^16.9.0"
+    "babel-jest": "26.6.3",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jest": "26.6.3",
+    "metro-react-native-babel-preset": "0.65.2",
+    "react": "^17.0.1",
+    "react-native": "^0.64.0",
+    "react-test-renderer": "^16.0.9"
   },
   "types": "@types/index.d.ts"
 }

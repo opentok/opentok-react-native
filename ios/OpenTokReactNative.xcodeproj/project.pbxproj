@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EE70BC9267127320011216E /* OTCustomAudioDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE70BC8267127320011216E /* OTCustomAudioDriver.swift */; };
 		9C6F95B920ACE8BE00FEAD68 /* OpenTokReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */; };
 		9C6F95BA20ACE8BE00FEAD68 /* OpenTokReactNative.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */; };
 		9C6F95CE20ACE90E00FEAD68 /* OTSubscriberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6EE70BC8267127320011216E /* OTCustomAudioDriver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTCustomAudioDriver.swift; sourceTree = "<group>"; };
 		9C6F95B420ACE8BE00FEAD68 /* libOpenTokReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOpenTokReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenTokReactNative.h; sourceTree = "<group>"; };
 		9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenTokReactNative.m; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				9C86849B218E2B31004679BA /* Utils */,
+				6EE70BC8267127320011216E /* OTCustomAudioDriver.swift */,
 				9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */,
 				9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */,
 				9C6F95C320ACE90E00FEAD68 /* OTPublisherView.swift */,
@@ -180,6 +183,7 @@
 				9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */,
 				9C86850F218E3433004679BA /* Utils.swift in Sources */,
 				9C6F95CF20ACE90E00FEAD68 /* OTPublisherView.swift in Sources */,
+				6EE70BC9267127320011216E /* OTCustomAudioDriver.swift in Sources */,
 				9C6F95CE20ACE90E00FEAD68 /* OTSubscriberManager.swift in Sources */,
 				9C6F95B920ACE8BE00FEAD68 /* OpenTokReactNative.m in Sources */,
 				9C6F95D620ACE90E00FEAD68 /* OTPublisher.m in Sources */,
