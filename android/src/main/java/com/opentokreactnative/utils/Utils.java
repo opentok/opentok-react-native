@@ -86,12 +86,14 @@ public final class Utils {
         return transportPolicy;
     }
 
+
+
     public static List<IceServer> sanitizeIceServer(ReadableArray serverList) {
         List<IceServer> iceServer = new ArrayList<>();
         for (int i = 0; i < serverList.size(); i++) {
             iceServer.add(new IceServer(
                     serverList.getMap(i).getString("credential"),
-                    serverList.getMap(i).getString("url"),
+                    serverList.getMap(i).("url"),
                     serverList.getMap(i).getString("user")
             ));
         }
