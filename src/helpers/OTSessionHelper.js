@@ -8,6 +8,7 @@ import {
   isString,
   isBoolean,
   isObject,
+  isArray
 } from 'underscore';
 
 const validateString = (value) => (isString(value) ? value : '');
@@ -58,6 +59,7 @@ const sanitizeSessionEvents = (sessionId, events) => {
 };
 
 const sanitizeCustomTurnOptions = (options) => {
+  let sessionOptions = {};
   if (typeof options !== 'object') {
     return {};
   }
@@ -85,8 +87,7 @@ const sanitizeCustomTurnOptions = (options) => {
       handleError(`${key} is not a valid option`);
     }
   });
-
-  return customTurnOptions;
+  return sessionOptions;
 };
 
 const sanitizeSessionOptions = (options) => {
@@ -163,7 +164,6 @@ const sanitizeSessionOptions = (options) => {
       sessionOptions[key] = customTurnOptions[key];
     });
   }
-  console.log('sessionOptions', sessionOptions);
   return sessionOptions;
 };
 
