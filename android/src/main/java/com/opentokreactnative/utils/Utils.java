@@ -86,17 +86,17 @@ public final class Utils {
         return transportPolicy;
     }
 
-
-
     public static List<IceServer> sanitizeIceServer(ReadableArray serverList) {
-        List<IceServer> iceServer = new ArrayList<>();
+        List<IceServer> iceServers = new ArrayList<>();
         for (int i = 0; i < serverList.size(); i++) {
-            iceServer.add(new IceServer(
-                    serverList.getMap(i).getString("credential"),
-                    serverList.getMap(i).("url"),
-                    serverList.getMap(i).getString("user")
-            ));
+            for (int j = 0; i < serverList.getMap(i).getArray("urls").size(); j++) {
+                iceServers.add(new IceServer(
+                        serverList.getMap(i).getString("credential"),
+                        serverList.getMap(i).getArray("urls").getString(j),
+                        serverList.getMap(i).getString("user")
+                ));
+            }
         }
-        return iceServer;
+        return iceServers;
     }
 }
