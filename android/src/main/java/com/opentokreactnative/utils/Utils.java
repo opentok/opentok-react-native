@@ -88,13 +88,16 @@ public final class Utils {
 
     public static List<IceServer> sanitizeIceServer(ReadableArray serverList) {
         List<IceServer> iceServers = new ArrayList<>();
-        for (int i = 0; i < serverList.size(); i++) {
-            for (int j = 0; i < serverList.getMap(i).getArray("urls").size(); j++) {
-                iceServers.add(new IceServer(
-                        serverList.getMap(i).getString("credential"),
-                        serverList.getMap(i).getArray("urls").getString(j),
-                        serverList.getMap(i).getString("user")
-                ));
+        if (serverList.size() != 0) {
+            for (int i = 0; i < serverList.size(); i++) {
+                for (int j = 0; j < serverList.getMap(i).getArray("urls").size(); j++) {
+                    iceServers.add(new IceServer(
+                            serverList.getMap(i).getArray("urls").getString(j),
+                            serverList.getMap(i).getString("username"),
+                            serverList.getMap(i).getString("credential")
+
+                    ));
+                }
             }
         }
         return iceServers;
