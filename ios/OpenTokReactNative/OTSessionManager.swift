@@ -51,6 +51,7 @@ class OTSessionManager: RCTEventEmitter {
         // settings.iceConfig = sessionOptions["iceConfig"];
         settings.proxyURL = Utils.sanitizeStringProperty(sessionOptions["proxyUrl"] as Any);
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(sessionOptions["ipWhitelist"] as Any);
+        settings.iceConfig = Utils.sanitizeIceServer(sessionOptions["customServers"] as Any, sessionOptions["transportPolicy"] as Any, sessionOptions["includeServers"] as Any);
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
     

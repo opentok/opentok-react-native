@@ -31,13 +31,16 @@ import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.opentok.android.VideoUtils;
+import com.opentok.android.Session.Builder.TransportPolicy;
+import com.opentok.android.Session.Builder.IncludeServers;
+import com.opentok.android.Session.Builder.IceServer;
 import com.opentok.android.AudioDeviceManager;
 import com.opentokreactnative.utils.EventUtils;
 import com.opentokreactnative.utils.Utils;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
-import java.util.List;
 
 public class OTSessionManager extends ReactContextBaseJavaModule
         implements Session.SessionListener,
@@ -83,10 +86,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
             AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
         }
-        // Note: IceConfig is an additional property not supported at the moment. 
-        // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
-        // final List<Session.Builder.IceServer> iceConfigServerList = (List<Session.Builder.IceServer>) iceConfig.getArray("customServers");
-        // final Session.Builder.IncludeServers iceConfigServerConfig; // = iceConfig.getString("includeServers");
+        final List<IceServer> iceServersList = Utils.sanitizeIceServer(sessionOptions.getArray("customServers"));
+        final IncludeServers includeServers = Utils.sanitizeIncludeServer(sessionOptions.getString("includeServers"));
+        final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(sessionOptions.getString("transportPolicy"));
         final String proxyUrl = sessionOptions.getString("proxyUrl");
         String androidOnTop = sessionOptions.getString("androidOnTop");
         String androidZOrder = sessionOptions.getString("androidZOrder");
@@ -108,8 +110,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     }
                 })
                 .connectionEventsSuppressed(connectionEventsSuppressed)
-                // Note: setCustomIceServers is an additional property not supported at the moment. 
-                // .setCustomIceServers(serverList, config)
+                .setCustomIceServers(iceServersList, includeServers)
+                .setIceRouting(transportPolicy)
                 .setIpWhitelist(ipWhitelist)
                 .setProxyUrl(proxyUrl)
                 .build();
