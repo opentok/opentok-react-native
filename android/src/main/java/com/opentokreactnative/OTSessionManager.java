@@ -86,10 +86,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
             AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
         }
-        // Note: IceConfig is an additional property not supported at the moment. 
-        // final ReadableMap iceConfig = sessionOptions.getMap("iceConfig");
-        // final List<Session.Builder.IceServer> iceConfigServerList = (List<Session.Builder.IceServer>) iceConfig.getArray("customServers");
-        final List<IceServer> iceServersList = Utils.sanitizeIceServer(sessionOptions.getArray("customServers")); // = iceConfig.getString("includeServers");
+        final List<IceServer> iceServersList = Utils.sanitizeIceServer(sessionOptions.getArray("customServers"));
         final IncludeServers includeServers = Utils.sanitizeIncludeServer(sessionOptions.getString("includeServers"));
         final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(sessionOptions.getString("transportPolicy"));
         final String proxyUrl = sessionOptions.getString("proxyUrl");
@@ -113,8 +110,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     }
                 })
                 .connectionEventsSuppressed(connectionEventsSuppressed)
-                // Note: setCustomIceServers is an additional property not supported at the moment. 
-                // .setCustomIceServers(serverList, config)
                 .setCustomIceServers(iceServersList, includeServers)
                 .setIceRouting(transportPolicy)
                 .setIpWhitelist(ipWhitelist)
