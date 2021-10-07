@@ -82,7 +82,7 @@ class Utils {
         return transportPolicy;
     }
     
-    static func sanitiseServerList(_ serverList: Any) -> [([String], String, String)] {
+    static func sanitiseServerList(_ serverList: Any) -> [(urls: [String], userName: String, credential: String)] {
         var iceServerList: [([String], String, String)] = []
         
         if let serverList = serverList as? [[String: Any]] {
@@ -101,8 +101,8 @@ class Utils {
         myICEServerConfiguration.transportPolicy = Utils.sanitizeTransportPolicy(transportPolicy);
         let serverList = Utils.sanitiseServerList(serverList);
         for server in serverList {
-            for url in server.0 {
-                myICEServerConfiguration.addICEServer(withURL: url, userName: server.1, credential: server.2, error: nil);
+            for url in server.urls {
+                myICEServerConfiguration.addICEServer(withURL: url, userName: server.userName, credential: server.credential, error: nil);
             }
         }
         return myICEServerConfiguration;
