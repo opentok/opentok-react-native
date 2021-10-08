@@ -8,6 +8,7 @@ import {
   isString,
   isBoolean,
   isObject,
+  isArray
 } from 'underscore';
 
 const validateString = (value) => (isString(value) ? value : '');
@@ -15,6 +16,8 @@ const validateString = (value) => (isString(value) ? value : '');
 const validateBoolean = (value) => (isBoolean(value) ? value : false);
 
 const validateObject = (value) => (isObject(value) ? value : {});
+
+const validateArray = (value) => (isArray(value) ? value : []);
 
 const sanitizeSessionEvents = (sessionId, events) => {
   if (typeof events !== 'object') {
@@ -34,7 +37,7 @@ const sanitizeSessionEvents = (sessionId, events) => {
       sessionReconnecting: 'sessionDidBeginReconnecting',
       archiveStarted: 'archiveStartedWithId',
       archiveStopped: 'archiveStoppedWithId',
-      streamPropertyChanged: 'streamPropertyChanged',
+      streamPropertyChanged: 'streamPropertyChanged'
     },
     android: {
       streamCreated: 'onStreamReceived',
@@ -49,10 +52,42 @@ const sanitizeSessionEvents = (sessionId, events) => {
       sessionReconnecting: 'onReconnecting',
       archiveStarted: 'onArchiveStarted',
       archiveStopped: 'onArchiveStopped',
-      streamPropertyChanged: 'onStreamPropertyChanged',
-    },
+      streamPropertyChanged: 'onStreamPropertyChanged'
+    }
   };
   return reassignEvents('session', customEvents, events, sessionId);
+};
+
+const sanitizeCustomTurnOptions = (options) => {
+  let sessionOptions = {};
+  if (typeof options !== 'object') {
+    return {};
+  }
+  const validCustomTurnOptions = {
+    includeServers: 'string',
+    transportPolicy: 'string',
+    customServers: 'Array'
+  };
+
+  const customTurnOptions = {
+    includeServers: 'all',
+    transportPolicy: 'all',
+    customServers: []
+  };
+
+  each(options, (value, key) => {
+    const optionType = validCustomTurnOptions[key];
+    if (optionType !== undefined) {
+      if (optionType === 'string') {
+        sessionOptions[key] = validateString(value);
+      } else if (optionType === 'Array') {
+        sessionOptions[key] = validateArray(value);
+      }
+    } else {
+      handleError(`${key} is not a valid option`);
+    }
+  });
+  return sessionOptions;
 };
 
 const sanitizeSessionOptions = (options) => {
@@ -121,6 +156,14 @@ const sanitizeSessionOptions = (options) => {
     }
   });
 
+  if (sessionOptions.iceConfig) {
+    const customTurnOptions = sanitizeCustomTurnOptions(
+      sessionOptions.iceConfig
+    );
+    each(customTurnOptions, (value, key) => {
+      sessionOptions[key] = customTurnOptions[key];
+    });
+  }
   return sessionOptions;
 };
 
@@ -130,16 +173,16 @@ const sanitizeSignalData = (signal) => {
       signal: {
         type: '',
         data: '',
-        to: '',
+        to: ''
       },
-      errorHandler: handleSignalError,
+      errorHandler: handleSignalError
     };
   }
   return {
     signal: {
       type: validateString(signal.type),
       data: validateString(signal.data),
-      to: validateString(signal.to),
+      to: validateString(signal.to)
     },
     errorHandler:
       typeof signal.errorHandler !== 'function'
@@ -186,5 +229,5 @@ export {
   sanitizeSignalData,
   sanitizeCredentials,
   getConnectionStatus,
-  isConnected,
+  isConnected
 };
