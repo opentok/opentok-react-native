@@ -92,7 +92,7 @@ public final class Utils {
 
     public static List<IceServer> sanitizeIceServer(ReadableArray serverList) {
         List<IceServer> iceServers = new ArrayList<>();
-        if (serverList.size() != 0) {
+        if (serverList != null) {
             for (int i = 0; i < serverList.size(); i++) {
                 for (int j = 0; j < serverList.getMap(i).getArray("urls").size(); j++) {
                     iceServers.add(new IceServer(
