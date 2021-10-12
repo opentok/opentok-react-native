@@ -68,25 +68,17 @@ public final class Utils {
 
     public static IncludeServers sanitizeIncludeServer(String value) {
         IncludeServers includeServers =  IncludeServers.All;
-        if (value != null) {
-            switch (value) {
-                case "custom":
-                    includeServers =  IncludeServers.Custom;
-                    break;
-            }
+        if (value != null && value.equals("custom")) {
+            includeServers = IncludeServers.Custom;
         }
         return includeServers;
     }
 
     public static TransportPolicy sanitizeTransportPolicy(String value) {
         TransportPolicy transportPolicy =  TransportPolicy.All;
-        if (value != null) {
-            switch (value) {
-                case "relay":
-                    transportPolicy =  TransportPolicy.Relay;
-                    break;
-            }
-        }    
+        if (value != null && value.equals("relay")) {
+            transportPolicy =  TransportPolicy.Relay;
+        }  
         return transportPolicy;
     }
 

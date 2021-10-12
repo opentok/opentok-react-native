@@ -106,7 +106,7 @@ class App extends Component {
         customServers: [
           {
 	        urls: [
-	          'turn:123.124.125.126:3478?transport=udp’',
+	          'turn:123.124.125.126:3478?transport=udp',
 	          'turn:123.124.125.126:3478?transport=tcp'
 	        ],
 	        username: 'webrtc',
