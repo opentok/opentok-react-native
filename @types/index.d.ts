@@ -132,13 +132,13 @@ declare module "opentok-react-native" {
      * Ice Config. Please check https://tokbox.com/developer/guides/configurable-turn-servers/
      */
     iceConfig?: {
-        includeServers: 'all' | 'custom';
-        transportPolicy: 'all' | 'relay';
-        customServers: {
-        urls: string[];
-        username?: string;
-        credential?: string;
-        }[];
+      includeServers: 'all' | 'custom';
+      transportPolicy: 'all' | 'relay';
+      customServers: {
+      urls: string[];
+      username?: string;
+      credential?: string;
+      }[];
     };
   }
 
