@@ -84,9 +84,10 @@ class App extends Component {
   
   * **streamPropertyChanged** (Object) - Sent when a stream has started or stopped publishing audio or video or if the video dimensions of the stream have changed.
 
-  ### Setting Session options:
+### Setting Session options:
 
   You can set the session options using the `options` prop. Please note that all session options are optional:
+  
 ```javascript
 class App extends Component {
   constructor(props) {
@@ -99,6 +100,20 @@ class App extends Component {
       isCamera2Capable: false, // Android only - default is false
       ipWhitelist: false, // https://tokbox.com/developer/sdks/js/reference/OT.html#initSession - ipWhitelist
       enableStereoOutput: true // Enable stereo output, default is false
+      iceConfig:{
+        transportPolicy: 'all', // Valid options are 'all' or 'relay'. Default is 'all'
+        includeServers: 'all', // Valid options are 'all' or 'custom'. Default is 'all'
+        customServers: [
+          {
+	        urls: [
+	          'turn:123.124.125.126:3478?transport=udp',
+	          'turn:123.124.125.126:3478?transport=tcp'
+	        ],
+	        username: 'webrtc',
+	        credential: 'foO0Bar1'
+      		},
+        ],
+      },
     };
   }
 
@@ -112,3 +127,14 @@ class App extends Component {
   }
 }
 ```
+
+#### Configurable Turn Servers
+
+You can customize TURN server usage for each client in the session in the following ways:
+
+- You can add a list of your own TURN servers that the client will use.
+- You can decide whether the client should use your TURN servers exclusively or use them in addition to the OpenTok TURN servers
+
+This feature is available as an [add-on feature](https://tokbox.com/pricing/plans).
+Please see [https://tokbox.com/developer/guides/configurable-turn-servers/](https://tokbox.com/developer/guides/configurable-turn-servers/) for a detailed documentation.
+

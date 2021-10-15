@@ -127,7 +127,19 @@ declare module "opentok-react-native" {
     /**
      * Enable Stereo output
      */
-    enableStereoOutput: boolean;
+    enableStereoOutput?: boolean;
+    /**
+     * Ice Config. Please check https://tokbox.com/developer/guides/configurable-turn-servers/
+     */
+    iceConfig?: {
+      includeServers: 'all' | 'custom';
+      transportPolicy: 'all' | 'relay';
+      customServers: {
+      urls: string[];
+      username?: string;
+      credential?: string;
+      }[];
+    };
   }
 
   interface OTSessionEventHandlers {

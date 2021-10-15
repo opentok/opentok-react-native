@@ -1,3 +1,9 @@
+# 0.19.0 (Oct 11, 2021)
+- [Update]: update SDKs Android to 2.20.2
+- [Update]: added IceConfig options in the Session Options object
+- [Fix]: added missing typings in @types/index.d.ts
+- [Fix]: fix crash in OTSubscriberLayout [#525](https://github.com/opentok/opentok-react-native/pull/525)
+
 # 0.18.0 (Jun 24, 2021)
 - [Update]: update SDKs iOS to 2.20.0 and Android to 2.20.1
 - [Fix]: fix crash in OTPublisherLayout when sessionId is null. Fix: https://github.com/opentok/opentok-react-native/issues/462#issuecomment-752171962
