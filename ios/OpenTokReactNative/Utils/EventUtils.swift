@@ -61,7 +61,7 @@ class EventUtils {
         videoStatsEventData["videoPacketsLost"] = videoStats.videoPacketsLost;
         videoStatsEventData["videoBytesReceived"] = videoStats.videoBytesReceived;
         videoStatsEventData["videoPacketsReceived"] = videoStats.videoPacketsReceived;
-        videoStatsEventData["timestamp"] = videoStats.timestamp;
+        videoStatsEventData["timeStamp"] = videoStats.timestamp;
         return videoStatsEventData;
     }
     
@@ -70,7 +70,7 @@ class EventUtils {
         audioStatsEventData["audioPacketsLost"] = audioStats.audioPacketsLost;
         audioStatsEventData["audioBytesReceived"] = audioStats.audioBytesReceived;
         audioStatsEventData["audioPacketsReceived"] = audioStats.audioPacketsReceived;
-        audioStatsEventData["timestamp"] = audioStats.timestamp;
+        audioStatsEventData["timeStamp"] = audioStats.timestamp;
         return audioStatsEventData;
     }
     
