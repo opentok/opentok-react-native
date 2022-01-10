@@ -62,6 +62,9 @@ RCT_EXTERN_METHOD(setPreferredFrameRate:
 RCT_EXTERN_METHOD(changeCameraPosition:
                   (NSString*)publisherId
                   cameraPosition:(NSString*)cameraPosition)
+RCT_EXTERN_METHOD(changeVideoContentHint:
+                  (NSString*)publisherId
+                  videoContentHint:(NSString*)videoContentHint)
 RCT_EXTERN_METHOD(setNativeEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(removeNativeEvents:

@@ -68,6 +68,8 @@ class OTPublisher extends Component {
         const value = useDefault(this.props.properties[key], defaultValue);
         if (key === 'cameraPosition') {
           OT.changeCameraPosition(this.state.publisherId, value);
+        } else if (key === 'videoContentHint') {
+          OT.changeVideoContentHint(this.state.publisherId, value);
         } else {
           OT[key](this.state.publisherId, value);
         }

@@ -107,4 +107,17 @@ class Utils {
         }
         return myICEServerConfiguration;
     }
+    
+    static func convertVideoContentHint(_ videoContentHint: String) -> String {
+        switch videoContentHint {
+        case "":
+            return OTVideoContentHint.OTVideoContentHintNone
+        case "motion":
+            return OTVideoContentHint.OTVideoContentHintMotion
+        case "detail":
+            return OTVideoContentHint.OTVideoContentHintDetail
+        case "text":
+            return OTVideoContentHint.OTVideoContentHintText
+        }
+    }
 }

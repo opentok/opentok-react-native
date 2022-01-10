@@ -8,6 +8,7 @@ import com.opentok.android.SubscriberKit;
 import com.opentok.android.Session.Builder.TransportPolicy;
 import com.opentok.android.Session.Builder.IncludeServers;
 import com.opentok.android.Session.Builder.IceServer;
+import com.opentok.android.BaseVideoCapturer.VideoContentHint;
 import com.opentokreactnative.OTRN;
 
 import com.facebook.react.bridge.ReadableArray;
@@ -97,5 +98,19 @@ public final class Utils {
             }
         }
         return iceServers;
+    }
+
+    public static VideoContentHint convertVideoContentHint(String videoContentHint) {
+
+        switch (videoContentHint) {
+            case "motion":
+                return VideoContentHint.MOTION;
+            case "detail":
+                return VideoContentHint.DETAIL;
+            case "text":
+                return VideoContentHint.TEXT;
+            default:
+                return VideoContentHint.NONE;
+        }
     }
 }
