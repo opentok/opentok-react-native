@@ -81,7 +81,7 @@ class OTSessionManager: RCTEventEmitter {
             publisherProperties.cameraFrameRate = Utils.sanitizeFrameRate(properties["frameRate"] as Any);
             publisherProperties.cameraResolution = Utils.sanitizeCameraResolution(properties["resolution"] as Any);
             publisherProperties.name = properties["name"] as? String;
-            publisherProperties.videoCapture.videoContentHint = Utils.convertVideoContentHint(properties["videoContentHint"] as Any)
+            publisherProperties.videoCapture?.videoContentHint = Utils.convertVideoContentHint(properties["videoContentHint"] as Any)
             OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
             guard let publisher = OTRN.sharedState.publishers[publisherId] else {
                 let errorInfo = EventUtils.createErrorMessage("There was an error creating the native publisher instance")
@@ -229,7 +229,7 @@ class OTSessionManager: RCTEventEmitter {
     
     @objc func changeVideoContentHint(_ publisherId: String, videoContentHint: String) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
-        publisher.videoCapture.videoContentHint = Utils.convertVideoContentHint(videoContentHint);
+        publisher.videoCapture?.videoContentHint = Utils.convertVideoContentHint(videoContentHint);
     }
     
     @objc func setNativeEvents(_ events: Array<String>) -> Void {
