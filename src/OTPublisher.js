@@ -79,6 +79,7 @@ class OTPublisher extends Component {
     updatePublisherProperty('publishAudio', true);
     updatePublisherProperty('publishVideo', true);
     updatePublisherProperty('cameraPosition', 'front');
+    updatePublisherProperty('videoContentHint', '');
   }
   componentWillUnmount() {
     OT.destroyPublisher(this.state.publisherId, (error) => {
