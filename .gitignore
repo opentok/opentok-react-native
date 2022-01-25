@@ -20,10 +20,3 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-
-# Android Studio
-
-android/.idea
-android/.gradle
-android/.project
-android/.settings
