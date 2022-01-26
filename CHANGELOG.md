@@ -1,3 +1,6 @@
+# 0.20.0 (Jan 26, 2022)
+- [Update]: update SDKs iOS to 2.21.3 and Android to 2.21.4 
+
 # 0.19.0 (Oct 11, 2021)
 - [Update]: update SDKs Android to 2.20.2
 - [Update]: added IceConfig options in the Session Options object
