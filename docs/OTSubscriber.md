@@ -78,6 +78,14 @@ class App extends Component {
       error: (error) => {
         console.log(`There was an error with the subscriber: ${error}`);
       },
+      audioNetworkStats: event => {
+        console.log('audioNetworkStats', event);
+        // { timeStamp: 1643203644833, audioPacketsLost: 0, audioPacketsReceived: 64, audioBytesReceived: 5574 }
+      },
+      videoNetworkStats: event => {
+        console.log('videoNetworkStats', event);
+        // videoBytesReceived: 706635, videoPacketsLost: 0, timeStamp: 1643203644724, videoPacketsReceived: 656 }
+      },
     };
   }
 
