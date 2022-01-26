@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'OpenTok','~> 2.20.0'
+  s.dependency 'OpenTok','~> 2.21.3'
 end
