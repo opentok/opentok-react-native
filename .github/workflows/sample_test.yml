@@ -44,7 +44,7 @@ jobs:
             pod update opentok-react-native
             pod install
             cat Podfile.lock
-            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.4'
+            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.0'
           else
             ./gradlew app:assembleRelease
           fi
