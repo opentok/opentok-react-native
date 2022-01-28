@@ -33,6 +33,19 @@ const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera
 const sanitizeAudioBitrate = (audioBitrate = 40000) =>
   (audioBitrate < 6000 || audioBitrate > 510000 ? 40000 : audioBitrate);
 
+const sanitizeVideoContentHint = (sanitizeVideoContentHint = '') => {
+  switch (sanitizeVideoContentHint) {
+    case 'motion':
+      return 'motion';
+    case 'detail':
+      return 'detail';
+    case 'text':
+      return 'text';
+    default:
+      return '';
+  }
+};
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
@@ -46,6 +59,7 @@ const sanitizeProperties = (properties) => {
       audioBitrate: 40000,
       frameRate: 30,
       resolution: sanitizeResolution(),
+      videoContentHint: '',
       videoSource: 'camera',
     };
   }
@@ -60,6 +74,7 @@ const sanitizeProperties = (properties) => {
     audioBitrate: sanitizeAudioBitrate(properties.audioBitrate),
     frameRate: sanitizeFrameRate(properties.frameRate),
     resolution: sanitizeResolution(properties.resolution),
+    videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
     videoSource: sanitizeVideoSource(properties.videoSource),
   };
 };
