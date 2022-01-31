@@ -178,6 +178,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             if (cameraPosition.equals("back")) {
                 mPublisher.cycleCamera();
             }
+            if (mPublisher.getCapturer() != null) {
+                mPublisher.getCapturer().setVideoContentHint(Utils.convertVideoContentHint(properties.getString("videoContentHint")));
+            }
         }
         mPublisher.setPublisherListener(this);
         mPublisher.setAudioLevelListener(this);
@@ -360,6 +363,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
             mPublisher.cycleCamera();
+        }
+    }
+
+    @ReactMethod
+    public void changeVideoContentHint(String publisherId, String videoContentHint) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null && mPublisher.getCapturer() != null) {
+            mPublisher.getCapturer().setVideoContentHint(Utils.convertVideoContentHint(videoContentHint));
         }
     }
 

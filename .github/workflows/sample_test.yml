@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Xcode version
+        uses: maxim-lobanov/setup-xcode@v1.4.1
+        with: 
+          xcode-version: '13.1'
       - name: Pack Library
         run: |
             npm pack
@@ -44,7 +48,7 @@ jobs:
             pod update opentok-react-native
             pod install
             cat Podfile.lock
-            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.4'
+            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.0'
           else
             ./gradlew app:assembleRelease
           fi
