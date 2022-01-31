@@ -33,6 +33,8 @@
   * **publishVideo** (Boolean) — Whether to publish video.
 
   * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+  
+  * **videoContentHint** (String) — Sets the content hint of the video track of the publisher's stream. You can set this to one of the following values: "", "motion", "details" or "text". For additional information, check the Video API [Documentation](https://tokbox.com/developer/sdks/js/reference/OT.html#initPublisher).
 
   * **videoTrack** (Boolean) — If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
 
