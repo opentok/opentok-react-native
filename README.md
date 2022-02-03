@@ -124,6 +124,45 @@ If you try to archive the app and it fails, please do the following:
 
 Newer versions of Android–`API Level 23` (Android 6.0)–have a different permissions model that is already handled by this library.
 
+#### Bintray sunset
+
+Bintray support has ended (official announce: [https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/)). On your app build.gradle file you need to remove reference to `jcenter` and replace it to `mavenCentral`. Example: 
+
+```
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ...
+    repositories {
+        google()
+        mavenCentral()
+    }
+    ...
+}
+
+allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
+        google()
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+```
+
 ## Samples
 
 To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo.
