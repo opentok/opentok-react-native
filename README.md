@@ -6,11 +6,13 @@
 React Native library for OpenTok iOS and Android SDKs
 
 - [opentok-react-native](#opentok-react-native)
+  - [Please note that this library is not officially supported by Vonage.](#please-note-that-this-library-is-not-officially-supported-by-vonage)
     - [In this repo, you'll find the OpenTok React Native library:](#in-this-repo-youll-find-the-opentok-react-native-library)
   - [Pre-Requisites:](#pre-requisites)
   - [Installation:](#installation)
     - [iOS Installation](#ios-installation)
     - [Android Installation](#android-installation)
+      - [Bintray sunset](#bintray-sunset)
   - [Samples](#samples)
   - [Development and Contributing](#development-and-contributing)
   - [Getting Help](#getting-help)
@@ -126,7 +128,7 @@ Newer versions of Android–`API Level 23` (Android 6.0)–have a different perm
 
 #### Bintray sunset
 
-Bintray support has ended (official announce: [https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/)). On your app build.gradle file you need to remove reference to `jcenter` and replace it to `mavenCentral`. Example: 
+Bintray support has ended (official announcement: [https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/)). In your app build.gradle file you need to remove reference to `jcenter` and replace it with `mavenCentral`. Example:
 
 ```
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
