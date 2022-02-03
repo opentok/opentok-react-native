@@ -298,7 +298,7 @@ declare module "opentok-react-native" {
     /**
      * The audio level, from 0 to 1.0. Adjust this value logarithmically for use in adjusting a user interface element, such as a volume meter. Use a moving average to smooth the data.
      */
-    audioLevel?: CallbackWithParam<string>;
+    audioLevel?: CallbackWithParam<number>;
 
     /**
      * Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
