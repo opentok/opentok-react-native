@@ -1,4 +1,4 @@
-# opentok-react-native
+# opentok-react-native 
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
