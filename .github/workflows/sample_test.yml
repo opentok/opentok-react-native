@@ -29,11 +29,11 @@ jobs:
         with:
           repository: opentok/opentok-react-native-samples
           path: samples
-      - name: Set up JDK 1.8
+      - name: Set up JDK
         if: ${{ matrix.platform == 'android' }}
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
       - name: NPM install ${{ matrix.project }}
         run: |
           cd samples/${{ matrix.project }}
