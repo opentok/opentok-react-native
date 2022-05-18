@@ -1,3 +1,7 @@
+# 0.20.3 (May 18, 2022)
+
+- [Fix]: Updates from DependatBot
+
 # 0.20.2 (May 16, 2022)
 
 - [Update]: Readme file update with Bintray instructions
