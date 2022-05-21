@@ -1,3 +1,13 @@
+# 0.20.3 (May 18, 2022)
+
+- [Fix]: Updates from DependatBot
+
+# 0.20.2 (May 16, 2022)
+
+- [Update]: Readme file update with Bintray instructions
+- [Update]: Android Native SDK to 2.21.5 and iOS to 2.21.3
+- [Fix]: Typescrit types fixed audioLevel
+
 # 0.20.1 (Jan 28, 2022)
 - [Update]: Add Content Hint API on the OTPublisher object
 - [Update]: Add timestamp property on the audioNetworkStats and videoNetworkStats
