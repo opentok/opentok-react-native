@@ -6,9 +6,8 @@ package com.opentokreactnative;
 
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.view.View;
-
 import androidx.annotation.Nullable;
+import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -156,8 +155,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         String videoSource = properties.getString("videoSource");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
-            View view = getCurrentActivity().getWindow().getDecorView().getRootView();
-            OTScreenCapturer capturer = new OTScreenCapturer(view);
+            OTScreenCapturer capturer = new OTScreenCapturer(this.getReactApplicationContext());
             mPublisher = new Publisher.Builder(this.getReactApplicationContext())
                     .audioTrack(audioTrack)
                     .videoTrack(videoTrack)

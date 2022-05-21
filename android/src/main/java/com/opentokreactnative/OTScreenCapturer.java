@@ -1,89 +1,40 @@
 package com.opentokreactnative;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.os.Handler;
+import android.media.Image;
+import android.media.ImageReader;
 import android.view.View;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.opentok.android.BaseVideoCapturer;
 
-public class OTScreenCapturer extends BaseVideoCapturer {
+import java.nio.ByteBuffer;
 
+public class OTScreenCapturer extends BaseVideoCapturer implements ImageReader.OnImageAvailableListener {
     private boolean capturing = false;
-    private View contentView;
+    private ReactApplicationContext reactContext;
 
-    private int fps = 15;
-    private int width = 20;
-    private int height = 20;
-    private int[] frame;
+    private OTNativeScreenRecorder nativeScreenRecorder;
 
-    private Bitmap bmp;
-    private Canvas canvas;
-
-    private Handler mHandler = new Handler();
-
-    private Runnable newFrame = new Runnable() {
-        @Override
-        public void run() {
-            if (capturing) {
-                int width = contentView.getWidth();
-                int height = contentView.getHeight();
-
-                if (frame == null ||
-                        OTScreenCapturer.this.width != width ||
-                        OTScreenCapturer.this.height != height) {
-
-                    OTScreenCapturer.this.width = width;
-                    OTScreenCapturer.this.height = height;
-
-                    if (bmp != null) {
-                        bmp.recycle();
-                        bmp = null;
-                    }
-                    bmp = Bitmap.createBitmap(width,
-                            height, Bitmap.Config.ARGB_8888);
-
-                    canvas = new Canvas(bmp);
-                    frame = new int[width * height];
-                }
-                canvas.save();
-                canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
-                contentView.draw(canvas);
-
-                bmp.getPixels(frame, 0, width, 0, 0, width, height);
-
-                provideIntArrayFrame(frame, ARGB, width, height, 0, false);
-
-                canvas.restore();
-
-                mHandler.postDelayed(newFrame, 1000 / fps);
-
-            }
-        }
-    };
-
-    public OTScreenCapturer(View view) {
-        this.contentView = view;
+    public OTScreenCapturer(ReactApplicationContext reactContext) {
+        this.reactContext = reactContext;
+        this.nativeScreenRecorder = new OTNativeScreenRecorder(reactContext, this);
     }
 
     @Override
-    public void init() {
-
-    }
+    public void init() {}
 
     @Override
     public int startCapture() {
         capturing = true;
-
-        mHandler.postDelayed(newFrame, 1000 / fps);
+        nativeScreenRecorder.startRecording();
         return 0;
     }
 
     @Override
     public int stopCapture() {
         capturing = false;
-        mHandler.removeCallbacks(newFrame);
+        nativeScreenRecorder.stopRecording();
         return 0;
     }
 
@@ -96,9 +47,9 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     public CaptureSettings getCaptureSettings() {
 
         CaptureSettings settings = new CaptureSettings();
-        settings.fps = fps;
-        settings.width = width;
-        settings.height = height;
+        settings.fps = 15;
+        settings.width = nativeScreenRecorder.screenWidth;
+        settings.height = nativeScreenRecorder.screenHeight;
         settings.format = ARGB;
         return settings;
     }
@@ -118,4 +69,42 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
     }
 
+    @Override
+    public void onImageAvailable(final ImageReader reader) {
+        Image image = null;
+        Bitmap bitmap = null;
+        try {
+            image = reader.acquireNextImage();
+
+            if (image != null) {
+                Image.Plane[] planes = image.getPlanes();
+                ByteBuffer buffer = planes[0].getBuffer();
+                buffer.rewind();
+
+                int pixelStride = planes[0].getPixelStride();
+                int rowStride = planes[0].getRowStride();
+                int rowPadding = rowStride - pixelStride * reader.getWidth();
+                int bitmapWidth = reader.getWidth() + rowPadding / pixelStride;
+                bitmap = Bitmap.createBitmap(bitmapWidth, reader.getHeight(), Bitmap.Config.ARGB_8888);
+                bitmap.copyPixelsFromBuffer(buffer);
+
+                int width = nativeScreenRecorder.screenWidth;
+                int height = nativeScreenRecorder.screenHeight;
+                int[] frame = new int[width * height];
+                bitmap.getPixels(frame, 0, width, 0, 0, width, height);
+
+                provideIntArrayFrame(frame, ARGB, width, height, 0, false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+
+            if (image != null) {
+                image.close();
+            }
+        }
+    }
 }
