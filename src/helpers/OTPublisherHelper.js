@@ -73,7 +73,7 @@ const sanitizeProperties = (properties) => {
     cameraPosition: sanitizeCameraPosition(properties.cameraPosition),
     audioFallbackEnabled: sanitizeBooleanProperty(properties.audioFallbackEnabled),
     audioBitrate: sanitizeAudioBitrate(properties.audioBitrate),
-    enableDtx: sanitizeBooleanProperty(properties.enableDtx),
+    enableDtx: sanitizeBooleanProperty(properties.enableDtx ? properties.enableDtx : false),
     frameRate: sanitizeFrameRate(properties.frameRate),
     resolution: sanitizeResolution(properties.resolution),
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
