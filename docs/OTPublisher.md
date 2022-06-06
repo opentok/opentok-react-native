@@ -23,6 +23,8 @@
   * **audioTrack** (Boolean) — If this property is set to false, the audio subsystem will not be initialized for the publisher, and setting the publishAudio property will have no effect. If your application does not require the use of audio, it is recommended to set this property rather than use the publishAudio property, which only temporarily disables the audio track.
 
   * **cameraPosition** (String) - The preferred camera position. When setting this property, if the change is possible, the publisher will use the camera with the specified position. Valid Inputs: 'front' or 'back'
+
+  * **enableDtx** (Boolean) - Whether to enable [Opus DTX](https://datatracker.ietf.org/doc/html/rfc7587#section-3.1.3). The default value is false. Setting this to true can reduce bandwidth usage in streams that have long periods of silence.
   
   * **frameRate** (Number) - The desired frame rate, in frames per second, of the video. Valid values are 30, 15, 7, and 1. The published stream will use the closest value supported on the publishing client. The frame rate can differ slightly from the value you set, depending on the device of the client. And the video will only use the desired frame rate if the client configuration supports it. 
 
