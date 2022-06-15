@@ -50,6 +50,7 @@ jobs:
             cat Podfile.lock
             xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.0'
           else
+            ./gradlew -Dorg.gradle.jvmargs=-Xmx4g
             ./gradlew app:assembleRelease
           fi
           
