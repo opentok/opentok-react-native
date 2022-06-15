@@ -37,7 +37,7 @@ jobs:
       - name: NPM install ${{ matrix.project }}
         run: |
           cd samples/${{ matrix.project }}
-          npm install
+          npm install --legacy-peer-deps
           npm install ../../new.tgz
           cat package.json
       - name: Build ${{ matrix.project }} ${{ matrix.platform }}
@@ -50,7 +50,7 @@ jobs:
             cat Podfile.lock
             xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.0'
           else
-            ./gradlew app:assembleRelease
+            ./gradlew -Dorg.gradle.jvmargs=-Xmx4g app:assembleRelease
           fi
           
           

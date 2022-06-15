@@ -1,3 +1,8 @@
+# 0.21.0 (June 14, 2022)
+
+- [Update]: Add DTX Option for Publisher
+- [Update]: Android Native SDK to 2.22.3 and iOS to 2.22.3
+
 # 0.20.3 (May 18, 2022)
 
 - [Fix]: Updates from DependatBot

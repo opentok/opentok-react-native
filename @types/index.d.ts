@@ -259,6 +259,11 @@ declare module "opentok-react-native" {
     cameraPosition?: "front" | "back";
 
     /**
+     * Whether to enable Opus DTX. The default value is false. Setting this to true can reduce bandwidth usage in streams that have long periods of silence.
+     */
+    enableDtx?: boolean;
+
+    /**
      * The desired frame rate, in frames per second, of the video. Valid values are 30, 15, 7, and 1. The published stream will use the closest value supported on the publishing client. The frame rate can differ slightly from the value you set, depending on the device of the client. And the video will only use the desired frame rate if the client configuration supports it.
      */
     frameRate?: 30 | 15 | 7 | 1;
