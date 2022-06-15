@@ -1,5 +1,5 @@
 import React, { Component, Children, cloneElement } from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import { View } from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { pick, isNull } from 'underscore';
