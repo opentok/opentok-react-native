@@ -1,3 +1,7 @@
+# 0.20.4 (July 29, 2022)
+
+- [Fix]: Removed Prop Types deprecation
+
 # 0.20.3 (May 18, 2022)
 
 - [Fix]: Updates from DependatBot
