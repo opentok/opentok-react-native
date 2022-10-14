@@ -1,3 +1,9 @@
+# 0.21.1 (Oct 14, 2022)
+
+- [Update]: iOS SDK to 2.23.1 and Android to 2.23.1
+- [Update]: min target for iOS is now 12.0
+
+
 # 0.21.0 (June 14, 2022)
 
 - [Update]: Add DTX Option for Publisher
