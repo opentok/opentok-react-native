@@ -10,12 +10,12 @@ Pod::Spec.new do |s|
 
   s.authors       = package['author']
   s.homepage      = package['homepage']
-  s.platform      = :ios, "9.0"
+  s.platform      = :ios, "12.0"
   s.swift_version = "4.2"
 
   s.source        = { :git => "https://github.com/opentok/opentok-react-native.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'OpenTok','~> 2.22.3'
+  s.dependency 'OTXCFramework','2.23.1'
 end

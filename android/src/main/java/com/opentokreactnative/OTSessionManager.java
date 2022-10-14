@@ -412,6 +412,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         }
     }
 
+    // Required for rn built in EventEmitter Calls.
+    @ReactMethod
+    public void addListener(String eventName) {
+
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+
+    }
+
+
     @ReactMethod
     public void sendSignal(String sessionId, ReadableMap signal, Callback callback) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
