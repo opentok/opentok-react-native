@@ -84,10 +84,9 @@ export default class OTSession extends Component {
     OT.disconnectSession(this.props.sessionId, (disconnectError) => {
       if (disconnectError) {
         this.otrnEventHandler(disconnectError);
-      } else {
-        const events = sanitizeSessionEvents(this.props.sessionId, this.props.eventHandlers);
-        removeNativeEvents(events);
       }
+      const events = sanitizeSessionEvents(this.props.sessionId, this.props.eventHandlers);
+      removeNativeEvents(events);
     });
   }
   getSessionInfo() {
