@@ -107,7 +107,6 @@ export default class OTSession extends Component {
   }
 
   sessionDisconnectedHandler = (session) => {
-    console.log("sessionDisconnectedHandler", session);
     const events = sanitizeSessionEvents(this.props.sessionId, this.props.eventHandlers);
     removeNativeEvents(events);
   };
