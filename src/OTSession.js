@@ -24,16 +24,18 @@ export default class OTSession extends Component {
     this.initComponent();
   }
   initComponent = () => {
-    const credentials = pick(this.props, ['apiKey', 'sessionId', 'token']);
+    const credentials = pick(this.props, ["apiKey", "sessionId", "token"]);
     this.sanitizedCredentials = sanitizeCredentials(credentials);
     if (Object.keys(this.sanitizedCredentials).length === 3) {
-      this.sessionDisconnected = nativeEvents.addListener(`${sessionId}:${this.componentEvents.sessionDisconnected}`, (session) =>
-        this.sessionDisconnectedHandler(session)
-      );
       const sessionEvents = sanitizeSessionEvents(this.sanitizedCredentials.sessionId, this.props.eventHandlers);
       setNativeEvents(sessionEvents);
+      OT.setJSComponentEvents(this.componentEventsArray);
+      this.sessionDisconnected = nativeEvents.addListener(`${this.props.sessionId}:${this.componentEvents.sessionDisconnected}`, (session) =>
+        this.sessionDisconnectedHandler(session)
+      );
+      
     }
-  }
+  };
   componentDidMount() {
     const sessionOptions = sanitizeSessionOptions(this.props.options);
     const { apiKey, sessionId, token } = this.sanitizedCredentials;
