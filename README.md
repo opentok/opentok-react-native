@@ -3,6 +3,7 @@
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
 ## Please note that this library is not officially supported by Vonage.
+
 React Native library for OpenTok iOS and Android SDKs
 
 - [opentok-react-native](#opentok-react-native)
@@ -44,6 +45,8 @@ React Native library for OpenTok iOS and Android SDKs
 
 **Note:** Please make sure to have [CocoaPods](https://cocoapods.org/) on your computer.
 If you've installed this package before, you may need to edit your `Podfile` and project structure because the installation process has changed.
+
+**Note:** From version 2.22.0, the SDK added support for XCFramework. The package will use `OTXCFramework` on the podspec and not `OpentTok`.
 
 1. In you terminal, change into the `ios` directory of your React Native project.
 
