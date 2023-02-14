@@ -120,7 +120,9 @@ declare module "opentok-react-native" {
     useTextureViews?: boolean;
 
     /**
-     * Android only - default is false
+     * Android only - default is false.
+     * Deprecated and ignored.
+     
      */
     isCamera2Capable?: boolean;
 

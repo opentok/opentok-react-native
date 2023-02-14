@@ -97,7 +97,6 @@ class App extends Component {
       androidZOrder: '', // Android only - valid options are 'mediaOverlay' or 'onTop'
       androidOnTop: '',  // Android only - valid options are 'publisher' or 'subscriber'
       useTextureViews: true,  // Android only - default is false
-      isCamera2Capable: false, // Android only - default is false
       ipWhitelist: false, // https://tokbox.com/developer/sdks/js/reference/OT.html#initSession - ipWhitelist
       enableStereoOutput: true // Enable stereo output, default is false
       iceConfig:{
