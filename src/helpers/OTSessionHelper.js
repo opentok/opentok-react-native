@@ -96,7 +96,6 @@ const sanitizeSessionOptions = (options) => {
 
   if (platform === 'android') {
     sessionOptions = {
-      isCamera2Capable: false,
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
@@ -131,7 +130,6 @@ const sanitizeSessionOptions = (options) => {
     android: {
       connectionEventsSuppressed: 'boolean',
       useTextureViews: 'boolean',
-      isCamera2Capable: 'boolean',
       androidOnTop: 'string',
       androidZOrder: 'string',
       ipWhitelist: 'boolean',
