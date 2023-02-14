@@ -1,8 +1,12 @@
+# 0.21.2 (February 14, 2023)
+
+- [Update]: iOS SDK to 2.23.1 and Android to 2.23.1
+- [Fix]: Fix video freeze issue in Android 13 simulator (API level 33) - issue #628
+
 # 0.21.1 (Oct 14, 2022)
 
 - [Update]: iOS SDK to 2.23.1 and Android to 2.23.1
 - [Update]: min target for iOS is now 12.0
-
 
 # 0.21.0 (June 14, 2022)
 
