@@ -100,6 +100,11 @@ declare module "opentok-react-native" {
     connectionEventsSuppressed?: boolean;
 
     /**
+     * EU proxy server URL provided by vonage. Please check https://tokbox.com/developer/guides/eu-proxy/
+     */
+     proxyUrl?: string;
+
+     /**
      * Android only - valid options are 'mediaOverlay' or 'onTop'
      */
     androidZOrder?: "mediaOverlay" | "onTop";
@@ -115,7 +120,9 @@ declare module "opentok-react-native" {
     useTextureViews?: boolean;
 
     /**
-     * Android only - default is false
+     * Android only - default is false.
+     * Deprecated and ignored.
+     
      */
     isCamera2Capable?: boolean;
 

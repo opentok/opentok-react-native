@@ -78,7 +78,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void initSession(String apiKey, String sessionId, ReadableMap sessionOptions) {
 
         final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
-        final boolean isCamera2Capable = sessionOptions.getBoolean("isCamera2Capable");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
         final boolean enableStereoOutput = sessionOptions.getBoolean("enableStereoOutput");
@@ -102,11 +101,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     @Override
                     public boolean useTextureViews() {
                         return useTextureViews;
-                    }
-
-                    @Override
-                    public boolean isCamera2Capable() {
-                        return isCamera2Capable;
                     }
                 })
                 .connectionEventsSuppressed(connectionEventsSuppressed)
