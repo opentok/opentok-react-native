@@ -82,6 +82,10 @@ PublisherKit.AudioStatsListener and PublisherKit.VideoStatsListener interfaces i
 SDK and the `OTPublisherKitNetworkStatsDelegate` protocal in the OpenTok iOS SDK) have not been
 implemented.
 
+* **API enhancements from OpenTok Android and iOS SDK v2.23+** -- These features include
+per-subscriber audio volume control, scalable video support for screen sharing, and support
+for publishing FHD (1920x1080-pixel) streams. These have not been implemented.
+
 To build Android and iOS apps that use these features, use the
 [OpenTok Android SDK](https://tokbox.com/developer/sdks/android/)
 and the [OpenTok iOS SDK](https://tokbox.com/developer/sdks/ios/).
