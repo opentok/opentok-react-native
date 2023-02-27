@@ -53,7 +53,7 @@ video renderer that renders streams and provides user interface controls for dis
 the stream name and muting the microphone or camera. Publishers and subscribers use
   `mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL)`
   
-* **Codec detection support** -- There is no support to detect
+* **Codec detection support** -- There is no way to detect
 [video codecs](https://tokbox.com/developer/guides/codecs/) supported on a device.
 
 * **Scalable video for screen-sharing videos** -- [This](https://tokbox.com/developer/guides/scalable-video/)
@@ -68,7 +68,7 @@ no support for events and methods related to the
 can publish or force mute, based on the roles assigned to the
 [client token](https://tokbox.com/developer/guides/create-token).
 
-* **Reporting issues** -- There is no way to programatically report that your app experienced an issue
+* **Reporting issues** -- There is no way to programmatically report that your app experienced an issue
 (to view with [Inspector](http://tokbox.com/developer/tools/Inspector) or to discuss with
 the Vonage API support team.)
  
@@ -79,7 +79,7 @@ in the OpenTok iOS SDK.
 
 * **Publisher audio level and video level events** -- These events (corresponding to the 
 PublisherKit.AudioStatsListener and PublisherKit.VideoStatsListener interfaces in the OpenTok Android
-SDK and the `OTPublisherKitNetworkStatsDelegate` protocal in the OpenTok iOS SDK) have not been
+SDK and the `OTPublisherKitNetworkStatsDelegate` protocol in the OpenTok iOS SDK) have not been
 implemented.
 
 * **API enhancements from OpenTok Android and iOS SDK v2.23+** -- These features include
