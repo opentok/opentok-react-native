@@ -2,22 +2,20 @@
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-## Please note that this library is not officially supported by Vonage.
-React Native library for OpenTok iOS and Android SDKs
+React Native library for using [OpenTok](https://tokbox.com/developer/).
 
-- [opentok-react-native](#opentok-react-native)
-  - [Please note that this library is not officially supported by Vonage.](#please-note-that-this-library-is-not-officially-supported-by-vonage)
-    - [In this repo, you'll find the OpenTok React Native library:](#in-this-repo-youll-find-the-opentok-react-native-library)
-  - [Pre-Requisites:](#pre-requisites)
-  - [Installation:](#installation)
-    - [iOS Installation](#ios-installation)
-    - [Android Installation](#android-installation)
-      - [Bintray sunset](#bintray-sunset)
-  - [Samples](#samples)
-  - [Development and Contributing](#development-and-contributing)
-  - [Getting Help](#getting-help)
+**Important:** Please note that this library is not officially supported by Vonage.
 
-### In this repo, you'll find the OpenTok React Native library:
+- [Pre-Requisites:](#pre-requisites)
+- [Installation:](#installation)
+  - [iOS Installation](#ios-installation)
+  - [Android Installation](#android-installation)
+- [Samples](#samples)
+- [Docs](#docs)
+- [Development and Contributing](#development-and-contributing)
+- [Getting Help](#getting-help)
+
+In this repo, you'll find the OpenTok React Native library.
 
 ## Pre-Requisites:
 
@@ -164,6 +162,10 @@ allprojects {
     }
 }
 ```
+
+## Docs
+
+See the [docs](/docs/index.mg).
 
 ## Samples
 

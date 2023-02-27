@@ -1,111 +1,265 @@
-## Event Data
+# Event data
 
-Below, you will find the strucutre of the event objects broken down by event type.
+You can register event handler functions with the `eventHandlers` property of the
+OTSession, OTPublisher, and OTSubscriber components:
 
-### Archive Event
+```javascript
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-You can find the structure of the object below: 
+    this.sessionEventHandlers = {
+      streamCreated: event => {
+        console.log('Stream created!', event);
+      },
+      streamDestroyed: event => {
+        console.log('Stream destroyed!', event);
+      },
+      sessionConnected: event => {
+        console.log('Connected to the session!');
+      },
+      sessionDisconnected: event => {
+        console.log('Disconnected from the session!');
+      }
+    };
+
+    this.subscriberEventHandlers = {
+      streamCreated: event => {
+        console.log('Stream created!', event);
+      },
+      streamDestroyed: event => {
+        console.log('Stream destroyed!', event);
+      },
+      sessionConnected: event => {
+        this.setState({
+          isConnected: true,
+        })
+      }
+    };
+  }
+
+  render() {
+    return (
+      <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token" eventHandlers={this.sesssionEventHandlers}>
+        <OTPublisher eventHandlers={this.publisherEventHandlers}/>
+        <OTSubscriber eventHandlers={this.suscriberEventHandlers} />
+      </OTSession>
+    );
+  }
+}
+```
+
+The following sections define the structure of different event objects.
+
+## ArchiveEvent
+
+The OTSession object dispatches `archiveStarted` and `archiveStopped` events
+when an [archive](https://tokbox.com/developer/guides/archiving) starts and stops
+for a session. The event object has the following properties: 
 
 ```javascript
   archive = {
-    archiveId: '',
-    name: '',
-    sessionId: '',
+    archiveId: string, // The archive ID.
+    name: string, // The archive name.
+    sessionId: string, // The session ID.
   };
 ```
 
-### Audio Network Stats
+## AudioNetworkStats
 
-You can find the structure of the object below:
+To get audio data for a subscriber, register an event listener for the `audioNetworkStats` event.
+The event object has the following properties: 
 
 ```javascript
-  audioNetworkStats = {
-    audioPacketsLost: '',
-    audioBytesReceived: '',
-    audioPacketsReceived: '',
+  event = {
+    audioBytesReceived: number,
+    audioPacketsLost: number,
+    audioPacketsReceived: number,
+    timeStamp: number,
   };
 ```
 
-### Connection Event
+## ConnectionCreatedEvent
 
 You can find the structure of the object below: 
 
 ```javascript
-  connection = {
-    connectionId: '',
-    creationTime: '',
-    data: '',
-  };
+  event = {
+    sessionId: string;
+    connection = {
+      connectionId: string
+      creationTime: string,
+      data: string,
+    }
+  }
 ```
 
-### Error Event
+## ConnectionDestroyedEvent
+
+You can find the structure of the object below: 
+
+```javascript
+  event = {
+    sessionId: string;
+    connection = {
+      connectionId: string
+      creationTime: string,
+      data: string,
+    }
+  }
+```
+
+## ErrorEvent
+
 You can find the structure of the object below: 
 
 ```javascript
   error = {
-    code: '',
-    message: '',
+    code: string,
+    message: string,
+  };
+```
+## SessionConnectEvent
+
+```javascript
+event = {
+  sessionId: string;
+  connection: {
+    connectionId: string,
+    creationTime: string,
+    data: string,
+  },
+}
+```
+
+## SessionDisconnectEvent
+
+```javascript
+event = {
+  sessionId: string;
+}
+```
+
+## SignalEvent
+
+The OTSession object dispatches a `signal` event when a signal is received.
+See the [signaling developer guide](https://tokbox.com/developer/guides/signaling/).
+The event object has the following properties: 
+
+```javascript
+  event = {
+    type: string, // Either 'signal' or 'signal:type'.
+    data: string, // The data.
+    connectionId: string, // The connection ID of the client that sent the signal.
   };
 ```
 
-### Stream Event
+## StreamCreatedEvent
 
 You can find the structure of the object below: 
 
 ```javascript
   stream = {
-    streamId: '',
-    name: '',
-    connectionId: '', // This will be removed after v0.11.0 because it's exposed via the connection object
+    streamId: string;
+    name: string;
+    connectionId: string, // This will be removed after v0.11.0 because it's exposed via the connection object
     connection: {
-      connectionId: '',
-      creationTime: '',
-      data: '',
+      connectionId: string,
+      creationTime: string,
+      data: string,
     },
-    hasAudio: '',
-    hasVideo: '',
-    sessionId: '',
-    creationTime: '',
-    height: '',
-    width: '',
-    videoType: '', // camera or screen
+    hasAudio: boolean,
+    hasVideo: boolean,
+    sessionId: string,
+    creationTime: number,
+    height: number,
+    width: number,
+    videoType: string, // 'camera' or 'screen'
   };
 ```
 
-### Stream Property Changed event
+## StreamDestroyedEvent
+
+```javascript
+  event = {
+    streamId: string;
+    name: string;
+    connectionId: string;
+    connection: {
+      connectionId: string,
+      creationTime: string,
+      data: string,
+    },
+    hasAudio: boolean,
+    hasVideo: boolean,
+    sessionId: string,
+    creationTime: number,
+    height: number,
+    width: number,
+    videoType: string, // 'camera' or 'screen'
+  };
+```
+
+## StreamPropertyChangedEvent
 
 ```javascript
   event = {
     stream: {
-      streamId: '',
-      name: '',
-      connectionId: '', // This will be removed after v0.11.0 because it's exposed via the connection object
+      streamId: string,
+      name: string,
+      connectionId: string, // This will be removed after v0.11.0 because it's exposed via the connection object
       connection: {
-        connectionId: '',
-        creationTime: '',
-        data: '',
+        connectionId: string,
+        creationTime: number,
+        data: string,
       },
-      hasAudio: '',
-      hasVideo: '',
-      sessionId: '',
-      creationTime: '',
-      height: '',
-      width: '',
-      videoType: '', // camera or screen
+      hasAudio: boolean,
+      hasVideo: boolean,
+      sessionId: string,
+      creationTime: number,
+      height: number,
+      width: number,
+      videoType: string, // 'camera' or 'screen'
     },
-    oldValue: '',
-    newValue: '',
-    changedProperty: '',
+    oldValue: any,
+    newValue: any,
+    changedProperty: string,
   };
 ```
 
-### Video Network Stats
+## SubscriberAudioLevelEvent
+
+```javascript
+  event = {
+    audioLevel: number;
+    stream: {
+      streamId: string,
+      name: string,
+      connectionId: string, // This will be removed after v0.11.0 because it's exposed via the connection object
+      connection: {
+        connectionId: string,
+        creationTime: number,
+        data: string,
+      },
+      hasAudio: boolean,
+      hasVideo: boolean,
+      sessionId: string,
+      creationTime: number,
+      height: number,
+      width: number,
+      videoType: string, // 'camera' or 'screen'
+    },
+  };
+```
+
+## VideoNetworkStatsEvent
 You can find the structure of the object below:
 
 ```javascript
-  videoNetworkStats = {
-    videoPacketsLost: '',
-    videoBytesReceived: '',
-    videoPacketsReceived: '',
+  event = {
+    videoPacketsLost: number,
+    videoBytesReceived: number,
+    videoPacketsReceived: number,
+    timestamp: number
   };
 ```

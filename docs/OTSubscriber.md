@@ -23,9 +23,11 @@
 The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting. The `OTSubscriber` component will stop subscribing and unsubscribing when it's unmounting.
 
 ## Events
-  * **audioLevel** (String) — Sent on a regular interval with the recent representative audio level.
+  * **audioLevel** (SubscriberAudioLevelEvent) — Sent on a regular interval with the recent representative audio level.
+  See [SubscriberAudioLevelEvent](./EventData.md#SubscriberAudioLevelEvent)
 
   * **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the subscriber.
+  Am [SessionConnectEvent](./EventData.md#SessionConnectEvent) object is passed into the event handler.
 
   * **connected** () — Sent when the subscriber successfully connects to the stream.
 
