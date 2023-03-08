@@ -1,3 +1,7 @@
+# 0.21.3
+
+- [Update]: iOS SDK to 2.24.2 and Android to 2.24.2 - issue #629
+
 # 0.21.2 (February 14, 2023)
 
 - [Update]: iOS SDK to 2.23.1 and Android to 2.23.1
