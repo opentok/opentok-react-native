@@ -934,6 +934,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamHasAudioChanged");
     }
+
+    @Override
+    public void onStreamHasCaptionsChanged(Session session, Stream stream, boolean hasCaptions) {
+        WritableMap eventData = Arguments.createMap();
+        if (stream != null) {
+          eventData.putMap("stream", EventUtils.prepareJSStreamMap(stream, session));
+        }
+        eventData.putBoolean("hasCaptions", hasCaptions);
+        sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamHasCaptionsChanged", eventData);
+        printLogs("onStreamHasCaptionsChanged");
+    }
+
     @Override
     public void onStreamHasVideoChanged(Session session, Stream stream, boolean Video) {
 
