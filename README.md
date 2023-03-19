@@ -165,7 +165,7 @@ allprojects {
 
 ## Docs
 
-See the [docs](/docs/index.mg).
+See the [docs](/docs/index.md).
 
 ## Samples
 
