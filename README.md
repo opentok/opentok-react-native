@@ -99,19 +99,11 @@ If you try to archive the app and it fails, please do the following:
 
 3. Open your Android project in Android Studio.
 
-4. Add the following to your project `build.gradle` file:
+4. Sync Gradle
 
-```
-        maven {
-            url "http://tokbox.bintray.com/maven"
-        }
-```
+5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
-5. Sync Gradle
-
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
-
-7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+6. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
 ```xml
     <uses-permission android:name="android.permission.CAMERA" />
