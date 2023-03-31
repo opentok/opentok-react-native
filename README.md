@@ -4,6 +4,8 @@
 
 React Native library for using [OpenTok](https://tokbox.com/developer/).
 
+This library is now officially supported by Vonage.
+
 - [Pre-Requisites:](#pre-requisites)
 - [Installation:](#installation)
   - [iOS Installation](#ios-installation)
