@@ -4,16 +4,7 @@
 
 React Native library for using [OpenTok](https://tokbox.com/developer/).
 
-**Important:** Please note that this library is not officially supported by Vonage.
-
-- [Pre-Requisites:](#pre-requisites)
-- [Installation:](#installation)
-  - [iOS Installation](#ios-installation)
-  - [Android Installation](#android-installation)
-- [Samples](#samples)
-- [Docs](#docs)
-- [Development and Contributing](#development-and-contributing)
-- [Getting Help](#getting-help)
+This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
@@ -99,19 +90,11 @@ If you try to archive the app and it fails, please do the following:
 
 3. Open your Android project in Android Studio.
 
-4. Add the following to your project `build.gradle` file:
+4. Sync Gradle
 
-```
-        maven {
-            url "http://tokbox.bintray.com/maven"
-        }
-```
+5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
-5. Sync Gradle
-
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
-
-7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+6. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
 ```xml
     <uses-permission android:name="android.permission.CAMERA" />
