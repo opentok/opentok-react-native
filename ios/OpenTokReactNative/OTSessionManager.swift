@@ -104,6 +104,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.audioLevelDelegate = self;
+            publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
         }
     }
@@ -201,6 +202,11 @@ class OTSessionManager: RCTEventEmitter {
     @objc func publishVideo(_ publisherId: String, pubVideo: Bool) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.publishVideo = pubVideo;
+    }
+
+     @objc func getRtcStatsReport(_ publisherId: String) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.getRtcStatsReport()
     }
     
     @objc func subscribeToAudio(_ streamId: String, subAudio: Bool) -> Void {
@@ -527,6 +533,16 @@ extension OTSessionManager: OTPublisherKitAudioLevelDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioLevelUpdated", data: audioLevel)
+        }
+    }
+}
+
+extension OTSessionManager: OTPublisherKitRtcStatsReportDelegate {
+    func publisher(_ publisher: OTPublisherKit, rtcStatsReport stats: [OTPublisherRtcStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherRtcStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)rtcStatsReport", data: statsArray)
         }
     }
 }

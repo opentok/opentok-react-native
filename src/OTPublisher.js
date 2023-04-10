@@ -152,6 +152,9 @@ class OTPublisher extends Component {
       }
     );
   }
+  getRtcStatsReport() {
+    OT.getRtcStatsReport(this.state.publisherId);
+  }
   render() {
     const { publisher, publisherId } = this.state;
     const { sessionId } = this.context;
@@ -172,10 +175,12 @@ OTPublisher.propTypes = {
   ...viewPropTypes,
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  getRtcStatsReport: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 OTPublisher.defaultProps = {
   properties: {},
   eventHandlers: {},
+  getRtcStatsReport: {},
 };
 OTPublisher.contextType = OTContext;
 export default OTPublisher;

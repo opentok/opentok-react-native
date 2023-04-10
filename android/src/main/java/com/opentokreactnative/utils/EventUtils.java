@@ -1,12 +1,14 @@
 package com.opentokreactnative.utils;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.opentok.android.Connection;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.SubscriberKit;
+import com.opentok.android.PublisherKit;
 
 public final class EventUtils {
 
@@ -111,6 +113,17 @@ public final class EventUtils {
         videoStats.putInt("videoPacketsReceived", stats.videoPacketsReceived);
         videoStats.putDouble("timestamp", stats.timeStamp);
         return videoStats;
+    }
+
+    public static WritableArray preparePublisherRtcStats(PublisherKit.PublisherRtcStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherRtcStats stat : stats) {
+          WritableMap statMap = Arguments.createMap();
+          statMap.putString("connectionId", stat.connectionId);
+          statMap.putString("jsonArrayOfReports", stat.jsonArrayOfReports);
+          statsArrayMap.pushMap(statMap);
+        }
+        return statsArrayMap;
     }
 
     public static WritableMap createError(String message) {

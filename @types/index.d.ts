@@ -86,6 +86,11 @@ declare module "opentok-react-native" {
     timestamp: number,
   }
 
+  interface RtcStatsReportEvent {
+    connectionId: string,
+    jsonArrayOfReports: string,
+  }
+
   interface SignalEvent {
     sessionId: string;
     fromConnection: string;
@@ -273,6 +278,13 @@ declare module "opentok-react-native" {
      * Event handlers passed into native publsiher instance
      */
     eventHandlers?: OTPublisherEventHandlers;
+
+    /**
+     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
+     * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport?: any
   }
 
   interface OTPublisherProperties {
@@ -358,6 +370,12 @@ declare module "opentok-react-native" {
      * Sent if there is an error with the communication between the native publisher instance and the JS component.
      */
     otrnError?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when RTC stats reports are available for the publisher, 
+     * in response to calling the OTPublisher.getRtcStatsReport() method
+     */
+    rtcStatsReport?: CallbackWithParam<RtcStatsReportEvent, any>;
 
     /**
      * Sent when the publisher starts streaming.

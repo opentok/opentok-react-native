@@ -120,6 +120,22 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **otrnError** (Object) -- Sent if there is an error with the communication between the native publisher instance and the JS component.
 
+* **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the publisher,
+  in response to calling the `OTPublisher.getRtcStatsReport()` method. This event has an array of
+  objects. For a routed session (a seesion that uses the
+  [OpenTok Media Router](https://tokbox.com/developer/guides/create-session/#media-mode)),
+  this array includes one object, defining the statistics for the single video media stream that is sent
+  to the OpenTok Media Router. In a relayed session, the array includes an object for each subscriber
+  to the published stream. Each object includes two properties:
+
+  * `connectionId` -- For a relayed session (in which a publisher sends individual media streams
+    to each subscriber), this is the unique ID of the client’s connection.
+
+  * `jsonArrayOfReports` -- A JSON array of RTC stats reports for the media stream. The structure
+  of the JSON array is similar to the format of the RtcStatsReport object implemented in web browsers
+  (see the [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport)).
+  Also see [this W3C documentation](https://w3c.github.io/webrtc-stats/).
+
 * **streamCreated** (Object) -- Sent when the publisher starts streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
 

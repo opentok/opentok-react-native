@@ -91,12 +91,14 @@ const sanitizePublisherEvents = (publisherId, events) => {
       streamDestroyed: 'streamDestroyed',
       error: 'didFailWithError',
       audioLevel: 'audioLevelUpdated',
+      rtcStatsReport: 'rtcStatsReport',
     },
     android: {
       streamCreated: 'onStreamCreated',
       streamDestroyed: 'onStreamDestroyed',
       error: 'onError',
       audioLevel: 'onAudioLevelUpdated',
+      rtcStatsReport: 'onRtcStatsReport',
     },
   };
   return reassignEvents('publisher', customEvents, events, publisherId);

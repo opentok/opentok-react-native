@@ -17,6 +17,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.ReadableMap;
@@ -46,6 +47,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         implements Session.SessionListener,
         PublisherKit.PublisherListener,
         PublisherKit.AudioLevelListener,
+        PublisherKit.PublisherRtcStatsReportListener,
         SubscriberKit.SubscriberListener,
         Session.SignalListener,
         Session.ConnectionListener,
@@ -182,6 +184,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         }
         mPublisher.setPublisherListener(this);
         mPublisher.setAudioLevelListener(this);
+        mPublisher.setRtcStatsReportListener(this);
         mPublisher.setAudioFallbackEnabled(audioFallbackEnabled);
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
@@ -303,6 +306,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
             mPublisher.setPublishVideo(publishVideo);
+        }
+    }
+
+    @ReactMethod
+    public void getRtcStatsReport(String publisherId) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.getRtcStatsReport();
         }
     }
 
@@ -503,6 +516,15 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             reactContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit(eventName, eventData);
+        }
+    }
+
+    private void sendEventArray(ReactContext reactContext, String eventName, @Nullable WritableArray eventData) {
+
+        if (Utils.contains(jsEvents, eventName) || Utils.contains(componentEvents, eventName)) {
+            reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, eventData);
         }
     }
 
@@ -714,6 +736,17 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (publisherId.length() > 0) {
             String event = publisherId + ":" + publisherPreface + "onAudioLevelUpdated";
             sendEventWithString(this.getReactApplicationContext(), event, String.valueOf(audioLevel));
+        }
+    }
+
+    @Override
+    public void onRtcStatsReport(PublisherKit publisher, PublisherKit.PublisherRtcStats[] stats) {
+
+        String publisherId = Utils.getPublisherId(publisher);
+        if (publisherId.length() > 0) {
+            WritableArray rtcStatsReportArray = EventUtils.preparePublisherRtcStats(stats);
+            String event = publisherId + ":" + publisherPreface + "onRtcStatsReport";
+            sendEventArray(this.getReactApplicationContext(), event, rtcStatsReportArray);
         }
     }
 

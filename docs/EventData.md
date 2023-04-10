@@ -119,6 +119,17 @@ You can find the structure of the object below:
     message: string,
   };
 ```
+
+## RtcStatsReportEvent
+You can find the structure of the object below:
+
+```javascript
+  event = {
+    connectionId: string,
+    jsonArrayOfReports: string,
+  };
+```
+
 ## SessionConnectEvent
 
 ```javascript
