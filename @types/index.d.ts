@@ -280,7 +280,7 @@ declare module "opentok-react-native" {
     eventHandlers?: OTPublisherEventHandlers;
 
     /**
-     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
+     * Gets the RTC stats report for the publisher. This is an asynchronous operation.
      * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
      * the publisher are available.
      */

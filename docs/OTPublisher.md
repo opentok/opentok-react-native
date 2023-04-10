@@ -63,6 +63,11 @@ The OTPublisher component has the following properties, each of which is optiona
 * `eventHandlers` (Object) -- An object containing key-value pairs of event names and
 callback functions for event handlers. See [Events](#events).
 
+## Methods
+
+**getRtcStatsReport()** Gets the RTC stats report for the publisher. This is an asynchronous operation.
+The OTPublisher object dispatches an `rtcStatsReport` event when RTC statistics for the publisher are available.
+
 ## properties object
 
 The `properties` object passed into the OTPublisher object has the following properties:
