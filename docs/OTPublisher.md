@@ -126,7 +126,9 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 * **otrnError** (Object) -- Sent if there is an error with the communication between the native publisher instance and the JS component.
 
 * **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the publisher,
-  in response to calling the `OTPublisher.getRtcStatsReport()` method. This event has an array of
+  in response to calling the `OTPublisher.getRtcStatsReport()` method. A
+  [PublisherRtcStatsReportEvent](./EventData.md#publisherRtcStatsReportEvent) object is passed into
+  the event handler. This event has an array of
   objects. For a routed session (a seesion that uses the
   [OpenTok Media Router](https://tokbox.com/developer/guides/create-session/#media-mode)),
   this array includes one object, defining the statistics for the single video media stream that is sent

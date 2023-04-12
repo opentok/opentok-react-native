@@ -12,9 +12,5 @@
 @interface RCT_EXTERN_MODULE(OTPublisherSwift, RCTViewManager)
 RCT_EXPORT_VIEW_PROPERTY(publisherId, NSString)
 
-/*
-RCT_EXTERN_METHOD(getRtcStatsReport:
-    (NSString*)publisherId)
-*/
 @end
 

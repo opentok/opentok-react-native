@@ -150,11 +150,13 @@ class OTSessionManager: RCTEventEmitter {
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
             subscriber.networkStatsDelegate = self;
             subscriber.audioLevelDelegate = self;
+            subscriber.delegate = self;
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
+            subscriber.rtcStatsReportDelegate = self;
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -204,7 +206,7 @@ class OTSessionManager: RCTEventEmitter {
         publisher.publishVideo = pubVideo;
     }
 
-     @objc func getRtcStatsReport(_ publisherId: String) -> Void {
+    @objc func getRtcStatsReport(_ publisherId: String) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.getRtcStatsReport()
     }
@@ -227,6 +229,11 @@ class OTSessionManager: RCTEventEmitter {
     @objc func setPreferredFrameRate(_ streamId: String, frameRate: Float) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(frameRate);
+    }
+    
+    @objc func getSubscriberRtcStatsReport(_ streamId: String) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.getRtcStatsReport()
     }
     
     @objc func changeCameraPosition(_ publisherId: String, cameraPosition: String) -> Void {
@@ -686,5 +693,18 @@ extension OTSessionManager: OTSubscriberKitAudioLevelDelegate {
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
         self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
+    }
+}
+
+extension OTSessionManager: OTSubscriberKitRtcStatsReportDelegate {
+    func subscriber(_ subscriber: OTSubscriberKit, rtcStatsReport stats: String) {
+        var subscriberInfo: Dictionary<String, Any> = [:];
+        subscriberInfo["jsonArrayOfReports"] = stats;
+        guard let stream = subscriber.stream else {
+            self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo);
+            return;
+        }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo)
     }
 }

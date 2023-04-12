@@ -22,20 +22,42 @@
 
 The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting. The `OTSubscriber` component will stop subscribing and unsubscribing when it's unmounting.
 
+## Methods
+
+**getRtcStatsReport(streamId)** Gets the RTC stats report for the subscriber to the stream with the
+specified stream ID. This is an asynchronous operation. The OTSubscriber object dispatches an
+`rtcStatsReport` event when RTC statistics for the subscriber are available.
+
 ## Events
+
   * **audioLevel** (SubscriberAudioLevelEvent) — Sent on a regular interval with the recent representative audio level.
   See [SubscriberAudioLevelEvent](./EventData.md#SubscriberAudioLevelEvent)
 
   * **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the subscriber.
-  Am [SessionConnectEvent](./EventData.md#SessionConnectEvent) object is passed into the event handler.
+  A [SessionConnectEvent](./EventData.md#SessionConnectEvent) object is passed into the event handler.
 
-  * **connected** () — Sent when the subscriber successfully connects to the stream.
+  * **connected** () — Sent when the subscriber successfully connects to the stream. The event object
+    includes a `streamId` property, identifying the stream.
 
   * **disconnected** () — Called when the subscriber’s stream has been interrupted.
 
   * **error** (Object) — Sent if the subscriber fails to connect to its stream.
 
   * **otrnError** (Object) — Sent if there is an error with the communication between the native subscriber instance and the JS component.
+
+* **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the subscriber,
+  in response to calling the `OTSubscriber.getRtcStatsReport()` method. A
+  [SubscriberRtcStatsReportEvent](./EventData.md#subscriberRtcStatsReportEvent) object is passed
+  into the event handler. This event object has the following properties:
+
+  * `jsonArrayOfReports` property, which is a JSON array of RTCStatsReport for the media stream.
+    The structure of the JSON array is similar to the format of the RtcStatsReport object implemented
+    in web browsers (see the
+    [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport)).
+    Also see [this W3C documentation](https://w3c.github.io/webrtc-stats/).
+  
+  * `stream` -- An object representing the subscriber's stream. This object includes a `streamId`
+    property, identifying the stream.
 
   * **videoDataReceived** () - Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the `connected` message is sent.
 

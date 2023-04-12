@@ -274,3 +274,37 @@ You can find the structure of the object below:
     timestamp: number
   };
 ```
+
+## SubscriberRtcStatsReportEvent
+
+```javascript
+  event = {
+    stream: {
+      streamId: string;
+      name: string;
+      connectionId: string;
+      connection: {
+        connectionId: string,
+        creationTime: string,
+        data: string,
+      },
+      hasAudio: boolean,
+      hasVideo: boolean,
+      sessionId: string,
+      creationTime: number,
+      height: number,
+      width: number,
+      videoType: string, // 'camera' or 'screen'
+    },
+    jsonArrayOfReports: string
+  };
+```
+
+## PublisherRtcStatsReportEvent
+
+```javascript
+  event = [
+    connectionId: string
+    jsonArrayOfReports: string
+  ];
+```

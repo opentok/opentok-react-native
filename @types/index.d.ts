@@ -86,7 +86,7 @@ declare module "opentok-react-native" {
     timestamp: number,
   }
 
-  interface RtcStatsReportEvent {
+  interface PublisherRtcStatsReport {
     connectionId: string,
     jsonArrayOfReports: string,
   }
@@ -284,7 +284,7 @@ declare module "opentok-react-native" {
      * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
      * the publisher are available.
      */
-    getRtcStatsReport?: any
+    getRtcStatsReport(): void;
   }
 
   interface OTPublisherProperties {
@@ -373,9 +373,9 @@ declare module "opentok-react-native" {
 
     /**
      * Sent when RTC stats reports are available for the publisher, 
-     * in response to calling the OTPublisher.getRtcStatsReport() method
+     * in response to calling the OTPublisher.getRtcStatsReport() method.
      */
-    rtcStatsReport?: CallbackWithParam<RtcStatsReportEvent, any>;
+    rtcStatsReport?: CallbackWithParam<PublisherRtcStatsReport[]>, any>;
 
     /**
      * Sent when the publisher starts streaming.
@@ -423,6 +423,13 @@ declare module "opentok-react-native" {
      * If set to true, the subscriber can subscribe to it's own publisher stream (default: false)
      */
     subscribeToSelf?: boolean;
+
+    /**
+     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
+     * The OTSubscriber object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport(): void;
   }
 
   interface OTSubscriberProperties {
@@ -467,6 +474,12 @@ declare module "opentok-react-native" {
      * Sent if there is an error with the communication between the native subscriber instance and the JS component.
      */
     otrnError?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when an RTC stats report is available for the subscriber, 
+     * in response to calling the OTSubscriber.getRtcStatsReport() method.
+     */
+    rtcStatsReport?: CallbackWithParam<RtcStatsReport>, any>;
 
     /**
      * Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the connected message is sent.

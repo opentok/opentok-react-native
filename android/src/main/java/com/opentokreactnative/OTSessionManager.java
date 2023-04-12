@@ -55,6 +55,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Session.ArchiveListener,
         Session.StreamPropertiesListener,
         SubscriberKit.AudioLevelListener,
+        SubscriberKit.SubscriberRtcStatsReportListener,
         SubscriberKit.AudioStatsListener,
         SubscriberKit.VideoStatsListener,
         SubscriberKit.VideoListener,
@@ -226,6 +227,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setAudioLevelListener(this);
         mSubscriber.setAudioStatsListener(this);
         mSubscriber.setVideoStatsListener(this);
+        mSubscriber.setRtcStatsReportListener(this);
         mSubscriber.setVideoListener(this);
         mSubscriber.setStreamListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
@@ -364,6 +366,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Subscriber mSubscriber = mSubscribers.get(streamId);
         if (mSubscriber != null) {
             mSubscriber.setPreferredFrameRate(frameRate);
+        }
+    }
+
+    @ReactMethod
+    public void getSubscriberRtcStatsReport(String streamId) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.getRtcStatsReport();
         }
     }
 
@@ -815,6 +827,22 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         printLogs("onError: "+opentokError.getErrorDomain() + " : " +
                 opentokError.getErrorCode() +  " - "+opentokError.getMessage());
 
+    }
+
+    @Override
+    public void onRtcStatsReport(SubscriberKit subscriberKit, String stats) {
+
+        String streamId = Utils.getStreamIdBySubscriber(subscriberKit);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            if (mStream != null) {
+                subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream, subscriberKit.getSession()));
+            }
+            subscriberInfo.putString("jsonArrayOfReports", stats);
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface +  "onRtcStatsReport", subscriberInfo);
+        }
     }
 
     @Override

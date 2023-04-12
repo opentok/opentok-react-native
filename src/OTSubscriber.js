@@ -98,6 +98,9 @@ export default class OTSubscriber extends Component {
       }
     });
   }
+  getRtcStatsReport(streamId) {
+    OT.getSubscriberRtcStatsReport(streamId);
+  }
   render() {
     if (!this.props.children) {
       const containerStyle = this.props.containerStyle;
@@ -120,6 +123,7 @@ OTSubscriber.propTypes = {
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   streamProperties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerStyle: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  getRtcStatsReport: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   subscribeToSelf: PropTypes.bool
 };
 
@@ -128,7 +132,8 @@ OTSubscriber.defaultProps = {
   eventHandlers: {},
   streamProperties: {},
   containerStyle: {},
-  subscribeToSelf: false
+  subscribeToSelf: false,
+  getRtcStatsReport: {},
 };
 
 OTSubscriber.contextType = OTContext;
