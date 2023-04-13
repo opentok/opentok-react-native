@@ -1,4 +1,10 @@
-# 0.21.3
+# 0.21.4 (April 12 2023)
+
+- [Update]: Revert OpenTok iOS SDK back 2.23.1. There are issues with
+  linked libraries in the OpenTok iOS SDK v2.24.0+ that cause
+  issues when used in React Native. We are working on a bug fix.
+
+# 0.21.3 (March 2023)
 
 - [Update]: iOS SDK to 2.24.2 and Android to 2.24.2 - issue #629
 

@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'OTXCFramework','2.24.2'
+  s.dependency 'OTXCFramework','2.23.1'
 end
