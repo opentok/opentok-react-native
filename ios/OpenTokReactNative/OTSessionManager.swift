@@ -330,6 +330,16 @@ class OTSessionManager: RCTEventEmitter {
         callback([sessionInfo]);
     }
     
+    @objc func getSessionCapabilities(_ sessionId: String, callback: RCTResponseSenderBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { callback([NSNull()]); return }
+        var sessionCapabilities: Dictionary<String, Any> = [:];
+        sessionCapabilities["canPublish"] = session.capabilities?.canPublish;
+        // Bug in OT iOS SDK. This is set to false, but it should be true:
+        sessionCapabilities["canSubscribe"] = true;
+        sessionCapabilities["canForceMute"] = session.capabilities?.canForceMute;
+        callback([sessionCapabilities]);
+    }
+    
     @objc func enableLogs(_ logLevel: Bool) -> Void {
         self.logLevel = logLevel;
     }

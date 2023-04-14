@@ -514,6 +514,21 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void getSessionCapabilities(String sessionId, Callback callback) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        WritableMap sessionCapabilitiesMap = Arguments.createMap();
+        if (mSession != null){
+            Session.Capabilities sessionCapabilities = mSession.getCapabilities();
+            sessionCapabilitiesMap.putBoolean("canForceMute", sessionCapabilities.canForceMute);
+            sessionCapabilitiesMap.putBoolean("canPublish", sessionCapabilities.canPublish);
+            // Bug in OT Android SDK. This should always be true, but it is set to false:
+            sessionCapabilitiesMap.putBoolean("canSubscribe", true);
+        }
+        callback.invoke(sessionCapabilitiesMap);
+    }
+
+    @ReactMethod
     public void enableLogs(Boolean logLevel) {
         setLogLevel(logLevel);
     }

@@ -130,6 +130,15 @@ declare module "opentok-react-native" {
     getSessionInfo?: any
 
     /**
+     * Used to get capabilities of the client
+     */
+    getCapabilities(): {
+      canForceMute: boolean;
+      canPublish: boolean;
+      canSubscribe: boolean;
+    }
+
+    /**
      * Event handlers passed into the native session instance.
      */
     eventHandlers?: OTSessionEventHandlers;

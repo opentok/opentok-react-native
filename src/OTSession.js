@@ -71,6 +71,12 @@ export default class OTSession extends Component {
             this.setState({
               sessionInfo,
             });
+            // TO DO: The capababilities are set after the sessionConnected event is dispatched.
+            const sessionCapabilities = OT.getSessionCapabilities(sessionId, (sessionCapabilities) => {
+              this.setState({
+                sessionCapabilities,
+              });
+            });
             logOT({ apiKey, sessionId, action: 'rn_on_connect', proxyUrl: sessionOptions.proxyUrl, connectionId: session.connection.connectionId });
             if (Object.keys(signal).length > 0) {
               this.signal(signal);
@@ -92,6 +98,9 @@ export default class OTSession extends Component {
   }
   getSessionInfo() {
     return this.state.sessionInfo;
+  }
+  getCapabilities() {
+    return this.state.sessionCapabilities;
   }
   signal(signal) {
     const signalData = sanitizeSignalData(signal);

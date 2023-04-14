@@ -87,6 +87,9 @@ RCT_EXTERN_METHOD(removeJSComponentEvents:
 RCT_EXTERN_METHOD(getSessionInfo:
                   (NSString*)sessionId
                   callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(getSessionCapabilities:
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end

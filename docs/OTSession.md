@@ -173,6 +173,17 @@ feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy
   - `data` (String) -- The [connection data](https://tokbox.com/developer/guides/create-token/#connection-data)
     for the local client.
 
+***getCapabilities()*** Indicates whether the client can publish and subscribe to streams in the session, based on the role assigned to the token used to connect to the session. This method returns null until you have connected to a session and the `connectionCreated` event has been dispatched. After that event has been dispatched, this method returns an object with the following properties:
+
+* `canForceMute` (Boolean) -- Whether the client can force mute streams in the session or disable the active mute state in a session (`true`) or not (`false`).
+
+* `canPublish` (Boolean) -- Whether the client can publish streams to the session (`true`) or not (`false`).
+
+* `canSubscribe` (Boolean) -- Whether the client can subscribe to streams in the session (`true`) or not (`false`).
+
+ For more information, see the
+ [OpenTok token documentation](https://tokbox.com/developer/guides/create-token).
+
 **signal()** Sends a signal to clients connected to the session. The method has one parameter,
 an object that includes the following properties, each of which is optional
 (although you usually want to set the `data` property):
