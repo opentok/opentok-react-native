@@ -93,6 +93,9 @@ class OTSessionManager: RCTEventEmitter {
                 guard let screenView = RCTPresentedViewController()?.view else {
                     let errorInfo = EventUtils.createErrorMessage("There was an error setting the videoSource as screen")
                     callback([errorInfo]);
+                    if let scalableScreenshare = properties["scalableScreenshare"] as? Bool {
+                        publisherProperties.scalableScreenshare = scalableScreenshare;
+                    }
                     return
                 }
                 publisher.videoType = .screen;

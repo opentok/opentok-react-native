@@ -152,6 +152,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Boolean publishAudio = properties.getBoolean("publishAudio");
         Boolean publishVideo = properties.getBoolean("publishVideo");
         String videoSource = properties.getString("videoSource");
+        Boolean scalableScreenshare = properties.getBoolean("scalableScreenshare");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
@@ -165,6 +166,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     .resolution(Publisher.CameraCaptureResolution.valueOf(resolution))
                     .frameRate(Publisher.CameraCaptureFrameRate.valueOf(frameRate))
                     .capturer(capturer)
+                    .scalableScreenshare(scalableScreenshare)
                     .build();
             mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         } else {

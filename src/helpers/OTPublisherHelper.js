@@ -62,6 +62,7 @@ const sanitizeProperties = (properties) => {
       resolution: sanitizeResolution(),
       videoContentHint: '',
       videoSource: 'camera',
+      scalableScreenshare: false,
     };
   }
   return {
@@ -78,6 +79,7 @@ const sanitizeProperties = (properties) => {
     resolution: sanitizeResolution(properties.resolution),
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
     videoSource: sanitizeVideoSource(properties.videoSource),
+    scalableScreenshare: Boolean(properties.scalableScreenshare),
   };
 };
 

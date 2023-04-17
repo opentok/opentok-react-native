@@ -108,6 +108,11 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **publishVideo** (Boolean) -- Whether to publish video. The default is `true`.
 
+* **scalableScreenshare** (Boolean) -- Whether to allow use of
+{scalable video}(https://tokbox.com/developer/guides/scalable-video/) for a screen-sharing publisher
+(true) or not (false, the default). This only applies to a publisher that has the `videoSource` set
+to "screen".
+
 * **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
 
 * **videoContentHint** (String) -- Sets the content hint of the video track of the publisher's stream. You can set this to one of the following values: "", "motion", "details" or "text". For additional information, see the [documentation](https://tokbox.com/developer/sdks/js/reference/OT.html#initPublisher) for the `videoContentHint` option of the
