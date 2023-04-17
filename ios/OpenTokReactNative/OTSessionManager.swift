@@ -574,6 +574,24 @@ extension OTSessionManager: OTPublisherKitRtcStatsReportDelegate {
     }
 }
 
+extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
+    func publisher(_ publisher: OTPublisherKit, audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherAudioNetworkStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStats", data: statsArray)
+        }
+    }
+
+    func publisher(_ publisher: OTPublisherKit, videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherVideoNetworkStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStats", data: statsArray)
+        }
+    }
+}
+
 extension OTSessionManager: OTSubscriberDelegate {
     func subscriberDidConnect(toStream subscriberKit: OTSubscriberKit) {
         if let stream = subscriberKit.stream {

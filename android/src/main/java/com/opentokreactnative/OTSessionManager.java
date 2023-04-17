@@ -48,6 +48,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         PublisherKit.PublisherListener,
         PublisherKit.AudioLevelListener,
         PublisherKit.PublisherRtcStatsReportListener,
+        PublisherKit.AudioStatsListener,
+        PublisherKit.VideoStatsListener,
         SubscriberKit.SubscriberListener,
         Session.SignalListener,
         Session.ConnectionListener,
@@ -191,6 +193,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setAudioFallbackEnabled(audioFallbackEnabled);
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
+        mPublisher.setAudioStatsListener(this);
+        mPublisher.setVideoStatsListener(this);
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         mPublishers.put(publisherId, mPublisher);
         callback.invoke();
@@ -788,6 +792,28 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableArray rtcStatsReportArray = EventUtils.preparePublisherRtcStats(stats);
             String event = publisherId + ":" + publisherPreface + "onRtcStatsReport";
             sendEventArray(this.getReactApplicationContext(), event, rtcStatsReportArray);
+        }
+    }
+
+    @Override
+    public void onAudioStats(PublisherKit publisher, PublisherKit.PublisherAudioStats[] stats) {
+
+        String publisherId = Utils.getPublisherId(publisher);
+        if (publisherId.length() > 0) {
+            WritableArray publisherInfo = EventUtils.preparePublisherAudioStats(stats);
+            String event = publisherId + ":" + publisherPreface + "onAudioStats";
+            sendEventArray(this.getReactApplicationContext(), event, publisherInfo);
+        }
+    }
+
+    @Override
+    public void onVideoStats(PublisherKit publisher, PublisherKit.PublisherVideoStats[] stats) {
+
+        String publisherId = Utils.getPublisherId(publisher);
+        if (publisherId.length() > 0) {
+            WritableArray publisherInfo = EventUtils.preparePublisherVideoStats(stats);
+            String event = publisherId + ":" + publisherPreface +  "onVideoStats";
+            sendEventArray(this.getReactApplicationContext(), event, publisherInfo);
         }
     }
 

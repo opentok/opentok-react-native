@@ -93,14 +93,18 @@ const sanitizePublisherEvents = (publisherId, events) => {
       streamDestroyed: 'streamDestroyed',
       error: 'didFailWithError',
       audioLevel: 'audioLevelUpdated',
+      audioNetworkStats: 'audioStats',
       rtcStatsReport: 'rtcStatsReport',
+      videoNetworkStats: 'videoStats',
     },
     android: {
       streamCreated: 'onStreamCreated',
       streamDestroyed: 'onStreamDestroyed',
       error: 'onError',
       audioLevel: 'onAudioLevelUpdated',
+      audioNetworkStats: 'onAudioStats',
       rtcStatsReport: 'onRtcStatsReport',
+      videoNetworkStats: 'onVideoStats',
     },
   };
   return reassignEvents('publisher', customEvents, events, publisherId);

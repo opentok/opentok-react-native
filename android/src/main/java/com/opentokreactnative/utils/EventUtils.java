@@ -126,6 +126,36 @@ public final class EventUtils {
         return statsArrayMap;
     }
 
+    public static WritableArray preparePublisherAudioStats(PublisherKit.PublisherAudioStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherAudioStats stat : stats) {
+          WritableMap audioStats = Arguments.createMap();
+          audioStats.putString("connectionId", stat.connectionId);
+          audioStats.putString("subscriberId", stat.subscriberId);
+          audioStats.putDouble("audioBytesSent", stat.audioBytesSent);
+          audioStats.putDouble("audioPacketsLost", stat.audioPacketsLost);
+          audioStats.putDouble("audioPacketsSent", stat.audioPacketsSent);
+          audioStats.putDouble("startTime", stat.startTime);
+          statsArrayMap.pushMap(audioStats);
+        }
+        return statsArrayMap;
+    }
+
+    public static WritableArray preparePublisherVideoStats(PublisherKit.PublisherVideoStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherVideoStats stat : stats) {
+          WritableMap videoStats = Arguments.createMap();
+          videoStats.putString("connectionId", stat.connectionId);
+          videoStats.putString("subscriberId", stat.subscriberId);
+          videoStats.putDouble("videoBytesSent", stat.videoBytesSent);
+          videoStats.putDouble("videoPacketsLost", stat.videoPacketsLost);
+          videoStats.putDouble("videoPacketsSent", stat.videoPacketsSent);
+          videoStats.putDouble("startTime", stat.startTime);
+          statsArrayMap.pushMap(videoStats);
+        }
+        return statsArrayMap;
+    }
+
     public static WritableMap createError(String message) {
 
         WritableMap errorInfo = Arguments.createMap();

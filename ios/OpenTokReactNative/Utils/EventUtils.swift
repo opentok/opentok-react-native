@@ -67,6 +67,36 @@ class EventUtils {
         return statsArray;
     }
 
+    static func preparePublisherVideoNetworkStats(_ videoStats: [OTPublisherKitVideoNetworkStats]) -> [Dictionary<String, Any>] {
+        var statsArray:[Dictionary<String, Any>] = [];
+        for value in videoStats {
+            var stats: Dictionary<String, Any> = [:];
+            stats["connectionId"] = value.connectionId;
+            stats["subscriberId"] = value.subscriberId;
+            stats["videoPacketsLost"] = value.videoPacketsLost;
+            stats["videoBytesSent"] = value.videoBytesSent;
+            stats["videoPacketsSent"] = value.videoPacketsSent;
+            stats["timestamp"] = value.timestamp;
+            statsArray.append(stats);
+        }
+        return statsArray;
+    }
+
+    static func preparePublisherAudioNetworkStats(_ audioStats: [OTPublisherKitAudioNetworkStats]) -> [Dictionary<String, Any>] {
+        var statsArray:[Dictionary<String, Any>] = [];
+        for value in audioStats {
+            var stats: Dictionary<String, Any> = [:];
+            stats["connectionId"] = value.connectionId;
+            stats["subscriberId"] = value.subscriberId;
+            stats["audioPacketsLost"] = value.audioPacketsLost;
+            stats["audioPacketsSent"] = value.audioPacketsSent;
+            stats["audioPacketsSent"] = value.audioPacketsSent;
+            stats["timestamp"] = value.timestamp;
+            statsArray.append(stats);
+        }
+        return statsArray;
+    }
+    
     static func prepareSubscriberVideoNetworkStatsEventData(_ videoStats: OTSubscriberKitVideoNetworkStats) -> Dictionary<String, Any> {
         var videoStatsEventData: Dictionary<String, Any> = [:];
         videoStatsEventData["videoPacketsLost"] = videoStats.videoPacketsLost;
