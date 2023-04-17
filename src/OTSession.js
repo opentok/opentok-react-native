@@ -102,6 +102,17 @@ export default class OTSession extends Component {
   getCapabilities() {
     return this.state.sessionCapabilities;
   }
+  async reportIssue() {
+    return new Promise((resolve, reject) => {
+      OT.reportIssue(this.props.sessionId, (reportIssueId, error) => {
+        if (reportIssueId) {
+          resolve(reportIssueId)
+        } else {
+          reject (new Error(error))
+        }
+      });
+    })
+  }
   signal(signal) {
     const signalData = sanitizeSignalData(signal);
     OT.sendSignal(this.props.sessionId, signalData.signal, signalData.errorHandler);

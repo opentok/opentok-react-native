@@ -529,6 +529,18 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void reportIssue(String sessionId, Callback callback) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null){
+          callback.invoke(mSession.reportIssue());
+        } else {
+          callback.invoke(null, "Error connecting to session. Could not find native session instance.");
+
+        }
+    }
+
+    @ReactMethod
     public void enableLogs(Boolean logLevel) {
         setLogLevel(logLevel);
     }

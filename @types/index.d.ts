@@ -139,6 +139,11 @@ declare module "opentok-react-native" {
     }
 
     /**
+     * Used to report an issue
+     */
+    reportIssue(): string
+
+    /**
      * Event handlers passed into the native session instance.
      */
     eventHandlers?: OTSessionEventHandlers;

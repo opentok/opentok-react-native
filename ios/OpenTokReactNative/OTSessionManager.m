@@ -90,6 +90,9 @@ RCT_EXTERN_METHOD(getSessionInfo:
 RCT_EXTERN_METHOD(getSessionCapabilities:
                   (NSString*)sessionId
                   callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(reportIssue:
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end

@@ -184,6 +184,10 @@ feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy
  For more information, see the
  [OpenTok token documentation](https://tokbox.com/developer/guides/create-token).
 
+**reportIssue()** Lets you report that your app experienced an issue (to view with
+[Inspector](http://tokbox.com/developer/tools/Inspector) or to discuss with the Vonage API
+support team.) The method returns a Promise that resolves with a string, the issue ID.
+
 **signal()** Sends a signal to clients connected to the session. The method has one parameter,
 an object that includes the following properties, each of which is optional
 (although you usually want to set the `data` property):

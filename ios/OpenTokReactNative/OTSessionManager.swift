@@ -340,6 +340,13 @@ class OTSessionManager: RCTEventEmitter {
         callback([sessionCapabilities]);
     }
     
+    @objc func reportIssue(_ sessionId: String, callback: RCTResponseSenderBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { callback([NSNull()]); return }
+        var issueId:NSString? = ""
+        session.reportIssue(&issueId)
+        callback([issueId! as NSString])
+    }
+    
     @objc func enableLogs(_ logLevel: Bool) -> Void {
         self.logLevel = logLevel;
     }
