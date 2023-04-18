@@ -354,9 +354,9 @@ declare module "opentok-react-native" {
     publishVideo?: boolean;
 
     /**
-     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
      */
-    resolution?: "1280x720" | "640x480" | "352x288";
+    resolution?: "1920x1080" | "1280x720" | "640x480" | "352x288";
 
     /**
      * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.

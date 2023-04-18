@@ -8,6 +8,8 @@ const sanitizeResolution = (resolution) => {
       return 'MEDIUM';
     case '1280x720':
       return 'HIGH';
+    case '1920x1080':
+      return 'HIGH_1080P';
     default:
       return 'MEDIUM';
   }
