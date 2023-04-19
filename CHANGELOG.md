@@ -1,4 +1,4 @@
-# 0.21.5 (TBD 2023)
+# 0.22.0 (TBD 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Andriod and iOS SDKs:
 
