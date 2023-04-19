@@ -35,7 +35,7 @@ specified stream ID. This is an asynchronous operation. The OTSubscriber object 
   See [SubscriberAudioLevelEvent](./EventData.md#SubscriberAudioLevelEvent)
 
   * **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the subscriber.
-  A [SessionConnectEvent](./EventData.md#SessionConnectEvent) object is passed into the event handler.
+  A [AudioNetworkStats](./EventData.md#AudioNetworkStats) object is passed into the event handler.
 
   * **connected** () — Sent when the subscriber successfully connects to the stream. The event object
     includes a `streamId` property, identifying the stream.

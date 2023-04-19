@@ -114,11 +114,53 @@ You can find the structure of the object below:
 You can find the structure of the object below: 
 
 ```javascript
-  error = {
+  event = {
     code: string,
     message: string,
   };
 ```
+
+## PublisherVideoNetworkStatsEvent
+
+To get video data for a publisher, register an event listener for the OTPublisher
+`videoNetworkStats` event. The object has the following structure: 
+
+```javascript
+  event = [
+      {
+      connectionId: string,
+      subscriberId: string,
+      videoPacketsLost: number,
+      videoBytesSent: number,
+      videoPacketsSent: number,
+      timestamp: number,
+    }
+  ];
+```
+
+Note that this event object is an array of objects. See the docs for
+the OTPublisher `videoNetworkStats` event.
+
+## PublisherAudioNetworkStatsEvent
+
+To get audio data for a publisher, register an event listener for the OTPublisher
+`audioNetworkStats` event. The object has the following structure: 
+
+```javascript
+  event = [
+      {
+      connectionId: string,
+      subscriberId: string,
+      audioPacketsLost: number,
+      audioPacketsSent: number,
+      audioPacketsSent: number,
+      timestamp: number,
+    }
+  ];
+```
+
+Note that this event object is an array of objects. See the docs for
+the OTPublisher `audioNetworkStats` event.
 
 ## RtcStatsReportEvent
 You can find the structure of the object below:

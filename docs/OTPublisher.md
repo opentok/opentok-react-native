@@ -126,6 +126,10 @@ to "screen".
 
 * **audioLevel** (Number) -- The audio level, from 0 to 1.0. Adjust this value logarithmically for use in adjusting a user interface element, such as a volume meter. Use a moving average to smooth the data.
 
+**audioNetworkStats** (Object) --
+
+**videoNetworkStats** (Object) --
+
 * **error** (Object) -- Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
 
 * **otrnError** (Object) -- Sent if there is an error with the communication between the native publisher instance and the JS component.

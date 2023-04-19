@@ -1,3 +1,21 @@
+# 0.21.5 (TBD 2023)
+
+- [Update]: Add API to implement functionality missing from the OpenTok Andriod and iOS SDKs:
+
+  * `OTSession.getCapabilities()` method
+  * `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
+  * OTPublisher `scalableScreenshare` option (in the OTPublisher properties)
+  * OTPublisher `audioNetworkStats` and `videoNetworkStats` events
+  * `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
+  * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
+  * OTSubscriber `audioVolume` property.
+
+For more info, see the docs:
+
+* [OTPublisher](/docs/OTPublisher.md)
+* [OTSession](/docs/OTSession.md)
+* [OTSubscriber](/docs/OTSubscriber.md)
+
 # 0.21.4 (April 12 2023)
 
 - [Update]: Revert OpenTok iOS SDK back 2.23.1. There are issues with
