@@ -66,10 +66,6 @@ GCD queue). See the docs for the
 [OTSession.apiQueue property](https://tokbox.com/developer/sdks/ios/reference/Classes/OTSession.html#//api/name/apiQueue)
 in the OpenTok iOS SDK.
 
-* **API enhancements from OpenTok Android and iOS SDK v2.23+** -- These features include
-per-subscriber audio volume control, scalable video support for screen sharing, and support
-for publishing FHD (1920x1080-pixel) streams. These have not been implemented.
-
 To build Android and iOS apps that use these features, use the
 [OpenTok Android SDK](https://tokbox.com/developer/sdks/android/)
 and the [OpenTok iOS SDK](https://tokbox.com/developer/sdks/ios/).
