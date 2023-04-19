@@ -250,6 +250,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     preferredResolution.getInt("height"));
             mSubscriber.setPreferredResolution(resolution);
         }
+        if (properties.hasKey("audioVolume")) {
+            mSubscriber.setAudioVolume((float) properties.getDouble("audioVolume"));
+        }
         mSubscribers.put(streamId, mSubscriber);
         if (mSession != null) {
             mSession.subscribe(mSubscriber);
@@ -372,6 +375,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Subscriber mSubscriber = mSubscribers.get(streamId);
         if (mSubscriber != null) {
             mSubscriber.setPreferredFrameRate(frameRate);
+        }
+    }
+
+    @ReactMethod
+    public void setAudioVolume(String streamId, Float audioVolume) {
+
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.setAudioVolume(audioVolume);
         }
     }
 

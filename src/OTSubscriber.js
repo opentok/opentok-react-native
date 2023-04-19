@@ -53,6 +53,9 @@ export default class OTSubscriber extends Component {
         if (preferredFrameRate !== undefined) {
           OT.setPreferredFrameRate(streamId, sanitizeFrameRate(preferredFrameRate));
         }
+        if (audioVolume !== undefined) {
+          OT.setAudioVolume(streamId, audioVolume);
+        }
       });
       this.setState({ streamProperties });
     }

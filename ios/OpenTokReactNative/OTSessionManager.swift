@@ -159,6 +159,9 @@ class OTSessionManager: RCTEventEmitter {
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
+            if let audioVolume = properties["audioVolume"] as? Double {
+              subscriber.audioVolume = audioVolume;
+            }
             subscriber.rtcStatsReportDelegate = self;
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
@@ -232,6 +235,11 @@ class OTSessionManager: RCTEventEmitter {
     @objc func setPreferredFrameRate(_ streamId: String, frameRate: Float) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(frameRate);
+    }
+    
+    @objc func setAudioVolume(_ streamId: String, audioVolume: Double) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.audioVolume = audioVolume;
     }
     
     @objc func getSubscriberRtcStatsReport(_ streamId: String) -> Void {

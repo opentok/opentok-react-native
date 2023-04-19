@@ -63,6 +63,9 @@ RCT_EXTERN_METHOD(setPreferredResolution:
 RCT_EXTERN_METHOD(setPreferredFrameRate:
                   (NSString*)streamId
                   frameRate:(nonnull NSNumber*)frameRate)
+RCT_EXTERN_METHOD(setAudioVolume:
+                  (NSString*)streamId
+                  audioVolume:(nonnull NSNumber*)audioVolume)
 RCT_EXTERN_METHOD(changeCameraPosition:
                   (NSString*)publisherId
                   cameraPosition:(NSString*)cameraPosition)

@@ -19,6 +19,7 @@
 
   * **preferredFrameRate** (Number) — Set this to the desired frame rate (in frames per second). Set this to null to remove the preferred frame rate, and the client will use the highest frame rate available. Valid values are 30, 15, 7, and 1.
 
+  * **audioVolume** (Number) — Sets the audio volume, between 0 and 100, of the subscriber. If the value is not in this range, it will be clamped to it.
 
 The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting. The `OTSubscriber` component will stop subscribing and unsubscribing when it's unmounting.
 
