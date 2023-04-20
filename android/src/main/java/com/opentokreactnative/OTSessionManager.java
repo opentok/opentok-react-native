@@ -22,9 +22,11 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.Promise;
 
 import com.opentok.android.Session;
 import com.opentok.android.Connection;
+import com.opentok.android.MediaUtils;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Stream;
@@ -396,6 +398,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (mSubscriber != null) {
             mSubscriber.getRtcStatsReport();
         }
+    }
+
+    @ReactMethod
+    public void getSupportedCodecs(Promise promise) {
+
+        MediaUtils.SupportedCodecs mSupportedCodecs = MediaUtils.getSupportedCodecs(this.getReactApplicationContext());
+        WritableMap supportedCodecsMap = EventUtils.prepareMediaCodecsMap(mSupportedCodecs);
+        promise.resolve(supportedCodecsMap); 
     }
 
     @ReactMethod

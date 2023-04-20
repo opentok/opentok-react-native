@@ -96,6 +96,9 @@ RCT_EXTERN_METHOD(getSessionCapabilities:
 RCT_EXTERN_METHOD(reportIssue:
                   (NSString*)sessionId
                   callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(getSupportedCodecs:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end

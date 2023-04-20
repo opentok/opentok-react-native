@@ -18,3 +18,16 @@ By default, the native logs are disabled. Please using the following method to e
 ```javascript
   OT.enableLogs(false);
 ```
+
+## To get supported codecs for the client device
+
+```javascript
+  const supportedCodecs = await OT.getSupportedCodecs();
+  console.log(supportedCodecs);
+```
+
+The `OT.getSupportedCodecs()` method returns a promise that resolves with an object defining the supported codecs on the device. This object includes two properties:
+
+* `videoDecoderCodecs` -- An array of values, defining the video codecs for decoding that are supported on the device. Supported values are "VP8" and "H.264".
+
+* `videoEncoderCodecs` -- An array of values, defining the video codecs for encoding that are supported on the device.. Supported values are "VP8" and "H.264".
