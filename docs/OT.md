@@ -31,3 +31,5 @@ The `OT.getSupportedCodecs()` method returns a promise that resolves with an obj
 * `videoDecoderCodecs` -- An array of values, defining the video codecs for decoding that are supported on the device. Supported values are "VP8" and "H.264".
 
 * `videoEncoderCodecs` -- An array of values, defining the video codecs for encoding that are supported on the device.. Supported values are "VP8" and "H.264".
+
+See the OpenTok [video codecs](https://tokbox.com/developer/guides/codecs/) documentattion.

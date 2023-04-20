@@ -9,6 +9,7 @@
   * `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
   * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
   * OTSubscriber `audioVolume` property.
+  * OT.getSupportedCodecs() method.
 
 For more info, see the docs:
 

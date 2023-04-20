@@ -53,9 +53,6 @@ video renderer that renders streams and provides user interface controls for dis
 the stream name and muting the microphone or camera. Publishers and subscribers use
   `mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL)`
   
-* **Codec detection support** -- There is no way to detect
-[video codecs](https://tokbox.com/developer/guides/codecs/) supported on a device.
-
 * **Force mute** -- Clients using OpenTok React Native can be forced to mute
 (by clients using the OpenTok REST API, server SDKs, or client SDKs). However, there is
 no support for events and methods related to the
