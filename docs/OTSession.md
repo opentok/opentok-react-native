@@ -171,7 +171,7 @@ feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy
   - `data` (String) -- The [connection data](https://tokbox.com/developer/guides/create-token/#connection-data)
     for the local client.
 
-***getCapabilities()*** Indicates whether the client can publish and subscribe to streams in the session, , based on the roles assigned to the [client token](https://tokbox.com/developer/guides/create-token) used to connect to the session. This method returns null until you have connected to a session and the `connectionCreated` event has been dispatched. After that event has been dispatched, this method returns an object with the following properties:
+***getCapabilities()*** Indicates whether the client can publish and subscribe to streams in the session, , based on the roles assigned to the [client token](https://tokbox.com/developer/guides/create-token) used to connect to the session. The method returns a Promise that resolves with an object with the following properties:
 
 * `canForceMute` (Boolean) -- Whether the client can force mute streams in the session or disable the active mute state in a session (`true`) or not (`false`).
 
@@ -179,8 +179,10 @@ feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy
 
 * `canSubscribe` (Boolean) -- Whether the client can subscribe to streams in the session (`true`) or not (`false`).
 
- For more information, see the
- [OpenTok token documentation](https://tokbox.com/developer/guides/create-token).
+The promise is rejected if you have not connected to the session and the `connectionCreated` event has been dispatched.
+
+For more information, see the
+[OpenTok token documentation](https://tokbox.com/developer/guides/create-token).
 
 **reportIssue()** Lets you report that your app experienced an issue (to view with
 [Inspector](http://tokbox.com/developer/tools/Inspector) or to discuss with the Vonage API

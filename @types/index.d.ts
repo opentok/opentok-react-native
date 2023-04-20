@@ -132,16 +132,16 @@ declare module "opentok-react-native" {
     /**
      * Used to get capabilities of the client
      */
-    getCapabilities(): {
+    getCapabilities(): Promise<{
       canForceMute: boolean;
       canPublish: boolean;
       canSubscribe: boolean;
-    }
+    }>
 
     /**
      * Used to report an issue
      */
-    reportIssue(): string
+    reportIssue(): Promise<string>
 
     /**
      * Event handlers passed into the native session instance.
