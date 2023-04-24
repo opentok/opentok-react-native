@@ -10,6 +10,8 @@
   * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
   * OTSubscriber `audioVolume` property.
   * OT.getSupportedCodecs() method.
+  * OT.forceMuteAll(), OT.forceMuteStream(), OT.disableForceMute() methods. OTPublisher
+    `muteForce` event and OTSession `muteForced` event.
 
 For more info, see the docs:
 

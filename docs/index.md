@@ -53,11 +53,6 @@ video renderer that renders streams and provides user interface controls for dis
 the stream name and muting the microphone or camera. Publishers and subscribers use
   `mPublisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL)`
   
-* **Force mute** -- Clients using OpenTok React Native can be forced to mute
-(by clients using the OpenTok REST API, server SDKs, or client SDKs). However, there is
-no support for events and methods related to the
-[force mute feature](https://tokbox.com/developer/guides/moderation/#force_mute). 
-
 * **iOS delegate callback queue** -- For iOS, you cannot assign the delegate callback queue (the
 GCD queue). See the docs for the
 [OTSession.apiQueue property](https://tokbox.com/developer/sdks/ios/reference/Classes/OTSession.html#//api/name/apiQueue)

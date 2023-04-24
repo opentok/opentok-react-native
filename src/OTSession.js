@@ -119,6 +119,15 @@ export default class OTSession extends Component {
     const signalData = sanitizeSignalData(signal);
     OT.sendSignal(this.props.sessionId, signalData.signal, signalData.errorHandler);
   }
+  forceMuteAll(excludedStreamIds) {
+    return OT.forceMuteAll(this.props.sessionId, excludedStreamIds || []);
+  }
+  forceMuteStream(streamId) {
+    return OT.forceMuteStream(this.props.sessionId, streamId);
+  }
+  disableForceMute() {
+    return OT.disableForceMute(this.props.sessionId);
+  }
   render() {
     const { style, children, sessionId, apiKey, token } = this.props;
     const { sessionInfo } = this.state;

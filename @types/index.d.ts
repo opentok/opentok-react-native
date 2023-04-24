@@ -139,6 +139,21 @@ declare module "opentok-react-native" {
     }>
 
     /**
+     * Mutes all streams in the session.
+     */
+    forceMuteAll(excludedStreamIds: string[]): Promise<>
+
+    /**
+     * Mutes a stream in the session.
+     */
+    forceMuteStream(streamId: string): Promise<>
+
+    /**
+     * Disables the force mute state for the session.
+     */
+    disableForceMute(): Promise<>
+
+    /**
      * Used to report an issue
      */
     reportIssue(): Promise<string>

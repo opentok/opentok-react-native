@@ -120,6 +120,14 @@ You can find the structure of the object below:
   };
 ```
 
+## MuteForcedEvent
+
+```javascript
+event = {
+  active: boolean;
+}
+```
+
 ## PublisherVideoNetworkStatsEvent
 
 To get video data for a publisher, register an event listener for the OTPublisher

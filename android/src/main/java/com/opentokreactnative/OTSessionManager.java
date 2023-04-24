@@ -27,6 +27,7 @@ import com.facebook.react.bridge.Promise;
 import com.opentok.android.Session;
 import com.opentok.android.Connection;
 import com.opentok.android.MediaUtils;
+import com.opentok.android.MuteForcedInfo;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Stream;
@@ -51,12 +52,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         PublisherKit.AudioLevelListener,
         PublisherKit.PublisherRtcStatsReportListener,
         PublisherKit.AudioStatsListener,
+        PublisherKit.MuteListener,
         PublisherKit.VideoStatsListener,
         SubscriberKit.SubscriberListener,
         Session.SignalListener,
         Session.ConnectionListener,
         Session.ReconnectionListener,
         Session.ArchiveListener,
+        Session.MuteListener,
         Session.StreamPropertiesListener,
         SubscriberKit.AudioLevelListener,
         SubscriberKit.SubscriberRtcStatsReportListener,
@@ -122,6 +125,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSession.setReconnectionListener(this);
         mSession.setArchiveListener(this);
         mSession.setStreamPropertiesListener(this);
+        mSession.setMuteListener(this);
         mSessions.put(sessionId, mSession);
         mAndroidOnTopMap.put(sessionId, androidOnTop);
         mAndroidZOrderMap.put(sessionId, androidZOrder);
@@ -197,6 +201,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setPublishAudio(publishAudio);
         mPublisher.setAudioStatsListener(this);
         mPublisher.setVideoStatsListener(this);
+        mPublisher.setMuteListener(this);
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         mPublishers.put(publisherId, mPublisher);
         callback.invoke();
@@ -300,6 +305,59 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (mSession != null) {
             mSession.disconnect();
         }
+    }
+
+    @ReactMethod
+    public void forceMuteAll(String sessionId, ReadableArray excluededStreamIds, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+        ArrayList<Stream> mExcluededStreams = new ArrayList<Stream>();
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        for (int i = 0; i < excluededStreamIds.size(); i++) {
+            String streamId = excluededStreamIds.getString(i);
+            Stream mStream = streams.get(streamId);
+            if (mStream == null) {
+                promise.reject("Stream not found.");
+                return;
+            }
+            mExcluededStreams.add(mStream);
+        }
+        mSession.forceMuteAll(mExcluededStreams);
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void forceMuteStream(String sessionId, String streamId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        Stream mStream = streams.get(streamId);
+        if (mStream == null) {
+            promise.reject("Stream not found.");
+            return;
+        }
+        mSession.forceMuteStream(mStream);
+        promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void disableForceMute(String sessionId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        mSession.disableForceMute();
+        promise.resolve(true);
     }
 
     @ReactMethod
@@ -748,6 +806,17 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamDropped", streamInfo);
         printLogs("onStreamDropped: Stream Dropped: "+stream.getStreamId() +" in session: "+session.getSessionId());
     }
+    @Override
+    public void onMuteForced​(Session session, MuteForcedInfo info) {
+
+        WritableMap muteForcedInfo = Arguments.createMap();
+        String sessionId = session.getSessionId();
+        muteForcedInfo.putString("sessionId", sessionId);
+        Boolean active = info.getActive();
+        muteForcedInfo.putBoolean("active", active);
+        sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onMuteForced​", muteForcedInfo);
+        printLogs("Mute forced -- active: " + active + " in session: " + sessionId);
+    }
 
     @Override
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
@@ -837,6 +906,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             WritableArray publisherInfo = EventUtils.preparePublisherVideoStats(stats);
             String event = publisherId + ":" + publisherPreface +  "onVideoStats";
             sendEventArray(this.getReactApplicationContext(), event, publisherInfo);
+        }
+    }
+
+    @Override
+    public void onMuteForced​(PublisherKit publisher) {
+
+        String publisherId = Utils.getPublisherId(publisher);
+        if (publisherId.length() > 0) {
+            String event = publisherId + ":" + publisherPreface + "onMuteForced";
+            sendEventMap(this.getReactApplicationContext(), event, null);
         }
     }
 

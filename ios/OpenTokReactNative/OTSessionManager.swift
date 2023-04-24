@@ -368,6 +368,46 @@ class OTSessionManager: RCTEventEmitter {
         resolve(supportedCodecs)
     }
     
+    @objc func forceMuteAll(_ sessionId: String, excludedStreamIds: NSArray, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject("event_failure", "Session ID not found", nil)
+            return
+        }
+        return resolve(true);
+    }
+
+    @objc func forceMuteStream(_ sessionId: String, streamId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { 
+            reject("event_failure", "Session ID not found", nil);
+            return
+        }
+        guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
+            reject("event_failure", "Stream ID not found", nil);
+            return
+        }
+        var error: OTError?
+        session.forceMuteStream(stream, error: &error)
+        if let error = error {
+          reject("event_failure", error.localizedDescription, nil);
+          return;
+        }
+        resolve(true);
+    }
+
+    @objc func disableForceMute(_ sessionId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject("event_failure", "Session not found.", nil);
+            return
+            }
+        var error: OTError?
+        session.disableForceMute(&error)
+        if let error = error {
+          reject("event_failure", error.localizedDescription, nil);
+          return;
+        }
+        resolve(true);
+    }
+    
     @objc func enableLogs(_ logLevel: Bool) -> Void {
         self.logLevel = logLevel;
     }
@@ -526,6 +566,13 @@ extension OTSessionManager: OTSessionDelegate {
         self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)signal", data: signalData)
         printLogs("OTRN: Session signal received")
     }
+
+    func session(_ session: OTSession, info muteForced: OTMuteForcedInfo) {
+        var muteForcedInfo: Dictionary<String, Any> = [:];
+        muteForcedInfo["active"] = muteForced.active;
+        self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)muteFoced", data: muteForcedInfo)
+        printLogs("OTRN Session: Session muteForced - active:  \(muteForced.active)")
+    }
 }
 
 extension OTSessionManager: OTPublisherDelegate {
@@ -570,6 +617,14 @@ extension OTSessionManager: OTPublisherDelegate {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)didFailWithError", data: errorInfo)
         }
         printLogs("OTRN: Publisher failed: \(error.localizedDescription)")
+    }
+
+    func muteForced(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)muteForced", data: [NSNull()]);
+        }
+        printLogs("OTRN: Publisher mute forced")
     }
 }
 

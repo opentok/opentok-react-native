@@ -98,6 +98,7 @@ const sanitizePublisherEvents = (publisherId, events) => {
       audioNetworkStats: 'audioStats',
       rtcStatsReport: 'rtcStatsReport',
       videoNetworkStats: 'videoStats',
+      muteForced: 'muteForced',
     },
     android: {
       streamCreated: 'onStreamCreated',
@@ -107,6 +108,7 @@ const sanitizePublisherEvents = (publisherId, events) => {
       audioNetworkStats: 'onAudioStats',
       rtcStatsReport: 'onRtcStatsReport',
       videoNetworkStats: 'onVideoStats',
+      muteForced: 'onMuteForced',
     },
   };
   return reassignEvents('publisher', customEvents, events, publisherId);

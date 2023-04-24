@@ -99,6 +99,20 @@ RCT_EXTERN_METHOD(reportIssue:
 RCT_EXTERN_METHOD(getSupportedCodecs:
                   (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(forceMuteAll:
+                  (NSString*)sessionId
+                  excludedStreamIds:(NSArray*)excludedStreamIds
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(forceMuteStream:
+                  (NSString*)sessionId
+                  streamId:(NSString*)streamId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(disableForceMute:
+                  (NSString*)sessionId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end
