@@ -2,22 +2,11 @@
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-## Please note that this library is not officially supported by Vonage.
-React Native library for OpenTok iOS and Android SDKs
+React Native library for using [OpenTok](https://tokbox.com/developer/).
 
-- [opentok-react-native](#opentok-react-native)
-  - [Please note that this library is not officially supported by Vonage.](#please-note-that-this-library-is-not-officially-supported-by-vonage)
-    - [In this repo, you'll find the OpenTok React Native library:](#in-this-repo-youll-find-the-opentok-react-native-library)
-  - [Pre-Requisites:](#pre-requisites)
-  - [Installation:](#installation)
-    - [iOS Installation](#ios-installation)
-    - [Android Installation](#android-installation)
-      - [Bintray sunset](#bintray-sunset)
-  - [Samples](#samples)
-  - [Development and Contributing](#development-and-contributing)
-  - [Getting Help](#getting-help)
+This library is now officially supported by Vonage.
 
-### In this repo, you'll find the OpenTok React Native library:
+In this repo, you'll find the OpenTok React Native library.
 
 ## Pre-Requisites:
 
@@ -55,7 +44,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OpenTok', '2.20.0'
+        pod 'OpenTok', '2.23.1'
     end
 
 ```
@@ -101,19 +90,11 @@ If you try to archive the app and it fails, please do the following:
 
 3. Open your Android project in Android Studio.
 
-4. Add the following to your project `build.gradle` file:
+4. Sync Gradle
 
-```
-        maven {
-            url "http://tokbox.bintray.com/maven"
-        }
-```
+5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
-5. Sync Gradle
-
-6. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
-
-7. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
+6. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
 ```xml
     <uses-permission android:name="android.permission.CAMERA" />
@@ -164,6 +145,10 @@ allprojects {
     }
 }
 ```
+
+## Docs
+
+See the [docs](/docs/index.md).
 
 ## Samples
 
