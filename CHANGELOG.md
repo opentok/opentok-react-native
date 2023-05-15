@@ -1,3 +1,10 @@
+# 2.25.0  (May 17 2023)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.25.1.
+  Note that with this version, we are pinning the major and minor release versions
+  (2.25) to match the corresponding versions in the OpenTok Android and iOS SDKs.
+- [Fix]: Bluetooth headset reconnect does not work on android - issue #667
+
 # 0.21.4 (April 12 2023)
 
 - [Update]: Revert OpenTok iOS SDK back 2.23.1. There are issues with
