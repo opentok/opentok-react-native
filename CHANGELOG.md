@@ -6,7 +6,8 @@
   (2.25) to match the corresponding versions in the OpenTok Android and iOS SDKs.
 
   For iOS, note that this version supports iOS 13+, removes support for FAT binaries
-  and drops 32-bit support.
+  and drops 32-bit support. The OpenTok iOS SDK is now available as the OTXCFramework
+  Pod file. (The OpenTok pod file was for FAT binaries.)
 
   See the release notes for the OpenTok [ioS SDK](https://tokbox.com/developer/sdks/ios/release-notes.html)
   and the [Android SDK](https://tokbox.com/developer/sdks/android/release-notes.html).
