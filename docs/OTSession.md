@@ -150,9 +150,8 @@ The default value is false.
 
 **isCamera2Capable** (Boolean) -- Deprecated and ignored. Android only.
 
-**proxyUrl**
-
-The proxy URL. This is an [add-on feature](https://www.vonage.com/communications-apis/video/pricing//plans)
+**proxyUrl** (String) -- The proxy URL to use for the session.
+This is an [add-on feature](https://www.vonage.com/communications-apis/video/pricing//plans)
 feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy/) developer guide.
 
 **useTextureViews** (Boolean) -- Set to `true` to use texture views. The default is `false`. Android only.

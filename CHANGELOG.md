@@ -1,3 +1,20 @@
+# 2.25.0  (May 17 2023)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.25.1.
+
+  Note that with this version, we are pinning the major and minor release versions
+  (2.25) to match the corresponding versions in the OpenTok Android and iOS SDKs.
+
+  For iOS, note that this version supports iOS 13+, removes support for FAT binaries
+  and drops 32-bit support. The OpenTok iOS SDK is now available as the OTXCFramework
+  Pod file. (The OpenTok pod file was for FAT binaries.)
+
+  See the release notes for the OpenTok [ioS SDK](https://tokbox.com/developer/sdks/ios/release-notes.html)
+  and the [Android SDK](https://tokbox.com/developer/sdks/android/release-notes.html).
+
+- [Fix]: Fixes an issue in which applications could not connect to a session when
+  the `proxyUrl` option for OTSession was set. - issue #645
+
 # 0.21.4 (April 12 2023)
 
 - [Update]: Revert OpenTok iOS SDK back 2.23.1. There are issues with
