@@ -99,8 +99,7 @@
 - (void)createCGContextFromPixelBuffer {
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     CVPixelBufferLockBaseAddress(_pixelBuffer, 0);
-    
-    _bitmapContext = NULL;
+
     _bitmapContext = CGBitmapContextCreate(CVPixelBufferGetBaseAddress(_pixelBuffer),
                                           CVPixelBufferGetWidth(_pixelBuffer),
                                           CVPixelBufferGetHeight(_pixelBuffer),
@@ -135,11 +134,6 @@
 }
 
 #pragma mark - Capture lifecycle
-
-/**
- * Allocate capture resources; in this case we're just setting up a timer and
- * block to execute periodically to send video frames.
- */
 
 - (void)initCapture {
     
