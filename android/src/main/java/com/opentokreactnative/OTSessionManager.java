@@ -4,14 +4,15 @@ package com.opentokreactnative;
  * Created by manik on 1/29/18.
  */
 
+import android.os.Build;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -56,7 +57,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         SubscriberKit.AudioStatsListener,
         SubscriberKit.VideoStatsListener,
         SubscriberKit.VideoListener,
-        SubscriberKit.StreamListener{
+        SubscriberKit.StreamListener,
+        LifecycleEventListener
+        {
 
     private ConcurrentHashMap<String, Integer> connectionStatusMap = new ConcurrentHashMap<>();
     private ArrayList<String> jsEvents = new ArrayList<String>();
@@ -72,6 +75,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
         super(reactContext);
         sharedState = OTRN.getSharedState();
+        reactContext.addLifecycleEventListener(this);
     }
 
     @ReactMethod
@@ -981,5 +985,32 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamVideoTypeChanged");
     }
+    @Override
+    public void onHostResume() {
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+
+        for (String key: mPublishers.keySet()) {
+            Publisher publisher = mPublishers.get(key);
+
+            if (publisher != null) {
+                publisher.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onHostPause() {
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+
+       for (String key: mPublishers.keySet()) {
+            Publisher publisher = mPublishers.get(key);
+
+            if (publisher != null) {
+                publisher.onPause();
+            }
+        }
+    }
+    @Override
+    public void onHostDestroy() {}
 
 }
