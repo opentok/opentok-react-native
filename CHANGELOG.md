@@ -1,3 +1,7 @@
+# 2.25.1  (June 27 2023)
+
+- [Fix]: Fix camera lifecycle on Android. - issue #645
+
 # 2.25.0  (May 17 2023)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.25.1.
