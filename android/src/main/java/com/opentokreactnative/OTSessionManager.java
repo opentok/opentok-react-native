@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -59,7 +58,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         SubscriberKit.VideoStatsListener,
         SubscriberKit.VideoListener,
         SubscriberKit.StreamListener,
-         LifecycleEventListener
+        LifecycleEventListener
         {
 
     private ConcurrentHashMap<String, Integer> connectionStatusMap = new ConcurrentHashMap<>();
@@ -990,7 +989,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onHostResume() {
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
 
-        for(String key: mPublishers.keySet()){
+        for (String key: mPublishers.keySet()) {
             Publisher publisher = mPublishers.get(key);
 
             if (publisher != null) {
@@ -1003,7 +1002,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onHostPause() {
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
 
-       for(String key: mPublishers.keySet()){
+       for (String key: mPublishers.keySet()) {
             Publisher publisher = mPublishers.get(key);
 
             if (publisher != null) {
