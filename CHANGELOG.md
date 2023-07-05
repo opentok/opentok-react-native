@@ -1,3 +1,7 @@
+# 2.25.2 (July 5 2023)
+
+- [Fix]: Fix crash on iOS when publishing a screen-sharing stream.
+
 # 2.25.1  (June 27 2023)
 
 - [Fix]: Fix camera lifecycle on Android. - issue #645
