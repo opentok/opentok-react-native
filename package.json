@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "2.25.0",
+  "version": "2.25.1",
   "description": "React Native components for OpenTok iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "https://www.tokbox.com",
