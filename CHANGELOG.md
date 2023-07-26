@@ -1,4 +1,4 @@
-# 0.22.0 (TBD 2023)
+# 0.26.0 (August 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Andriod and iOS SDKs:
 
@@ -18,6 +18,31 @@ For more info, see the docs:
 * [OTPublisher](/docs/OTPublisher.md)
 * [OTSession](/docs/OTSession.md)
 * [OTSubscriber](/docs/OTSubscriber.md)
+
+# 2.25.2 (July 5 2023)
+
+- [Fix]: Fix crash on iOS when publishing a screen-sharing stream.
+
+# 2.25.1  (June 27 2023)
+
+- [Fix]: Fix camera lifecycle on Android. - issue #645
+
+# 2.25.0  (May 17 2023)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.25.1.
+
+  Note that with this version, we are pinning the major and minor release versions
+  (2.25) to match the corresponding versions in the OpenTok Android and iOS SDKs.
+
+  For iOS, note that this version supports iOS 13+, removes support for FAT binaries
+  and drops 32-bit support. The OpenTok iOS SDK is now available as the OTXCFramework
+  Pod file. (The OpenTok pod file was for FAT binaries.)
+
+  See the release notes for the OpenTok [ioS SDK](https://tokbox.com/developer/sdks/ios/release-notes.html)
+  and the [Android SDK](https://tokbox.com/developer/sdks/android/release-notes.html).
+
+- [Fix]: Fixes an issue in which applications could not connect to a session when
+  the `proxyUrl` option for OTSession was set. - issue #645
 
 # 0.21.4 (April 12 2023)
 
