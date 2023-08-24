@@ -1,4 +1,4 @@
-# 0.26.0 (August 2023)
+# 2.25.3 (August 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
 
