@@ -312,7 +312,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void forceMuteAll(String sessionId, ReadableArray excluededStreamIds, Promise promise) {
+    public void forceMuteAll(String sessionId, ReadableArray excludedStreamIds, Promise promise) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
         ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
@@ -321,8 +321,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             promise.reject("Session not found.");
             return;
         }
-        for (int i = 0; i < excluededStreamIds.size(); i++) {
-            String streamId = excluededStreamIds.getString(i);
+        for (int i = 0; i < excludedStreamIds.size(); i++) {
+            String streamId = excludedStreamIds.getString(i);
             Stream mStream = streams.get(streamId);
             if (mStream == null) {
                 promise.reject("Stream not found.");

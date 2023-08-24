@@ -1,6 +1,6 @@
 # 0.26.0 (August 2023)
 
-- [Update]: Add API to implement functionality missing from the OpenTok Andriod and iOS SDKs:
+- [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
 
   * `OTSession.getCapabilities()` method
   * `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
