@@ -199,7 +199,7 @@ support team.) The method returns a Promise that resolves with a string, the iss
 
 This method has one optional parameter -- `excludedStreams`, and array of stream IDs. A stream published by the moderator calling the forceMuteAll() method is muted along with other streams in the session, unless you add the moderator's stream (or streams) to the `excludedStreams` array. If you leave out the `excludedStreams` parameter, all streams in the session (including those of the moderator) will stop publishing audio. Also, any streams that are published after the call to the `forceMuteAll()` method are published with audio muted. You can remove the mute state of a session by calling the `OTSession.disableForceMute()` method.
 
-After you call the Session.disableForceMute() method, new streams published to the session will no longer have audio muted.
+After you call the `Session.disableForceMute()` method, new streams published to the session will no longer have audio muted.
 Calling this method causes the Publisher objects in the clients publishing the streams to dispatch muteForced events. Also, the Session object in each client connected to the session dispatches the muteForced event (with the active property of the event object set to true).
 
 Check the `capabilities.canForceMute` property of the object returned by `OTSession.getCapbabilities()` to see if you can call this function successfully. This is reserved for clients that have connected with a token that has been assigned the moderator role (see the [Token Creation documentation](https://tokbox.com/developer/guides/create-token/)).

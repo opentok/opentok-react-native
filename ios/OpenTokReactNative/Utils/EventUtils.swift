@@ -90,7 +90,7 @@ class EventUtils {
             stats["subscriberId"] = value.subscriberId;
             stats["audioPacketsLost"] = value.audioPacketsLost;
             stats["audioPacketsSent"] = value.audioPacketsSent;
-            stats["audioPacketsSent"] = value.audioPacketsSent;
+            stats["audioBytesSent"] = value.audioBytesSent;
             stats["timestamp"] = value.timestamp;
             statsArray.append(stats);
         }

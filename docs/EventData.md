@@ -161,7 +161,7 @@ To get audio data for a publisher, register an event listener for the OTPublishe
       subscriberId: string,
       audioPacketsLost: number,
       audioPacketsSent: number,
-      audioPacketsSent: number,
+      audioBytesSent: number,
       timestamp: number,
     }
   ];
@@ -354,7 +354,7 @@ You can find the structure of the object below:
 
 ```javascript
   event = [
-    connectionId: string
+    connectionId: string,
     jsonArrayOfReports: string
   ];
 ```

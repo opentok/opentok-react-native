@@ -316,7 +316,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
         ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
-        ArrayList<Stream> mExcluededStreams = new ArrayList<Stream>();
+        ArrayList<Stream> mExcludedStreams = new ArrayList<Stream>();
         if (mSession == null) {
             promise.reject("Session not found.");
             return;
@@ -328,9 +328,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 promise.reject("Stream not found.");
                 return;
             }
-            mExcluededStreams.add(mStream);
+            mExcludedStreams.add(mStream);
         }
-        mSession.forceMuteAll(mExcluededStreams);
+        mSession.forceMuteAll(mExcludedStreams);
         promise.resolve(null);
     }
 
