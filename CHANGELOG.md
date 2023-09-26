@@ -1,4 +1,4 @@
-# 2.25.3 (August 2023)
+# 2.25.3 (September 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
 
@@ -18,6 +18,8 @@ For more info, see the docs:
 * [OTPublisher](/docs/OTPublisher.md)
 * [OTSession](/docs/OTSession.md)
 * [OTSubscriber](/docs/OTSubscriber.md)
+
+- [Fix]: Fix android app crash due to permission missing.
 
 # 2.25.2 (July 5 2023)
 
