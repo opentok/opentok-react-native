@@ -47,6 +47,10 @@ RCT_EXTERN_METHOD(publishAudio:
 RCT_EXTERN_METHOD(publishVideo:
                   (NSString*)publisherId
                   pubVideo:(BOOL)pubVideo)
+RCT_EXTERN_METHOD(getRtcStatsReport:
+                  (NSString*)publisherId)
+RCT_EXTERN_METHOD(getSubscriberRtcStatsReport:
+                  (NSString*)subscriberId)
 RCT_EXTERN_METHOD(subscribeToAudio:
                   (NSString*)streamId
                   subAudio:(BOOL)subAudio)
@@ -59,6 +63,9 @@ RCT_EXTERN_METHOD(setPreferredResolution:
 RCT_EXTERN_METHOD(setPreferredFrameRate:
                   (NSString*)streamId
                   frameRate:(nonnull NSNumber*)frameRate)
+RCT_EXTERN_METHOD(setAudioVolume:
+                  (NSString*)streamId
+                  audioVolume:(nonnull NSNumber*)audioVolume)
 RCT_EXTERN_METHOD(changeCameraPosition:
                   (NSString*)publisherId
                   cameraPosition:(NSString*)cameraPosition)
@@ -83,6 +90,29 @@ RCT_EXTERN_METHOD(removeJSComponentEvents:
 RCT_EXTERN_METHOD(getSessionInfo:
                   (NSString*)sessionId
                   callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(getSessionCapabilities:
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(reportIssue:
+                  (NSString*)sessionId
+                  callback:(RCTResponseSenderBlock*)callback)
+RCT_EXTERN_METHOD(getSupportedCodecs:
+                  (RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(forceMuteAll:
+                  (NSString*)sessionId
+                  excludedStreamIds:(NSArray*)excludedStreamIds
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(forceMuteStream:
+                  (NSString*)sessionId
+                  streamId:(NSString*)streamId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(disableForceMute:
+                  (NSString*)sessionId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(enableLogs:
                   (BOOL)logLevel)
 @end

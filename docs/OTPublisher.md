@@ -63,6 +63,11 @@ The OTPublisher component has the following properties, each of which is optiona
 * `eventHandlers` (Object) -- An object containing key-value pairs of event names and
 callback functions for event handlers. See [Events](#events).
 
+## Methods
+
+**getRtcStatsReport()** Gets the RTC stats report for the publisher. This is an asynchronous operation.
+The OTPublisher object dispatches an `rtcStatsReport` event when RTC statistics for the publisher are available.
+
 ## properties object
 
 The `properties` object passed into the OTPublisher object has the following properties:
@@ -103,7 +108,12 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **publishVideo** (Boolean) -- Whether to publish video. The default is `true`.
 
-* **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+* **scalableScreenshare** (Boolean) -- Whether to allow use of
+{scalable video}(https://tokbox.com/developer/guides/scalable-video/) for a screen-sharing publisher
+(true) or not (false, the default). This only applies to a publisher that has the `videoSource` set
+to "screen".
+
+* **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
 
 * **videoContentHint** (String) -- Sets the content hint of the video track of the publisher's stream. You can set this to one of the following values: "", "motion", "details" or "text". For additional information, see the [documentation](https://tokbox.com/developer/sdks/js/reference/OT.html#initPublisher) for the `videoContentHint` option of the
 `OT.initPublisher()` method of the OpenTok.js SDK.
@@ -116,12 +126,38 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **audioLevel** (Number) -- The audio level, from 0 to 1.0. Adjust this value logarithmically for use in adjusting a user interface element, such as a volume meter. Use a moving average to smooth the data.
 
+* **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the publisher.
+  A [PublisherAudioNetworkStatsEvent](./EventData.md#PublisherAudioNetworkStatsEvent) object is passed into the event handler.
+
 * **error** (Object) -- Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
 
+* **muteForced** -- Sent when a moderator has forced this client to mute audio. 
+
 * **otrnError** (Object) -- Sent if there is an error with the communication between the native publisher instance and the JS component.
+
+* **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the publisher,
+  in response to calling the `OTPublisher.getRtcStatsReport()` method. A
+  [PublisherRtcStatsReportEvent](./EventData.md#publisherRtcStatsReportEvent) object is passed into
+  the event handler. This event has an array of
+  objects. For a routed session (a seesion that uses the
+  [OpenTok Media Router](https://tokbox.com/developer/guides/create-session/#media-mode)),
+  this array includes one object, defining the statistics for the single video media stream that is sent
+  to the OpenTok Media Router. In a relayed session, the array includes an object for each subscriber
+  to the published stream. Each object includes two properties:
+
+  * `connectionId` -- For a relayed session (in which a publisher sends individual media streams
+    to each subscriber), this is the unique ID of the client’s connection.
+
+  * `jsonArrayOfReports` -- A JSON array of RTC stats reports for the media stream. The structure
+  of the JSON array is similar to the format of the RtcStatsReport object implemented in web browsers
+  (see the [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport)).
+  Also see [this W3C documentation](https://w3c.github.io/webrtc-stats/).
 
 * **streamCreated** (Object) -- Sent when the publisher starts streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
 
 * **streamDestroyed** (Object) -- Sent when the publisher stops streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
+
+**videoNetworkStats** (Object) -- Sent periodically to report audio statistics for the publisher.
+  A [PublisherVideoNetworkStatsEvent](./EventData.md#PublisherVideoNetworkStatsEvent) object is passed into the event handler.

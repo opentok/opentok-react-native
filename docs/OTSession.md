@@ -150,13 +150,19 @@ The default value is false.
 
 **isCamera2Capable** (Boolean) -- Deprecated and ignored. Android only.
 
-**proxyUrl** (String) -- The proxy URL to use for the session.
+**proxyUrl** (String, optional) -- The proxy URL to use for the session.
 This is an [add-on feature](https://www.vonage.com/communications-apis/video/pricing//plans)
 feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy/) developer guide.
 
 **useTextureViews** (Boolean) -- Set to `true` to use texture views. The default is `false`. Android only.
 
 ## Methods
+
+**disableForceMute()** Disables the active mute state of the session. After you call this method, new streams published to the session will no longer have audio muted.
+
+After you call to the Session.forceMuteAll() method (or a moderator in another client makes a call to mute all streams), any streams published after the moderation call are published with audio muted. Call the `OTSession.disableForceMute()` method to remove the mute state of a session (so that new published streams are not automatically muted).
+
+Check the `capabilities.canForceMute` property of the object returned by `OTSession.getCapbabilities()` to see if you can call this function successfully. This is reserved for clients that have connected with a token that has been assigned the moderator role (see the [Token Creation documentation](https://tokbox.com/developer/guides/create-token/)).
 
 **getSessionInfo()** Returns an object with the following properties:
 
@@ -171,6 +177,37 @@ feature. See the [OpenTok IP Proxy](https://tokbox.com/developer/guides/ip-proxy
 
   - `data` (String) -- The [connection data](https://tokbox.com/developer/guides/create-token/#connection-data)
     for the local client.
+
+***getCapabilities()*** Indicates whether the client can publish and subscribe to streams in the session, , based on the roles assigned to the [client token](https://tokbox.com/developer/guides/create-token) used to connect to the session. The method returns a Promise that resolves with an object with the following properties:
+
+* `canForceMute` (Boolean) -- Whether the client can force mute streams in the session or disable the active mute state in a session (`true`) or not (`false`).
+
+* `canPublish` (Boolean) -- Whether the client can publish streams to the session (`true`) or not (`false`).
+
+* `canSubscribe` (Boolean) -- Whether the client can subscribe to streams in the session (`true`) or not (`false`).
+
+The promise is rejected if you have not connected to the session and the `connectionCreated` event has been dispatched.
+
+For more information, see the
+[OpenTok token documentation](https://tokbox.com/developer/guides/create-token).
+
+**reportIssue()** Lets you report that your app experienced an issue (to view with
+[Inspector](http://tokbox.com/developer/tools/Inspector) or to discuss with the Vonage API
+support team.) The method returns a Promise that resolves with a string, the issue ID.
+
+**forceMuteAll()** Forces all publishers in the session (except for those publishing excluded streams) to mute audio. 
+
+This method has one optional parameter -- `excludedStreams`, and array of stream IDs. A stream published by the moderator calling the forceMuteAll() method is muted along with other streams in the session, unless you add the moderator's stream (or streams) to the `excludedStreams` array. If you leave out the `excludedStreams` parameter, all streams in the session (including those of the moderator) will stop publishing audio. Also, any streams that are published after the call to the `forceMuteAll()` method are published with audio muted. You can remove the mute state of a session by calling the `OTSession.disableForceMute()` method.
+
+After you call the `Session.disableForceMute()` method, new streams published to the session will no longer have audio muted.
+Calling this method causes the Publisher objects in the clients publishing the streams to dispatch muteForced events. Also, the Session object in each client connected to the session dispatches the muteForced event (with the active property of the event object set to true).
+
+Check the `capabilities.canForceMute` property of the object returned by `OTSession.getCapbabilities()` to see if you can call this function successfully. This is reserved for clients that have connected with a token that has been assigned the moderator role (see the [Token Creation documentation](https://tokbox.com/developer/guides/create-token/)).
+
+**forceMuteStream()** Forces a the publisher of a specified stream to mute its audio. Pass the stream ID
+of the stream in as a parameter.
+
+Check the `capabilities.canForceMute` property of the object returned by `OTSession.getCapbabilities()` to see if you can call this function successfully. This is reserved for clients that have connected with a token that has been assigned the moderator role (see the [Token Creation documentation](https://tokbox.com/developer/guides/create-token/)).
 
 **signal()** Sends a signal to clients connected to the session. The method has one parameter,
 an object that includes the following properties, each of which is optional
@@ -202,6 +239,8 @@ A [ConnectionDestroyedEvent](./EventData.md#ConnectionDestroyedEvent) object is 
 
 **error** (Object) — Sent if the attempt to connect to the session fails or if the connection to the session drops due to an error after a successful connection.
 An [ErrorEvent](./EventData.md#ErrorEvent) object is passed into the event handler.
+
+* **muteForced** -- Sent when a moderator has forced clients publishing streams to the session to mute audio (the `active` property of this `MuteForcedEvent` object is set to `true`), or a moderator has disabled the mute audio state in the session (the active property of this `MuteForcedEvent` object is set to `false`). An [ErrorEvent](./EventData.md#MuteForcedEvent) object is passed into the event handler.
 
 **otrnError** -- Sent if there is an error with the communication between the native session instance and the JS component.
 

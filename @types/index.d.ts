@@ -86,6 +86,11 @@ declare module "opentok-react-native" {
     timestamp: number,
   }
 
+  interface PublisherRtcStatsReport {
+    connectionId: string,
+    jsonArrayOfReports: string,
+  }
+
   interface SignalEvent {
     sessionId: string;
     fromConnection: string;
@@ -123,6 +128,35 @@ declare module "opentok-react-native" {
      * Used to get details about the session
      */
     getSessionInfo?: any
+
+    /**
+     * Used to get capabilities of the client
+     */
+    getCapabilities(): Promise<{
+      canForceMute: boolean;
+      canPublish: boolean;
+      canSubscribe: boolean;
+    }>
+
+    /**
+     * Mutes all streams in the session.
+     */
+    forceMuteAll(excludedStreamIds: string[]): Promise<>
+
+    /**
+     * Mutes a stream in the session.
+     */
+    forceMuteStream(streamId: string): Promise<>
+
+    /**
+     * Disables the force mute state for the session.
+     */
+    disableForceMute(): Promise<>
+
+    /**
+     * Used to report an issue
+     */
+    reportIssue(): Promise<string>
 
     /**
      * Event handlers passed into the native session instance.
@@ -273,6 +307,13 @@ declare module "opentok-react-native" {
      * Event handlers passed into native publsiher instance
      */
     eventHandlers?: OTPublisherEventHandlers;
+
+    /**
+     * Gets the RTC stats report for the publisher. This is an asynchronous operation.
+     * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport(): void;
   }
 
   interface OTPublisherProperties {
@@ -328,9 +369,9 @@ declare module "opentok-react-native" {
     publishVideo?: boolean;
 
     /**
-     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
      */
-    resolution?: "1280x720" | "640x480" | "352x288";
+    resolution?: "1920x1080" | "1280x720" | "640x480" | "352x288";
 
     /**
      * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
@@ -358,6 +399,12 @@ declare module "opentok-react-native" {
      * Sent if there is an error with the communication between the native publisher instance and the JS component.
      */
     otrnError?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when RTC stats reports are available for the publisher, 
+     * in response to calling the OTPublisher.getRtcStatsReport() method.
+     */
+    rtcStatsReport?: CallbackWithParam<PublisherRtcStatsReport[]>, any>;
 
     /**
      * Sent when the publisher starts streaming.
@@ -405,6 +452,13 @@ declare module "opentok-react-native" {
      * If set to true, the subscriber can subscribe to it's own publisher stream (default: false)
      */
     subscribeToSelf?: boolean;
+
+    /**
+     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
+     * The OTSubscriber object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport(): void;
   }
 
   interface OTSubscriberProperties {
@@ -449,6 +503,12 @@ declare module "opentok-react-native" {
      * Sent if there is an error with the communication between the native subscriber instance and the JS component.
      */
     otrnError?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when an RTC stats report is available for the subscriber, 
+     * in response to calling the OTSubscriber.getRtcStatsReport() method.
+     */
+    rtcStatsReport?: CallbackWithParam<RtcStatsReport>, any>;
 
     /**
      * Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the connected message is sent.
