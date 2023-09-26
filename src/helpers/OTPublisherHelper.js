@@ -8,6 +8,8 @@ const sanitizeResolution = (resolution) => {
       return 'MEDIUM';
     case '1280x720':
       return 'HIGH';
+    case '1920x1080':
+      return 'HIGH_1080P';
     default:
       return 'MEDIUM';
   }
@@ -62,6 +64,7 @@ const sanitizeProperties = (properties) => {
       resolution: sanitizeResolution(),
       videoContentHint: '',
       videoSource: 'camera',
+      scalableScreenshare: false,
     };
   }
   return {
@@ -78,6 +81,7 @@ const sanitizeProperties = (properties) => {
     resolution: sanitizeResolution(properties.resolution),
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
     videoSource: sanitizeVideoSource(properties.videoSource),
+    scalableScreenshare: Boolean(properties.scalableScreenshare),
   };
 };
 
@@ -91,12 +95,20 @@ const sanitizePublisherEvents = (publisherId, events) => {
       streamDestroyed: 'streamDestroyed',
       error: 'didFailWithError',
       audioLevel: 'audioLevelUpdated',
+      audioNetworkStats: 'audioStats',
+      rtcStatsReport: 'rtcStatsReport',
+      videoNetworkStats: 'videoStats',
+      muteForced: 'muteForced',
     },
     android: {
       streamCreated: 'onStreamCreated',
       streamDestroyed: 'onStreamDestroyed',
       error: 'onError',
       audioLevel: 'onAudioLevelUpdated',
+      audioNetworkStats: 'onAudioStats',
+      rtcStatsReport: 'onRtcStatsReport',
+      videoNetworkStats: 'onVideoStats',
+      muteForced: 'onMuteForced',
     },
   };
   return reassignEvents('publisher', customEvents, events, publisherId);

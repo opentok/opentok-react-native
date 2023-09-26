@@ -1,3 +1,24 @@
+# 2.25.3 (August 2023)
+
+- [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
+
+  * `OTSession.getCapabilities()` method
+  * `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
+  * OTPublisher `scalableScreenshare` option (in the OTPublisher properties)
+  * OTPublisher `audioNetworkStats` and `videoNetworkStats` events
+  * `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
+  * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
+  * OTSubscriber `audioVolume` property.
+  * OT.getSupportedCodecs() method.
+  * OT.forceMuteAll(), OT.forceMuteStream(), OT.disableForceMute() methods. OTPublisher
+    `muteForce` event and OTSession `muteForced` event.
+
+For more info, see the docs:
+
+* [OTPublisher](/docs/OTPublisher.md)
+* [OTSession](/docs/OTSession.md)
+* [OTSubscriber](/docs/OTSubscriber.md)
+
 # 2.25.2 (July 5 2023)
 
 - [Fix]: Fix crash on iOS when publishing a screen-sharing stream.

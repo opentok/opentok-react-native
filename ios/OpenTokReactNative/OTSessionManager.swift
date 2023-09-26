@@ -93,6 +93,9 @@ class OTSessionManager: RCTEventEmitter {
                 guard let screenView = RCTPresentedViewController()?.view else {
                     let errorInfo = EventUtils.createErrorMessage("There was an error setting the videoSource as screen")
                     callback([errorInfo]);
+                    if let scalableScreenshare = properties["scalableScreenshare"] as? Bool {
+                        publisherProperties.scalableScreenshare = scalableScreenshare;
+                    }
                     return
                 }
                 publisher.videoType = .screen;
@@ -104,6 +107,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.audioLevelDelegate = self;
+            publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
         }
     }
@@ -149,11 +153,16 @@ class OTSessionManager: RCTEventEmitter {
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
             subscriber.networkStatsDelegate = self;
             subscriber.audioLevelDelegate = self;
+            subscriber.delegate = self;
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
+            if let audioVolume = properties["audioVolume"] as? Double {
+              subscriber.audioVolume = audioVolume;
+            }
+            subscriber.rtcStatsReportDelegate = self;
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -202,6 +211,11 @@ class OTSessionManager: RCTEventEmitter {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.publishVideo = pubVideo;
     }
+
+    @objc func getRtcStatsReport(_ publisherId: String) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.getRtcStatsReport()
+    }
     
     @objc func subscribeToAudio(_ streamId: String, subAudio: Bool) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
@@ -221,6 +235,16 @@ class OTSessionManager: RCTEventEmitter {
     @objc func setPreferredFrameRate(_ streamId: String, frameRate: Float) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(frameRate);
+    }
+    
+    @objc func setAudioVolume(_ streamId: String, audioVolume: Double) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.audioVolume = audioVolume;
+    }
+    
+    @objc func getSubscriberRtcStatsReport(_ streamId: String) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.getRtcStatsReport()
     }
     
     @objc func changeCameraPosition(_ publisherId: String, cameraPosition: String) -> Void {
@@ -315,6 +339,73 @@ class OTSessionManager: RCTEventEmitter {
         var sessionInfo: Dictionary<String, Any> = EventUtils.prepareJSSessionEventData(session);
         sessionInfo["connectionStatus"] = session.sessionConnectionStatus.rawValue;
         callback([sessionInfo]);
+    }
+    
+    @objc func getSessionCapabilities(_ sessionId: String, callback: RCTResponseSenderBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { callback([NSNull()]); return }
+        var sessionCapabilities: Dictionary<String, Any> = [:];
+        sessionCapabilities["canPublish"] = session.capabilities?.canPublish;
+        // Bug in OT iOS SDK. This is set to false, but it should be true:
+        sessionCapabilities["canSubscribe"] = true;
+        sessionCapabilities["canForceMute"] = session.capabilities?.canForceMute;
+        callback([sessionCapabilities]);
+    }
+    
+    @objc func reportIssue(_ sessionId: String, callback: RCTResponseSenderBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { callback([NSNull()]); return }
+        var issueId:NSString? = ""
+        session.reportIssue(&issueId)
+        callback([issueId! as NSString])
+    }
+    
+    // The OpenTok iOS SDK does not implement a getVideoCodecs method, because iOS
+    // supported all supported codecs. But we will implement it here so that the
+    // OT.getVideoCodecs() method can be called cross-platform.
+    @objc func getSupportedCodecs(_ resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        var supportedCodecs: Dictionary<String, Any> = [:];
+        supportedCodecs["videoDecoderCodecs"] = ["H.264", "VP8"];
+        supportedCodecs["videoEncoderCodecs"] = ["H.264", "VP8"];
+        resolve(supportedCodecs)
+    }
+    
+    @objc func forceMuteAll(_ sessionId: String, excludedStreamIds: NSArray, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject("event_failure", "Session ID not found", nil)
+            return
+        }
+        return resolve(true);
+    }
+
+    @objc func forceMuteStream(_ sessionId: String, streamId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else { 
+            reject("event_failure", "Session ID not found", nil);
+            return
+        }
+        guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
+            reject("event_failure", "Stream ID not found", nil);
+            return
+        }
+        var error: OTError?
+        session.forceMuteStream(stream, error: &error)
+        if let error = error {
+          reject("event_failure", error.localizedDescription, nil);
+          return;
+        }
+        resolve(true);
+    }
+
+    @objc func disableForceMute(_ sessionId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject("event_failure", "Session not found.", nil);
+            return
+            }
+        var error: OTError?
+        session.disableForceMute(&error)
+        if let error = error {
+          reject("event_failure", error.localizedDescription, nil);
+          return;
+        }
+        resolve(true);
     }
     
     @objc func enableLogs(_ logLevel: Bool) -> Void {
@@ -475,6 +566,13 @@ extension OTSessionManager: OTSessionDelegate {
         self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)signal", data: signalData)
         printLogs("OTRN: Session signal received")
     }
+
+    func session(_ session: OTSession, info muteForced: OTMuteForcedInfo) {
+        var muteForcedInfo: Dictionary<String, Any> = [:];
+        muteForcedInfo["active"] = muteForced.active;
+        self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)muteFoced", data: muteForcedInfo)
+        printLogs("OTRN Session: Session muteForced - active:  \(muteForced.active)")
+    }
 }
 
 extension OTSessionManager: OTPublisherDelegate {
@@ -520,6 +618,14 @@ extension OTSessionManager: OTPublisherDelegate {
         }
         printLogs("OTRN: Publisher failed: \(error.localizedDescription)")
     }
+
+    func muteForced(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)muteForced", data: [NSNull()]);
+        }
+        printLogs("OTRN: Publisher mute forced")
+    }
 }
 
 extension OTSessionManager: OTPublisherKitAudioLevelDelegate {
@@ -527,6 +633,34 @@ extension OTSessionManager: OTPublisherKitAudioLevelDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioLevelUpdated", data: audioLevel)
+        }
+    }
+}
+
+extension OTSessionManager: OTPublisherKitRtcStatsReportDelegate {
+    func publisher(_ publisher: OTPublisherKit, rtcStatsReport stats: [OTPublisherRtcStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherRtcStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)rtcStatsReport", data: statsArray)
+        }
+    }
+}
+
+extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
+    func publisher(_ publisher: OTPublisherKit, audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherAudioNetworkStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStats", data: statsArray)
+        }
+    }
+
+    func publisher(_ publisher: OTPublisherKit, videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherVideoNetworkStats(stats);
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStats", data: statsArray)
         }
     }
 }
@@ -670,5 +804,18 @@ extension OTSessionManager: OTSubscriberKitAudioLevelDelegate {
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
         self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
+    }
+}
+
+extension OTSessionManager: OTSubscriberKitRtcStatsReportDelegate {
+    func subscriber(_ subscriber: OTSubscriberKit, rtcStatsReport stats: String) {
+        var subscriberInfo: Dictionary<String, Any> = [:];
+        subscriberInfo["jsonArrayOfReports"] = stats;
+        guard let stream = subscriber.stream else {
+            self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo);
+            return;
+        }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo)
     }
 }
