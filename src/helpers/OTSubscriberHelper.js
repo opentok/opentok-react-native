@@ -21,6 +21,7 @@ const sanitizeSubscriberEvents = (events) => {
       audioNetworkStats: 'audioNetworkStatsUpdated',
       videoNetworkStats: 'videoNetworkStatsUpdated',
       audioLevel: 'audioLevelUpdated',
+      rtcStatsReport: 'rtcStatsReport',
       videoDisabled: 'subscriberVideoDisabled',
       videoEnabled: 'subscriberVideoEnabled',
       videoDisableWarning: 'subscriberVideoDisableWarning',
@@ -33,6 +34,7 @@ const sanitizeSubscriberEvents = (events) => {
       reconnected: 'onReconnected',
       error: 'onError',
       audioNetworkStats: 'onAudioStats',
+      rtcStatsReport: 'onRtcStatsReport',
       videoNetworkStats: 'onVideoStats',
       audioLevel: 'onAudioLevelUpdated',
       videoDisabled: 'onVideoDisabled',
@@ -102,7 +104,7 @@ const sanitizeProperties = (properties) => {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
-    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate)
+    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
   };
 };
 

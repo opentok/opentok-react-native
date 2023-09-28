@@ -12,6 +12,8 @@ class Utils {
     static func sanitizeCameraResolution(_ resolution: Any) -> OTCameraCaptureResolution {
         guard let cameraResolution = resolution as? String else { return .medium };
         switch cameraResolution {
+        case "HIGH_1080P":
+            return .high1080p;
         case "HIGH":
             return .high;
         case "LOW":
