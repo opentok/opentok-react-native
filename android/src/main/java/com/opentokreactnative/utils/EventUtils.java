@@ -1,12 +1,15 @@
 package com.opentokreactnative.utils;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.opentok.android.Connection;
+import com.opentok.android.MediaUtils;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.SubscriberKit;
+import com.opentok.android.PublisherKit;
 
 public final class EventUtils {
 
@@ -111,6 +114,70 @@ public final class EventUtils {
         videoStats.putInt("videoPacketsReceived", stats.videoPacketsReceived);
         videoStats.putDouble("timestamp", stats.timeStamp);
         return videoStats;
+    }
+
+    public static WritableArray preparePublisherRtcStats(PublisherKit.PublisherRtcStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherRtcStats stat : stats) {
+          WritableMap statMap = Arguments.createMap();
+          statMap.putString("connectionId", stat.connectionId);
+          statMap.putString("jsonArrayOfReports", stat.jsonArrayOfReports);
+          statsArrayMap.pushMap(statMap);
+        }
+        return statsArrayMap;
+    }
+
+    public static WritableArray preparePublisherAudioStats(PublisherKit.PublisherAudioStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherAudioStats stat : stats) {
+          WritableMap audioStats = Arguments.createMap();
+          audioStats.putString("connectionId", stat.connectionId);
+          audioStats.putString("subscriberId", stat.subscriberId);
+          audioStats.putDouble("audioBytesSent", stat.audioBytesSent);
+          audioStats.putDouble("audioPacketsLost", stat.audioPacketsLost);
+          audioStats.putDouble("audioPacketsSent", stat.audioPacketsSent);
+          audioStats.putDouble("startTime", stat.startTime);
+          statsArrayMap.pushMap(audioStats);
+        }
+        return statsArrayMap;
+    }
+
+    public static WritableArray preparePublisherVideoStats(PublisherKit.PublisherVideoStats[] stats) {
+        WritableArray statsArrayMap = Arguments.createArray();
+        for (PublisherKit.PublisherVideoStats stat : stats) {
+          WritableMap videoStats = Arguments.createMap();
+          videoStats.putString("connectionId", stat.connectionId);
+          videoStats.putString("subscriberId", stat.subscriberId);
+          videoStats.putDouble("videoBytesSent", stat.videoBytesSent);
+          videoStats.putDouble("videoPacketsLost", stat.videoPacketsLost);
+          videoStats.putDouble("videoPacketsSent", stat.videoPacketsSent);
+          videoStats.putDouble("startTime", stat.startTime);
+          statsArrayMap.pushMap(videoStats);
+        }
+        return statsArrayMap;
+    }
+
+    public static WritableMap prepareMediaCodecsMap(MediaUtils.SupportedCodecs supportedCodecs) {
+        WritableMap codecsMap = Arguments.createMap();
+        WritableArray videoDecoderCodecsArray = Arguments.createArray();
+        WritableArray videoEncoderCodecsArray = Arguments.createArray();
+        for (MediaUtils.VideoCodecType decoderCodec : supportedCodecs.videoDecoderCodecs ) {
+            if (decoderCodec.equals(MediaUtils.VideoCodecType.VIDEO_CODEC_H264)) {
+                videoDecoderCodecsArray.pushString("H.264");
+            } else {
+                videoDecoderCodecsArray.pushString("VP8");
+            }
+        }
+        for (MediaUtils.VideoCodecType encoderCodec : supportedCodecs.videoEncoderCodecs ) {
+            if (encoderCodec.equals(MediaUtils.VideoCodecType.VIDEO_CODEC_H264)) {
+                videoEncoderCodecsArray.pushString("H.264");
+            } else {
+                videoEncoderCodecsArray.pushString("VP8");
+            }
+        }
+        codecsMap.putArray("videoDecoderCodecs", videoDecoderCodecsArray);
+        codecsMap.putArray("videoEncoderCodecs", videoEncoderCodecsArray);
+        return codecsMap;
     }
 
     public static WritableMap createError(String message) {
