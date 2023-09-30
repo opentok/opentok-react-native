@@ -85,6 +85,9 @@ RCT_EXTERN_METHOD(destroyPublisher:
                   callback:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(setJSComponentEvents:
                   (NSArray*)events)
+RCT_EXTERN_METHOD(setVideoTransformers:
+                  (NSString*)publisherId
+                  videoTransformers:(NSArray*)videoTransformers)
 RCT_EXTERN_METHOD(removeJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(getSessionInfo:

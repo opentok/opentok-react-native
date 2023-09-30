@@ -314,6 +314,11 @@ declare module "opentok-react-native" {
      * the publisher are available.
      */
     getRtcStatsReport(): void;
+
+    /**
+     * Sets video transformers for the publisher (or clears them if passed an empty array)
+     */
+    setVideoTransformers?: any
   }
 
   interface OTPublisherProperties {

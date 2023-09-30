@@ -326,6 +326,30 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
+    @objc func setVideoTransformers(_ publisherId: String, videoTransformers: Array<Any>) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return // To do -- handle error
+        }
+        var nativeTransformers: [OTVideoTransformer] = [];
+
+        for transformer in videoTransformers {
+            guard let transformerDictionary = transformer as? [String: String] else {
+                return // To do -- handle error
+            }
+            guard let transformerName = transformerDictionary["name"], let transformerProperties = transformerDictionary["properties"] else {
+                return // To do -- handle error
+            }
+            guard let nativeTransformer = OTVideoTransformer(
+                name: transformerName,
+                properties: transformerProperties
+            ) else {
+                return // To do -- handle error
+            }
+            nativeTransformers.append(nativeTransformer)
+        }
+        publisher.videoTransformers = nativeTransformers
+    }
+    
     @objc func removeNativeEvents(_ events: Array<String>) -> Void {
         for event in events {
             if let i = self.jsEvents.index(of: event) {

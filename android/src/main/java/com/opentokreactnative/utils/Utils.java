@@ -3,6 +3,7 @@ package com.opentokreactnative.utils;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
+import com.opentok.android.PublisherKit.VideoTransformer;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.opentok.android.Session.Builder.TransportPolicy;
@@ -98,6 +99,24 @@ public final class Utils {
             }
         }
         return iceServers;
+    }
+
+    public static ArrayList<PublisherKit.VideoTransformer> sanitizeVideoTransformerList(ReadableArray transformerList) {
+        ArrayList<PublisherKit.VideoTransformer> nativeVideoTransformers = new ArrayList<>();
+        if (transformerList != null) {
+            for (int i = 0; i < transformerList.size(); i++) {
+                String transformerName = transformerList.getMap(i).getString("name");
+                if (transformerName == "BackgroundReplacement" ) {
+                    // Only implemented in iOS -- ignore in Androd for now.
+                    continue;
+                }
+                nativeVideoTransformers.add(new PublisherKit.VideoTransformer(
+                    transformerName,
+                    transformerList.getMap(i).getString("properties")
+                ));
+            }
+        }
+        return nativeVideoTransformers;
     }
 
     public static VideoContentHint convertVideoContentHint(String videoContentHint) {

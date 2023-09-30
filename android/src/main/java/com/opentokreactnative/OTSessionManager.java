@@ -31,6 +31,7 @@ import com.opentok.android.MediaUtils;
 import com.opentok.android.MuteForcedInfo;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
+import com.opentok.android.PublisherKit.VideoTransformer;
 import com.opentok.android.Stream;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
@@ -391,6 +392,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
             mPublisher.getRtcStatsReport();
+        }
+    }
+
+    @ReactMethod
+    public void setVideoTransformers(String publisherId, ReadableArray videoTransformers) {
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+          ArrayList<PublisherKit.VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(videoTransformers);
+          mPublisher.setVideoTransformers(nativeVideoTransformers);
         }
     }
 
@@ -1157,6 +1168,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         printLogs("onStreamHasAudioChanged");
     }
 
+    /* TODO -- This moved in OpenTok Android 2.26.0
     @Override
     public void onStreamHasCaptionsChanged(Session session, Stream stream, boolean hasCaptions) {
         WritableMap eventData = Arguments.createMap();
@@ -1167,6 +1179,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamHasCaptionsChanged", eventData);
         printLogs("onStreamHasCaptionsChanged");
     }
+    */
 
     @Override
     public void onStreamHasVideoChanged(Session session, Stream stream, boolean Video) {

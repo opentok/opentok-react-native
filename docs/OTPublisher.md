@@ -159,5 +159,52 @@ A [streamingEvent](./EventData.md#streamingEvent) object is passed into the even
 * **streamDestroyed** (Object) -- Sent when the publisher stops streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
 
+**setVideoTransformers()** -- Sets video transformers for the publisher. This method has one parameter -- and array of objects defining each transformer to apply to the publisher's stream. A transformer object has two properties:
+
+* `name` (String) -- Either 'backgroundBlur' (for a background blur filter) or 'backgroundImageReplacement' (for a background image replacement filter). Android only supports the 'backgroundBlur' transformer (and it is a beta feature in Android).
+
+* `properties` (String) -- A JSON string with the properties of the Vonage video transformer.
+
+  For a background blur transformer, the format of the JSON is:
+  
+  ```
+  `{
+     "radius" :"None"
+   }`
+   ```
+   
+   Valid values for the radius property are "None", "High", and "Low".
+   
+  For a custom background blur transformer, the format of the JSON is:
+  
+  ```
+  `{
+    "radius": "Custom",
+    "custom_radius": "value"
+  }
+  ```
+  
+  `custom_radius` can be any positive integer.
+  
+  For a background replacement transformer (supported on iOS only), the format of the JSON is:
+  
+  ```
+  `{
+    "image_file_path": "path/to/image"
+  }`
+  ```
+  
+  Where `image_file_path` is the absolute file path of a local image to use as virtual background. Supported image formats are PNG and JPEG.
+
+*Important:* Media transformations, such as background blur and background replacement, are resource-intensive and require devices with high processing power. It is recommended to only use these transformations on supported devices. See the following documentation:
+
+* [For iOS](https://tokbox.com/developer/guides/vonage-media-processor/ios/#client-requirements)
+
+* [For Android](https://tokbox.com/developer/guides/vonage-media-processor/android/#client-requirements)
+
+For more information on transformers, see [Using the Vonage Media Processor library](https://tokbox.com/developer/guides/vonage-media-processor/)
+
 **videoNetworkStats** (Object) -- Sent periodically to report audio statistics for the publisher.
   A [PublisherVideoNetworkStatsEvent](./EventData.md#PublisherVideoNetworkStatsEvent) object is passed into the event handler.
+## Methods
+
