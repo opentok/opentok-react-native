@@ -400,7 +400,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
-          ArrayList<PublisherKit.VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(videoTransformers);
+          ArrayList<VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(mPublisher, videoTransformers);
           mPublisher.setVideoTransformers(nativeVideoTransformers);
         }
     }
