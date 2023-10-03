@@ -11,7 +11,7 @@
   [known issues](https://tokbox.com/developer/sdks/ios/release-notes.html#known-issues)
   in the OpenTok iOS SDK release notes.
 
-- [Update]: The new OTPublisher.setVideoFilters() method lets you set (and clear)
+- [Update]: The new OTPublisher.setVideoTransformers() method lets you set (and clear)
   video transformers for a publisher. For more info, see the docs:
   [OTPublisher](/docs/OTPublisher.md).
 
