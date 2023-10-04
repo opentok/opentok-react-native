@@ -1,4 +1,4 @@
-# 2.26.0  (September 2023)
+# 2.26.0  (October 2023)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.26.0.
 
@@ -17,6 +17,10 @@
 
 - [Fix]: Fixes an issue in which applications could not connect to a session when
   the `proxyUrl` option for OTSession was set. - issue #645
+
+# 2.25.4 (October 2023)
+
+- [Fix]: Fixes TypeScript definitions  - issue #690.
 
 # 2.25.3 (September 2023)
 
