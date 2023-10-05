@@ -106,6 +106,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["audioFallbackEnabled"] as Any);
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
+            publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
             publisher.audioLevelDelegate = self;
             publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
@@ -157,6 +158,7 @@ class OTSessionManager: RCTEventEmitter {
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
+            subscriber.subscribeToCaptions = Utils.sanitizeBooleanProperty(properties["subscribeToCaptions"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
             if let audioVolume = properties["audioVolume"] as? Double {
@@ -225,6 +227,11 @@ class OTSessionManager: RCTEventEmitter {
     @objc func subscribeToVideo(_ streamId: String, subVideo: Bool) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.subscribeToVideo = subVideo;
+    }
+    
+    @objc func subscribeToCaptions(_ streamId: String, subCaptions: Bool) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.subscribeToCaptions = subCaptions;
     }
     
     @objc func setPreferredResolution(_ streamId: String, resolution: NSDictionary) -> Void {
@@ -841,5 +848,19 @@ extension OTSessionManager: OTSubscriberKitRtcStatsReportDelegate {
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
         self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo)
+    }
+}
+
+extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
+    func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal final: Bool) {
+        var subscriberInfo: Dictionary<String, Any> = [:];
+        subscriberInfo["text"] = text;
+        subscriberInfo["isFinal"] = final;
+        guard let stream = subscriber.stream else {
+            self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
+            return;
+        }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)captionReceived", data: subscriberInfo);
     }
 }

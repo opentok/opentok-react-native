@@ -27,6 +27,7 @@ const sanitizeSubscriberEvents = (events) => {
       videoDisableWarning: 'subscriberVideoDisableWarning',
       videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
       videoDataReceived: 'subscriberVideoDataReceived',
+      captionReceived: 'subscriberCaptionReceived:',
     },
     android: {
       connected: 'onConnected',
@@ -42,6 +43,7 @@ const sanitizeSubscriberEvents = (events) => {
       videoDisableWarning: 'onVideoDisableWarning',
       videoDisableWarningLifted: 'onVideoDisableWarningLifted',
       videoDataReceived: 'onVideoDataReceived',
+      captionReceived: 'onCaptionText',
     },
   };
   return reassignEvents('subscriber', customEvents, events);
@@ -96,6 +98,7 @@ const sanitizeProperties = (properties) => {
     return {
       subscribeToAudio: true,
       subscribeToVideo: true,
+      subscribeToCaptions: false,
       preferredResolution: sanitizeResolution(null),
       preferredFrameRate: sanitizeFrameRate(null)
     };
@@ -103,6 +106,7 @@ const sanitizeProperties = (properties) => {
   return {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
+    subscribeToCaptions: sanitizeBooleanProperty(properties.subscribeToCaptions),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
     preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
   };

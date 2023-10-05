@@ -47,6 +47,9 @@ RCT_EXTERN_METHOD(publishAudio:
 RCT_EXTERN_METHOD(publishVideo:
                   (NSString*)publisherId
                   pubVideo:(BOOL)pubVideo)
+RCT_EXTERN_METHOD(publishCaptions:
+                  (NSString*)publisherId
+                  pubAudio:(BOOL)publishCaptions)
 RCT_EXTERN_METHOD(getRtcStatsReport:
                   (NSString*)publisherId)
 RCT_EXTERN_METHOD(getSubscriberRtcStatsReport:
@@ -57,6 +60,9 @@ RCT_EXTERN_METHOD(subscribeToAudio:
 RCT_EXTERN_METHOD(subscribeToVideo:
                   (NSString*)streamId
                   subVideo:(BOOL)subVideo)
+RCT_EXTERN_METHOD(subscribeToCaptions:
+                  (NSString*)streamId
+                  subAudio:(BOOL)subCaptions)
 RCT_EXTERN_METHOD(setPreferredResolution:
                   (NSString*)streamId
                   resolution:(NSDictionary*)resolution)

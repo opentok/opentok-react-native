@@ -15,6 +15,16 @@
   video transformers for a publisher. For more info, see the docs:
   [OTPublisher](/docs/OTPublisher.md).
 
+- [Update]: Live Captions API enhancements.
+
+  * The new OTPublisher.publishCaptions option lets you enable and disable captions for a published stream  (if captions are enabled for the session). For more info, see the docs:[OTPublisher](/docs/OTPublisher.md).
+
+  * The new OTSubscriber.subscribeToCaptions option lets you turn captions on and off for a subscriber (if captions are enabled for the session and the publisher is publishing captions). For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
+
+  * The new OTSubscriber captionReceived event is dispatched when a subscriber receives a caption. For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
+
+  * For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
+
 - [Fix]: Fixes an issue in which applications could not connect to a session when
   the `proxyUrl` option for OTSession was set. - issue #645
 

@@ -18,6 +18,7 @@ export default class OTSubscriber extends Component {
     this.componentEvents = {
       streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
+      captionText: Platform.OS === 'android' ? 'session:onStreamReceived' : 'subscriber:caption:isFinal:',
     };
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
@@ -46,6 +47,9 @@ export default class OTSubscriber extends Component {
         }
         if (subscribeToVideo !== undefined) {
           OT.subscribeToVideo(streamId, sanitizeBooleanProperty(subscribeToVideo));
+        }
+        if (subscribeToCaptions !== undefined) {
+          OT.subscribeToCaptions(streamId, sanitizeBooleanProperty(subscribeToCaptions));
         }
         if (preferredResolution !== undefined) {
           OT.setPreferredResolution(streamId, sanitizeResolution(preferredResolution));

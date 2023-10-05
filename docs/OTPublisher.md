@@ -14,7 +14,9 @@ class App extends Component {
     super(props);
 
     this.publisherProperties = {
-      publishAudio: false,
+      publishAudio: true,
+      publishVideo: false,
+      publishCaptions: true,
       cameraPosition: 'front'
     };
 
@@ -59,6 +61,8 @@ The OTPublisher component has the following properties, each of which is optiona
   * publishAudio -- Toggles audio on (`true`) or off `false`.
 
   * publishVideo -- Toggles video on (`true`) or off `false`.
+
+  * publishCaptions -- Toggles captions on (`true`) or off `false` for the published stream.
 
 * `eventHandlers` (Object) -- An object containing key-value pairs of event names and
 callback functions for event handlers. See [Events](#events).
@@ -107,6 +111,8 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 * **publishAudio** (Boolean) -- Whether to publish audio. The default is `true`.
 
 * **publishVideo** (Boolean) -- Whether to publish video. The default is `true`.
+
+* **publishCaptions** (Boolean) — Whether to publish captions. Note that the session must have captions enabled (using the Video API REST method or server SDK) and the publisher must be publishing audio. For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
 
 * **scalableScreenshare** (Boolean) -- Whether to allow use of
 {scalable video}(https://tokbox.com/developer/guides/scalable-video/) for a screen-sharing publisher
