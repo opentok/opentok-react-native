@@ -1,3 +1,7 @@
+# 2.25.4 (October 2023)
+
+- [Fix]: Fixes TypeScript definitions  - issue #690.
+
 # 2.25.3 (September 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
