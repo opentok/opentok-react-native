@@ -11,11 +11,11 @@
   [known issues](https://tokbox.com/developer/sdks/ios/release-notes.html#known-issues)
   in the OpenTok iOS SDK release notes.
 
-- [Update]: The new OTPublisher.setVideoTransformers() method lets you set (and clear)
-  video transformers for a publisher. For more info, see the docs:
-  [OTPublisher](/docs/OTPublisher.md).
+- [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
+  video transformers, such as a background blur for a publisher (issues #631 and #682).
+  For more info, see the docs: [OTPublisher](/docs/OTPublisher.md).
 
-- [Update]: Live Captions API enhancements.
+- [Update]: Live Captions API enhancements (issue #643)
 
   * The new OTPublisher.publishCaptions option lets you enable and disable captions for a published stream  (if captions are enabled for the session). For more info, see the docs:[OTPublisher](/docs/OTPublisher.md).
 
