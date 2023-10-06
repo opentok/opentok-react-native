@@ -1,6 +1,6 @@
 # 2.26.0  (October 2023)
 
-- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.26.0.
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.26.1.
 
   See the release notes for the OpenTok [ioS SDK](https://tokbox.com/developer/sdks/ios/release-notes.html)
   and the [Android SDK](https://tokbox.com/developer/sdks/android/release-notes.html).
@@ -27,6 +27,8 @@
 
 - [Fix]: Fixes an issue in which applications could not connect to a session when
   the `proxyUrl` option for OTSession was set. - issue #645
+
+- [Fix]: Fixes an issue a stream is not destroyed immediately after unmounting an OTSession component or when the `OTSession.disconnect()` method is called. - issues #685 and #686
 
 # 2.25.4 (October 2023)
 
