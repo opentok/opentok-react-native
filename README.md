@@ -44,7 +44,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OTXCFramework', '2.26.0'
+        pod 'OTXCFramework', '2.26.1'
     end
 
 ```
