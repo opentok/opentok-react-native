@@ -857,10 +857,10 @@ extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
         subscriberInfo["text"] = text;
         subscriberInfo["isFinal"] = final;
         guard let stream = subscriber.stream else {
-            self.emitEvent("\(EventUtils.subscriberPreface)audioLevelUpdated", data: subscriberInfo);
+            self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
             return;
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
-        self.emitEvent("\(EventUtils.subscriberPreface)captionReceived", data: subscriberInfo);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
     }
 }
