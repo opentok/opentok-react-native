@@ -141,6 +141,7 @@ OTSubscriber.defaultProps = {
   containerStyle: {},
   subscribeToSelf: false,
   getRtcStatsReport: {},
+  subscribeToCaptions: false,
 };
 
 OTSubscriber.contextType = OTContext;

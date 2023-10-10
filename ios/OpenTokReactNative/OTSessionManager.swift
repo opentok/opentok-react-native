@@ -852,10 +852,10 @@ extension OTSessionManager: OTSubscriberKitRtcStatsReportDelegate {
 }
 
 extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
-    func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal final: Bool) {
+    func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal isFinal: Bool) {
         var subscriberInfo: Dictionary<String, Any> = [:];
         subscriberInfo["text"] = text;
-        subscriberInfo["isFinal"] = final;
+        subscriberInfo["isFinal"] = isFinal;
         guard let stream = subscriber.stream else {
             self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
             return;
