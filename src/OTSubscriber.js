@@ -18,7 +18,7 @@ export default class OTSubscriber extends Component {
     this.componentEvents = {
       streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
-      captionText: Platform.OS === 'android' ? 'session:onStreamReceived' : 'subscriber:caption:isFinal:',
+      captionReceived: Platform.OS === 'android' ? 'session:onCaptionText' : 'subscriber:subscriberCaptionReceived:',
     };
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
