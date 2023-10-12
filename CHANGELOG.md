@@ -56,6 +56,7 @@ For more info, see the docs:
 * [OTSubscriber](/docs/OTSubscriber.md)
 
 - [Fix]: Fix android app crash due to permission missing.
+- [Fix]: Fix OTSubscriber audioVolume and other properties not working -- issue #694
 
 # 2.25.2 (July 5 2023)
 
