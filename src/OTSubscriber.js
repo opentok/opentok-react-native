@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 import { OT, nativeEvents, setNativeEvents, removeNativeEvents } from './OT';
 import OTSubscriberView from './views/OTSubscriberView';
-import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution } from './helpers/OTSubscriberHelper';
+import { sanitizeSubscriberEvents, sanitizeProperties, sanitizeFrameRate, sanitizeResolution, sanitizeAudioVolume } from './helpers/OTSubscriberHelper';
 import { getOtrnErrorEventHandler, sanitizeBooleanProperty } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
@@ -41,7 +41,7 @@ export default class OTSubscriber extends Component {
     const { streamProperties } = this.props;
     if (!isEqual(this.state.streamProperties, streamProperties)) {
       each(streamProperties, (individualStreamProperties, streamId) => {
-        const { subscribeToAudio, subscribeToVideo, subscribeToCaptions, preferredResolution, preferredFrameRate } = individualStreamProperties;
+        const { subscribeToAudio, subscribeToVideo, subscribeToCaptions, preferredResolution, preferredFrameRate, audioVolume } = individualStreamProperties;
         if (subscribeToAudio !== undefined) {
           OT.subscribeToAudio(streamId, sanitizeBooleanProperty(subscribeToAudio));
         }
@@ -58,7 +58,7 @@ export default class OTSubscriber extends Component {
           OT.setPreferredFrameRate(streamId, sanitizeFrameRate(preferredFrameRate));
         }
         if (audioVolume !== undefined) {
-          OT.setAudioVolume(streamId, audioVolume);
+          OT.setAudioVolume(streamId, sanitizeAudioVolume(audioVolume));
         }
       });
       this.setState({ streamProperties });
@@ -75,9 +75,10 @@ export default class OTSubscriber extends Component {
     const { subscribeToSelf } = this.state;
     const { streamProperties, properties } = this.props;
     const { sessionId, sessionInfo } = this.context;
-    const subscriberProperties = isNull(streamProperties[stream.streamId]) ?
-      sanitizeProperties(properties) : sanitizeProperties(streamProperties[stream.streamId]);
-    // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
+    const subscriberProperties = streamProperties[stream.streamId] ?
+      sanitizeProperties(streamProperties[stream.streamId]) :
+      sanitizeProperties(properties);
+      // Subscribe to streams. If subscribeToSelf is true, subscribe also to his own stream
     const sessionInfoConnectionId = sessionInfo && sessionInfo.connection ? sessionInfo.connection.connectionId : null;
     if (subscribeToSelf || (sessionInfoConnectionId !== stream.connectionId)) {
       OT.subscribeToStream(stream.streamId, sessionId, subscriberProperties, (error) => {

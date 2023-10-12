@@ -93,6 +93,8 @@ const sanitizeFrameRate = (frameRate) => {
   }
 };
 
+const sanitizeAudioVolume = audioVolume => (typeof audioVolume === 'number') ? audioVolume : 100;
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
@@ -100,7 +102,8 @@ const sanitizeProperties = (properties) => {
       subscribeToVideo: true,
       subscribeToCaptions: false,
       preferredResolution: sanitizeResolution(null),
-      preferredFrameRate: sanitizeFrameRate(null)
+      preferredFrameRate: sanitizeFrameRate(null),
+      audioVolume: 100,
     };
   }
   return {
@@ -109,6 +112,7 @@ const sanitizeProperties = (properties) => {
     subscribeToCaptions: sanitizeBooleanProperty(properties.subscribeToCaptions),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
     preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
+    audioVolume: sanitizeAudioVolume(properties.audioVolume),
   };
 };
 
@@ -116,5 +120,6 @@ export {
   sanitizeSubscriberEvents,
   sanitizeProperties,
   sanitizeFrameRate,
-  sanitizeResolution
+  sanitizeResolution,
+  sanitizeAudioVolume
 };
