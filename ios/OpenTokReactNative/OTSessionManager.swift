@@ -154,7 +154,7 @@ class OTSessionManager: RCTEventEmitter {
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
             subscriber.networkStatsDelegate = self;
             subscriber.audioLevelDelegate = self;
-            subscriber.delegate = self;
+            subscriber.captionsDelegate = self;
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
@@ -857,10 +857,10 @@ extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
         subscriberInfo["text"] = text;
         subscriberInfo["isFinal"] = isFinal;
         guard let stream = subscriber.stream else {
-            self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
+            self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
             return;
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
-        self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
     }
 }
