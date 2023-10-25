@@ -167,7 +167,7 @@ A [streamingEvent](./EventData.md#streamingEvent) object is passed into the even
 
 **setVideoTransformers()** -- Sets video transformers for the publisher. This method has one parameter -- and array of objects defining each transformer to apply to the publisher's stream. A transformer object has two properties:
 
-* `name` (String) -- Either 'backgroundBlur' (for a background blur filter) or 'backgroundImageReplacement' (for a background image replacement filter). Android only supports the 'backgroundBlur' transformer (and it is a beta feature in Android).
+* `name` (String) -- Either 'BackgroundBlur' (for a background blur filter) or 'BackgroundImageReplacement' (for a background image replacement filter). Android only supports the 'BackgroundBlur' transformer (and it is a beta feature in Android).
 
 * `properties` (String) -- A JSON string with the properties of the Vonage video transformer.
 
