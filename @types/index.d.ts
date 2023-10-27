@@ -38,6 +38,7 @@ declare module "opentok-react-native" {
     name: string;
     streamId: string;
     hasAudio: boolean;
+    hasCaptions: boolean;
     hasVideo: boolean;
     sessionId: string;
     connectionId: string;
@@ -57,7 +58,7 @@ declare module "opentok-react-native" {
   interface StreamPropertyChangedEvent {
     newValue: any;
     oldValue: any;
-    changedProperty: "hasAudio" | "hasVideo" | "videoDimensions";
+    changedProperty: "hasAudio" | "hasCaptions" | "hasVideo" | "videoDimensions";
     stream: Stream;
   }
 
@@ -70,6 +71,11 @@ declare module "opentok-react-native" {
   interface ErrorEvent {
     code: string;
     message: string;
+  }
+
+  interface SubscriberCaptionEvent {
+    text: string,
+    isFinal: boolean,
   }
 
   interface SubscriberAudioStatsEvent {
@@ -357,6 +363,11 @@ declare module "opentok-react-native" {
     publishAudio?: boolean;
 
     /**
+     * Whether to publish captions.
+     */
+    publishCaptions?: boolean;
+
+    /**
      * Whether to publish video.
      */
     publishVideo?: boolean;
@@ -420,6 +431,11 @@ declare module "opentok-react-native" {
      * the publisher are available.
      */
     getRtcStatsReport?: () => void;
+
+    /**
+     * Sets video transformers for the publisher (or clears them if passed an empty array).
+     */
+    setVideoTransformers?: () => void;
   }
 
   interface OTSubscriberProps extends ViewProps {
@@ -461,6 +477,11 @@ declare module "opentok-react-native" {
     subscribeToAudio?: boolean;
 
     /**
+     * Whether to subscribe to captions.
+     */
+    subscribeToCaptions?: boolean;
+
+    /**
      * Whether to subscribe video.
      */
     subscribeToVideo?: boolean;
@@ -481,6 +502,11 @@ declare module "opentok-react-native" {
      * Sent when the subscriber successfully connects to the stream.
      */
     connected?: Callback<any>;
+
+    /**
+     * Sent when the subscriber receives a caption for the stream.
+     */
+    captionReceived?: CallbackWithParam<SubscriberCaptionEvent, any>;
 
     /**
      * Called when the subscriber’s stream has been interrupted.

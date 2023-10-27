@@ -106,6 +106,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["audioFallbackEnabled"] as Any);
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
+            publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
             publisher.audioLevelDelegate = self;
             publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
@@ -153,10 +154,11 @@ class OTSessionManager: RCTEventEmitter {
             OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
             subscriber.networkStatsDelegate = self;
             subscriber.audioLevelDelegate = self;
-            subscriber.delegate = self;
+            subscriber.captionsDelegate = self;
             session.subscribe(subscriber, error: &error)
             subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(properties["subscribeToAudio"] as Any);
             subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(properties["subscribeToVideo"] as Any);
+            subscriber.subscribeToCaptions = Utils.sanitizeBooleanProperty(properties["subscribeToCaptions"] as Any);
             subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(properties["preferredFrameRate"] as Any);
             subscriber.preferredResolution = Utils.sanitizePreferredResolution(properties["preferredResolution"] as Any);
             if let audioVolume = properties["audioVolume"] as? Double {
@@ -225,6 +227,11 @@ class OTSessionManager: RCTEventEmitter {
     @objc func subscribeToVideo(_ streamId: String, subVideo: Bool) -> Void {
         guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
         subscriber.subscribeToVideo = subVideo;
+    }
+    
+    @objc func subscribeToCaptions(_ streamId: String, subCaptions: Bool) -> Void {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
+        subscriber.subscribeToCaptions = subCaptions;
     }
     
     @objc func setPreferredResolution(_ streamId: String, resolution: NSDictionary) -> Void {
@@ -324,6 +331,30 @@ class OTSessionManager: RCTEventEmitter {
             }
             self.dispatchErrorViaCallback(callback, error: err)
         }
+    }
+    
+    @objc func setVideoTransformers(_ publisherId: String, videoTransformers: Array<Any>) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return // To do -- handle error
+        }
+        var nativeTransformers: [OTVideoTransformer] = [];
+
+        for transformer in videoTransformers {
+            guard let transformerDictionary = transformer as? [String: String] else {
+                return // To do -- handle error
+            }
+            guard let transformerName = transformerDictionary["name"], let transformerProperties = transformerDictionary["properties"] else {
+                return // To do -- handle error
+            }
+            guard let nativeTransformer = OTVideoTransformer(
+                name: transformerName,
+                properties: transformerProperties
+            ) else {
+                return // To do -- handle error
+            }
+            nativeTransformers.append(nativeTransformer)
+        }
+        publisher.videoTransformers = nativeTransformers
     }
     
     @objc func removeNativeEvents(_ events: Array<String>) -> Void {
@@ -817,5 +848,19 @@ extension OTSessionManager: OTSubscriberKitRtcStatsReportDelegate {
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
         self.emitEvent("\(EventUtils.subscriberPreface)rtcStatsReport", data: subscriberInfo)
+    }
+}
+
+extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
+    func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal isFinal: Bool) {
+        var subscriberInfo: Dictionary<String, Any> = [:];
+        subscriberInfo["text"] = text;
+        subscriberInfo["isFinal"] = isFinal;
+        guard let stream = subscriber.stream else {
+            self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
+            return;
+        }
+        subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
     }
 }
