@@ -14,6 +14,8 @@
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
 
   * **subscribeToVideo** (Boolean) — Whether to subscribe video.
+ 
+  * **subscribeToCaptions** (Boolean) — Whether to subscribe to captions. Note that the session must have captions enabled (using the Video API REST method or server SDK) and the publisher must be publishing captions. For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
 
   * **preferredResolution** (String) — Sets the preferred resolution of the subscriber's video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288".
 
@@ -36,6 +38,9 @@ specified stream ID. This is an asynchronous operation. The OTSubscriber object 
 
   * **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the subscriber.
   A [AudioNetworkStats](./EventData.md#AudioNetworkStats) object is passed into the event handler.
+
+  * **captionReceived** (Object) — Sent when a caption is received for the subscriber.
+  A [CaptionReceived](./EventData.md#SubscriberCaptionEvent) object is passed into the event handler.
 
   * **connected** () — Sent when the subscriber successfully connects to the stream. The event object
     includes a `streamId` property, identifying the stream.
@@ -83,6 +88,7 @@ class App extends Component {
     this.subscriberProperties = {
       subscribeToAudio: false,
       subscribeToVideo: true,
+      subscribeToCaptions: false,
     };
 
     this.sessionEventHandlers = {

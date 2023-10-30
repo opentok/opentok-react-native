@@ -31,6 +31,7 @@ import com.opentok.android.MediaUtils;
 import com.opentok.android.MuteForcedInfo;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
+import com.opentok.android.PublisherKit.VideoTransformer;
 import com.opentok.android.Stream;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Subscriber;
@@ -62,7 +63,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Session.ArchiveListener,
         Session.MuteListener,
         Session.StreamPropertiesListener,
+        Session.StreamCaptionsPropertiesListener,
         SubscriberKit.AudioLevelListener,
+        SubscriberKit.CaptionsListener,
         SubscriberKit.SubscriberRtcStatsReportListener,
         SubscriberKit.AudioStatsListener,
         SubscriberKit.VideoStatsListener,
@@ -163,6 +166,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         String resolution = properties.getString("resolution");
         Boolean publishAudio = properties.getBoolean("publishAudio");
         Boolean publishVideo = properties.getBoolean("publishVideo");
+        Boolean publishCaptions = properties.getBoolean("publishCaptions");
         String videoSource = properties.getString("videoSource");
         Boolean scalableScreenshare = properties.getBoolean("scalableScreenshare");
         Publisher mPublisher = null;
@@ -203,6 +207,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setAudioFallbackEnabled(audioFallbackEnabled);
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
+        mPublisher.setPublishCaptions(publishCaptions);
         mPublisher.setAudioStatsListener(this);
         mPublisher.setVideoStatsListener(this);
         mPublisher.setMuteListener(this);
@@ -247,8 +252,10 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSubscriber.setRtcStatsReportListener(this);
         mSubscriber.setVideoListener(this);
         mSubscriber.setStreamListener(this);
+        mSubscriber.setCaptionsListener(this);
         mSubscriber.setSubscribeToAudio(properties.getBoolean("subscribeToAudio"));
         mSubscriber.setSubscribeToVideo(properties.getBoolean("subscribeToVideo"));
+        mSubscriber.setSubscribeToCaptions(properties.getBoolean("subscribeToCaptions"));
         if (properties.hasKey("preferredFrameRate")) {
             mSubscriber.setPreferredFrameRate((float) properties.getDouble("preferredFrameRate"));
         }
@@ -375,6 +382,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void publishCaptions(String publisherId, Boolean publishCaptions) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.setPublishCaptions(publishCaptions);
+        }
+    }
+
+    @ReactMethod
     public void publishVideo(String publisherId, Boolean publishVideo) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
@@ -395,6 +412,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void setVideoTransformers(String publisherId, ReadableArray videoTransformers) {
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+          ArrayList<VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(mPublisher, videoTransformers);
+          mPublisher.setVideoTransformers(nativeVideoTransformers);
+        }
+    }
+
+    @ReactMethod
     public void subscribeToAudio(String streamId, Boolean subscribeToAudio) {
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
@@ -411,6 +438,15 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Subscriber mSubscriber = mSubscribers.get(streamId);
         if (mSubscriber != null) {
             mSubscriber.setSubscribeToVideo(subscribeToVideo);
+        }
+    }
+
+    @ReactMethod
+    public void subscribeToCaptions(String streamId, Boolean subscribeToCaptions) {
+        ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
+        Subscriber mSubscriber = mSubscribers.get(streamId);
+        if (mSubscriber != null) {
+            mSubscriber.setSubscribeToCaptions(subscribeToCaptions);
         }
     }
 
@@ -1150,11 +1186,36 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @Override
+    public void onCaptionText(SubscriberKit subscriber, String text, boolean isFinal) {
+        String streamId = Utils.getStreamIdBySubscriber(subscriber);
+        if (streamId.length() > 0) {
+            ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+            Stream mStream = streams.get(streamId);
+            WritableMap subscriberInfo = Arguments.createMap();
+            if (mStream != null) {
+                subscriberInfo.putMap("stream", EventUtils.prepareJSStreamMap(mStream, subscriber.getSession()));
+            }
+            subscriberInfo.putString("text", String.valueOf(text));
+            subscriberInfo.putBoolean("isFinal", isFinal);
+            sendEventMap(this.getReactApplicationContext(), subscriberPreface + "onCaptionText", subscriberInfo);
+        }
+    }
+
+    @Override
     public void onStreamHasAudioChanged(Session session, Stream stream, boolean Audio) {
 
         WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("hasAudio", !Audio, Audio, stream, session);
         sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamPropertyChanged", eventData);
         printLogs("onStreamHasAudioChanged");
+    }
+
+    @Override
+    public void onStreamHasCaptionsChanged(Session session, Stream stream, boolean hasCaptions) {
+        if (stream != null) {
+            WritableMap eventData = EventUtils.prepareStreamPropertyChangedEventData("hasCaptions", !hasCaptions, hasCaptions, stream, session);
+            sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onStreamPropertyChanged", eventData);
+            printLogs("onStreamHasCaptionsChanged");
+        }
     }
 
     @Override

@@ -79,6 +79,18 @@ The event object has the following properties:
   };
 ```
 
+## SubscriberCaptionEvent
+
+To get captions for a subscriber, register an event listener for the `captionReceived` event.
+The event object has the following properties: 
+
+```javascript
+  event = {
+    text: string,
+    isFinal: boolean,
+  };
+```
+
 ## ConnectionCreatedEvent
 
 You can find the structure of the object below: 
