@@ -93,9 +93,40 @@ export default class OTSession extends Component {
   getSessionInfo() {
     return this.state.sessionInfo;
   }
+  getCapabilities() {
+    return new Promise((resolve, reject ) => {
+      OT.getSessionCapabilities(this.props.sessionId, (sessionCapabilities) => {
+        if (sessionCapabilities) {
+          resolve(sessionCapabilities);
+        } else {
+          reject(new Error('Not connected to session.'));
+        }
+      });
+    });
+  }
+  async reportIssue() {
+    return new Promise((resolve, reject) => {
+      OT.reportIssue(this.props.sessionId, (reportIssueId, error) => {
+        if (reportIssueId) {
+          resolve(reportIssueId)
+        } else {
+          reject (new Error(error))
+        }
+      });
+    })
+  }
   signal(signal) {
     const signalData = sanitizeSignalData(signal);
     OT.sendSignal(this.props.sessionId, signalData.signal, signalData.errorHandler);
+  }
+  forceMuteAll(excludedStreamIds) {
+    return OT.forceMuteAll(this.props.sessionId, excludedStreamIds || []);
+  }
+  forceMuteStream(streamId) {
+    return OT.forceMuteStream(this.props.sessionId, streamId);
+  }
+  disableForceMute() {
+    return OT.disableForceMute(this.props.sessionId);
   }
   render() {
     const { style, children, sessionId, apiKey, token } = this.props;

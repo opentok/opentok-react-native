@@ -14,28 +14,56 @@
   * **subscribeToAudio** (Boolean) — Whether to subscribe to audio.
 
   * **subscribeToVideo** (Boolean) — Whether to subscribe video.
+ 
+  * **subscribeToCaptions** (Boolean) — Whether to subscribe to captions. Note that the session must have captions enabled (using the Video API REST method or server SDK) and the publisher must be publishing captions. For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
 
   * **preferredResolution** (String) — Sets the preferred resolution of the subscriber's video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288".
 
   * **preferredFrameRate** (Number) — Set this to the desired frame rate (in frames per second). Set this to null to remove the preferred frame rate, and the client will use the highest frame rate available. Valid values are 30, 15, 7, and 1.
 
+  * **audioVolume** (Number) — Sets the audio volume, between 0 and 100, of the subscriber. If the value is not in this range, it will be clamped to it.
 
 The `OTSubscriber` component will subscribe to a specified stream from a specified session upon mounting. The `OTSubscriber` component will stop subscribing and unsubscribing when it's unmounting.
 
+## Methods
+
+**getRtcStatsReport(streamId)** Gets the RTC stats report for the subscriber to the stream with the
+specified stream ID. This is an asynchronous operation. The OTSubscriber object dispatches an
+`rtcStatsReport` event when RTC statistics for the subscriber are available.
+
 ## Events
+
   * **audioLevel** (SubscriberAudioLevelEvent) — Sent on a regular interval with the recent representative audio level.
   See [SubscriberAudioLevelEvent](./EventData.md#SubscriberAudioLevelEvent)
 
   * **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the subscriber.
-  Am [SessionConnectEvent](./EventData.md#SessionConnectEvent) object is passed into the event handler.
+  A [AudioNetworkStats](./EventData.md#AudioNetworkStats) object is passed into the event handler.
 
-  * **connected** () — Sent when the subscriber successfully connects to the stream.
+  * **captionReceived** (Object) — Sent when a caption is received for the subscriber.
+  A [CaptionReceived](./EventData.md#SubscriberCaptionEvent) object is passed into the event handler.
+
+  * **connected** () — Sent when the subscriber successfully connects to the stream. The event object
+    includes a `streamId` property, identifying the stream.
 
   * **disconnected** () — Called when the subscriber’s stream has been interrupted.
 
   * **error** (Object) — Sent if the subscriber fails to connect to its stream.
 
   * **otrnError** (Object) — Sent if there is an error with the communication between the native subscriber instance and the JS component.
+
+* **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the subscriber,
+  in response to calling the `OTSubscriber.getRtcStatsReport()` method. A
+  [SubscriberRtcStatsReportEvent](./EventData.md#subscriberRtcStatsReportEvent) object is passed
+  into the event handler. This event object has the following properties:
+
+  * `jsonArrayOfReports` property, which is a JSON array of RTCStatsReport for the media stream.
+    The structure of the JSON array is similar to the format of the RtcStatsReport object implemented
+    in web browsers (see the
+    [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport)).
+    Also see [this W3C documentation](https://w3c.github.io/webrtc-stats/).
+  
+  * `stream` -- An object representing the subscriber's stream. This object includes a `streamId`
+    property, identifying the stream.
 
   * **videoDataReceived** () - Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the `connected` message is sent.
 
@@ -60,6 +88,7 @@ class App extends Component {
     this.subscriberProperties = {
       subscribeToAudio: false,
       subscribeToVideo: true,
+      subscribeToCaptions: false,
     };
 
     this.sessionEventHandlers = {

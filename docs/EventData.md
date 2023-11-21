@@ -79,6 +79,18 @@ The event object has the following properties:
   };
 ```
 
+## SubscriberCaptionEvent
+
+To get captions for a subscriber, register an event listener for the `captionReceived` event.
+The event object has the following properties: 
+
+```javascript
+  event = {
+    text: string,
+    isFinal: boolean,
+  };
+```
+
 ## ConnectionCreatedEvent
 
 You can find the structure of the object below: 
@@ -114,11 +126,72 @@ You can find the structure of the object below:
 You can find the structure of the object below: 
 
 ```javascript
-  error = {
+  event = {
     code: string,
     message: string,
   };
 ```
+
+## MuteForcedEvent
+
+```javascript
+event = {
+  active: boolean;
+}
+```
+
+## PublisherVideoNetworkStatsEvent
+
+To get video data for a publisher, register an event listener for the OTPublisher
+`videoNetworkStats` event. The object has the following structure: 
+
+```javascript
+  event = [
+      {
+      connectionId: string,
+      subscriberId: string,
+      videoPacketsLost: number,
+      videoBytesSent: number,
+      videoPacketsSent: number,
+      timestamp: number,
+    }
+  ];
+```
+
+Note that this event object is an array of objects. See the docs for
+the OTPublisher `videoNetworkStats` event.
+
+## PublisherAudioNetworkStatsEvent
+
+To get audio data for a publisher, register an event listener for the OTPublisher
+`audioNetworkStats` event. The object has the following structure: 
+
+```javascript
+  event = [
+      {
+      connectionId: string,
+      subscriberId: string,
+      audioPacketsLost: number,
+      audioPacketsSent: number,
+      audioBytesSent: number,
+      timestamp: number,
+    }
+  ];
+```
+
+Note that this event object is an array of objects. See the docs for
+the OTPublisher `audioNetworkStats` event.
+
+## RtcStatsReportEvent
+You can find the structure of the object below:
+
+```javascript
+  event = {
+    connectionId: string,
+    jsonArrayOfReports: string,
+  };
+```
+
 ## SessionConnectEvent
 
 ```javascript
@@ -262,4 +335,38 @@ You can find the structure of the object below:
     videoPacketsReceived: number,
     timestamp: number
   };
+```
+
+## SubscriberRtcStatsReportEvent
+
+```javascript
+  event = {
+    stream: {
+      streamId: string;
+      name: string;
+      connectionId: string;
+      connection: {
+        connectionId: string,
+        creationTime: string,
+        data: string,
+      },
+      hasAudio: boolean,
+      hasVideo: boolean,
+      sessionId: string,
+      creationTime: number,
+      height: number,
+      width: number,
+      videoType: string, // 'camera' or 'screen'
+    },
+    jsonArrayOfReports: string
+  };
+```
+
+## PublisherRtcStatsReportEvent
+
+```javascript
+  event = [
+    connectionId: string,
+    jsonArrayOfReports: string
+  ];
 ```

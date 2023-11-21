@@ -38,6 +38,7 @@ declare module "opentok-react-native" {
     name: string;
     streamId: string;
     hasAudio: boolean;
+    hasCaptions: boolean;
     hasVideo: boolean;
     sessionId: string;
     connectionId: string;
@@ -57,7 +58,7 @@ declare module "opentok-react-native" {
   interface StreamPropertyChangedEvent {
     newValue: any;
     oldValue: any;
-    changedProperty: "hasAudio" | "hasVideo" | "videoDimensions";
+    changedProperty: "hasAudio" | "hasCaptions" | "hasVideo" | "videoDimensions";
     stream: Stream;
   }
 
@@ -71,7 +72,12 @@ declare module "opentok-react-native" {
     code: string;
     message: string;
   }
-  
+
+  interface SubscriberCaptionEvent {
+    text: string,
+    isFinal: boolean,
+  }
+
   interface SubscriberAudioStatsEvent {
     audioBytesReceived: number,
     audioPacketsLost: number,
@@ -84,6 +90,11 @@ declare module "opentok-react-native" {
     videoBytesReceived: number,
     videoPacketsReceived: number,
     timestamp: number,
+  }
+
+  interface PublisherRtcStatsReport {
+    connectionId: string,
+    jsonArrayOfReports: string,
   }
 
   interface SignalEvent {
@@ -139,9 +150,9 @@ declare module "opentok-react-native" {
     /**
      * EU proxy server URL provided by vonage. Please check https://tokbox.com/developer/guides/eu-proxy/
      */
-     proxyUrl?: string;
+    proxyUrl?: string;
 
-     /**
+    /**
      * Android only - valid options are 'mediaOverlay' or 'onTop'
      */
     androidZOrder?: "mediaOverlay" | "onTop";
@@ -159,7 +170,7 @@ declare module "opentok-react-native" {
     /**
      * Android only - default is false.
      * Deprecated and ignored.
-     
+
      */
     isCamera2Capable?: boolean;
 
@@ -167,7 +178,7 @@ declare module "opentok-react-native" {
      * Whether to use the allowed IP list feature - default is false
      */
     ipWhitelist?: boolean;
-    
+
     /**
      * Enable Stereo output
      */
@@ -179,9 +190,9 @@ declare module "opentok-react-native" {
       includeServers: 'all' | 'custom';
       transportPolicy: 'all' | 'relay';
       customServers: {
-      urls: string[];
-      username?: string;
-      credential?: string;
+        urls: string[];
+        username?: string;
+        credential?: string;
       }[];
     };
   }
@@ -261,7 +272,36 @@ declare module "opentok-react-native" {
   /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSession.md
    */
-  export class OTSession extends React.Component<OTSessionProps> {}
+  export class OTSession extends React.Component<OTSessionProps, unknown> {
+    /**
+     * Used to get capabilities of the client
+     */
+    getCapabilities: () => Promise<{
+      canForceMute: boolean;
+      canPublish: boolean;
+      canSubscribe: boolean;
+    }>
+
+    /**
+     * Mutes all streams in the session.
+     */
+    forceMuteAll: (excludedStreamIds: string[]) => Promise<void>
+
+    /**
+     * Mutes a stream in the session.
+     */
+    forceMuteStream: (streamId: string) => Promise<void>
+
+    /**
+     * Disables the force mute state for the session.
+     */
+    disableForceMute: () => Promise<void>
+
+    /**
+     * Used to report an issue
+     */
+    reportIssue: () => Promise<string>
+  }
 
   interface OTPublisherProps extends ViewProps {
     /**
@@ -323,14 +363,19 @@ declare module "opentok-react-native" {
     publishAudio?: boolean;
 
     /**
+     * Whether to publish captions.
+     */
+    publishCaptions?: boolean;
+
+    /**
      * Whether to publish video.
      */
     publishVideo?: boolean;
 
     /**
-     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
      */
-    resolution?: "1280x720" | "640x480" | "352x288";
+    resolution?: "1920x1080" | "1280x720" | "640x480" | "352x288";
 
     /**
      * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
@@ -360,6 +405,12 @@ declare module "opentok-react-native" {
     otrnError?: CallbackWithParam<any, any>;
 
     /**
+     * Sent when RTC stats reports are available for the publisher,
+     * in response to calling the OTPublisher.getRtcStatsReport() method.
+     */
+    rtcStatsReport?: CallbackWithParam<PublisherRtcStatsReport[], any>;
+
+    /**
      * Sent when the publisher starts streaming.
      */
     streamCreated?: CallbackWithParam<StreamCreatedEvent, any>;
@@ -373,7 +424,19 @@ declare module "opentok-react-native" {
   /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTPublisher.md
    */
-  export class OTPublisher extends React.Component<OTPublisherProps> {}
+  export class OTPublisher extends React.Component<OTPublisherProps, unknown> {
+    /**
+     * Gets the RTC stats report for the publisher. This is an asynchronous operation.
+     * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport?: () => void;
+
+    /**
+     * Sets video transformers for the publisher (or clears them if passed an empty array).
+     */
+    setVideoTransformers?: () => void;
+  }
 
   interface OTSubscriberProps extends ViewProps {
     /**
@@ -414,6 +477,11 @@ declare module "opentok-react-native" {
     subscribeToAudio?: boolean;
 
     /**
+     * Whether to subscribe to captions.
+     */
+    subscribeToCaptions?: boolean;
+
+    /**
      * Whether to subscribe video.
      */
     subscribeToVideo?: boolean;
@@ -436,6 +504,11 @@ declare module "opentok-react-native" {
     connected?: Callback<any>;
 
     /**
+     * Sent when the subscriber receives a caption for the stream.
+     */
+    captionReceived?: CallbackWithParam<SubscriberCaptionEvent, any>;
+
+    /**
      * Called when the subscriber’s stream has been interrupted.
      */
     disconnected?: Callback<any>;
@@ -449,6 +522,12 @@ declare module "opentok-react-native" {
      * Sent if there is an error with the communication between the native subscriber instance and the JS component.
      */
     otrnError?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when an RTC stats report is available for the subscriber,
+     * in response to calling the OTSubscriber.getRtcStatsReport() method.
+     */
+    rtcStatsReport?: CallbackWithParam<RtcStatsReport, any>;
 
     /**
      * Sent when a frame of video has been decoded. Although the subscriber will connect in a relatively short time, video can take more time to synchronize. This message is sent after the connected message is sent.
@@ -491,9 +570,16 @@ declare module "opentok-react-native" {
   /**
    * https://github.com/opentok/opentok-react-native/blob/main/docs/OTSubscriber.md#custom-rendering-of-streams
    */
-  export class OTSubscriberView extends React.Component<OTSubscriberViewProps> {}
+  export class OTSubscriberView extends React.Component<OTSubscriberViewProps, unknown> {}
   /**
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
    */
-  export class OTSubscriber extends React.Component<OTSubscriberProps> {}
+  export class OTSubscriber extends React.Component<OTSubscriberProps, unknown> {
+    /**
+     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
+     * The OTSubscriber object dispatches an rtcStatsReport event when RTC statistics for
+     * the publisher are available.
+     */
+    getRtcStatsReport: () => void;
+  }
 }

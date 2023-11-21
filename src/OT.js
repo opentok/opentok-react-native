@@ -12,7 +12,8 @@ const checkAndroidPermissions = () => new Promise((resolve, reject) => {
       const permissionsError = {};
       permissionsError.permissionsDenied = [];
       each(result, (permissionValue, permissionType) => {
-        if (permissionValue === 'denied') {
+        // Check if the permission is denied or set to 'never_ask_again'.
+        if (permissionValue === 'denied' || permissionValue === 'never_ask_again' ) {
           permissionsError.permissionsDenied.push(permissionType);
           permissionsError.type = 'Permissions error';
         }

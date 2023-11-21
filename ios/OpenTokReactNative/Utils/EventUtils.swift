@@ -55,6 +55,47 @@ class EventUtils {
         streamPropertyEventData["changedProperty"] = changedProperty;
         return streamPropertyEventData
     }
+
+    static func preparePublisherRtcStats(_ rtcStatsReport: [OTPublisherRtcStats]) -> [Dictionary<String, Any>] {
+        var statsArray:[Dictionary<String, Any>] = [];
+        for value in rtcStatsReport {
+            var stats:Dictionary<String, Any> = [:];
+            stats["connectionId"] = value.connectionId;
+            stats["jsonArrayOfReports"] = value.jsonArrayOfReports;
+            statsArray.append(stats);
+        }
+        return statsArray;
+    }
+
+    static func preparePublisherVideoNetworkStats(_ videoStats: [OTPublisherKitVideoNetworkStats]) -> [Dictionary<String, Any>] {
+        var statsArray:[Dictionary<String, Any>] = [];
+        for value in videoStats {
+            var stats: Dictionary<String, Any> = [:];
+            stats["connectionId"] = value.connectionId;
+            stats["subscriberId"] = value.subscriberId;
+            stats["videoPacketsLost"] = value.videoPacketsLost;
+            stats["videoBytesSent"] = value.videoBytesSent;
+            stats["videoPacketsSent"] = value.videoPacketsSent;
+            stats["timestamp"] = value.timestamp;
+            statsArray.append(stats);
+        }
+        return statsArray;
+    }
+
+    static func preparePublisherAudioNetworkStats(_ audioStats: [OTPublisherKitAudioNetworkStats]) -> [Dictionary<String, Any>] {
+        var statsArray:[Dictionary<String, Any>] = [];
+        for value in audioStats {
+            var stats: Dictionary<String, Any> = [:];
+            stats["connectionId"] = value.connectionId;
+            stats["subscriberId"] = value.subscriberId;
+            stats["audioPacketsLost"] = value.audioPacketsLost;
+            stats["audioPacketsSent"] = value.audioPacketsSent;
+            stats["audioBytesSent"] = value.audioBytesSent;
+            stats["timestamp"] = value.timestamp;
+            statsArray.append(stats);
+        }
+        return statsArray;
+    }
     
     static func prepareSubscriberVideoNetworkStatsEventData(_ videoStats: OTSubscriberKitVideoNetworkStats) -> Dictionary<String, Any> {
         var videoStatsEventData: Dictionary<String, Any> = [:];
@@ -83,7 +124,7 @@ class EventUtils {
     }
     
     static func getSupportedEvents() -> [String] {
-        return ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect", "\(sessionPreface)streamPropertyChanged", "\(subscriberPreface)subscriberDidReconnect"];
+        return ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(publisherPreface)rtcStatsReport", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect", "\(sessionPreface)streamPropertyChanged", "\(subscriberPreface)subscriberDidReconnect", "\(subscriberPreface)subscriberCaptionReceived"];
     }
     
     static func convertDateToString(_ creationTime: Date) -> String {

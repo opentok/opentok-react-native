@@ -14,7 +14,9 @@ class App extends Component {
     super(props);
 
     this.publisherProperties = {
-      publishAudio: false,
+      publishAudio: true,
+      publishVideo: false,
+      publishCaptions: true,
       cameraPosition: 'front'
     };
 
@@ -60,8 +62,15 @@ The OTPublisher component has the following properties, each of which is optiona
 
   * publishVideo -- Toggles video on (`true`) or off `false`.
 
+  * publishCaptions -- Toggles captions on (`true`) or off `false` for the published stream.
+
 * `eventHandlers` (Object) -- An object containing key-value pairs of event names and
 callback functions for event handlers. See [Events](#events).
+
+## Methods
+
+**getRtcStatsReport()** Gets the RTC stats report for the publisher. This is an asynchronous operation.
+The OTPublisher object dispatches an `rtcStatsReport` event when RTC statistics for the publisher are available.
 
 ## properties object
 
@@ -103,7 +112,14 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **publishVideo** (Boolean) -- Whether to publish video. The default is `true`.
 
-* **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+* **publishCaptions** (Boolean) — Whether to publish captions. Note that the session must have captions enabled (using the Video API REST method or server SDK) and the publisher must be publishing audio. For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
+
+* **scalableScreenshare** (Boolean) -- Whether to allow use of
+{scalable video}(https://tokbox.com/developer/guides/scalable-video/) for a screen-sharing publisher
+(true) or not (false, the default). This only applies to a publisher that has the `videoSource` set
+to "screen".
+
+* **resolution** (String) - The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
 
 * **videoContentHint** (String) -- Sets the content hint of the video track of the publisher's stream. You can set this to one of the following values: "", "motion", "details" or "text". For additional information, see the [documentation](https://tokbox.com/developer/sdks/js/reference/OT.html#initPublisher) for the `videoContentHint` option of the
 `OT.initPublisher()` method of the OpenTok.js SDK.
@@ -116,12 +132,85 @@ see the Subscriber videoDisabled event and the OpenTok Media Router and media mo
 
 * **audioLevel** (Number) -- The audio level, from 0 to 1.0. Adjust this value logarithmically for use in adjusting a user interface element, such as a volume meter. Use a moving average to smooth the data.
 
+* **audioNetworkStats** (Object) — Sent periodically to report audio statistics for the publisher.
+  A [PublisherAudioNetworkStatsEvent](./EventData.md#PublisherAudioNetworkStatsEvent) object is passed into the event handler.
+
 * **error** (Object) -- Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
 
+* **muteForced** -- Sent when a moderator has forced this client to mute audio. 
+
 * **otrnError** (Object) -- Sent if there is an error with the communication between the native publisher instance and the JS component.
+
+* **rtcStatsReport** (Object) -- Sent when RTC stats reports are available for the publisher,
+  in response to calling the `OTPublisher.getRtcStatsReport()` method. A
+  [PublisherRtcStatsReportEvent](./EventData.md#publisherRtcStatsReportEvent) object is passed into
+  the event handler. This event has an array of
+  objects. For a routed session (a seesion that uses the
+  [OpenTok Media Router](https://tokbox.com/developer/guides/create-session/#media-mode)),
+  this array includes one object, defining the statistics for the single video media stream that is sent
+  to the OpenTok Media Router. In a relayed session, the array includes an object for each subscriber
+  to the published stream. Each object includes two properties:
+
+  * `connectionId` -- For a relayed session (in which a publisher sends individual media streams
+    to each subscriber), this is the unique ID of the client’s connection.
+
+  * `jsonArrayOfReports` -- A JSON array of RTC stats reports for the media stream. The structure
+  of the JSON array is similar to the format of the RtcStatsReport object implemented in web browsers
+  (see the [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport)).
+  Also see [this W3C documentation](https://w3c.github.io/webrtc-stats/).
 
 * **streamCreated** (Object) -- Sent when the publisher starts streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
 
 * **streamDestroyed** (Object) -- Sent when the publisher stops streaming.
 A [streamingEvent](./EventData.md#streamingEvent) object is passed into the event handler.
+
+**setVideoTransformers()** -- Sets video transformers for the publisher. This method has one parameter -- and array of objects defining each transformer to apply to the publisher's stream. A transformer object has two properties:
+
+* `name` (String) -- Either 'BackgroundBlur' (for a background blur filter) or 'BackgroundImageReplacement' (for a background image replacement filter). Android only supports the 'BackgroundBlur' transformer (and it is a beta feature in Android).
+
+* `properties` (String) -- A JSON string with the properties of the Vonage video transformer.
+
+  For a background blur transformer, the format of the JSON is:
+  
+  ```
+  `{
+     "radius" :"None"
+   }`
+   ```
+   
+   Valid values for the radius property are "None", "High", and "Low".
+   
+  For a custom background blur transformer, the format of the JSON is:
+  
+  ```
+  `{
+    "radius": "Custom",
+    "custom_radius": "value"
+  }
+  ```
+  
+  `custom_radius` can be any positive integer.
+  
+  For a background replacement transformer (supported on iOS only), the format of the JSON is:
+  
+  ```
+  `{
+    "image_file_path": "path/to/image"
+  }`
+  ```
+  
+  Where `image_file_path` is the absolute file path of a local image to use as virtual background. Supported image formats are PNG and JPEG.
+
+*Important:* Media transformations, such as background blur and background replacement, are resource-intensive and require devices with high processing power. It is recommended to only use these transformations on supported devices. See the following documentation:
+
+* [For iOS](https://tokbox.com/developer/guides/vonage-media-processor/ios/#client-requirements)
+
+* [For Android](https://tokbox.com/developer/guides/vonage-media-processor/android/#client-requirements)
+
+For more information on transformers, see [Using the Vonage Media Processor library](https://tokbox.com/developer/guides/vonage-media-processor/)
+
+**videoNetworkStats** (Object) -- Sent periodically to report audio statistics for the publisher.
+  A [PublisherVideoNetworkStatsEvent](./EventData.md#PublisherVideoNetworkStatsEvent) object is passed into the event handler.
+## Methods
+

@@ -21,11 +21,13 @@ const sanitizeSubscriberEvents = (events) => {
       audioNetworkStats: 'audioNetworkStatsUpdated',
       videoNetworkStats: 'videoNetworkStatsUpdated',
       audioLevel: 'audioLevelUpdated',
+      rtcStatsReport: 'rtcStatsReport',
       videoDisabled: 'subscriberVideoDisabled',
       videoEnabled: 'subscriberVideoEnabled',
       videoDisableWarning: 'subscriberVideoDisableWarning',
       videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
       videoDataReceived: 'subscriberVideoDataReceived',
+      captionReceived: 'subscriberCaptionReceived:',
     },
     android: {
       connected: 'onConnected',
@@ -33,6 +35,7 @@ const sanitizeSubscriberEvents = (events) => {
       reconnected: 'onReconnected',
       error: 'onError',
       audioNetworkStats: 'onAudioStats',
+      rtcStatsReport: 'onRtcStatsReport',
       videoNetworkStats: 'onVideoStats',
       audioLevel: 'onAudioLevelUpdated',
       videoDisabled: 'onVideoDisabled',
@@ -40,6 +43,7 @@ const sanitizeSubscriberEvents = (events) => {
       videoDisableWarning: 'onVideoDisableWarning',
       videoDisableWarningLifted: 'onVideoDisableWarningLifted',
       videoDataReceived: 'onVideoDataReceived',
+      captionReceived: 'onCaptionText',
     },
   };
   return reassignEvents('subscriber', customEvents, events);
@@ -89,20 +93,26 @@ const sanitizeFrameRate = (frameRate) => {
   }
 };
 
+const sanitizeAudioVolume = audioVolume => (typeof audioVolume === 'number') ? audioVolume : 100;
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
       subscribeToAudio: true,
       subscribeToVideo: true,
+      subscribeToCaptions: false,
       preferredResolution: sanitizeResolution(null),
-      preferredFrameRate: sanitizeFrameRate(null)
+      preferredFrameRate: sanitizeFrameRate(null),
+      audioVolume: 100,
     };
   }
   return {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
+    subscribeToCaptions: sanitizeBooleanProperty(properties.subscribeToCaptions),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
-    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate)
+    preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
+    audioVolume: sanitizeAudioVolume(properties.audioVolume),
   };
 };
 
@@ -110,5 +120,6 @@ export {
   sanitizeSubscriberEvents,
   sanitizeProperties,
   sanitizeFrameRate,
-  sanitizeResolution
+  sanitizeResolution,
+  sanitizeAudioVolume
 };

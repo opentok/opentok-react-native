@@ -1,3 +1,65 @@
+# 2.26.1  (October 2023)
+
+- [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
+  video transformers, such as a background blur for a publisher (issues #631 and #682).
+  For more info, see the docs: [OTPublisher](/docs/OTPublisher.md).
+
+- [Update]: Live Captions API enhancements (issue #643)
+
+  * The new OTPublisher.publishCaptions option lets you enable and disable captions for a published stream  (if captions are enabled for the session). For more info, see the docs:[OTPublisher](/docs/OTPublisher.md).
+
+  * The new OTSubscriber.subscribeToCaptions option lets you turn captions on and off for a subscriber (if captions are enabled for the session and the publisher is publishing captions). For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
+
+  * The new OTSubscriber captionReceived event is dispatched when a subscriber receives a caption. For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
+
+  * For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
+
+- [Fix]: Fixes an issue in which applications could not connect to a session when
+  the `proxyUrl` option for OTSession was set. - issue #645
+
+- [Fix]: Fixes an issue a stream is not destroyed immediately after unmounting an OTSession component or when the `OTSession.disconnect()` method is called. - issues #685 and #686
+
+# 2.26.0  (October 2023)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.26.1.
+
+  See the release notes for the OpenTok [ioS SDK](https://tokbox.com/developer/sdks/ios/release-notes.html)
+  and the [Android SDK](https://tokbox.com/developer/sdks/android/release-notes.html).
+
+  For Android, this version of the library requires a mininum Android API level of 23.
+
+  There are changes to iOS 14 networking affecting relayed sessions — see the list of
+  [known issues](https://tokbox.com/developer/sdks/ios/release-notes.html#known-issues)
+  in the OpenTok iOS SDK release notes.
+
+# 2.25.4 (October 2023)
+
+- [Fix]: Fixes TypeScript definitions  - issue #690.
+
+# 2.25.3 (September 2023)
+
+- [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
+
+  * `OTSession.getCapabilities()` method
+  * `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
+  * OTPublisher `scalableScreenshare` option (in the OTPublisher properties)
+  * OTPublisher `audioNetworkStats` and `videoNetworkStats` events
+  * `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
+  * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
+  * OTSubscriber `audioVolume` property.
+  * OT.getSupportedCodecs() method.
+  * OT.forceMuteAll(), OT.forceMuteStream(), OT.disableForceMute() methods. OTPublisher
+    `muteForce` event and OTSession `muteForced` event.
+
+For more info, see the docs:
+
+* [OTPublisher](/docs/OTPublisher.md)
+* [OTSession](/docs/OTSession.md)
+* [OTSubscriber](/docs/OTSubscriber.md)
+
+- [Fix]: Fix android app crash due to permission missing.
+- [Fix]: Fix OTSubscriber audioVolume and other properties not working -- issue #694
+
 # 2.25.2 (July 5 2023)
 
 - [Fix]: Fix crash on iOS when publishing a screen-sharing stream.
