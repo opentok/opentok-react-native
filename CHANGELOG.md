@@ -1,3 +1,15 @@
+# 2.27.0  (January 2023)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
+
+  This version adds support for the VP9 codec in relayed sessions. For more information, see the [video codecs](https://tokbox.com/developer/guides/codecs/) documentation.
+
+  This version adds support for adaptive media routing. For more information, see the [adaptive media routing](https://tokbox.com/developer/guides/create-session/#adaptive-media-routing) documentation.
+
+  For more details, see the release notes for the OpenTok [iOS](https://tokbox.com/developer/sdks/ios/release-notes.html) and [Android](https://tokbox.com/developer/sdks/android/release-notes.html) SDKs.
+
+  *Note* This version of the OpenTok React Native SDK does *not* include API enhancements from v2.27.0 of the iOS and Android SDKs, such as publisher audio fallback and end-to-end encryption. These will be added in an upcoming version of the OpenTok React Native.
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
