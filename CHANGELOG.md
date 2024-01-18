@@ -10,6 +10,8 @@
 
   *Note* This version of the OpenTok React Native SDK does *not* include API enhancements from v2.27.0 of the iOS and Android SDKs, such as publisher audio fallback and end-to-end encryption. These will be added in an upcoming version of the OpenTok React Native.
 
+- [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)

@@ -430,12 +430,15 @@ declare module "opentok-react-native" {
      * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
      * the publisher are available.
      */
-    getRtcStatsReport?: () => void;
+    getRtcStatsReport: () => void;
 
     /**
      * Sets video transformers for the publisher (or clears them if passed an empty array).
      */
-    setVideoTransformers?: () => void;
+    setVideoTransformers: (transformers: Array<{
+      name: string,
+      properties?: string,
+    }>) => void;
   }
 
   interface OTSubscriberProps extends ViewProps {
