@@ -288,7 +288,7 @@ declare module "opentok-react-native" {
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSession.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTSession.html
    */
   export class OTSession extends React.Component<OTSessionProps, unknown> {
     /**
@@ -449,7 +449,7 @@ declare module "opentok-react-native" {
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTPublisher.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTPublisher.html
    */
   export class OTPublisher extends React.Component<OTPublisherProps, unknown> {
     /**
@@ -610,11 +610,11 @@ declare module "opentok-react-native" {
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/main/docs/OTSubscriber.md#custom-rendering-of-streams
+   * https://tokbox.com/developer/guides/subscribe-stream/react-native/#custom_rendering
    */
   export class OTSubscriberView extends React.Component<OTSubscriberViewProps, unknown> {}
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTSubscriber.html
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps, unknown> {
     /**
