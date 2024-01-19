@@ -12,6 +12,14 @@
 
 - [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
 
+- [Fix]: This version fixes some issues in the TypeScript definitions.
+
+- [Fix]: This version fixes the following events, which were not being dispatched:
+
+  * OTSubscriber rtcStatsReport
+  * OTPublisher videoNetworkStats
+  * OTPublisher audioNetworkStats
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)

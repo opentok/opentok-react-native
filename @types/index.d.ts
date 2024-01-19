@@ -92,6 +92,24 @@ declare module "opentok-react-native" {
     timestamp: number,
   }
 
+  interface PublisherAudioNetworkStats {
+    connectionId?: string,
+    subscriberId?: string,
+    audioBytesSent: number,
+    audioPacketsLost: number,
+    audioPacketsSent: number,
+    timeStamp: number,
+  }
+
+  interface PublisherVideoNetworkStats {
+    connectionId?: string,
+    subscriberId?: string,
+    videoPacketsLost: number,
+    videoBytesSent: number,
+    videoPacketsSent: number,
+    timestamp: number,
+  }
+
   interface PublisherRtcStatsReport {
     connectionId: string,
     jsonArrayOfReports: string,
@@ -99,7 +117,7 @@ declare module "opentok-react-native" {
 
   interface SignalEvent {
     sessionId: string;
-    fromConnection: string;
+    connectionId: string;
     type: string;
     data: string;
   }
@@ -395,6 +413,10 @@ declare module "opentok-react-native" {
     audioLevel?: CallbackWithParam<number>;
 
     /**
+     * Sent when publisher audio stats are available.
+     */
+    audioNetworkStats?: CallbackWithParam<PublisherAudioNetworkStats[], any>;
+    /**
      * Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
      */
     error?: CallbackWithParam<any, any>;
@@ -419,6 +441,11 @@ declare module "opentok-react-native" {
      * Sent when the publisher stops streaming.
      */
     streamDestroyed?: CallbackWithParam<StreamDestroyedEvent, any>;
+
+    /**
+     * Sent when publisher video stats are available.
+     */
+    videoNetworkStats?: CallbackWithParam<PublisherVideoNetworkStats[], any>;
   }
 
   /**
@@ -474,6 +501,18 @@ declare module "opentok-react-native" {
   }
 
   interface OTSubscriberProperties {
+    /* The audio volume, from 0 to 100.
+    */
+    audioVolume: number;
+
+    /* The preferred frame rate, in frames per second.
+    */
+    preferredFrameRate?: number;
+
+    /* The preferred resolution, either "1280x720", "640x480", or "352x288".
+    */
+    preferredResolution?: string;
+
     /**
      * Whether to subscribe to audio.
      */
