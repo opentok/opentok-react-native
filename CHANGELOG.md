@@ -12,11 +12,12 @@
 
 - [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
 
+- [Update]: The axios package is updated. This updates a vulnerable version of in the follow-redirects dependency.
+
 - [Fix]: This version fixes some issues in the TypeScript definitions.
 
 - [Fix]: This version fixes the following events, which were not being dispatched:
 
-  * OTSubscriber rtcStatsReport
   * OTPublisher videoNetworkStats
   * OTPublisher audioNetworkStats
 
