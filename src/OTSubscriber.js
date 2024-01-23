@@ -19,6 +19,8 @@ export default class OTSubscriber extends Component {
       streamDestroyed: Platform.OS === 'android' ? 'session:onStreamDropped' : 'session:streamDestroyed',
       streamCreated: Platform.OS === 'android' ? 'session:onStreamReceived' : 'session:streamCreated',
       captionReceived: Platform.OS === 'android' ? 'session:onCaptionText' : 'subscriber:subscriberCaptionReceived:',
+      publisherStreamCreated: 'publisherStreamCreated',
+      publisherStreamDestroyed: 'publisherStreamDestroyed'
     };
     this.componentEventsArray = Object.values(this.componentEvents);
     this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
@@ -36,6 +38,14 @@ export default class OTSubscriber extends Component {
       OT.setJSComponentEvents(this.componentEventsArray);
       setNativeEvents(subscriberEvents);
     }
+    this.publisherStreamCreated = nativeEvents.addListener(
+      'publisherStreamCreated',
+      stream => this.publisherStreamCreatedHandler(stream)
+    );
+    this.publisherStreamDestroyed = nativeEvents.addListener(
+      'publisherStreamDestroyed',
+      stream => this.publisherStreamDestroyedHandler(stream)
+    );
   }
   componentDidUpdate() {
     const { streamProperties } = this.props;
@@ -67,6 +77,8 @@ export default class OTSubscriber extends Component {
   componentWillUnmount() {
     this.streamCreated.remove();
     this.streamDestroyed.remove();
+    this.publisherStreamCreated.remove();
+    this.publisherStreamDestroyed.remove();
     OT.removeJSComponentEvents(this.componentEventsArray);
     const events = sanitizeSubscriberEvents(this.props.eventHandlers);
     removeNativeEvents(events);
@@ -105,6 +117,16 @@ export default class OTSubscriber extends Component {
         });
       }
     });
+  }
+  publisherStreamCreatedHandler = (stream) => {
+    if (this.state.subscribeToSelf) {
+      this.streamCreatedHandler(stream);
+    }
+  }
+  publisherStreamDestroyedHandler = (stream) => {
+    if (this.state.subscribeToSelf) {
+      this.streamDestroyedHandler(stream);
+    }
   }
   getRtcStatsReport(streamId) {
     OT.getSubscriberRtcStatsReport(streamId);
