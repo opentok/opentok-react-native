@@ -328,7 +328,16 @@ declare module "opentok-react-native" {
     audioBitrate?: number;
 
     /**
-     * Whether to turn on audio fallback or not.
+     * Settings to enable and disable publisher and subscriber audio fallback.
+     * See https://tokbox.com/developer/guides/audio-fallback.
+     */
+    audioFallback?: {
+      publisher?: boolean;
+      subscriber?: boolean;
+    };
+
+    /**
+     * Deprecated. See the `audioFallback` property.
      */
     audioFallbackEnabled?: boolean;
 
@@ -419,6 +428,26 @@ declare module "opentok-react-native" {
      * Sent when the publisher stops streaming.
      */
     streamDestroyed?: CallbackWithParam<StreamDestroyedEvent, any>;
+
+    /**
+     * Sent when the publisher stops sending video because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoDisabled?: Callback<any>;
+
+    /**
+     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback)).
+     */
+    videoDisableWarning?: Callback<any>;
+
+    /**
+     * Sent after a videoDisableWarning event when network conditions improve (see [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback)).
+     */
+    videoDisableWarningLifted?: Callback<any>;
+
+    /**
+     * Sent when the publisher resumes sending video after it was disabled because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoEnabled?: CallbackWithParam<{reason: string; stream: Stream}, any>;
   }
 
   /**

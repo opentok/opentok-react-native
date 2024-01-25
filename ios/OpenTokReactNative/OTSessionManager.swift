@@ -82,6 +82,8 @@ class OTSessionManager: RCTEventEmitter {
             publisherProperties.cameraResolution = Utils.sanitizeCameraResolution(properties["resolution"] as Any);
             publisherProperties.enableOpusDtx = Utils.sanitizeBooleanProperty(properties["enableDtx"] as Any);
             publisherProperties.name = properties["name"] as? String;
+            publisherProperties.publisherAudioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["publisherAudioFallback"] as Any);
+            publisherProperties.subscriberAudioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["subscriberAudioFallback"] as Any);
             publisherProperties.videoCapture?.videoContentHint = Utils.convertVideoContentHint(properties["videoContentHint"] as Any)
             OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
             guard let publisher = OTRN.sharedState.publishers[publisherId] else {
@@ -103,7 +105,6 @@ class OTSessionManager: RCTEventEmitter {
             } else if let cameraPosition = properties["cameraPosition"] as? String {
                 publisher.cameraPosition = cameraPosition == "front" ? .front : .back;
             }
-            publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["audioFallbackEnabled"] as Any);
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
@@ -656,6 +657,42 @@ extension OTSessionManager: OTPublisherDelegate {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)muteForced", data: [NSNull()]);
         }
         printLogs("OTRN: Publisher mute forced")
+    }
+
+    func videoDisableWarning(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisableWarning", data: [NSNull()])
+        }
+        printLogs("OTRN: Publisher videoDisableWarning")
+    }
+
+    func videoDisableWarningLifted(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisableWarningLifted", data: [NSNull()])
+        }
+        printLogs("OTRN: Publisher videoDisableWarningLifted")
+    }
+
+    func videoDisabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
+        var publisherInfo: Dictionary<String, Any> = [:]
+        publsiherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisabled", data: publisherInfo)
+        }
+        printLogs("OTRN: Publisher videoDisabled")
+    }
+
+    func videoEnabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
+        var publisherInfo: Dictionary<String, Any> = [:]
+        publsiherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoEnabled", data: publisherInfo)
+        }
+        printLogs("OTRN: Publisher videoEnabled")
     }
 }
 
