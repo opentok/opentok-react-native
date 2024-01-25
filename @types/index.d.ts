@@ -432,7 +432,7 @@ declare module "opentok-react-native" {
     /**
      * Sent when the publisher stops sending video because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
      */
-    videoDisabled?: Callback<any>;
+    videoDisabled?: CallbackWithParam<{reason: string}>;
 
     /**
      * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback)).
@@ -447,7 +447,7 @@ declare module "opentok-react-native" {
     /**
      * Sent when the publisher resumes sending video after it was disabled because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
      */
-    videoEnabled?: CallbackWithParam<{reason: string; stream: Stream}, any>;
+    videoEnabled?: CallbackWithParam<{reason: string}, any>;
   }
 
   /**
@@ -571,12 +571,12 @@ declare module "opentok-react-native" {
     /**
      * This message is sent when the OpenTok Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the videoDisabled message is sent. If the stream quality improves, the videoDisableWarningLifted message is sent.
      */
-    videoDisableWarning?: Callback<any>;
+    videoDisableWarning?: CallbackWithParam<{stream: Stream});
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
      */
-    videoDisableWarningLifted?: Callback<any>;
+    videoDisableWarningLifted?: CallbackWithParam<{stream: Stream});
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).

@@ -105,6 +105,7 @@ class OTSessionManager: RCTEventEmitter {
             } else if let cameraPosition = properties["cameraPosition"] as? String {
                 publisher.cameraPosition = cameraPosition == "front" ? .front : .back;
             }
+            publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["audioFallbackEnabled"] as Any);
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
@@ -677,7 +678,7 @@ extension OTSessionManager: OTPublisherDelegate {
 
     func videoDisabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
         var publisherInfo: Dictionary<String, Any> = [:]
-        publsiherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
         if (publisherId.count > 0) {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisabled", data: publisherInfo)
@@ -687,7 +688,7 @@ extension OTSessionManager: OTPublisherDelegate {
 
     func videoEnabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
         var publisherInfo: Dictionary<String, Any> = [:]
-        publsiherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
         if (publisherId.count > 0) {
             self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoEnabled", data: publisherInfo)
