@@ -219,7 +219,7 @@ declare module "opentok-react-native" {
     connectionDestroyed?: CallbackWithParam<ConnectionDestroyedEvent, any>;
 
     /**
-     * Sent if the attempt to connect to the session fails or if the connection to the session drops due to an error after a successful connection.
+     * Sent if the attempt to connect to the session fails or if the connection to the session drops due to an error after a successful connection. Also sent if setting an encryption secret results in an error.
      */
     error?: CallbackWithParam<ErrorEvent, any>;
 
@@ -301,6 +301,12 @@ declare module "opentok-react-native" {
      * Used to report an issue
      */
     reportIssue: () => Promise<string>
+
+    /**
+     * Used to set the encryption secret in a session that uses end-to-end encryption.
+     * See https://tokbox.com/developer/guides/end-to-end-encryption.
+     */
+    encryptionSecret?: string
   }
 
   interface OTPublisherProps extends ViewProps {
