@@ -1,6 +1,6 @@
 # 2.27.0  (January 2023)
 
-- [Update]: This version adds support for [end-to-end encryption](https://tokbox.com/developer/guides/end-to-end-encryption). The `OTSession` component includes a new `encryptionSecret()` prop, which you can use to set and change the encryption secret used by the local client.
+- [Update]: This version adds support for [end-to-end encryption](https://tokbox.com/developer/guides/end-to-end-encryption). The `OTSession` component includes a new `encryptionSecret` prop, which you can use to set and change the encryption secret used by the local client.
 
 # 2.26.1  (October 2023)
 

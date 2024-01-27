@@ -69,7 +69,7 @@ export default class OTSession extends Component {
     const { apiKey, sessionId, token } = credentials;
     OT.initSession(apiKey, sessionId, sessionOptions);
     if (encryptionSecret) {
-      this.setEncryptionSecret(sessionId, encryptionSecret);
+      this.setEncryptionSecret(encryptionSecret);
     }
     OT.connect(sessionId, token, (error) => {
       if (error) {
@@ -139,9 +139,9 @@ export default class OTSession extends Component {
     return OT.disableForceMute(this.props.sessionId);
   }
   setEncryptionSecret(secret) {
-    OT.setEncryptionSecret(this.props.sessionId, sanitizeEncryptionSecret(secret), (error) => {
-      const errorHandler = this.props.eventHandlers.error;
-      if (errorHandler) {
+    const errorHandler = this.props.eventHandlers.error;
+    OT.setEncryptionSecret(this.props.sessionId, 'sanitizeEncryptionSecret(secret)', (error) => {
+      if (error && errorHandler) {
         errorHandler(error);
       }
     });

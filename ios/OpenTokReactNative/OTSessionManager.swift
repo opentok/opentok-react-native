@@ -55,19 +55,6 @@ class OTSessionManager: RCTEventEmitter {
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
     
-    @objc func setEncryptionSecret(_ sessionId: String, secret: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        var error: OTError?
-        guard let session = OTRN.sharedState.sessions[sessionId] else {
-            let errorInfo = EventUtils.createErrorMessage("Error setting encryption secret. Could not find native session instance")
-            callback([errorInfo]);
-            return
-        }
-        session.setEncryptionSecret(_ secret: String, error: &error)
-        if let err = error {
-            self.dispatchErrorViaCallback(callback, error: err)
-        }
-    }
-    
     @objc func connect(_ sessionId: String, token: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
         guard let session = OTRN.sharedState.sessions[sessionId] else {
@@ -319,15 +306,15 @@ class OTSessionManager: RCTEventEmitter {
             callback([NSNull()])
         }
     }
-    
-    @objc func setEncryptionSecret(_ sessionId: String, encryptionSecret: String, callback: RCTResponseSenderBlock ) -> Void {
+
+    @objc func setEncryptionSecret(_ sessionId: String, secret: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         var error: OTError?
         guard let session = OTRN.sharedState.sessions[sessionId] else {
             let errorInfo = EventUtils.createErrorMessage("Error setting encryption secret. Could not find native session instance.")
             callback([errorInfo])
             return
         }
-        session.setEncryptionSecret(_: encryptionSecret, error: &error)
+        session.setEncryptionSecret(secret, error: &error)
         if let err = error {
             dispatchErrorViaCallback(callback, error: err)
         } else {

@@ -139,6 +139,13 @@ declare module "opentok-react-native" {
      * Event handlers passed into the native session instance.
      */
     eventHandlers?: OTSessionEventHandlers;
+
+
+    /**
+     * Used to set the encryption secret in a session that uses end-to-end encryption.
+     * See https://tokbox.com/developer/guides/end-to-end-encryption.
+     */
+    encryptionSecret?: string
   }
 
   interface OTSessionSessionOptions {
@@ -301,12 +308,6 @@ declare module "opentok-react-native" {
      * Used to report an issue
      */
     reportIssue: () => Promise<string>
-
-    /**
-     * Used to set the encryption secret in a session that uses end-to-end encryption.
-     * See https://tokbox.com/developer/guides/end-to-end-encryption.
-     */
-    encryptionSecret?: string
   }
 
   interface OTPublisherProps extends ViewProps {

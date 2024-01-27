@@ -88,7 +88,7 @@ RCT_EXTERN_METHOD(sendSignal:
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(setEncryptionSecret:
                   (NSString*)sessionId
-                  (NSString*)secret
+                  secret:(NSString*)secret
                   callback:(RCTResponseSenderBlock*)callback)
 RCT_EXTERN_METHOD(destroyPublisher:
                   (NSString*)publisherId
