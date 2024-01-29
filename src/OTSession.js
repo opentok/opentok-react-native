@@ -140,7 +140,7 @@ export default class OTSession extends Component {
   }
   setEncryptionSecret(secret) {
     const errorHandler = this.props.eventHandlers.error;
-    OT.setEncryptionSecret(this.props.sessionId, 'sanitizeEncryptionSecret(secret)', (error) => {
+    OT.setEncryptionSecret(this.props.sessionId, sanitizeEncryptionSecret(secret), (error) => {
       if (error && errorHandler) {
         errorHandler(error);
       }
@@ -174,6 +174,7 @@ OTSession.propTypes = {
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   options: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   signal: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  encryptionSecret: PropTypes.string,
 };
 
 OTSession.defaultProps = {
