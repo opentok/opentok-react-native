@@ -1,4 +1,4 @@
-# 2.27.0  (January 2023)
+# 2.27.0  (January 2024)
 
 - [Update]: This version adds a new `OTPublisher audioFallback` option, which supports both subscriber and publisher audio fallback. The `audioFallback.subscriber` property replaces the `OTPublisher audioFallbackEnabled` option, which is deprecated.
 The OTPublisher component has new callback functions for publisher audio fallback-related events: `videoDisabled()`, `videoEnabled()`, `videoDisableWarning()`, and `videoDisableWarningLifted()`. See the [audio fallback developer guide](https://tokbox.com/developer/guides/audio-fallback).

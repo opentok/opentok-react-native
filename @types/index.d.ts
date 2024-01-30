@@ -430,22 +430,22 @@ declare module "opentok-react-native" {
     streamDestroyed?: CallbackWithParam<StreamDestroyedEvent, any>;
 
     /**
-     * Sent when the publisher stops sending video because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
+     * Sent when the publisher stops sending video because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
      */
     videoDisabled?: CallbackWithParam<{reason: string}>;
 
     /**
-     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback)).
+     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see https://tokbox.com/developer/guides/audio-fallback).
      */
     videoDisableWarning?: Callback<any>;
 
     /**
-     * Sent after a videoDisableWarning event when network conditions improve (see [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback)).
+     * Sent after a videoDisableWarning event when network conditions improve (see https://tokbox.com/developer/guides/audio-fallback).
      */
     videoDisableWarningLifted?: Callback<any>;
 
     /**
-     * Sent when the publisher resumes sending video after it was disabled because of [publisher audio fallback](https://tokbox.com/developer/guides/audio-fallback).
+     * Sent when the publisher resumes sending video after it was disabled because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
      */
     videoEnabled?: CallbackWithParam<{reason: string}, any>;
   }
