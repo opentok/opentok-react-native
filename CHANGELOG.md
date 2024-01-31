@@ -1,3 +1,10 @@
+# 2.27.0  (February 2023)
+
+- [Fix]: This version fixes the following events, which were not being dispatched:
+
+  * OTSession muteForced
+  * OTPublisher muteForced
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)

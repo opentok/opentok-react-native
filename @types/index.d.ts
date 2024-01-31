@@ -104,6 +104,10 @@ declare module "opentok-react-native" {
     data: string;
   }
 
+  interface MuteForcedEvent {
+    active: boolean;
+  }
+
   interface OTSessionProps extends ViewProps {
     /**
      * TokBox API Key
@@ -222,6 +226,11 @@ declare module "opentok-react-native" {
      * Sent if the attempt to connect to the session fails or if the connection to the session drops due to an error after a successful connection.
      */
     error?: CallbackWithParam<ErrorEvent, any>;
+
+    /**
+     * Sent when a moderator has forced clients publishing streams to the session to mute audio (the active property of the MuteForcedEvent object is set to true), or a moderator has disabled the mute audio state in the session (the active property of the MuteForcedEvent object is set to false).
+     */
+    muteForced?: CallbackWithParam<MuteForcedEvent, any>;
 
     /**
      * Sent if there is an error with the communication between the native session instance and the JS component.
@@ -398,6 +407,11 @@ declare module "opentok-react-native" {
      * Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
      */
     error?: CallbackWithParam<any, any>;
+
+    /**
+     * Sent when a moderator has forced this publisher's stream to be muted.
+     */
+    muteForced?: Callback<any>;
 
     /**
      * Sent if there is an error with the communication between the native publisher instance and the JS component.
