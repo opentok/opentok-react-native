@@ -399,12 +399,25 @@ class OTSessionManager: RCTEventEmitter {
         resolve(supportedCodecs)
     }
     
-    @objc func forceMuteAll(_ sessionId: String, excludedStreamIds: NSArray, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
+    @objc func forceMuteAll(_ sessionId: String, excludedStreamIds: Array<String>, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
         guard let session = OTRN.sharedState.sessions[sessionId] else {
             reject("event_failure", "Session ID not found", nil)
             return
         }
-        return resolve(true);
+        var excludedStreams:[OTStream] = []
+        for streamId in excludedStreamIds {
+            guard let stream = OTRN.sharedState.subscriberStreams[streamId] ?? OTRN.sharedState.publisherStreams[streamId] else {
+                continue // Ignore bogus stream IDs
+            }
+            excludedStreams.append(stream)
+        }
+        var error: OTError?
+        session.forceMuteAll(excludedStreams, error: &error)
+        if let error = error {
+          reject("event_failure", error.localizedDescription, nil)
+          return
+        }
+        return resolve(true)
     }
 
     @objc func forceMuteStream(_ sessionId: String, streamId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{
