@@ -95,8 +95,8 @@ declare module "opentok-react-native" {
   interface PublisherAudioNetworkStats {
     connectionId?: string,
     subscriberId?: string,
-    audioBytesSent: number,
     audioPacketsLost: number,
+    audioBytesSent: number,
     audioPacketsSent: number,
     timeStamp: number,
   }
@@ -501,16 +501,19 @@ declare module "opentok-react-native" {
   }
 
   interface OTSubscriberProperties {
-    /* The audio volume, from 0 to 100.
-    */
+    /**
+     * The audio volume, from 0 to 100.
+     */
     audioVolume: number;
 
-    /* The preferred frame rate, in frames per second.
-    */
+    /**
+     * The preferred frame rate, in frames per second.
+     */
     preferredFrameRate?: number;
 
-    /* The preferred resolution, either "1280x720", "640x480", or "352x288".
-    */
+    /**
+     * The preferred resolution, either "1280x720", "640x480", or "352x288".
+     */
     preferredResolution?: string;
 
     /**
