@@ -1,4 +1,4 @@
-# 2.27.0  (January 2023)
+# 2.27.0  (January 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
 
