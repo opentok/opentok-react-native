@@ -847,14 +847,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         printLogs("onStreamDropped: Stream Dropped: "+stream.getStreamId() +" in session: "+session.getSessionId());
     }
     @Override
-    public void onMuteForced​(Session session, MuteForcedInfo info) {
+    public void onMuteForced(Session session, MuteForcedInfo info) {
 
         WritableMap muteForcedInfo = Arguments.createMap();
         String sessionId = session.getSessionId();
         muteForcedInfo.putString("sessionId", sessionId);
         Boolean active = info.getActive();
         muteForcedInfo.putBoolean("active", active);
-        sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onMuteForced​", muteForcedInfo);
+        sendEventMap(this.getReactApplicationContext(), session.getSessionId() + ":" + sessionPreface + "onMuteForced", muteForcedInfo);
         printLogs("Mute forced -- active: " + active + " in session: " + sessionId);
     }
 
@@ -950,7 +950,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @Override
-    public void onMuteForced​(PublisherKit publisher) {
+    public void onMuteForced(PublisherKit publisher) {
 
         String publisherId = Utils.getPublisherId(publisher);
         if (publisherId.length() > 0) {

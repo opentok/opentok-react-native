@@ -601,7 +601,7 @@ extension OTSessionManager: OTSessionDelegate {
     func session(_ session: OTSession, info muteForced: OTMuteForcedInfo) {
         var muteForcedInfo: Dictionary<String, Any> = [:];
         muteForcedInfo["active"] = muteForced.active;
-        self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)muteFoced", data: muteForcedInfo)
+        self.emitEvent("\(session.sessionId):\(EventUtils.sessionPreface)muteForced", data: muteForcedInfo)
         printLogs("OTRN Session: Session muteForced - active:  \(muteForced.active)")
     }
 }
