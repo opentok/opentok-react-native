@@ -124,7 +124,40 @@ class EventUtils {
     }
     
     static func getSupportedEvents() -> [String] {
-        return ["\(sessionPreface)streamCreated", "\(sessionPreface)streamDestroyed", "\(sessionPreface)sessionDidConnect", "\(sessionPreface)sessionDidDisconnect", "\(sessionPreface)connectionCreated", "\(sessionPreface)connectionDestroyed", "\(sessionPreface)didFailWithError", "\(publisherPreface)streamCreated", "\(sessionPreface)signal", "\(publisherPreface)streamDestroyed", "\(publisherPreface)didFailWithError", "\(publisherPreface)audioLevelUpdated", "\(publisherPreface)rtcStatsReport", "\(subscriberPreface)subscriberDidConnect", "\(subscriberPreface)subscriberDidDisconnect", "\(subscriberPreface)didFailWithError", "\(subscriberPreface)videoNetworkStatsUpdated", "\(subscriberPreface)audioNetworkStatsUpdated", "\(subscriberPreface)audioLevelUpdated", "\(subscriberPreface)rtcStatsReport", "\(subscriberPreface)subscriberVideoEnabled", "\(subscriberPreface)subscriberVideoDisabled", "\(subscriberPreface)subscriberVideoDisableWarning", "\(subscriberPreface)subscriberVideoDisableWarningLifted", "\(subscriberPreface)subscriberVideoDataReceived", "\(sessionPreface)archiveStartedWithId", "\(sessionPreface)archiveStoppedWithId", "\(sessionPreface)sessionDidBeginReconnecting", "\(sessionPreface)sessionDidReconnect", "\(sessionPreface)streamPropertyChanged", "\(subscriberPreface)subscriberDidReconnect", "\(subscriberPreface)subscriberCaptionReceived"];
+        return [
+            "\(sessionPreface)streamCreated",
+            "\(sessionPreface)streamDestroyed",
+            "\(sessionPreface)sessionDidConnect",
+            "\(sessionPreface)sessionDidDisconnect",
+            "\(sessionPreface)connectionCreated",
+            "\(sessionPreface)connectionDestroyed",
+            "\(sessionPreface)didFailWithError",
+            "\(publisherPreface)streamCreated",
+            "\(sessionPreface)signal",
+            "\(publisherPreface)streamDestroyed",
+            "\(publisherPreface)didFailWithError",
+            "\(publisherPreface)audioLevelUpdated",
+            "\(publisherPreface)rtcStatsReport",
+            "\(subscriberPreface)subscriberDidConnect",
+            "\(subscriberPreface)subscriberDidDisconnect",
+            "\(subscriberPreface)didFailWithError",
+            "\(subscriberPreface)videoNetworkStatsUpdated",
+            "\(subscriberPreface)audioNetworkStatsUpdated",
+            "\(subscriberPreface)audioLevelUpdated",
+            "\(subscriberPreface)rtcStatsReport",
+            "\(subscriberPreface)subscriberVideoEnabled",
+            "\(subscriberPreface)subscriberVideoDisabled",
+            "\(subscriberPreface)subscriberVideoDisableWarning",
+            "\(subscriberPreface)subscriberVideoDisableWarningLifted",
+            "\(subscriberPreface)subscriberVideoDataReceived",
+            "\(sessionPreface)archiveStartedWithId",
+            "\(sessionPreface)archiveStoppedWithId",
+            "\(sessionPreface)sessionDidBeginReconnecting",
+            "\(sessionPreface)sessionDidReconnect",
+            "\(sessionPreface)streamPropertyChanged",
+            "\(subscriberPreface)subscriberDidReconnect",
+            "\(subscriberPreface)subscriberCaptionReceived"
+        ];
     }
     
     static func convertDateToString(_ creationTime: Date) -> String {
