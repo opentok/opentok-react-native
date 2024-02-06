@@ -333,7 +333,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
             Stream mStream = streams.get(streamId);
             if (mStream == null) {
                 promise.reject("Stream not found.");
-                return;
+                continue;
             }
             mExcludedStreams.add(mStream);
         }
