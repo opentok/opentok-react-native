@@ -1,4 +1,4 @@
-# 2.27.0  (February 2023)
+# 2.27.0  (February 2024)
 
 - [Fix]: This version fixes the OTSession `muteForced` and OTPublisher `muteForced` events, which were not being dispatched. It also fixes the `OTSession.forceMuteAll()` method in iOS.
 
