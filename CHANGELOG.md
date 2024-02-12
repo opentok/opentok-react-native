@@ -8,8 +8,6 @@
 
   For more details, see the release notes for the OpenTok [iOS](https://tokbox.com/developer/sdks/ios/release-notes.html) and [Android](https://tokbox.com/developer/sdks/android/release-notes.html) SDKs.
 
-  *Note* This version of the OpenTok React Native SDK does *not* include API enhancements from v2.27.0 of the iOS and Android SDKs, such as publisher audio fallback and end-to-end encryption. These will be added in an upcoming version of the OpenTok React Native.
-
 - [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
 
 - [Update]: The axios package is updated. This updates a vulnerable version of in the follow-redirects dependency.
