@@ -309,6 +309,21 @@ class OTSessionManager: RCTEventEmitter {
             callback([NSNull()])
         }
     }
+
+    @objc func setEncryptionSecret(_ sessionId: String, secret: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        var error: OTError?
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            let errorInfo = EventUtils.createErrorMessage("Error setting encryption secret. Could not find native session instance.")
+            callback([errorInfo])
+            return
+        }
+        session.setEncryptionSecret(secret, error: &error)
+        if let err = error {
+            dispatchErrorViaCallback(callback, error: err)
+        } else {
+            callback([NSNull()])
+        }
+    }
     
     @objc func destroyPublisher(_ publisherId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         DispatchQueue.main.async {

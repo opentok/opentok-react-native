@@ -599,6 +599,19 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
+    public void setEncryptionSecret(String sessionId, String secret, Callback callback) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null) {
+            mSession.setEncryptionSecret(secret);
+            callback.invoke();
+        } else {
+            WritableMap errorInfo = EventUtils.createError("There was an error setting the encryption secret. The native session instance could not be found.");
+            callback.invoke(errorInfo);
+        }
+    }
+
+    @ReactMethod
     public void destroyPublisher(final String publisherId, final Callback callback) {
 
         UiThreadUtil.runOnUiThread(new Runnable() {

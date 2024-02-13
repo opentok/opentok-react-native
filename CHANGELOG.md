@@ -8,6 +8,8 @@
 
   For more details, see the release notes for the OpenTok [iOS](https://tokbox.com/developer/sdks/ios/release-notes.html) and [Android](https://tokbox.com/developer/sdks/android/release-notes.html) SDKs.
 
+- [Update]: This version adds support for [end-to-end encryption](https://tokbox.com/developer/guides/end-to-end-encryption). The `OTSession` component includes a new `encryptionSecret` prop, which you can use to set and change the encryption secret used by the local client.
+
 - [Update]: This version adds a new `OTPublisher audioFallback` option, which supports both subscriber and publisher audio fallback. The `audioFallback.subscriber` property replaces the `OTPublisher audioFallbackEnabled` option, which is deprecated.
 The OTPublisher component has new callback functions for publisher audio fallback-related events: `videoDisabled()`, `videoEnabled()`, `videoDisableWarning()`, and `videoDisableWarningLifted()`. See the [audio fallback developer guide](https://tokbox.com/developer/guides/audio-fallback).
 
