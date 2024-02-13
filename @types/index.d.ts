@@ -346,7 +346,16 @@ declare module "opentok-react-native" {
     audioBitrate?: number;
 
     /**
-     * Whether to turn on audio fallback or not.
+     * Settings to enable and disable publisher and subscriber audio fallback.
+     * See https://tokbox.com/developer/guides/audio-fallback.
+     */
+    audioFallback?: {
+      publisher?: boolean;
+      subscriber?: boolean;
+    };
+
+    /**
+     * Deprecated. See the `audioFallback` property.
      */
     audioFallbackEnabled?: boolean;
 
@@ -441,6 +450,26 @@ declare module "opentok-react-native" {
      * Sent when the publisher stops streaming.
      */
     streamDestroyed?: CallbackWithParam<StreamDestroyedEvent, any>;
+
+    /**
+     * Sent when the publisher stops sending video because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoDisabled?: CallbackWithParam<{reason: string}>;
+
+    /**
+     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoDisableWarning?: Callback<any>;
+
+    /**
+     * Sent after a videoDisableWarning event when network conditions improve (see https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoDisableWarningLifted?: Callback<any>;
+
+    /**
+     * Sent when the publisher resumes sending video after it was disabled because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
+     */
+    videoEnabled?: CallbackWithParam<{reason: string}, any>;
 
     /**
      * Sent when publisher video stats are available.
@@ -587,12 +616,12 @@ declare module "opentok-react-native" {
     /**
      * This message is sent when the OpenTok Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the videoDisabled message is sent. If the stream quality improves, the videoDisableWarningLifted message is sent.
      */
-    videoDisableWarning?: Callback<any>;
+    videoDisableWarning?: CallbackWithParam<{stream: Stream});
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
      */
-    videoDisableWarningLifted?: Callback<any>;
+    videoDisableWarningLifted?: CallbackWithParam<{stream: Stream});
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
