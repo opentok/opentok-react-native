@@ -1,3 +1,24 @@
+# 2.27.0  (January 2024)
+
+- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
+
+  This version adds support for the VP9 codec in relayed sessions. For more information, see the [video codecs](https://tokbox.com/developer/guides/codecs/) documentation.
+
+  This version adds support for adaptive media routing. For more information, see the [adaptive media routing](https://tokbox.com/developer/guides/create-session/#adaptive-media-routing) documentation.
+
+  For more details, see the release notes for the OpenTok [iOS](https://tokbox.com/developer/sdks/ios/release-notes.html) and [Android](https://tokbox.com/developer/sdks/android/release-notes.html) SDKs.
+
+- [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
+
+- [Update]: The axios package is updated. This updates a vulnerable version of in the follow-redirects dependency.
+
+- [Fix]: This version fixes some issues in the TypeScript definitions.
+
+- [Fix]: This version fixes the following events, which were not being dispatched:
+
+  * OTPublisher videoNetworkStats
+  * OTPublisher audioNetworkStats
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)

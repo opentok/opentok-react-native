@@ -108,6 +108,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
             publisher.audioLevelDelegate = self;
+            publisher.networkStatsDelegate = self;
             publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
         }
@@ -683,7 +684,7 @@ extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherAudioNetworkStats(stats);
-            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStats", data: statsArray)
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStatsUpdated", data: statsArray)
         }
     }
 
@@ -691,7 +692,7 @@ extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherVideoNetworkStats(stats);
-            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStats", data: statsArray)
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStatsUpdated", data: statsArray)
         }
     }
 }
