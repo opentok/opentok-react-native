@@ -82,6 +82,8 @@ class OTSessionManager: RCTEventEmitter {
             publisherProperties.cameraResolution = Utils.sanitizeCameraResolution(properties["resolution"] as Any);
             publisherProperties.enableOpusDtx = Utils.sanitizeBooleanProperty(properties["enableDtx"] as Any);
             publisherProperties.name = properties["name"] as? String;
+            publisherProperties.publisherAudioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["publisherAudioFallback"] as Any);
+            publisherProperties.subscriberAudioFallbackEnabled = Utils.sanitizeBooleanProperty(properties["subscriberAudioFallback"] as Any);
             publisherProperties.videoCapture?.videoContentHint = Utils.convertVideoContentHint(properties["videoContentHint"] as Any)
             OTRN.sharedState.publishers.updateValue(OTPublisher(delegate: self, settings: publisherProperties)!, forKey: publisherId);
             guard let publisher = OTRN.sharedState.publishers[publisherId] else {
@@ -108,6 +110,7 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
             publisher.audioLevelDelegate = self;
+            publisher.networkStatsDelegate = self;
             publisher.rtcStatsReportDelegate = self;
             callback([NSNull()]);
         }
@@ -672,6 +675,42 @@ extension OTSessionManager: OTPublisherDelegate {
         }
         printLogs("OTRN: Publisher mute forced")
     }
+
+    func videoDisableWarning(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisableWarning", data: [NSNull()])
+        }
+        printLogs("OTRN: Publisher videoDisableWarning")
+    }
+
+    func videoDisableWarningLifted(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisableWarningLifted", data: [NSNull()])
+        }
+        printLogs("OTRN: Publisher videoDisableWarningLifted")
+    }
+
+    func videoDisabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
+        var publisherInfo: Dictionary<String, Any> = [:]
+        publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoDisabled", data: publisherInfo)
+        }
+        printLogs("OTRN: Publisher videoDisabled")
+    }
+
+    func videoEnabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
+        var publisherInfo: Dictionary<String, Any> = [:]
+        publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if (publisherId.count > 0) {
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoEnabled", data: publisherInfo)
+        }
+        printLogs("OTRN: Publisher videoEnabled")
+    }
 }
 
 extension OTSessionManager: OTPublisherKitAudioLevelDelegate {
@@ -698,7 +737,7 @@ extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherAudioNetworkStats(stats);
-            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStats", data: statsArray)
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)audioNetworkStatsUpdated", data: statsArray)
         }
     }
 
@@ -706,7 +745,7 @@ extension OTSessionManager: OTPublisherKitNetworkStatsDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             let statsArray: [Dictionary<String, Any>] = EventUtils.preparePublisherVideoNetworkStats(stats);
-            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStats", data: statsArray)
+            self.emitEvent("\(publisherId):\(EventUtils.publisherPreface)videoNetworkStatsUpdated", data: statsArray)
         }
     }
 }
