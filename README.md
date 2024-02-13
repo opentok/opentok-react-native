@@ -44,7 +44,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OTXCFramework', '2.26.1'
+        pod 'OTXCFramework', '2.27.0'
     end
 
 ```
@@ -148,7 +148,7 @@ allprojects {
 
 ## Docs
 
-See the [docs](/docs/index.md).
+See the [docs](https://tokbox.com/developer/sdks/react-native/reference).
 
 ## Samples
 

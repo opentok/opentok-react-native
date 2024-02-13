@@ -68,6 +68,15 @@ class Utils {
         }
     }
     
+    static func convertOTPublisherVideoEventReasonToString(_ reason: OTPublisherVideoEventReason) -> String {
+        switch reason {
+            case OTPublisherVideoEventReason.publisherPropertyChanged:
+                return "PublisherPropertyChanged"
+            case OTPublisherVideoEventReason.qualityChanged:
+                return "QualityChanged"
+        }
+    }
+    
     static func sanitizeIncludeServer(_ value: Any)  -> OTSessionICEIncludeServers {
         var includeServers = OTSessionICEIncludeServers.all;
         if let includeServer = value as? String, includeServer == "custom" {

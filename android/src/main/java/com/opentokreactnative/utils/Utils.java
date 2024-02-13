@@ -106,10 +106,6 @@ public final class Utils {
         if (transformerList != null) {
             for (int i = 0; i < transformerList.size(); i++) {
                 String transformerName = transformerList.getMap(i).getString("name");
-                if (transformerName == "BackgroundReplacement" ) {
-                    // Only implemented in iOS -- ignore in Androd for now.
-                    continue;
-                }
                 VideoTransformer transformer = publisher.new VideoTransformer(
                     transformerName,
                     transformerList.getMap(i).getString("properties")
