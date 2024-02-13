@@ -1,4 +1,4 @@
-# 2.27.0  (January 2024)
+# 2.27.0  (February 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
 
@@ -21,8 +21,12 @@ The OTPublisher component has new callback functions for publisher audio fallbac
 
 - [Fix]: This version fixes the following events, which were not being dispatched:
 
-  * OTPublisher videoNetworkStats
   * OTPublisher audioNetworkStats
+  * OTPublisher videoNetworkStats
+  * OTPublisher muteForced
+  * OTSession muteForced
+
+- [Fix]: This version fixes the `OTSession.forceMuteAll()` method in iOS.
 
 # 2.26.1  (October 2023)
 
