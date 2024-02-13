@@ -148,7 +148,7 @@ allprojects {
 
 ## Docs
 
-See the [docs](/docs/index.md).
+See the [docs](https://tokbox.com/developer/sdks/react-native/reference).
 
 ## Samples
 

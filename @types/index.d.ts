@@ -92,6 +92,24 @@ declare module "opentok-react-native" {
     timestamp: number,
   }
 
+  interface PublisherAudioNetworkStats {
+    connectionId?: string,
+    subscriberId?: string,
+    audioPacketsLost: number,
+    audioBytesSent: number,
+    audioPacketsSent: number,
+    timeStamp: number,
+  }
+
+  interface PublisherVideoNetworkStats {
+    connectionId?: string,
+    subscriberId?: string,
+    videoPacketsLost: number,
+    videoBytesSent: number,
+    videoPacketsSent: number,
+    timestamp: number,
+  }
+
   interface PublisherRtcStatsReport {
     connectionId: string,
     jsonArrayOfReports: string,
@@ -99,7 +117,7 @@ declare module "opentok-react-native" {
 
   interface SignalEvent {
     sessionId: string;
-    fromConnection: string;
+    connectionId: string;
     type: string;
     data: string;
   }
@@ -270,7 +288,7 @@ declare module "opentok-react-native" {
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSession.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTSession.html
    */
   export class OTSession extends React.Component<OTSessionProps, unknown> {
     /**
@@ -404,6 +422,10 @@ declare module "opentok-react-native" {
     audioLevel?: CallbackWithParam<number>;
 
     /**
+     * Sent when publisher audio stats are available.
+     */
+    audioNetworkStats?: CallbackWithParam<PublisherAudioNetworkStats[], any>;
+    /**
      * Sent if the publisher encounters an error. After this message is sent, the publisher can be considered fully detached from a session and may be released.
      */
     error?: CallbackWithParam<any, any>;
@@ -448,10 +470,15 @@ declare module "opentok-react-native" {
      * Sent when the publisher resumes sending video after it was disabled because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
      */
     videoEnabled?: CallbackWithParam<{reason: string}, any>;
+
+    /**
+     * Sent when publisher video stats are available.
+     */
+    videoNetworkStats?: CallbackWithParam<PublisherVideoNetworkStats[], any>;
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTPublisher.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTPublisher.html
    */
   export class OTPublisher extends React.Component<OTPublisherProps, unknown> {
     /**
@@ -459,12 +486,15 @@ declare module "opentok-react-native" {
      * The OTPublisher object dispatches an rtcStatsReport event when RTC statistics for
      * the publisher are available.
      */
-    getRtcStatsReport?: () => void;
+    getRtcStatsReport: () => void;
 
     /**
      * Sets video transformers for the publisher (or clears them if passed an empty array).
      */
-    setVideoTransformers?: () => void;
+    setVideoTransformers: (transformers: Array<{
+      name: string,
+      properties?: string,
+    }>) => void;
   }
 
   interface OTSubscriberProps extends ViewProps {
@@ -500,6 +530,21 @@ declare module "opentok-react-native" {
   }
 
   interface OTSubscriberProperties {
+    /**
+     * The audio volume, from 0 to 100.
+     */
+    audioVolume: number;
+
+    /**
+     * The preferred frame rate, in frames per second.
+     */
+    preferredFrameRate?: number;
+
+    /**
+     * The preferred resolution, either "1280x720", "640x480", or "352x288".
+     */
+    preferredResolution?: string;
+
     /**
      * Whether to subscribe to audio.
      */
@@ -597,11 +642,11 @@ declare module "opentok-react-native" {
   }
 
   /**
-   * https://github.com/opentok/opentok-react-native/blob/main/docs/OTSubscriber.md#custom-rendering-of-streams
+   * https://tokbox.com/developer/guides/subscribe-stream/react-native/#custom_rendering
    */
   export class OTSubscriberView extends React.Component<OTSubscriberViewProps, unknown> {}
   /**
-   * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
+   * https://tokbox.com/developer/sdks/react-native/reference/OTSubscriber.html
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps, unknown> {
     /**

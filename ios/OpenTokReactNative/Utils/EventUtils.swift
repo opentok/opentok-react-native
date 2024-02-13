@@ -148,6 +148,7 @@ class EventUtils {
             "\(subscriberPreface)videoNetworkStatsUpdated",
             "\(subscriberPreface)audioNetworkStatsUpdated",
             "\(subscriberPreface)audioLevelUpdated",
+            "\(subscriberPreface)rtcStatsReport",
             "\(subscriberPreface)subscriberVideoEnabled",
             "\(subscriberPreface)subscriberVideoDisabled",
             "\(subscriberPreface)subscriberVideoDisableWarning",

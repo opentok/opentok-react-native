@@ -69,7 +69,7 @@ const logRequest = (body, proxyUrl) => {
   axios({
     url,
     method: 'post',
-    data: JSON.stringify(body),
+    data: body,
   })
     .then(() => {
       // response complete
