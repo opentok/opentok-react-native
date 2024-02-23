@@ -1,3 +1,7 @@
+# 2.27.2  (March 2024)
+
+- [Fix]: Calling `OTSubscriber.getRtcStatsReport()` method was resulting in an error. This version fixes the issue. 
+
 # 2.27.0  (February 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
