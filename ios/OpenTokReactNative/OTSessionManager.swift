@@ -254,7 +254,7 @@ class OTSessionManager: RCTEventEmitter {
     
     @objc func getSubscriberRtcStatsReport() -> Void {
         for subscriber in OTRN.sharedState.subscribers {
-            subscriber.getRtcStatsReport()
+            subscriber.value.getRtcStatsReport()
         }
     }
     
