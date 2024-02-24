@@ -1,4 +1,4 @@
-# 2.27.2  (March 2024)
+# 2.27.1  (March 2024)
 
 - [Fix]: Calling `OTSubscriber.getRtcStatsReport()` method was resulting in an error. This version fixes the issue. 
 
