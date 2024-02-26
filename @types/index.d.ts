@@ -554,7 +554,7 @@ declare module "opentok-react-native" {
     /**
      * The audio volume, from 0 to 100.
      */
-    audioVolume: number;
+    audioVolume?: number;
 
     /**
      * The preferred frame rate, in frames per second.
