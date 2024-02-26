@@ -106,8 +106,8 @@ export default class OTSubscriber extends Component {
       }
     });
   }
-  getRtcStatsReport(streamId) {
-    OT.getSubscriberRtcStatsReport(streamId);
+  getRtcStatsReport() {
+    OT.getSubscriberRtcStatsReport();
   }
   render() {
     if (!this.props.children) {

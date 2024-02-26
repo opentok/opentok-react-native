@@ -252,9 +252,10 @@ class OTSessionManager: RCTEventEmitter {
         subscriber.audioVolume = audioVolume;
     }
     
-    @objc func getSubscriberRtcStatsReport(_ streamId: String) -> Void {
-        guard let subscriber = OTRN.sharedState.subscribers[streamId] else { return }
-        subscriber.getRtcStatsReport()
+    @objc func getSubscriberRtcStatsReport() -> Void {
+        for subscriber in OTRN.sharedState.subscribers {
+            subscriber.value.getRtcStatsReport()
+        }
     }
     
     @objc func changeCameraPosition(_ publisherId: String, cameraPosition: String) -> Void {

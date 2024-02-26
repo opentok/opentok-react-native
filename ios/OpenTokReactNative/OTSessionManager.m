@@ -52,8 +52,7 @@ RCT_EXTERN_METHOD(publishCaptions:
                   pubAudio:(BOOL)publishCaptions)
 RCT_EXTERN_METHOD(getRtcStatsReport:
                   (NSString*)publisherId)
-RCT_EXTERN_METHOD(getSubscriberRtcStatsReport:
-                  (NSString*)subscriberId)
+RCT_EXTERN_METHOD(getSubscriberRtcStatsReport)
 RCT_EXTERN_METHOD(subscribeToAudio:
                   (NSString*)streamId
                   subAudio:(BOOL)subAudio)

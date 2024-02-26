@@ -494,11 +494,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void getSubscriberRtcStatsReport(String streamId) {
+    public void getSubscriberRtcStatsReport() {
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
-        Subscriber mSubscriber = mSubscribers.get(streamId);
-        if (mSubscriber != null) {
+        ArrayList<Subscriber> mSubscriberList = new ArrayList<>(mSubscribers.values());
+        for (Subscriber mSubscriber : mSubscriberList) {
             mSubscriber.getRtcStatsReport();
         }
     }
