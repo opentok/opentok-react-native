@@ -1,3 +1,20 @@
+# 2.27.1  (March 2024)
+
+- [Fix]: On Android, OTPublisher components failed with an error when either `PermissionsAndroid.PERMISSIONS.CAMERA` or `PermissionsAndroid.PERMISSIONS.RECORD_AUDIO` were not `true`. This version fixes that, by having audio-only or video-only publishers skip the `PermissionsAndroid.PERMISSIONS.CAMERA` or `PermissionsAndroid.PERMISSIONS.RECORD_AUDIO` check if the `videoTrack` or `audioTrack` property of the `properties` prop of the OTPublisher component is set to `false`. You can set these props to `false` based on these permissions:
+
+```jsx
+import { PermissionsAndroid } from 'react-native';
+// ...
+
+<OTPublisher
+  properties={{
+    videoTrack={{(Platform.OS === 'ios' || PermissionsAndroid.CAMERA)}}
+  }}
+/>
+```
+
+*Note:* In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds these permissions. However, an app or user can disable them independently of the SDK.
+
 # 2.27.0  (March 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
