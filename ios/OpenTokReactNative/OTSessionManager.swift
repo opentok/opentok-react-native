@@ -168,6 +168,7 @@ class OTSessionManager: RCTEventEmitter {
               subscriber.audioVolume = audioVolume;
             }
             subscriber.rtcStatsReportDelegate = self;
+            subscriber.captionsDelegate = self;
             if let err = error {
                 self.dispatchErrorViaCallback(callback, error: err)
             } else {
@@ -217,6 +218,11 @@ class OTSessionManager: RCTEventEmitter {
         publisher.publishVideo = pubVideo;
     }
 
+    @objc func publishCaptions(_ publisherId: String, pubCaptions: Bool) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.publishCaptions = pubCaptions;
+    }
+    
     @objc func getRtcStatsReport(_ publisherId: String) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.getRtcStatsReport()
@@ -924,10 +930,10 @@ extension OTSessionManager: OTSubscriberKitCaptionsDelegate {
         subscriberInfo["text"] = text;
         subscriberInfo["isFinal"] = isFinal;
         guard let stream = subscriber.stream else {
-            self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
+            self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
             return;
         }
         subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream);
-        self.emitEvent("\(EventUtils.subscriberPreface)subscriberDidConnect", data: subscriberInfo);
+        self.emitEvent("\(EventUtils.subscriberPreface)subscriberCaptionReceived", data: subscriberInfo);
     }
 }
