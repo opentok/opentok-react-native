@@ -1,3 +1,7 @@
+# 2.27.2 (April 2023)
+
+- [Fix] The `subscribeToSelf` prop of the OTSubscriber component was not working. This version fixes the issue (issue #612).
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
