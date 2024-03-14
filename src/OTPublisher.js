@@ -99,20 +99,21 @@ class OTPublisher extends Component {
     }
   };
   createPublisher() {
+    const publisherProperties = sanitizeProperties(this.props.properties);
     if (Platform.OS === 'android') {
-      checkAndroidPermissions()
+      const { audioTrack, videoTrack } = publisherProperties;
+      checkAndroidPermissions(audioTrack, videoTrack)
         .then(() => {
-          this.initPublisher();
+          this.initPublisher(publisherProperties);
         })
         .catch((error) => {
           this.otrnEventHandler(error);
         });
     } else {
-      this.initPublisher();
+      this.initPublisher(publisherProperties);
     }
   }
-  initPublisher() {
-    const publisherProperties = sanitizeProperties(this.props.properties);
+  initPublisher(publisherProperties) {
     OT.initPublisher(
       this.state.publisherId,
       publisherProperties,
