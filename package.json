@@ -1,7 +1,7 @@
 {
-  "name": "opentok-react-native",
+  "name": "@vonage/client-sdk-video-react-native",
   "version": "2.27.0",
-  "description": "React Native components for OpenTok iOS and Android SDKs",
+  "description": "React Native components for Vonage Video iOS and Android SDKs",
   "main": "src/index.js",
   "homepage": "https://www.tokbox.com",
   "scripts": {
@@ -11,7 +11,7 @@
   "keywords": [
     "opentok",
     "react-native",
-    "tokbox",
+    "vonage",
     "webrtc",
     "ios",
     "android",
