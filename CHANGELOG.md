@@ -1,3 +1,7 @@
+# 2.27.1  (March 2024)
+
+- [Fix]: Fixes some TypeScript definitions (issue #725).
+
 # 2.27.0  (March 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
