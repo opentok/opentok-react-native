@@ -17,6 +17,8 @@ import { PermissionsAndroid } from 'react-native';
 
 - [Fix]: On Android, setting the `videoTrack` property of the `properties` prop of the OTPublisher component `false` resulted in the app to crash. This version fixes the issue (issue #652).
 
+- [Fix]: Fixes some TypeScript definitions (issue #725).
+
 # 2.27.0  (March 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
