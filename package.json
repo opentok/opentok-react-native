@@ -26,7 +26,7 @@
     "url": "https://github.com/opentok/opentok-react-native.git"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.5",
     "deprecated-react-native-prop-types": "^2.3.0",
     "flow-bin": "^0.180.0",
     "prop-types": "^15.7.2",
