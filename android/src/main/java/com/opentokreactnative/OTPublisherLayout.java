@@ -5,8 +5,8 @@ import android.widget.FrameLayout;
 import android.opengl.GLSurfaceView;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.opentok.android.BaseVideoRenderer;
-import com.opentok.android.Publisher;
+import com.vonage.BaseVideoRenderer;
+import com.vonage.Publisher;
 
 import java.util.concurrent.ConcurrentHashMap;
 

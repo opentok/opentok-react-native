@@ -3,13 +3,13 @@ package com.opentokreactnative.utils;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.opentok.android.Connection;
-import com.opentok.android.MediaUtils;
-import com.opentok.android.OpentokError;
-import com.opentok.android.Session;
-import com.opentok.android.Stream;
-import com.opentok.android.SubscriberKit;
-import com.opentok.android.PublisherKit;
+import com.vonage.Connection;
+import com.vonage.MediaUtils;
+import com.vonage.OpentokError;
+import com.vonage.Session;
+import com.vonage.Stream;
+import com.vonage.SubscriberKit;
+import com.vonage.PublisherKit;
 
 public final class EventUtils {
 

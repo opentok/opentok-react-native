@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.opentok.android.BaseVideoRenderer;
-import com.opentok.android.Session;
-import com.opentok.android.Subscriber;
+import com.vonage.BaseVideoRenderer;
+import com.vonage.Session;
+import com.vonage.Subscriber;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

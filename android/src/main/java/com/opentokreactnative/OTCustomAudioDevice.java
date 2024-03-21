@@ -21,7 +21,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.opentok.android.BaseAudioDevice;
+import com.vonage.BaseAudioDevice;
 
 import java.nio.ByteBuffer;
 import java.util.List;

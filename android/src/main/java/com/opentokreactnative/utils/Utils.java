@@ -1,15 +1,15 @@
 package com.opentokreactnative.utils;
 
-import com.opentok.android.OpentokError;
-import com.opentok.android.Publisher;
-import com.opentok.android.PublisherKit;
-import com.opentok.android.PublisherKit.VideoTransformer;
-import com.opentok.android.Subscriber;
-import com.opentok.android.SubscriberKit;
-import com.opentok.android.Session.Builder.TransportPolicy;
-import com.opentok.android.Session.Builder.IncludeServers;
-import com.opentok.android.Session.Builder.IceServer;
-import com.opentok.android.BaseVideoCapturer.VideoContentHint;
+import com.vonage.OpentokError;
+import com.vonage.Publisher;
+import com.vonage.PublisherKit;
+import com.vonage.PublisherKit.VideoTransformer;
+import com.vonage.Subscriber;
+import com.vonage.SubscriberKit;
+import com.vonage.Session.Builder.TransportPolicy;
+import com.vonage.Session.Builder.IncludeServers;
+import com.vonage.Session.Builder.IceServer;
+import com.vonage.BaseVideoCapturer.VideoContentHint;
 import com.opentokreactnative.OTRN;
 
 import com.facebook.react.bridge.ReadableArray;
