@@ -407,7 +407,7 @@ class OTSessionManager: RCTEventEmitter {
         callback([issueId! as NSString])
     }
     
-    // The OpenTok iOS SDK does not implement a getVideoCodecs method, because iOS
+    // The Vonage Video iOS SDK does not implement a getVideoCodecs method, because iOS
     // supported all supported codecs. But we will implement it here so that the
     // OT.getVideoCodecs() method can be called cross-platform.
     @objc func getSupportedCodecs(_ resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void{

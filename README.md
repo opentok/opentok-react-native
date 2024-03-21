@@ -49,7 +49,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 3. Now run, `pod install`
 
-4. After installing the OpenTok iOS SDK, change into your root directory of your project.
+4. After installing the Vonage Video iOS SDK, change into your root directory of your project.
 
 **For React Native < 0.60**, now run `react-native link opentok-react-native`.
 
@@ -90,7 +90,7 @@ If you try to archive the app and it fails, please do the following:
 
 4. Sync Gradle
 
-5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
+5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the Vonage Video React Native library.
 
 6. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
