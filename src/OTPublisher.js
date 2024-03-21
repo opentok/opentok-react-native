@@ -101,8 +101,9 @@ class OTPublisher extends Component {
   createPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
     if (Platform.OS === 'android') {
-      const { audioTrack, videoTrack } = publisherProperties;
-      checkAndroidPermissions(audioTrack, videoTrack)
+      const { audioTrack, videoTrack, videoSource } = publisherProperties;
+      const isScreenSharing = (videoSource === 'screen');
+      checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
           this.initPublisher(publisherProperties);
         })
