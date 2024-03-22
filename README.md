@@ -51,7 +51,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
 
 4. After installing the Vonage Video iOS SDK, change into your root directory of your project.
 
-**For React Native < 0.60**, now run `react-native link opentok-react-native`.
+**For React Native < 0.60**, now run `react-native link vonage/client-sdk-video-react-native`.
 
 5. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project.
 
