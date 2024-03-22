@@ -1,3 +1,9 @@
+# 2.27.3  (March 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1.
+
+*Note:* In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds the camera access permission. However, an app or user can disable it independently of the SDK.
+
 # 2.27.2  (March 2024)
 
 - [Fix]: On Android, a screen-sharing OTPublisher (one with the `videoSource` setting set to `"screen"`) failed if the app did not have camera access permission. This version fixes the issue, so that screen-sharing can proceed without camera access permission.
