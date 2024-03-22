@@ -2,6 +2,8 @@
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1.
 
+- [Fix] Toggling between a screen and camera video source for publisher caused apps to crash in iOS. This version fixes the issue (issue #710).
+
 # 2.27.2  (March 2024)
 
 - [Fix]: On Android, a screen-sharing OTPublisher (one with the `videoSource` setting set to `"screen"`) failed if the app did not have camera access permission. This version fixes the issue, so that screen-sharing can proceed without camera access permission.
