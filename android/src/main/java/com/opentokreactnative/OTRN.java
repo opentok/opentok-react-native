@@ -2,11 +2,11 @@ package com.opentokreactnative;
 
 import android.widget.FrameLayout;
 
-import com.vonage.Connection;
-import com.vonage.Publisher;
-import com.vonage.Session;
-import com.vonage.Stream;
-import com.vonage.Subscriber;
+import com.opentok.android.Connection;
+import com.opentok.android.Publisher;
+import com.opentok.android.Session;
+import com.opentok.android.Stream;
+import com.opentok.android.Subscriber;
 
 import java.util.concurrent.ConcurrentHashMap;
 

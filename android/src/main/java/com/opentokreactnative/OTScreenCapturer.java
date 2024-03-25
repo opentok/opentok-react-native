@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.view.View;
 
-import com.vonage.BaseVideoCapturer;
+import com.opentok.android.BaseVideoCapturer;
 
 public class OTScreenCapturer extends BaseVideoCapturer {
 
