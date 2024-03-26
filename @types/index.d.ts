@@ -1,4 +1,4 @@
-declare module "vonage/client-sdk-video-react-native" {
+declare module "@vonage/client-sdk-video-react-native" {
   import React from "react";
   import { ViewProps } from "react-native";
 
