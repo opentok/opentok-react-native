@@ -1,6 +1,9 @@
 # 2.27.3  (March 2024)
 
-- [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1.
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1. See their release notes for details:
+
+  * https://tokbox.com/developer/sdks/android/release-notes.html
+  * https://tokbox.com/developer/sdks/ios/release-notes.html
 
 - [Fix] Toggling between a screen and camera video source for publisher caused apps to crash in iOS. This version fixes the issue (issue #710).
 
