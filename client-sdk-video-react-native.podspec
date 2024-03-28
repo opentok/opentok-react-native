@@ -3,7 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name          = package['name']
+  s.name          = "client-sdk-video-react-native"
   s.version       = package['version']
   s.summary       = package['description']
   s.license       = package['license']
@@ -13,9 +13,9 @@ Pod::Spec.new do |s|
   s.platform      = :ios, "13.0"
   s.swift_version = "4.2"
 
-  s.source        = { :git => "https://github.com/opentok/opentok-react-native.git", :tag => "vonage#{s.version}" }
+  s.source        = { :git => "https://github.com/opentok/opentok-react-native.git", :tag => "vonage-#{s.version}" }
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'VonageVideoSDK','2.27.0'
+  s.dependency 'VonageVideoSDK','2.25.0'
 end
