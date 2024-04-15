@@ -3,7 +3,7 @@
   "version": "2.27.0",
   "description": "React Native components for Vonage Video iOS and Android SDKs",
   "main": "src/index.js",
-  "homepage": "https://www.tokbox.com",
+  "homepage": "https://developer.vonage.com/en/video/overview",
   "scripts": {
     "flow": "flow",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,7 +23,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/opentok/opentok-react-native.git"
+    "url": "https://github.com/opentok/opentok-react-native.git#vonage"
   },
   "dependencies": {
     "axios": "^1.6.5",
