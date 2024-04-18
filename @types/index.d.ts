@@ -483,7 +483,7 @@ declare module "@vonage/client-sdk-video-react-native" {
     videoDisableWarning?: Callback<any>;
 
     /**
-     * Sent after a videoDisableWarning event when network conditions improve (see https://tokbox.com/developer/guides/audio-fallback).
+     * Sent after a videoDisableWarning event when network conditions improve (see https://developer.vonage.com/en/video/guides/audio-fallback/publisher-audio-fallback?source=video).
      */
     videoDisableWarningLifted?: Callback<any>;
 

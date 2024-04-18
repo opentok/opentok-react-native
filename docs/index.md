@@ -6,20 +6,19 @@ these docs and samples point to the OpenTok developer center, instead of the Von
 Developer Center. A reference guide for Vonage application developers is in development.
 
 
-The Vonage React Native SDK documentation is now maitained at https://tokbox.com/developer/sdks/react-native. 
+The Vonage React Native SDK documentation is now maitained at https://developer.vonage.com/en/video/client-sdks/react-native/overview?source=video. 
 
-## Basic sample
+## Samples
 
-See https://tokbox.com/developer/sdks/react-native#basic-sample
-Note that this sample 
+See https://github.com/opentok/opentok-react-native-samples. Note that you need to adjust these samples to load the the `@vonage/client-sdk-video-react-native` Node module (instead of the `opentok-react-native` module). And you should use a Vonage application ID (not an API key) for the `apiKey` property in the App.js files.
 
 ## Reference docs 
 
-See https://tokbox.com/developer/sdks/react-native/reference/
+See https://vonage.github.io/conversation-docs/video-react-native-reference/latest/index.html
 
 ## Unsupported features
 
-See https://tokbox.com/developer/sdks/react-native#unsupported-features.
+See https://developer.vonage.com/en/video/client-sdks/react-native/overview#unsupported-features.
 
 ## More information
 
