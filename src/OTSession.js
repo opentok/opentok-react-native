@@ -35,7 +35,7 @@ export default class OTSession extends Component {
       this.createSession(this.sanitizedCredentials, sessionOptions, encryptionSecret);
       logOT({ apiKey, sessionId, action: 'rn_initialize', proxyUrl: sessionOptions.proxyUrl });
     } else {
-      handleError('Please check your OpenTok credentials.');
+      handleError('Please check your Vonage Video API credentials.');
     }
   }
   componentDidUpdate(previousProps) {

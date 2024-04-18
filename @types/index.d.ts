@@ -128,17 +128,19 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSessionProps extends ViewProps {
     /**
-     * TokBox API Key
+     * Your Vonage application ID. (When using the Vonage Video React Native SDK
+     * with OpenTok projects, you pass in an OpenTok API key. But for Vonage
+     * applications, pass in the application ID.)
      */
     apiKey: string;
 
     /**
-     * TokBox Session ID
+     * Vonage Video API session ID.
      */
     sessionId: string;
 
     /**
-     * TokBox token
+     * A connection token for the Video API session.
      */
     token: string;
 
@@ -165,7 +167,6 @@ declare module "@vonage/client-sdk-video-react-native" {
 
     /**
      * Used to set the encryption secret in a session that uses end-to-end encryption.
-     * See https://tokbox.com/developer/guides/end-to-end-encryption.
      */
     encryptionSecret?: string
   }
@@ -177,7 +178,7 @@ declare module "@vonage/client-sdk-video-react-native" {
     connectionEventsSuppressed?: boolean;
 
     /**
-     * EU proxy server URL provided by vonage. Please check https://tokbox.com/developer/guides/eu-proxy/
+     * EU proxy server URL provided by Vonage.
      */
     proxyUrl?: string;
 
@@ -213,7 +214,7 @@ declare module "@vonage/client-sdk-video-react-native" {
      */
     enableStereoOutput?: boolean;
     /**
-     * Ice Config. Please check https://tokbox.com/developer/guides/configurable-turn-servers/
+     * ICE configuration.
      */
     iceConfig?: {
       includeServers: 'all' | 'custom';
@@ -273,12 +274,12 @@ declare module "@vonage/client-sdk-video-react-native" {
     sessionDisconnected?: CallbackWithParam<SessionDisconnectEvent, any>;
 
     /**
-     * Sent when the local client has reconnected to the OpenTok session after its network connection was lost temporarily.
+     * Sent when the local client has reconnected to the Video API session after its network connection was lost temporarily.
      */
     sessionReconnected?: CallbackWithParam<any>;
 
     /**
-     * Sent when the local client has lost its connection to an OpenTok session and is trying to reconnect. This results from a loss in network connectivity. If the client can reconnect to the session, the sessionReconnected message is sent. Otherwise, if the client cannot reconnect, the sessionDisconnected message is sent.
+     * Sent when the local client has lost its connection to a Video API session and is trying to reconnect. This results from a loss in network connectivity. If the client can reconnect to the session, the sessionReconnected message is sent. Otherwise, if the client cannot reconnect, the sessionDisconnected message is sent.
      */
     sessionReconnecting?: Callback<any>;
 
@@ -304,7 +305,7 @@ declare module "@vonage/client-sdk-video-react-native" {
   }
 
   /**
-   * https://tokbox.com/developer/sdks/react-native/reference/OTSession.html
+   * Represents the Vonage Video API session.
    */
   export class OTSession extends React.Component<OTSessionProps, unknown> {
     /**
@@ -363,7 +364,6 @@ declare module "@vonage/client-sdk-video-react-native" {
 
     /**
      * Settings to enable and disable publisher and subscriber audio fallback.
-     * See https://tokbox.com/developer/guides/audio-fallback.
      */
     audioFallback?: {
       publisher?: boolean;
@@ -473,22 +473,22 @@ declare module "@vonage/client-sdk-video-react-native" {
     streamDestroyed?: CallbackWithParam<StreamDestroyedEvent, any>;
 
     /**
-     * Sent when the publisher stops sending video because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
+     * Sent when the publisher stops sending video because of publisher audio fallback.
      */
     videoDisabled?: CallbackWithParam<{reason: string}>;
 
     /**
-     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions (see https://tokbox.com/developer/guides/audio-fallback).
+     * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions.
      */
     videoDisableWarning?: Callback<any>;
 
     /**
-     * Sent after a videoDisableWarning event when network conditions improve (see https://tokbox.com/developer/guides/audio-fallback).
+     * Sent after a videoDisableWarning event when network conditions improve (see https://developer.vonage.com/en/video/guides/audio-fallback/publisher-audio-fallback?source=video).
      */
     videoDisableWarningLifted?: Callback<any>;
 
     /**
-     * Sent when the publisher resumes sending video after it was disabled because of publisher audio fallback (see https://tokbox.com/developer/guides/audio-fallback).
+     * Sent when the publisher resumes sending video after it was disabled because of publisher audio fallback.
      */
     videoEnabled?: CallbackWithParam<{reason: string}, any>;
 
@@ -499,7 +499,7 @@ declare module "@vonage/client-sdk-video-react-native" {
   }
 
   /**
-   * https://tokbox.com/developer/sdks/react-native/reference/OTPublisher.html
+   * Represents the client's publisher.
    */
   export class OTPublisher extends React.Component<OTPublisherProps, unknown> {
     /**
@@ -520,12 +520,12 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSubscriberProps extends ViewProps {
     /**
-     * OpenTok Session ID. This is auto populated by wrapping OTSubscriber with OTSession
+     * The session ID. This is auto populated by wrapping OTSubscriber with OTSession
      */
     sessionId?: string;
 
     /**
-     * OpenTok Subscriber streamId. This is auto populated inside the OTSubscriber component when streamCreated event is fired from the native instance
+     * THe Subscriber stream ID. This is auto populated inside the OTSubscriber component when streamCreated event is fired from the native instance
      */
     streamId?: string;
 
@@ -635,7 +635,7 @@ declare module "@vonage/client-sdk-video-react-native" {
     videoDisabled?: CallbackWithParam<{reason: string; stream: Stream}, any>;
 
     /**
-     * This message is sent when the OpenTok Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the videoDisabled message is sent. If the stream quality improves, the videoDisableWarningLifted message is sent.
+     * This message is sent when the Vonge Video API Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the videoDisabled message is sent. If the stream quality improves, the videoDisableWarningLifted message is sent.
      */
     videoDisableWarning?: CallbackWithParam<{stream: Stream});
 
@@ -657,17 +657,17 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSubscriberViewProps extends ViewProps {
     /**
-     * OpenTok Subscriber streamId.
+     * The Subscriber stream ID.
      */
     streamId?: string;
   }
 
   /**
-   * https://tokbox.com/developer/guides/subscribe-stream/react-native/#custom_rendering
+   * Used when rendering subscribers individually.
    */
   export class OTSubscriberView extends React.Component<OTSubscriberViewProps, unknown> {}
   /**
-   * https://tokbox.com/developer/sdks/react-native/reference/OTSubscriber.html
+   * Represents the subscribers to the session.
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps, unknown> {
     /**

@@ -3,7 +3,6 @@
 //  OpenTokReactNative
 //
 //  Created by Manik Sachdeva on 11/3/18.
-//  Copyright © 2018 TokBox Inc. All rights reserved.
 //
 
 import Foundation

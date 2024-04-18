@@ -1,12 +1,10 @@
-# opentok-react-native
+# Vonage Video client SDK for React Native
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-React Native library for using [OpenTok](https://tokbox.com/developer/).
+React Native library for using the [Vonage Video API](https://developer.vonage.com/en/video/overview).
 
 This library is now officially supported by Vonage.
-
-In this repo, you'll find the OpenTok React Native library.
 
 ## Pre-Requisites:
 
@@ -26,8 +24,8 @@ In this repo, you'll find the OpenTok React Native library.
 
 2. Add the library using `npm` or `yarn`.
 
-- `npm install opentok-react-native`
-- `yarn add opentok-react-native`
+- `npm install @vonage/client-sdk-video-react-native`
+- `yarn add @vonage/client-sdk-video-react-native`
 
 ### iOS Installation
 
@@ -44,16 +42,16 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'OTXCFramework', '2.27.0'
+        pod 'VonageVideoSDK', '2.27.0'
     end
 
 ```
 
 3. Now run, `pod install`
 
-4. After installing the OpenTok iOS SDK, change into your root directory of your project.
+4. After installing the Vonage Video iOS SDK, change into your root directory of your project.
 
-**For React Native < 0.60**, now run `react-native link opentok-react-native`.
+**For React Native < 0.60**, now run `react-native link vonage/client-sdk-video-react-native`.
 
 5. Open `<YourProjectName>.xcworkspace` contents in XCode. This file can be found in the `ios` folder of your React Native project.
 
@@ -84,15 +82,15 @@ If you try to archive the app and it fails, please do the following:
 
 1. In your terminal, change into your project directory.
 
-2. If you have already run `react-native link opentok-react-native` for the iOS installation, please skip this step.
+2. If you have already run `react-native link @vonage/client-sdk-video-react-native` for the iOS installation, please skip this step.
 
-   - Run `react-native link opentok-react-native`
+   - Run `react-native link @vonage/client-sdk-video-react-native`
 
 3. Open your Android project in Android Studio.
 
 4. Sync Gradle
 
-5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
+5. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the Vonage Video React Native library.
 
 6. As for the older Android devices, ensure you add camera and audio permissions to your `AndroidManifest.xml` file:
 
@@ -148,11 +146,15 @@ allprojects {
 
 ## Docs
 
-See the [docs](https://tokbox.com/developer/sdks/react-native/reference).
+See the [docs](https://developer.vonage.com/en/video/client-sdks/react-native/overview?source=video).
 
 ## Samples
 
-To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo.
+To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo. **Important:** These samples were written for the OpenTok version of the React Native client SDK for Vonage Video. You will need to modify references the sample apps to work with this version of the client SDK (@vonage/client-sdk-video-react-native) for use with Vonage applications:
+
+* In the source code, change `opentok-react-native` references to `@vonage/client-sdk-video-react-native`.
+
+* For the `apiKey` prop of the `OTSession` component, pass in a Vonage *application ID* (*not* an OpenTok API key or a Vonage API key).
 
 ## Development and Contributing
 
@@ -164,6 +166,6 @@ Interested in contributing? We :heart: pull requests! See the
 We love to hear from you so if you have questions, comments or find a bug in the project, let us know! You can either:
 
 - Open an issue on this repository
-- See <https://support.tokbox.com/> for support options
+- See <https://api.support.vonage.com/hc/en-us/> for support options
 - Tweet at us! We're [@VonageDev](https://twitter.com/VonageDev) on Twitter
 - Or [join the Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
