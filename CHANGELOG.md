@@ -1,12 +1,6 @@
 # 2.27.4  (April 2024)
 
-- [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.1.
-
-  This version fixes some crashes.
-
-  This version the `OTSubscriber captionReceived` event handler.
-
-- [Fix]: The `OTPublisher publishCaptions` setting was not working correctly in iOS. This version fixes these issues.
+- [Fix]: This version the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
 
 # 2.27.3  (March 2024)
 
