@@ -27,7 +27,7 @@ const sanitizeSubscriberEvents = (events) => {
       videoDisableWarning: 'subscriberVideoDisableWarning',
       videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
       videoDataReceived: 'subscriberVideoDataReceived',
-      captionReceived: 'subscriberCaptionReceived:',
+      captionReceived: 'subscriberCaptionReceived',
     },
     android: {
       connected: 'onConnected',

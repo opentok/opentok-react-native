@@ -62,7 +62,7 @@ RCT_EXTERN_METHOD(subscribeToVideo:
                   subVideo:(BOOL)subVideo)
 RCT_EXTERN_METHOD(subscribeToCaptions:
                   (NSString*)streamId
-                  subAudio:(BOOL)subCaptions)
+                  subCaptions:(BOOL)subCaptions)
 RCT_EXTERN_METHOD(setPreferredResolution:
                   (NSString*)streamId
                   resolution:(NSDictionary*)resolution)
