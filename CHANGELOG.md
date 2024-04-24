@@ -1,3 +1,7 @@
+# 2.27.4  (April 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.27.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements).
+
 # 2.27.3  (March 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1. See their release notes for details:
