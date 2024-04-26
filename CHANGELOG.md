@@ -1,3 +1,7 @@
+# 2.26.2  (April 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.26.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
+
 # 2.26.1  (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
