@@ -8,7 +8,7 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-## Pre-Requisites
+## Prerequisites
 
 1. Install [node.js](https://nodejs.org/)
 
