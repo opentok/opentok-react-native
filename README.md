@@ -83,31 +83,31 @@ If you try to archive the app and it fails, please do the following:
 
 5. For older Android devices, add the following permissions to the `AndroidManifest.xml` file:
 
+   * `android.permission.BLUETOOTH` -- The default audio device supports
+   Bluetooth audio. If your app does not use the default audio device and does not
+   use Bluetooth, you can remove this permission.
+
    * `android.permission.BLUETOOTH_CONNECT` -- You need to enable this for API level 31 and above. If you want
    to use the Bluetooth device with Android SDK DefaultAudioDevice targeting API level 31 and above, please
    ask for runtime permissions in the app or enable the ("Nearby devices/Bluetooth") permission manually in
    the app settings.
 
-   * `android.permission.READ_PHONE_STATE` -- The OpenTok Android SDK requests this permission in API level 22
-   and lower, and 31 and above.
-
-   * `android.permission.BLUETOOTH` -- The default audio device supports
-   Bluetooth audio. If your app does not use the default audio device and does not
-   use Bluetooth, you can remove this permission.
+   * `android.permission.BROADCAST_STICKY` -- We have determined that this is unused by
+   the OpenTok Android SDK, and we will remove this permission from an upcoming release.
 
    * `android.permission.CAMERA` -- If your app does not use the default video capturer
    and does not access the camera, you can remove this permission.
 
    * `android.permission.INTERNET` -- Required.
 
-   * `android.permission.RECORD_AUDIO` -- If your app does not use the default audio
-   device and does not access the microphone, you can remove this permission.
-
    * `android.permission.MODIFY_AUDIO_SETTINGS` -- If your app does not use the default audio
    device and does not access the microphone, you can remove this permission.
 
-   * `android.permission.BROADCAST_STICKY` -- We have determined that this is unused by
-   the OpenTok Android SDK, and we will remove this permission from an upcoming release.
+   * `android.permission.READ_PHONE_STATE` -- The OpenTok Android SDK requests this permission in API level 22
+   and lower, and 31 and above.
+
+   * `android.permission.RECORD_AUDIO` -- If your app does not use the default audio
+   device and does not access the microphone, you can remove this permission.
 
    For newer versions of Android — `API Level 23` (Android 6.0) and later — you do not need to add these to your app manifest. The OpenTok React Native SDK adds them automatically. However, if you use Android 21+, certain permissions require you to prompt the user.
 
