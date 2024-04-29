@@ -4,6 +4,13 @@
 
 - [Update]: The installation instructions in the README file are updated, with new details on required Android permissions (such as `android.permission.BLUETOOTH`).
 
+# 2.26.2  (April 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.26.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
+
+# 2.25.5  (April 2024)
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.25.5. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
+
 # 2.27.3  (March 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1. See their release notes for details:
