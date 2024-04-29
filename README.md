@@ -8,19 +8,15 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-## Pre-Requisites:
+## Pre-Requisites
 
 1. Install [node.js](https://nodejs.org/)
 
-2. Install and update [Xcode](https://developer.apple.com/xcode/) (you will need a Mac)
+2. Install and update [Xcode](https://developer.apple.com/xcode/) (you will need a Mac). (See the React Native iOS installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html).)
 
-- React Native iOS installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
+3. Install and update [Android Studio](https://developer.android.com/studio/index.html). (See the React Native Android installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html).)
 
-3. Install and update [Android Studio](https://developer.android.com/studio/index.html)
-
-- React Native Android installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html)
-
-## Installation:
+## Installation
 
 1. In your terminal, change into your React Native project's directory.
 
@@ -95,6 +91,10 @@ If you try to archive the app and it fails, please do the following:
    * `android.permission.READ_PHONE_STATE` -- The OpenTok Android SDK requests this permission in API level 22
    and lower, and 31 and above.
 
+   * `android.permission.BLUETOOTH` -- The default audio device supports
+   Bluetooth audio. If your app does not use the default audio device and does not
+   use Bluetooth, you can remove this permission.
+
    * `android.permission.CAMERA` -- If your app does not use the default video capturer
    and does not access the camera, you can remove this permission.
 
@@ -105,10 +105,6 @@ If you try to archive the app and it fails, please do the following:
 
    * `android.permission.MODIFY_AUDIO_SETTINGS` -- If your app does not use the default audio
    device and does not access the microphone, you can remove this permission.
-
-   * `android.permission.BLUETOOTH` -- The default audio device supports
-   Bluetooth audio. If your app does not use the default audio device and does not
-   use Bluetooth, you can remove this permission.
 
    * `android.permission.BROADCAST_STICKY` -- We have determined that this is unused by
    the OpenTok Android SDK, and we will remove this permission from an upcoming release.
