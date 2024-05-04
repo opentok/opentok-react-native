@@ -1,6 +1,6 @@
 # 2.27.4  (April 2024)
 
-- [Fix]: This version the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
+- [Fix]: This version fixes the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
 
 # 2.27.3  (March 2024)
 
