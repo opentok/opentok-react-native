@@ -1,6 +1,21 @@
-# 2.27.2 (March 2024)
+# 2.27.5  (May 2024)
+
+- [Fix]: Calling `OTSubscriber.getRtcStatsReport()` method was resulting in an error. This version fixes the issue.
 
 - [Fix] The `subscribeToSelf` prop of the OTSubscriber component was not working. This version fixes the issue (issue #612).
+
+# 2.27.4  (April 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.27.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
+
+- [Update]: The installation instructions in the README file are updated, with new details on required Android permissions (such as `android.permission.BLUETOOTH`).
+
+# 2.26.2  (April 2024)
+
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.26.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
+
+# 2.25.5  (April 2024)
+- [Update]: This version updates the Vonage Video iOS SDK version to 2.25.5. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
 
 # 2.27.3  (March 2024)
 

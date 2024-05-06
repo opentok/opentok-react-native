@@ -671,9 +671,9 @@ declare module "opentok-react-native" {
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps, unknown> {
     /**
-     * Gets the RTC stats report for the subscriber. This is an asynchronous operation.
-     * The OTSubscriber object dispatches an rtcStatsReport event when RTC statistics for
-     * the publisher are available.
+     * Gets the RTC stats report for the subscribers. This is an asynchronous operation.
+     * The OTSubscriber object dispatches rtcStatsReport events when RTC statistics for
+     * the subscribers are available.
      */
     getRtcStatsReport: () => void;
   }

@@ -128,8 +128,8 @@ export default class OTSubscriber extends Component {
       this.streamDestroyedHandler(stream);
     }
   }
-  getRtcStatsReport(streamId) {
-    OT.getSubscriberRtcStatsReport(streamId);
+  getRtcStatsReport() {
+    OT.getSubscriberRtcStatsReport();
   }
   render() {
     if (!this.props.children) {
