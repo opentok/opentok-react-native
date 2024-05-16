@@ -475,7 +475,7 @@ declare module "@vonage/client-sdk-video-react-native" {
     /**
      * Sent when the publisher stops sending video because of publisher audio fallback.
      */
-    videoDisabled?: CallbackWithParam<{reason: string}>;
+    videoDisabled?: CallbackWithParam<{reason: string}, any>;
 
     /**
      * Sent when the publisher is close to going to audio-only fallback becuase of declining network conditions.
@@ -637,12 +637,12 @@ declare module "@vonage/client-sdk-video-react-native" {
     /**
      * This message is sent when the Vonge Video API Media Router determines that the stream quality has degraded and the video will be disabled if the quality degrades further. If the quality degrades further, the subscriber disables the video and the videoDisabled message is sent. If the stream quality improves, the videoDisableWarningLifted message is sent.
      */
-    videoDisableWarning?: CallbackWithParam<{stream: Stream});
+    videoDisableWarning?: CallbackWithParam<{stream: Stream}, any>;
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
      */
-    videoDisableWarningLifted?: CallbackWithParam<{stream: Stream});
+    videoDisableWarningLifted?: CallbackWithParam<{stream: Stream}, any>;
 
     /**
      * This message is sent when the subscriber’s video stream starts (when there previously was no video) or resumes (after video was disabled). Check the reason parameter for the reason why the video started (or resumed).
