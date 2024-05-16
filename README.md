@@ -42,7 +42,7 @@ If you've installed this package before, you may need to edit your `Podfile` and
     target '<YourProjectName>' do
 
       # Pods for <YourProject>
-        pod 'VonageVideoSDK', '2.27.0'
+        pod 'VonageClientSDKVideoMacOS', '2.27.2'
     end
 
 ```
