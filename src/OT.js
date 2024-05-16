@@ -4,10 +4,10 @@ import { each } from 'underscore';
 const OT = NativeModules.OTSessionManager;
 const nativeEvents = new NativeEventEmitter(OT);
 
-const checkAndroidPermissions = (audioTrack, videoTrack) => new Promise((resolve, reject) => {
+const checkAndroidPermissions = (audioTrack, videoTrack, isScreenSharing) => new Promise((resolve, reject) => {
   const permissionsToCheck = [
     ... audioTrack ? [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO] : [],
-    ... videoTrack ? [PermissionsAndroid.PERMISSIONS.CAMERA] : [],
+    ... (videoTrack && !isScreenSharing) ? [PermissionsAndroid.PERMISSIONS.CAMERA] : [],
   ];
   PermissionsAndroid.requestMultiple(permissionsToCheck)
     .then((result) => {
