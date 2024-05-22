@@ -1,0 +1,32 @@
+{
+  "name": "TestApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "opentok-react-native": "opentok/opentok-react-native#develop",
+    "react": "18.2.0",
+    "react-native": "0.71.8",
+    "react-native-eject": "^0.2.0",
+    "react-native-link": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.32.0",
+    "jest": "^26.6.3",
+    "metro-react-native-babel-preset": "0.72.3",
+    "react-test-renderer": "18.1.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
