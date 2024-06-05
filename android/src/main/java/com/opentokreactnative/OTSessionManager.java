@@ -98,11 +98,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
-        final boolean enableStereoOutput = sessionOptions.getBoolean("enableStereoOutput");
-        if (enableStereoOutput) {
-            OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
-            AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
-        }
         final List<IceServer> iceServersList = Utils.sanitizeIceServer(sessionOptions.getArray("customServers"));
         final IncludeServers includeServers = Utils.sanitizeIncludeServer(sessionOptions.getString("includeServers"));
         final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(sessionOptions.getString("transportPolicy"));
