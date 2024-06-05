@@ -39,6 +39,8 @@ const sanitizeSessionEvents = (sessionId, events) => {
       archiveStopped: 'archiveStoppedWithId',
       streamPropertyChanged: 'streamPropertyChanged',
       muteForced: 'muteForced',
+      publisherStreamCreated: 'publisherStreamCreated',
+      publisherStreamDestroyed: 'publisherStreamDestroyed',
     },
     android: {
       streamCreated: 'onStreamReceived',
@@ -55,6 +57,8 @@ const sanitizeSessionEvents = (sessionId, events) => {
       archiveStopped: 'onArchiveStopped',
       streamPropertyChanged: 'onStreamPropertyChanged',
       muteForced: 'onMuteForced',
+      publisherStreamCreated: 'publisherStreamCreated',
+      publisherStreamDestroyed: 'publisherStreamDestroyed',
     }
   };
   return reassignEvents('session', customEvents, events, sessionId);
