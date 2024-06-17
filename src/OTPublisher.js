@@ -31,6 +31,8 @@ class OTPublisher extends Component {
   }
   initComponent = () => {
     this.componentEvents = {
+      publisherStreamCreated: 'publisherStreamCreated',
+      publisherStreamDestroyed: 'publisherStreamDestroyed:',
       sessionConnected:
         Platform.OS === 'android'
           ? 'session:onConnected'
@@ -43,7 +45,40 @@ class OTPublisher extends Component {
       this.props.eventHandlers
     );
     setNativeEvents(this.publisherEvents);
+    setNativeEvents({
+      publisherCreated: (event) => {
+        if (
+          this.props.eventHandlers
+          && this.props.eventHandlers.streamCreated
+          && event.publisherId === this.state.publisherId
+        ) {
+          // don't forward publisherId in client event:
+          delete event.publisherId;
+          this.props.eventHandlers.streamCreated(event);
+        }
+      },
+      publisherDestroyed: (event) => {
+        if (
+          this.props.eventHandlers
+          && this.props.eventHandlers.streamDestroyed
+          && event.publisherId === this.state.publisherId
+        ) {
+          // don't forward publisherId in client event:
+          delete event.publisherId;
+          this.props.eventHandlers.streamDestroyed(event);
+        }
+      },
+    
+    });
     OT.setJSComponentEvents(this.componentEventsArray);
+    this.publisherStreamCreated = nativeEvents.addListener(
+      'publisherStreamCreated',
+      stream => this.publisherStreamCreatedHandler(stream)
+    );
+    this.publisherStreamDestroyed = nativeEvents.addListener(
+      'publisherStreamDestroyed',
+      stream => this.publisherStreamDestroyedHandler(stream)
+    );
     if (this.context.sessionId) {
       this.sessionConnected = nativeEvents.addListener(
         `${this.context.sessionId}:${this.componentEvents.sessionConnected}`,
@@ -157,6 +192,18 @@ class OTPublisher extends Component {
   }
   getRtcStatsReport() {
     OT.getRtcStatsReport(this.state.publisherId);
+  }
+
+  publisherStreamCreatedHandler = (stream) => {
+    if (this.props.eventHandlers && this.props.eventHandlers.streamCreated) {
+      this.props.eventHandlers.streamCreated(stream);
+    }
+  }
+
+  publisherStreamDestroyedHandler = (stream) => {
+    if (this.props.eventHandlers && this.props.eventHandlers.streamDestroyed) {
+      this.props.eventHandlers.streamDestroyed(stream);
+    }
   }
 
   setVideoTransformers(videoTransformers) {
