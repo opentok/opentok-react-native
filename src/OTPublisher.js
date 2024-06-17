@@ -45,31 +45,6 @@ class OTPublisher extends Component {
       this.props.eventHandlers
     );
     setNativeEvents(this.publisherEvents);
-    setNativeEvents({
-      publisherCreated: (event) => {
-        if (
-          this.props.eventHandlers
-          && this.props.eventHandlers.streamCreated
-          && event.publisherId === this.state.publisherId
-        ) {
-          // don't forward publisherId in client event:
-          delete event.publisherId;
-          this.props.eventHandlers.streamCreated(event);
-        }
-      },
-      publisherDestroyed: (event) => {
-        if (
-          this.props.eventHandlers
-          && this.props.eventHandlers.streamDestroyed
-          && event.publisherId === this.state.publisherId
-        ) {
-          // don't forward publisherId in client event:
-          delete event.publisherId;
-          this.props.eventHandlers.streamDestroyed(event);
-        }
-      },
-    
-    });
     OT.setJSComponentEvents(this.componentEventsArray);
     this.publisherStreamCreated = nativeEvents.addListener(
       'publisherStreamCreated',
@@ -195,13 +170,21 @@ class OTPublisher extends Component {
   }
 
   publisherStreamCreatedHandler = (stream) => {
-    if (this.props.eventHandlers && this.props.eventHandlers.streamCreated) {
+    if (
+      this.props.eventHandlers
+      && this.props.eventHandlers.streamCreated
+      && stream.publisherId === this.state.publisherId
+    ) {
       this.props.eventHandlers.streamCreated(stream);
     }
   }
 
   publisherStreamDestroyedHandler = (stream) => {
-    if (this.props.eventHandlers && this.props.eventHandlers.streamDestroyed) {
+    if (
+      this.props.eventHandlers
+      && this.props.eventHandlers.streamCreated
+      && stream.publisherId === this.state.publisherId
+    ) {
       this.props.eventHandlers.streamDestroyed(stream);
     }
   }
