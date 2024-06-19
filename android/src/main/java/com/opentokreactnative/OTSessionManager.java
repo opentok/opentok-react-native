@@ -878,9 +878,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         mSubscriberStreams.put(stream.getStreamId(), stream);
         if (publisherId.length() > 0) {
-            String event = publisherId + ":" + publisherPreface + "onStreamCreated";
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream, publisherKit.getSession());
-            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            streamInfo.putString("publisherId", publisherId);
             sendEventMap(this.getReactApplicationContext(), "publisherStreamCreated", streamInfo);
         }
         printLogs("onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
@@ -891,13 +890,12 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
 
         String publisherId = Utils.getPublisherId(publisherKit);
-        String event = publisherId + ":" + publisherPreface + "onStreamDestroyed";
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         String mStreamId = stream.getStreamId();
         mSubscriberStreams.remove(mStreamId);
         if (publisherId.length() > 0) {
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream, publisherKit.getSession());
-            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            streamInfo.putString("publisherId", publisherId);
             sendEventMap(this.getReactApplicationContext(), "publisherStreamDestroyed", streamInfo);
         }
         Callback mCallback = sharedState.getPublisherDestroyedCallbacks().get(publisherId);
