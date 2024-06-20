@@ -1,3 +1,14 @@
+# 2.27.5  (June 2024)
+
+- [Fix]: This version fixes the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
+
+- [Fix]: Calling `OTSubscriber.getRtcStatsReport()` method was resulting in an error. This version fixes the issue.
+
+- [Fix]: Setting the `enableStereoOutput` option of the OTSession component was causing apps to crash in Android. The custom audio driver (used in Android when the `enableStereoOutput` option is set) is broken. This version disables the `enableStereoOutput` option in Android.
+
+- [Fix] The `subscribeToSelf` prop of the OTSubscriber component was not working. This version fixes the issue (issue #612).
+
+
 # 2.27.4  (April 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
