@@ -56,6 +56,9 @@
     },  
     "metro-transform-plugins": {
       "@babel/traverse": "^7.23.2"
+    },
+    "@jest/transform": {
+      "micromatch": "^4.0.7"
     }
   },
   "types": "@types/index.d.ts"

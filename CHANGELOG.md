@@ -4,6 +4,8 @@
 
   This version adds support for the VP9 codec in relayed sessions. For more information, see the [video codecs](https://tokbox.com/developer/guides/codecs/) documentation.
 
+- [Update]: This version updates a vulnerable Node module (braces).
+
 # 2.27.5  (June 2024)
 
 - [Fix]: This version fixes the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
