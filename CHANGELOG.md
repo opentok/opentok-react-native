@@ -1,6 +1,6 @@
 # 2.27.6  (June 2024)
 
-- [Fix]: This version fixes some iOS crashes that were introduced in version 2.27.5.
+- [Fix]: This version fixes some iOS crashes that were introduced in version 2.27.5. Fixes issue #757.
 
 # 2.27.5  (June 2024)
 
