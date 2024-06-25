@@ -14,6 +14,10 @@ This library is now officially supported by Vonage.
 
 3. Install and update [Android Studio](https://developer.android.com/studio/index.html). (See the React Native Android installation [instructions](https://facebook.github.io/react-native/docs/getting-started.html).)
 
+## System requirements
+
+See the system requirements for the [OpenTok Android SDK](https://tokbox.com/developer/sdks/android/#requirements) and [OpenTok iOS SDK](https://tokbox.com/developer/sdks/ios/#system-requirements). (The OpenTok React Native SDK has the same requirements for Android and iOS.)
+
 ## Installation
 
 1. In your terminal, change into your React Native project's directory.

@@ -98,11 +98,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         final boolean useTextureViews = sessionOptions.getBoolean("useTextureViews");
         final boolean connectionEventsSuppressed = sessionOptions.getBoolean("connectionEventsSuppressed");
         final boolean ipWhitelist = sessionOptions.getBoolean("ipWhitelist");
-        final boolean enableStereoOutput = sessionOptions.getBoolean("enableStereoOutput");
-        if (enableStereoOutput) {
-            OTCustomAudioDriver otCustomAudioDriver = new OTCustomAudioDriver(this.getReactApplicationContext());
-            AudioDeviceManager.setAudioDevice(otCustomAudioDriver);
-        }
         final List<IceServer> iceServersList = Utils.sanitizeIceServer(sessionOptions.getArray("customServers"));
         final IncludeServers includeServers = Utils.sanitizeIncludeServer(sessionOptions.getString("includeServers"));
         final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(sessionOptions.getString("transportPolicy"));
@@ -494,11 +489,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void getSubscriberRtcStatsReport(String streamId) {
+    public void getSubscriberRtcStatsReport() {
 
         ConcurrentHashMap<String, Subscriber> mSubscribers = sharedState.getSubscribers();
-        Subscriber mSubscriber = mSubscribers.get(streamId);
-        if (mSubscriber != null) {
+        ArrayList<Subscriber> mSubscriberList = new ArrayList<>(mSubscribers.values());
+        for (Subscriber mSubscriber : mSubscriberList) {
             mSubscriber.getRtcStatsReport();
         }
     }
@@ -883,9 +878,9 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         mSubscriberStreams.put(stream.getStreamId(), stream);
         if (publisherId.length() > 0) {
-            String event = publisherId + ":" + publisherPreface + "onStreamCreated";;
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream, publisherKit.getSession());
-            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            streamInfo.putString("publisherId", publisherId);
+            sendEventMap(this.getReactApplicationContext(), "publisherStreamCreated", streamInfo);
         }
         printLogs("onStreamCreated: Publisher Stream Created. Own stream "+stream.getStreamId());
 
@@ -895,13 +890,13 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
 
         String publisherId = Utils.getPublisherId(publisherKit);
-        String event = publisherId + ":" + publisherPreface + "onStreamDestroyed";
         ConcurrentHashMap<String, Stream> mSubscriberStreams = sharedState.getSubscriberStreams();
         String mStreamId = stream.getStreamId();
         mSubscriberStreams.remove(mStreamId);
         if (publisherId.length() > 0) {
             WritableMap streamInfo = EventUtils.prepareJSStreamMap(stream, publisherKit.getSession());
-            sendEventMap(this.getReactApplicationContext(), event, streamInfo);
+            streamInfo.putString("publisherId", publisherId);
+            sendEventMap(this.getReactApplicationContext(), "publisherStreamDestroyed", streamInfo);
         }
         Callback mCallback = sharedState.getPublisherDestroyedCallbacks().get(publisherId);
         if (mCallback != null) {
