@@ -3,7 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-  s.name          = package['name']
+  s.name          = "client-sdk-video-react-native"
   s.version       = package['version']
   s.summary       = package['description']
   s.license       = package['license']
@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'OTXCFramework','2.27.3'
+  s.dependency 'VonageClientSDKVideo','2.27.3'
 end

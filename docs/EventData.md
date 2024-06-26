@@ -1,1 +1,1 @@
-This documentation is now maintained at https://tokbox.com/developer/sdks/react-native/reference/EventData.html.
+This documentation is now maintained at https://vonage.github.io/conversation-docs/video-react-native-reference/latest/EventData.html.
