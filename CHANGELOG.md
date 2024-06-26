@@ -2,7 +2,21 @@
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.
 
-  This version adds support for the VP9 codec in relayed sessions. For more information, see the [video codecs](https://tokbox.com/developer/guides/codecs/) documentation.
+- [Update]: The Vonage Video iOS and Android SDKs loaded by this version are reduced in size by removing Vonage Media Library code. *Important* In order to use the `OTPublisher.setVideoTransformers()` method (which uses the Vonage Media Library), you must load the Vonage Media Library separately by include the following in your Podfile:
+
+```
+pod 'VonageClientSDKVideoTransformers'
+```
+
+... and by including the following in your app/build.gradle file:
+
+```
+implementation "com.vonage:client-sdk-video-transformers:2.27.2"
+```
+
+- [Update]: This version adds support for reading the Certificate Authority certificates in the trust store of the host so that it can use them as valid root certificates when connecting to OpenTok services.
+
+- [Update]: This version adds support for Apple's requirement of the [signature for the SDK](https://developer.apple.com/support/third-party-SDK-requirements).
 
 - [Update]: This version updates a vulnerable Node module (braces).
 
