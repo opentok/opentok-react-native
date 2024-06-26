@@ -651,7 +651,7 @@ extension OTSessionManager: OTPublisherDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
         if (publisherId.count > 0) {
             OTRN.sharedState.isPublishing[publisherId] = true;
-            let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
+            var streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
             streamInfo["publisherId"] = publisherId;
             self.emitEvent("publisherStreamCreated", data: streamInfo);
             setStreamObservers(stream: stream, isPublisherStream: true)
@@ -667,7 +667,7 @@ extension OTSessionManager: OTPublisherDelegate {
         OTRN.sharedState.isPublishing[publisherId] = false;
         if (publisherId.count > 0) {
             OTRN.sharedState.isPublishing[publisherId] = false;
-            let streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
+            var streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
             streamInfo["publisherId"] = publisherId;
             self.emitEvent("publisherStreamDestroyed", data: streamInfo);
         }

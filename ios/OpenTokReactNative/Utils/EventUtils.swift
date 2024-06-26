@@ -132,10 +132,8 @@ class EventUtils {
             "\(sessionPreface)connectionCreated",
             "\(sessionPreface)connectionDestroyed",
             "\(sessionPreface)didFailWithError",
-            "\(publisherPreface)streamCreated",
             "\(sessionPreface)signal",
             "\(sessionPreface)muteForced",
-            "\(publisherPreface)streamDestroyed",
             "\(publisherPreface)didFailWithError",
             "\(publisherPreface)audioLevelUpdated",
             "\(publisherPreface)rtcStatsReport",
@@ -162,7 +160,9 @@ class EventUtils {
             "\(sessionPreface)sessionDidReconnect",
             "\(sessionPreface)streamPropertyChanged",
             "\(subscriberPreface)subscriberDidReconnect",
-            "\(subscriberPreface)subscriberCaptionReceived"
+            "\(subscriberPreface)subscriberCaptionReceived",
+            "publisherStreamCreated",
+            "publisherStreamDestroyed"
         ];
     }
     
