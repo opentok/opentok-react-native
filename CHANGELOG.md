@@ -2,17 +2,9 @@
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.
 
-- [Update]: The Vonage Video iOS and Android SDKs loaded by this version are reduced in size by removing Vonage Media Library code. *Important* In order to use the `OTPublisher.setVideoTransformers()` method (which uses the Vonage Media Library), you must load the Vonage Media Library separately by include the following in your Podfile:
+- [Update]: The Vonage Video iOS and Android SDKs loaded by this version are reduced in size by removing Vonage Media Library code.
 
-```
-pod 'VonageClientSDKVideoTransformers'
-```
-
-... and by including the following in your app/build.gradle file:
-
-```
-implementation "com.vonage:client-sdk-video-transformers:2.27.2"
-```
+  **Important:** In order to use the `OTPublisher.setVideoTransformers()` method (which uses the Vonage Media Library), you must add the Vonage Media Library separately from the Vonage Video React Native SDK. For details, see [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
 
 - [Update]: This version adds support for reading the Certificate Authority certificates in the trust store of the host so that it can use them as valid root certificates when connecting to OpenTok services.
 
