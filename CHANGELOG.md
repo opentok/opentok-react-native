@@ -1,3 +1,17 @@
+# 2.28.0  (July 2024)
+
+- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.
+
+- [Update]: The Vonage Video iOS and Android SDKs loaded by this version are reduced in size by removing Vonage Media Library code.
+
+  **Important:** In order to use the `OTPublisher.setVideoTransformers()` method (which uses the Vonage Media Library), you must add the Vonage Media Library separately from the Vonage Video React Native SDK. For details, see [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
+
+- [Update]: This version adds support for reading the Certificate Authority certificates in the trust store of the host so that it can use them as valid root certificates when connecting to OpenTok services.
+
+- [Update]: This version adds support for Apple's requirement of the [signature for the SDK](https://developer.apple.com/support/third-party-SDK-requirements).
+
+- [Update]: This version updates a vulnerable Node module (braces).
+
 # 2.27.6  (June 2024)
 
 - [Fix]: This version fixes some iOS crashes that were introduced in version 2.27.5. Fixes issue #757.
