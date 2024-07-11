@@ -130,7 +130,7 @@ If you try to archive the app and it fails, please do the following:
 3. If your app will use the `OTPublisher.setVideoFilters()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.27.2"
+   implementation "com.vonage:client-sdk-video-transformers:2.28.0"
    ```
 
 #### Bintray sunset
