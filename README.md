@@ -1,12 +1,10 @@
-# opentok-react-native
+# Vonage Video client SDK for React Native
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-React Native library for using [OpenTok](https://tokbox.com/developer/).
+React Native library for using the [Vonage Video API](https://developer.vonage.com/en/video/overview).
 
 This library is now officially supported by Vonage.
-
-In this repo, you'll find the OpenTok React Native library.
 
 ## Prerequisites
 
@@ -26,8 +24,8 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native`
-  * `yarn add opentok-react-native`
+- `npm install @vonage/client-sdk-video-react-native`
+- `yarn add @vonage/client-sdk-video-react-native`
 
 ### iOS Installation
 
@@ -44,11 +42,11 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-         pod 'OTXCFramework', '2.28.0'
+         pod 'VonageClientSDKVideoMacOS', '2.28.0'
      end
      ```
    
-   * Run `react-native link opentok-react-native`.
+   * Run `react-native link @vonage/client-sdk-video-react-native`.
 
    These steps are not necessary in React Native version 0.60 and later.
 
@@ -83,13 +81,13 @@ If you try to archive the app and it fails, please do the following:
 
 2. **For React Native versions prior to 0.60**:
 
-   - Run `react-native link opentok-react-native`
+   - Run `react-native link @vonage/client-sdk-video-react-native`
 
    This step is not necessary in React Native version 0.60 and later.
 
 3. Run `bundle install`.
 
-4. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
+4. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the Vonage Video React library.
 
 5. For older Android devices, add the following permissions to the `AndroidManifest.xml` file:
 
@@ -103,7 +101,7 @@ If you try to archive the app and it fails, please do the following:
    the app settings.
 
    * `android.permission.BROADCAST_STICKY` -- We have determined that this is unused by
-   the OpenTok Android SDK, and we will remove this permission from an upcoming release.
+   the Vonage Video Android SDK, and we will remove this permission from an upcoming release.
 
    * `android.permission.CAMERA` -- If your app does not use the default video capturer
    and does not access the camera, you can remove this permission.
@@ -113,13 +111,13 @@ If you try to archive the app and it fails, please do the following:
    * `android.permission.MODIFY_AUDIO_SETTINGS` -- If your app does not use the default audio
    device and does not access the microphone, you can remove this permission.
 
-   * `android.permission.READ_PHONE_STATE` -- The OpenTok Android SDK requests this permission in API level 22
+   * `android.permission.READ_PHONE_STATE` -- The Vonage Video Android SDK requests this permission in API level 22
    and lower, and 31 and above.
 
    * `android.permission.RECORD_AUDIO` -- If your app does not use the default audio
    device and does not access the microphone, you can remove this permission.
 
-   For newer versions of Android — `API Level 23` (Android 6.0) and later — you do not need to add these to your app manifest. The OpenTok React Native SDK adds them automatically. However, if you use Android 21+, certain permissions require you to prompt the user.
+   For newer versions of Android — `API Level 23` (Android 6.0) and later — you do not need to add these to your app manifest. The Vonage Video React Native SDK adds them automatically. However, if you use Android 21+, certain permissions require you to prompt the user.
 
    Your app can remove any of these permissions that will not be required. See [this post](https://stackoverflow.com/a/31616472) and [this Android documentation](https://developer.android.com/studio/build/manifest-merge). For example, this removes the `android.permission.CAMERA` permission:
 
@@ -174,11 +172,15 @@ allprojects {
 
 ## Docs
 
-See the [docs](https://tokbox.com/developer/sdks/react-native/reference).
+See the [docs](https://developer.vonage.com/en/video/client-sdks/react-native/overview?source=video).
 
 ## Samples
 
-To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo.
+To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo. **Important:** These samples were written for the OpenTok version of the React Native client SDK for Vonage Video. You will need to modify references the sample apps to work with this version of the client SDK (@vonage/client-sdk-video-react-native) for use with Vonage applications:
+
+* In the source code, change `opentok-react-native` references to `@vonage/client-sdk-video-react-native`.
+
+* For the `apiKey` prop of the `OTSession` component, pass in a Vonage *application ID* (*not* an OpenTok API key or a Vonage API key).
 
 ## Development and Contributing
 
@@ -190,6 +192,6 @@ Interested in contributing? We :heart: pull requests! See the
 We love to hear from you so if you have questions, comments or find a bug in the project, let us know! You can either:
 
 - Open an issue on this repository
-- See <https://support.tokbox.com/> for support options
+- See <https://api.support.vonage.com/hc/en-us/> for support options
 - Tweet at us! We're [@VonageDev](https://twitter.com/VonageDev) on Twitter
 - Or [join the Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)

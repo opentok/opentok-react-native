@@ -2,8 +2,6 @@
 //  OTScreenCapture.m
 //  Screen-Sharing
 //
-//  Copyright (c) 2014 TokBox Inc. All rights reserved.
-//
 
 #include <mach/mach.h>
 #include <mach/mach_time.h>

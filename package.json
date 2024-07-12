@@ -1,9 +1,9 @@
 {
-  "name": "opentok-react-native",
+  "name": "@vonage/client-sdk-video-react-native",
   "version": "2.28.0",
-  "description": "React Native components for OpenTok iOS and Android SDKs",
+  "description": "React Native components for Vonage Video iOS and Android SDKs",
   "main": "src/index.js",
-  "homepage": "https://www.tokbox.com",
+  "homepage": "https://developer.vonage.com/en/video/overview",
   "scripts": {
     "flow": "flow",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
   "keywords": [
     "opentok",
     "react-native",
-    "tokbox",
+    "vonage",
     "webrtc",
     "ios",
     "android",
@@ -23,7 +23,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/opentok/opentok-react-native.git"
+    "url": "https://github.com/opentok/opentok-react-native.git#vonage"
   },
   "dependencies": {
     "axios": "^1.6.8",
