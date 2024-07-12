@@ -42,7 +42,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-        pod 'VonageClientSDKVideoMacOS', '2.27.2'
+         pod 'VonageClientSDKVideoMacOS', '2.28.0'
      end
      ```
    
@@ -60,6 +60,12 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    ```
 
 When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
+
+3. If your app will use the `OTPublisher.setVideoTransformers()` method, you need to include the following in your Podfile:
+
+   ```
+   pod 'VonageClientSDKVideoTransformers'
+   ```
 
 If you try to archive the app and it fails, please do the following:
 
@@ -117,6 +123,12 @@ If you try to archive the app and it fails, please do the following:
 
    ```
    <uses-permission android:name="android.permission.CAMERA" tools:node="remove"/>
+   ```
+
+3. If your app will use the `OTPublisher.setVideoTransformers()` method, you need to include the following in your app/build.gradle file:
+
+   ```
+   implementation "com.vonage:client-sdk-video-transformers:2.28.0"
    ```
 
 #### Bintray sunset

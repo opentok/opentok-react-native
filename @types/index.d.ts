@@ -511,6 +511,9 @@ declare module "@vonage/client-sdk-video-react-native" {
 
     /**
      * Sets video transformers for the publisher (or clears them if passed an empty array).
+     * To use this method, add `pod 'VonageClientSDKVideoTransformers'` to your
+     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.28.0"`
+     * to your your app/build.gradle file.
      */
     setVideoTransformers: (transformers: Array<{
       name: string,
