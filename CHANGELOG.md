@@ -1,3 +1,7 @@
+# 2.28.1  (August 2024)
+
+- [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` passed into the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
+
 # 2.28.0  (July 2024)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.

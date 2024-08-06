@@ -224,6 +224,11 @@ declare module "opentok-react-native" {
         credential?: string;
       }[];
     };
+
+    /**
+     * Enable single peer connection for the client.
+     */
+    enableSinglePeerConnection?: boolean;
   }
 
   interface OTSessionEventHandlers {
