@@ -3,11 +3,12 @@
 - [Update]: The new `OTPublisher.setAudioTransformers()` method lets you set (and clear) audio transformers. One transformer, the noise suppression filter, is supported. To use this, call the `setAudioTransformers()` method of the OTPublisher ref, and pass in an array with one object that has a `name` property set to `'NoiseSuppression'` and a `properties` property set to an empty string:
 
   ```js
-    publisherRef.setVideoTransformers ([{
+    publisherRef.setAudioTransformers ([{
       name: 'NoiseSuppression',
       properties: '',
     }]);
   ```
+
   *Important:* To use this method, you must add the Vonage Media Transformer library to your project, separately from the OpenTok React Native SDK. See [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
 
 - [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` passed into the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
