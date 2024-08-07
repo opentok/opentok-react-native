@@ -372,7 +372,7 @@ class OTSessionManager: RCTEventEmitter {
             guard let transformerName = transformerDictionary["name"], let transformerProperties = transformerDictionary["properties"] else {
                 return // To do -- handle error
             }
-            guard let audioTransformer = OTAudioTransformer(
+            guard let nativeTransformer = OTAudioTransformer(
                 name: transformerName,
                 properties: transformerProperties
             ) else {
