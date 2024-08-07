@@ -359,6 +359,30 @@ class OTSessionManager: RCTEventEmitter {
         }
     }
     
+    @objc func setAudioTransformers(_ publisherId: String, audioTransformers: Array<Any>) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return // To do -- handle error
+        }
+        var nativeTransformers: [OTAudioTransformer] = [];
+
+        for transformer in audioTransformers {
+            guard let transformerDictionary = transformer as? [String: String] else {
+                return // To do -- handle error
+            }
+            guard let transformerName = transformerDictionary["name"], let transformerProperties = transformerDictionary["properties"] else {
+                return // To do -- handle error
+            }
+            guard let audioTransformer = OTAudioTransformer(
+                name: transformerName,
+                properties: transformerProperties
+            ) else {
+                return // To do -- handle error
+            }
+            nativeTransformers.append(nativeTransformer)
+        }
+        publisher.audioTransformers = nativeTransformers
+    }
+
     @objc func setVideoTransformers(_ publisherId: String, videoTransformers: Array<Any>) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
             return // To do -- handle error
