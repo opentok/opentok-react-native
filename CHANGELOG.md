@@ -11,7 +11,7 @@
 
   *Important:* To use this method, you must add the Vonage Media Transformer library to your project, separately from the OpenTok React Native SDK. See [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
 
-- [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` passed into the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
+- [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` prop of the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
 
 # 2.28.0  (July 2024)
 
