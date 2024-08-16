@@ -1,3 +1,7 @@
+# 2.28.1  (August 2024)
+
+- [Update]: This version updates the Vonage Video Android SDK to version 2.28.2 and the Vonage Video iOS 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html). This version updates `sourceCompatibility` and `targetCompatibility` to Java 17 in the Android build.gradle file.
+
 # 2.28.0  (July 2024)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.
