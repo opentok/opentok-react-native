@@ -224,6 +224,11 @@ declare module "opentok-react-native" {
         credential?: string;
       }[];
     };
+
+    /**
+     * Enable single peer connection for the client.
+     */
+    enableSinglePeerConnection?: boolean;
   }
 
   interface OTSessionEventHandlers {
@@ -508,6 +513,17 @@ declare module "opentok-react-native" {
      * the publisher are available.
      */
     getRtcStatsReport: () => void;
+
+    /**
+     * Sets audio transformers for the publisher (or clears them if passed an empty array).
+     * To use this method, add `pod 'VonageClientSDKVideoTransformers'` to your
+     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.28.0"`
+     * to your your app/build.gradle file.
+     */
+    setAudioTransformers: (transformers: Array<{
+      name: string,
+      properties?: string,
+    }>) => void;
 
     /**
      * Sets video transformers for the publisher (or clears them if passed an empty array).
