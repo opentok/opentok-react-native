@@ -3,6 +3,7 @@ package com.opentokreactnative.utils;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
+import com.opentok.android.PublisherKit.AudioTransformer;
 import com.opentok.android.PublisherKit.VideoTransformer;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
@@ -99,6 +100,21 @@ public final class Utils {
             }
         }
         return iceServers;
+    }
+
+    public static ArrayList<AudioTransformer> sanitizeAudioTransformerList(PublisherKit publisher, ReadableArray transformerList) {
+        ArrayList<AudioTransformer> nativeAudioTransformers = new ArrayList<>();
+        if (transformerList != null) {
+            for (int i = 0; i < transformerList.size(); i++) {
+                String transformerName = transformerList.getMap(i).getString("name");
+                AudioTransformer transformer = publisher.new AudioTransformer(
+                    transformerName,
+                    transformerList.getMap(i).getString("properties")
+                );
+                nativeAudioTransformers.add(transformer);
+            }
+        }
+        return nativeAudioTransformers;
     }
 
     public static ArrayList<VideoTransformer> sanitizeVideoTransformerList(PublisherKit publisher, ReadableArray transformerList) {
