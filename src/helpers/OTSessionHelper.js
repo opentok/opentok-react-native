@@ -106,6 +106,7 @@ const sanitizeSessionOptions = (options) => {
       enableStereoOutput: false,
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
+      enableSinglePeerConnection: false,
     };
   } else {
     sessionOptions = {
@@ -114,6 +115,7 @@ const sanitizeSessionOptions = (options) => {
       iceConfig: {},
       proxyUrl: '',
       enableStereoOutput: false,
+      enableSinglePeerConnection: false,
     };
   }
 
@@ -128,6 +130,7 @@ const sanitizeSessionOptions = (options) => {
       iceConfig: 'object',
       proxyUrl: 'string',
       enableStereoOutput: 'boolean',
+      enableSinglePeerConnection: 'boolean',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
@@ -138,6 +141,7 @@ const sanitizeSessionOptions = (options) => {
       iceConfig: 'object',
       proxyUrl: 'string',
       enableStereoOutput: 'boolean',
+      enableSinglePeerConnection: 'boolean',
     },
   };
 

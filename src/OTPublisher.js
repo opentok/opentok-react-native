@@ -189,6 +189,10 @@ class OTPublisher extends Component {
     }
   }
 
+  setAudioTransformers(audioTransformers) {
+    OT.setAudioTransformers(this.state.publisherId, audioTransformers);
+  }
+
   setVideoTransformers(videoTransformers) {
     OT.setVideoTransformers(this.state.publisherId, videoTransformers);
   }
@@ -214,6 +218,7 @@ OTPublisher.propTypes = {
   properties: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   getRtcStatsReport: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  setAudioTransformers: PropTypes.func, // eslint-disable-line react/forbid-prop-types
   setVideoTransformers: PropTypes.func, // eslint-disable-line react/forbid-prop-types
 };
 OTPublisher.defaultProps = {

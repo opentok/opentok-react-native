@@ -97,6 +97,9 @@ RCT_EXTERN_METHOD(setJSComponentEvents:
 RCT_EXTERN_METHOD(setVideoTransformers:
                   (NSString*)publisherId
                   videoTransformers:(NSArray*)videoTransformers)
+RCT_EXTERN_METHOD(setAudioTransformers:
+                  (NSString*)publisherId
+                  audioTransformers:(NSArray*)audioTransformers)
 RCT_EXTERN_METHOD(removeJSComponentEvents:
                   (NSArray*)events)
 RCT_EXTERN_METHOD(getSessionInfo:

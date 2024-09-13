@@ -31,6 +31,7 @@ import com.opentok.android.MediaUtils;
 import com.opentok.android.MuteForcedInfo;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
+import com.opentok.android.PublisherKit.AudioTransformer;
 import com.opentok.android.PublisherKit.VideoTransformer;
 import com.opentok.android.Stream;
 import com.opentok.android.OpentokError;
@@ -107,6 +108,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         ConcurrentHashMap<String, String> mAndroidOnTopMap = sharedState.getAndroidOnTopMap();
         ConcurrentHashMap<String, String> mAndroidZOrderMap = sharedState.getAndroidZOrderMap();
+        final boolean singlePeerConnection = sessionOptions.getBoolean("enableSinglePeerConnection");
 
 
         Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
@@ -121,6 +123,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 .setIceRouting(transportPolicy)
                 .setIpWhitelist(ipWhitelist)
                 .setProxyUrl(proxyUrl)
+                .setSinglePeerConnection(singlePeerConnection)
                 .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);
@@ -418,6 +421,16 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         if (mPublisher != null) {
           ArrayList<VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(mPublisher, videoTransformers);
           mPublisher.setVideoTransformers(nativeVideoTransformers);
+        }
+    }
+
+    @ReactMethod
+    public void setAudioTransformers(String publisherId, ReadableArray audioTransformers) {
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+          ArrayList<AudioTransformer> nativeAudioTransformers = Utils.sanitizeAudioTransformerList(mPublisher, audioTransformers);
+          mPublisher.setAudioTransformers(nativeAudioTransformers);
         }
     }
 

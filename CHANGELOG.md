@@ -1,6 +1,21 @@
-# 2.28.1  (August 2024)
+# 2.28.1  (October 2024)
 
 - [Update]: This version updates the Vonage Video Android SDK to version 2.28.2 and the Vonage Video iOS 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html). This version updates `sourceCompatibility` and `targetCompatibility` to Java 17 in the Android build.gradle file.
+
+# 2.28.1  (September 2024)
+
+- [Update]: The new `OTPublisher.setAudioTransformers()` method lets you set (and clear) audio transformers. One transformer, the noise suppression filter, is supported. To use this, call the `setAudioTransformers()` method of the OTPublisher ref, and pass in an array with one object that has a `name` property set to `'NoiseSuppression'` and a `properties` property set to an empty string:
+
+  ```js
+  publisherRef.setAudioTransformers([{
+    name: 'NoiseSuppression',
+    properties: '',
+  }]);
+  ```
+
+  *Important:* To use this method, you must add the Vonage Media Transformer library to your project, separately from the OpenTok React Native SDK. See [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
+
+- [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` prop of the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
 
 # 2.28.0  (July 2024)
 
