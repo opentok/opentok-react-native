@@ -183,7 +183,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                     .build();
             mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         } else {
-            mPublisher = new Publisher.Builder(this.getReactApplicationContext())
+            mPublisher = new Publisher.Builder(this.getCurrentActivity())
                     .audioTrack(audioTrack)
                     .videoTrack(videoTrack)
                     .name(name)
