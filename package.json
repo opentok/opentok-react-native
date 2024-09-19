@@ -32,7 +32,7 @@
     "prop-types": "^15.7.2",
     "react-native-get-random-values": "^1.11.0",
     "underscore": "^1.13.0",
-    "uuid": "^9.0.1"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "babel-jest": "29.7.0",
