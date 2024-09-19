@@ -30,8 +30,9 @@
     "deprecated-react-native-prop-types": "^2.3.0",
     "flow-bin": "^0.180.0",
     "prop-types": "^15.7.2",
+    "react-native-get-random-values": "^1.11.0",
     "underscore": "^1.13.0",
-    "uuid": "^3.4.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "babel-jest": "29.7.0",

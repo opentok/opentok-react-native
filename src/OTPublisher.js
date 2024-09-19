@@ -1,7 +1,9 @@
+import 'react-native-get-random-values';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 import { isNull } from 'underscore';
+import { v4 as uuid } from 'uuid';
 import {
   checkAndroidPermissions,
   OT,
@@ -17,7 +19,6 @@ import OTPublisherView from './views/OTPublisherView';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
 import OTContext from './contexts/OTContext';
-const uuid = require('uuid/v4');
 
 class OTPublisher extends Component {
   constructor(props, context) {
