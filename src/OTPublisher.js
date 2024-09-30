@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 import { isNull } from 'underscore';
+import uuid from 'react-native-uuid';
 import {
   checkAndroidPermissions,
   OT,
@@ -17,7 +18,6 @@ import OTPublisherView from './views/OTPublisherView';
 import { getOtrnErrorEventHandler } from './helpers/OTHelper';
 import { isConnected } from './helpers/OTSessionHelper';
 import OTContext from './contexts/OTContext';
-const uuid = require('uuid/v4');
 
 class OTPublisher extends Component {
   constructor(props, context) {
@@ -25,7 +25,7 @@ class OTPublisher extends Component {
     this.state = {
       initError: null,
       publisher: null,
-      publisherId: uuid(),
+      publisherId: uuid.v4(),
     };
     this.initComponent();
   }
