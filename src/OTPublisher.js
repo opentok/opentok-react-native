@@ -182,7 +182,7 @@ class OTPublisher extends Component {
   publisherStreamDestroyedHandler = (stream) => {
     if (
       this.props.eventHandlers
-      && this.props.eventHandlers.streamCreated
+      && this.props.eventHandlers.streamDestroyed
       && stream.publisherId === this.state.publisherId
     ) {
       this.props.eventHandlers.streamDestroyed(stream);
