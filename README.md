@@ -42,7 +42,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-         pod 'VonageClientSDKVideoMacOS', '2.28.0'
+         pod 'VonageClientSDKVideoMacOS', '2.28.1'
      end
      ```
    
