@@ -1,4 +1,6 @@
-# 2.28.2  (October 2024)
+# 2.28.2  (September 2024)
+
+- [Update]: This version updates the Vonage Video Android and iOS SDK to version 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
 
 - [Fix]: Updates react and react-native modules (and axios dependency). Fixes issue #769
 
