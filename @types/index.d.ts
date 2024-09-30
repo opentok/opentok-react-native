@@ -128,11 +128,15 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSessionProps extends ViewProps {
     /**
-     * Your Vonage application ID. (When using the Vonage Video React Native SDK
-     * with OpenTok projects, you pass in an OpenTok API key. But for Vonage
-     * applications, pass in the application ID.)
+     * Deprecated. Replaced by the applicationId prop.
      */
-    apiKey: string;
+    apiKey?: string;
+
+    /**
+     * The Vonage application ID. This is a beta feature, replacing the
+     * apiKey prop.
+     */
+    applicationId?: string;
 
     /**
      * Vonage Video API session ID.
