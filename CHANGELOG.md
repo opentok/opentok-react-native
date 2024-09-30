@@ -1,5 +1,17 @@
 # 2.28.2  (September 2024)
 
+- [Update]: The new `OTSession` component now has an `applicationId` prop, replacing the `apiKey` prop, which is now deprecated:
+
+```js
+<OTSession
+  applicationId="the application ID"
+  sessionId="the session ID"
+  token="the connection token"
+/>
+```
+
+Vonage developers specify Vonage application ID (not an API key), along with a session ID and token, as OTSession props. If you include the `applicationId` prop, do not include an `apiKey` prop. This is a beta feature.
+
 - [Update]: This version updates the Vonage Video Android and iOS SDK to version 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
 
 - [Fix]: Updates react, react-native modules (and axios dependency), and replaces uuid with react-native-uuid. The fixes issue #769. And it prevents [an issue](https://github.com/uuidjs/uuid/issues/375) that would result from using an upgraded version of uuid.

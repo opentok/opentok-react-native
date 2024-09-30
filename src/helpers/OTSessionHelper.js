@@ -203,6 +203,15 @@ const sanitizeEncryptionSecret = (secret) => {
 
 const sanitizeCredentials = (credentials) => {
   const _credentials = {};
+  if (!credentials.applicationId && !credentials.apiKey) {
+    handleError('Please add the applicationId');
+  }
+
+  if (credentials.applicationId) {
+    credentials.apiKey = credentials.applicationId;
+    delete credentials.applicationId;
+  }
+
   each(credentials, (value, key) => {
     if (!isString(value) || isEmpty(value) || isNull(value)) {
       handleError(`Please add the ${key}`);

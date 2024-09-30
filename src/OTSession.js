@@ -20,7 +20,7 @@ export default class OTSession extends Component {
     this.initComponent();
   }
   initComponent = () => {
-    const credentials = pick(this.props, ['apiKey', 'sessionId', 'token']);
+    const credentials = pick(this.props, ['apiKey', 'applicationId', 'sessionId', 'token']);
     this.sanitizedCredentials = sanitizeCredentials(credentials);
     if (Object.keys(this.sanitizedCredentials).length === 3) {
       const sessionEvents = sanitizeSessionEvents(this.sanitizedCredentials.sessionId, this.props.eventHandlers);
@@ -147,7 +147,8 @@ export default class OTSession extends Component {
     });
   }
   render() {
-    const { style, children, sessionId, apiKey, token } = this.props;
+    const { style, children, sessionId, token, applicationId } = this.props;
+    const apiKey = applicationId || this.props.apiKey;
     const { sessionInfo } = this.state;
     if (children && sessionId && apiKey && token) {
       return (
@@ -163,7 +164,8 @@ export default class OTSession extends Component {
 }
 
 OTSession.propTypes = {
-  apiKey: PropTypes.string.isRequired,
+  apiKey: PropTypes.string,
+  applicationId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
