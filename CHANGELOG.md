@@ -1,6 +1,6 @@
-# 2.28.2  (October 2024)
+# 2.28.2  (September 2024)
 
-- [Fix]: Updates react and react-native modules (and axios dependency). Fixes issue #769
+- [Fix]: Updates react, react-native modules (and axios dependency), and replaces uuid with react-native-uuid. The fixes issue #769. And it prevents [an issue](https://github.com/uuidjs/uuid/issues/375) that would result from using an upgraded version of uuid.
 
 # 2.28.1  (September 2024)
 
