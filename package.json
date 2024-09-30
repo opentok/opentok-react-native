@@ -31,7 +31,7 @@
     "flow-bin": "^0.180.0",
     "prop-types": "^15.7.2",
     "underscore": "^1.13.0",
-    "uuid": "^3.4.0"
+    "react-native-uuid": "^2.0.2"
   },
   "devDependencies": {
     "babel-jest": "29.7.0",
