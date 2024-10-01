@@ -9,7 +9,7 @@
       sourceCompatibility JavaVersion.VERSION_17
       targetCompatibility JavaVersion.VERSION_17
   }
-```
+  ```
 
 # 2.28.2  (September 2024)
 
