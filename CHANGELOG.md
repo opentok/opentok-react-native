@@ -1,4 +1,15 @@
-# 2.28.2  (September 2024)
+# 2.28.3 (October 2024)
+
+- [Update]: This version updates the Vonage Video Android SDK to version 2.28.3 and the Vonage Video iOS SDK to version 2.28.2. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+
+  This version updates `sourceCompatibility` and `targetCompatibility` to Java 17 in the Android build.gradle file. When using this version, you will need to specify `sourceCompatibility` and `targetCompatibility` in the Android build.gradle file:
+
+  ```
+  compileOptions {
+      sourceCompatibility JavaVersion.VERSION_17
+      targetCompatibility JavaVersion.VERSION_17
+  }
+  ```
 
 - [Update]: The new `OTSession` component now has an `applicationId` prop, replacing the `apiKey` prop, which is now deprecated:
 
@@ -12,11 +23,11 @@
 
 Vonage developers specify Vonage application ID (not an API key), along with a session ID and token, as OTSession props. If you include the `applicationId` prop, do not include an `apiKey` prop. This is a beta feature.
 
-- [Update]: This version updates the Vonage Video Android and iOS SDK to version 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
-
 - [Fix]: Updates react, react-native modules (and axios dependency), and replaces uuid with react-native-uuid. The fixes issue #769. And it prevents [an issue](https://github.com/uuidjs/uuid/issues/375) that would result from using an upgraded version of uuid.
 
 - [Fix]: Fixes an error that resulted if you set an OTPublisher event handler for `streamCreated` without setting one for `streamDestroyed`.
+
+*Note:* An update for version 2.28.2 did not ship. This version is 2.28.3 to keep in line with the React Video API client SDK for OpenTok developers (opentok-react-native).
 
 # 2.28.1  (September 2024)
 
