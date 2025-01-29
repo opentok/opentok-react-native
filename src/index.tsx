@@ -1,5 +1,6 @@
 import OpentokReactNative from './NativeOpentokReactNative';
 
+/*
 export function connectToSession(
   apiKey: string,
   sessionId: string,
@@ -16,3 +17,6 @@ export function connectToSession(
     );
   }, 12000);
 }
+*/
+
+export { OpentokReactNative as OTSessionManager };
