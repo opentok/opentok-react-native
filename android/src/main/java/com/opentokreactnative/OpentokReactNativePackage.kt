@@ -24,6 +24,7 @@ class OpentokReactNativePackage : BaseReactPackage() {
         OpentokReactNativeModule.NAME,
         false,  // canOverrideExistingModule
         false,  // needsEagerInit
+        true,  // hasConstants
         false,  // isCxxModule
         true // isTurboModule
       )

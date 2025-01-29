@@ -1,12 +1,17 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { multiply } from 'opentok-react-native';
+import { connectToSession } from 'opentok-react-native';
 
-const result = multiply(3, 7);
+const apiKey = '';
+const sessionId = '';
+const token = '';
+
+connectToSession(apiKey, sessionId, token);
+console.log(apiKey, sessionId);
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result:</Text>
     </View>
   );
 }
