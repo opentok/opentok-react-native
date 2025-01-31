@@ -44,7 +44,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-         pod 'OTXCFramework', '2.28.2'
+         pod 'OTXCFramework', '2.29.0'
      end
      ```
    
