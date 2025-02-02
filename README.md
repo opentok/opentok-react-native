@@ -8,6 +8,26 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
+## IMPORTANT -- prototype version
+
+This version is a prototype for supporting the new architecture. It is based on the new architecture samples for [Turbo Module](https://reactnative.dev/docs/turbo-native-modules-introduction), [Fabric components](https://reactnative.dev/docs/fabric-native-components-introduction), and [library creation docs](https://reactnative.dev/docs/the-new-architecture/create-module-library). 
+
+Some notes:
+
+* This version only supports basic session methods in the 
+
+* This version only supports Android.
+
+To run and test:
+
+1. Run `yarn` to install.
+
+2. Edit the `apiKey`, `sessionId`, and `token` properties in the App.tsx file in the sample app (in the ./examples subdirectory).
+
+3. Run `yarn example android` to run the sample app.
+
+You can connect to the session and publish in Playground to see the session and connection events in the sample app.
+
 ## Prerequisites
 
 1. Install [node.js](https://nodejs.org/)
