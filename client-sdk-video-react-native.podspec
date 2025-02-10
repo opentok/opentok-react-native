@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'VonageClientSDKVideo','2.28.2'
+  s.dependency 'VonageClientSDKVideo','2.29.0'
 end
