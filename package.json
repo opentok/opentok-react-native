@@ -72,6 +72,7 @@
     "@types/react": "^18.2.44",
     "commitlint": "^17.0.2",
     "del-cli": "^5.1.0",
+    "deprecated-react-native-prop-types": "5.0.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -82,7 +83,8 @@
     "react-native-builder-bob": "^0.36.0",
     "release-it": "^17.10.0",
     "turbo": "^1.10.7",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "underscore": "^1.13.7"
   },
   "resolutions": {
     "@types/react": "^18.2.44"

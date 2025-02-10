@@ -343,6 +343,11 @@ declare module 'opentok-react-native' {
      * Used to report an issue
      */
     reportIssue: () => Promise<string>;
+
+    /**
+     * Send a signal
+     */
+    signal: (signal: any) => void;
   }
 
   interface OTPublisherProps extends ViewProps {
