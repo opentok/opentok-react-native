@@ -1,3 +1,4 @@
 import OTSession from './OTSession';
+import OTSubscriberView from './OTSubscriberView';
 
-export { OTSession };
+export { OTSession, OTSubscriberView };

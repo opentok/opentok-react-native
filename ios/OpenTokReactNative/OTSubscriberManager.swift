@@ -11,7 +11,7 @@ import Foundation
 @objc(OTSubscriberSwift)
 class OTSubscriberManager: RCTViewManager {
   override func view() -> UIView {
-    return OTSubscriberView();
+    return OTSubscriberViewNative();
   }
   
   override static func requiresMainQueueSetup() -> Bool {

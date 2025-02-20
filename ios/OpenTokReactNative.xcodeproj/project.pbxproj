@@ -15,7 +15,7 @@
 		9C6F95D020ACE90E00FEAD68 /* OTSubscriber.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */; };
 		9C6F95D120ACE90E00FEAD68 /* OTPublisherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */; };
 		9C6F95D220ACE90E00FEAD68 /* OTSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */; };
-		9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */; };
+		9C6F95D320ACE90E00FEAD68 /* OTSubscriberViewNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95C720ACE90E00FEAD68 /* OTSubscriberViewNative.swift */; };
 		9C6F95D520ACE90E00FEAD68 /* OTRN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */; };
 		9C6F95D620ACE90E00FEAD68 /* OTPublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */; };
 		9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86849C218E2B5A004679BA /* EventUtils.swift */; };
@@ -49,7 +49,7 @@
 		9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTSubscriber.m; sourceTree = "<group>"; };
 		9C6F95C520ACE90E00FEAD68 /* OTPublisherManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPublisherManager.swift; sourceTree = "<group>"; };
 		9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSessionManager.swift; sourceTree = "<group>"; };
-		9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSubscriberView.swift; sourceTree = "<group>"; };
+		9C6F95C720ACE90E00FEAD68 /* OTSubscriberViewNative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTSubscriberViewNative.swift; sourceTree = "<group>"; };
 		9C6F95CB20ACE90E00FEAD68 /* OTRN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTRN.swift; sourceTree = "<group>"; };
 		9C6F95CC20ACE90E00FEAD68 /* OTPublisher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTPublisher.m; sourceTree = "<group>"; };
 		9C86849C218E2B5A004679BA /* EventUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventUtils.swift; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 				9C6F95C620ACE90E00FEAD68 /* OTSessionManager.swift */,
 				9C6F95C420ACE90E00FEAD68 /* OTSubscriber.m */,
 				9C6F95C220ACE90D00FEAD68 /* OTSubscriberManager.swift */,
-				9C6F95C720ACE90E00FEAD68 /* OTSubscriberView.swift */,
+				9C6F95C720ACE90E00FEAD68 /* OTSubscriberViewNative.swift */,
 				9C6F95B720ACE8BE00FEAD68 /* OpenTokReactNative.h */,
 				9C6F95B820ACE8BE00FEAD68 /* OpenTokReactNative.m */,
 				9C6F95C020ACE90D00FEAD68 /* OpenTokReactNative-Bridging-Header.h */,
@@ -180,7 +180,7 @@
 				9C86849D218E2B5A004679BA /* EventUtils.swift in Sources */,
 				9C6F95D220ACE90E00FEAD68 /* OTSessionManager.swift in Sources */,
 				BA0CCEB72313FD6200F3C9ED /* OTSessionManager.m in Sources */,
-				9C6F95D320ACE90E00FEAD68 /* OTSubscriberView.swift in Sources */,
+				9C6F95D320ACE90E00FEAD68 /* OTSubscriberViewNative.swift in Sources */,
 				9C86850F218E3433004679BA /* Utils.swift in Sources */,
 				9C6F95CF20ACE90E00FEAD68 /* OTPublisherView.swift in Sources */,
 				6EE70BC9267127320011216E /* OTCustomAudioDriver.swift in Sources */,

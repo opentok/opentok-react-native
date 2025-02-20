@@ -1,5 +1,5 @@
 //
-//  OTSubscriberView.swift
+//  OTSubscriberViewNative.swift
 //  OpenTokReactNative
 //
 //  Created by Manik Sachdeva on 1/18/18.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-@objc(OTSubscriberView)
-class OTSubscriberView: UIView {
+@objc(OTSubscriberViewNative)
+class OTSubscriberViewNative: UIView {
   @objc var streamId: NSString?
   override init(frame: CGRect) {
     super.init(frame: frame)
