@@ -1,11 +1,7 @@
-import React, {useRef} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import React, { useRef } from 'react';
+import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
-import { OTSession } from 'opentok-react-native';
+import { OTSession, OTSubscriberView } from 'opentok-react-native';
 
 function App(): React.JSX.Element {
   const apiKey = '';
@@ -16,8 +12,9 @@ function App(): React.JSX.Element {
   const [subscribeToVideo, setSubscribeToVideo] = React.useState<boolean>(true);
 
   const sessionRef = useRef<OTSession>(null);
+  const subscriberRef = useRef<OTSubscriberViewNative>(null);
   const toggleVideo = () => {
-    setSubscribeToVideo(val => !val);
+    setSubscribeToVideo((val) => !val);
   };
 
   React.useEffect(() => {
@@ -27,7 +24,7 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Text style={styles.text}>
         SubscribeToVideo: {subscribeToVideo.toString()}
       </Text>
@@ -37,37 +34,54 @@ function App(): React.JSX.Element {
         sessionId={sessionId}
         ref={sessionRef}
         eventHandlers={{
-          sessionConnected: (event:any) => {
+          sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
             sessionRef.current?.signal({
               type: 'greeting2',
-              data: 'hello again from React Native'
+              data: 'hello again from React Native',
             });
-        },
-          streamCreated: (event:any) => {
-            console.log('streamCreated', event);
-            setStreamIds(prevIds => [...prevIds, event.streamId]);
           },
-          streamDestroyed: (event:any) => console.log('streamDestroyed', event),
-          signal: (event:any) => console.log('signal event', event),
-          error: (event:any) => console.log('error event', event),
+          streamCreated: (event: any) => {
+            console.log('streamCreated', event);
+            setStreamIds((prevIds) => [...prevIds, event.streamId]);
+          },
+          streamDestroyed: (event: any) =>
+            console.log('streamDestroyed', event),
+          signal: (event: any) => console.log('signal event', event),
+          error: (event: any) => console.log('error event', event),
         }}
         signal={{
           type: 'greeting2',
-          data: 'initial signal from React Native'
+          data: 'initial signal from React Native',
         }}
         style={styles.session}
       >
-        {streamIds?.map((streamId) => <Text
-          style={styles.text}
-          key={streamId}>
-          Stream: {streamId}
-        </Text>)}
-        </OTSession>
+        {streamIds?.map((streamId) => (
+          <OTSubscriberView
+            streamId={streamId}
+            sessionId={sessionId}
+            key={streamId}
+            ref={subscriberRef}
+            subscribeToVideo={subscribeToVideo}
+            subscribeToAudio={!subscribeToVideo}
+            style={styles.webview}
+            eventHandlers={{
+              subscriberConnected: (event: any) => {
+                console.log('subscriberConnected', event);
+                setTimeout(() => {
+                  subscriberRef.current?.getRtcStatsReport();
+                }, 4000);
+              },
+              onRtcStatsReport: (event: any) => {
+                console.log('onRtcStatsReport', event);
+              },
+            }}
+          />
+        ))}
+      </OTSession>
       <Text style={styles.text}>
         Stream count: {streamIds.length.toString()}
       </Text>
-
     </SafeAreaView>
   );
 }
@@ -82,8 +96,8 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   session: {
-    display: "flex"
-  }
+    display: 'flex',
+  },
 });
 
 export default App;
