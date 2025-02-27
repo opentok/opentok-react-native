@@ -44,7 +44,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-         pod 'OTXCFramework', '2.29.0'
+         pod 'OTXCFramework', '2.29.1'
      end
      ```
    
@@ -91,41 +91,7 @@ If you try to archive the app and it fails, please do the following:
 
 4. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
-5. For older Android devices, add the following permissions to the `AndroidManifest.xml` file:
-
-   * `android.permission.BLUETOOTH` -- The default audio device supports
-   Bluetooth audio. If your app does not use the default audio device and does not
-   use Bluetooth, you can remove this permission.
-
-   * `android.permission.BLUETOOTH_CONNECT` -- You need to enable this for API level 31 and above. If you want
-   to use the Bluetooth device with Android SDK DefaultAudioDevice targeting API level 31 and above, please
-   ask for runtime permissions in the app or enable the ("Nearby devices/Bluetooth") permission manually in
-   the app settings.
-
-   * `android.permission.BROADCAST_STICKY` -- We have determined that this is unused by
-   the OpenTok Android SDK, and we will remove this permission from an upcoming release.
-
-   * `android.permission.CAMERA` -- If your app does not use the default video capturer
-   and does not access the camera, you can remove this permission.
-
-   * `android.permission.INTERNET` -- Required.
-
-   * `android.permission.MODIFY_AUDIO_SETTINGS` -- If your app does not use the default audio
-   device and does not access the microphone, you can remove this permission.
-
-   * `android.permission.READ_PHONE_STATE` -- The OpenTok Android SDK requests this permission in API level 22
-   and lower, and 31 and above.
-
-   * `android.permission.RECORD_AUDIO` -- If your app does not use the default audio
-   device and does not access the microphone, you can remove this permission.
-
-   For newer versions of Android — `API Level 23` (Android 6.0) and later — you do not need to add these to your app manifest. The OpenTok React Native SDK adds them automatically. However, if you use Android 21+, certain permissions require you to prompt the user.
-
-   Your app can remove any of these permissions that will not be required. See [this post](https://stackoverflow.com/a/31616472) and [this Android documentation](https://developer.android.com/studio/build/manifest-merge). For example, this removes the `android.permission.CAMERA` permission:
-
-   ```
-   <uses-permission android:name="android.permission.CAMERA" tools:node="remove"/>
-   ```
+5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
 
 3. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
