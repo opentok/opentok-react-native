@@ -2,9 +2,51 @@ import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 import type { EventEmitter } from 'react-native/Libraries/Types/CodegenTypes';
 
-type SessionOptions = {
+export type ArchiveEvent = {
+  archiveId: string;
+  name: string;
+  sessionId: string;
+};
+
+export type Connection = {
+  creationTime: string;
+  data: string;
+  connectionId: string;
+};
+
+export type ConnectionEvent = {
+  sessionId: string;
+  creationTime: string;
+  data: string;
+  connectionId: string;
+};
+
+export type EmptyEvent = {};
+
+export type IceConfig = {
+  includeServers: string; // 'all' | 'custom';
+  transportPolicy: string; // 'all' | 'relay';
+  customServers: {
+    urls: string[];
+    username?: string;
+    credential?: string;
+  }[];
+};
+
+export type MuteForcedEvent = {
+  active: boolean;
+};
+
+export type SessionOptions = {
+  androidZOrder?: string;
   connectionEventsSuppressed?: boolean;
+  enableStereoOutput?: boolean;
+  enableSinglePeerConnection?: boolean;
+  iceConfig: IceConfig;
   ipWhitelist?: boolean;
+  isCamera2Capable?: boolean;
+  proxyUrl?: string;
+  useTextureViews?: boolean;
 };
 
 export type SessionConnectEvent = {
@@ -12,8 +54,34 @@ export type SessionConnectEvent = {
   connectionId: string;
 };
 
+export type SessionDisconnectEvent = {
+  sessionId: string;
+};
+
+export type Stream = {
+  name: string;
+  streamId: string;
+  hasAudio: boolean;
+  hasCaptions: boolean;
+  hasVideo: boolean;
+  sessionId: string;
+  connectionId: string;
+  width: number;
+  height: number;
+  videoType: string; //  "screen" | "camera";
+  connection: Connection;
+  creationTime: string;
+};
+
 export type StreamEvent = {
   streamId: string;
+};
+
+export type StreamPropertyChangedEvent = {
+  newValue: boolean;
+  oldValue: boolean;
+  changedProperty: string; // 'hasAudio' | 'hasCaptions' | 'hasVideo' | 'videoDimensions';
+  stream: Stream;
 };
 
 export type SignalEvent = {
@@ -30,10 +98,18 @@ export type SessionErrorEvent = {
 };
 
 export interface Spec extends TurboModule {
+  readonly onArchiveStarted: EventEmitter<ArchiveEvent>;
+  readonly onArchiveStopped: EventEmitter<ArchiveEvent>;
+  readonly onConnectionCreated: EventEmitter<ConnectionEvent>;
+  readonly onConnectionDestroyed: EventEmitter<ConnectionEvent>;
+  readonly onMuteForced: EventEmitter<MuteForcedEvent>;
   readonly onSessionConnected: EventEmitter<SessionConnectEvent>;
-  readonly onSessionDisconnected: EventEmitter<SessionConnectEvent>;
+  readonly onSessionDisconnected: EventEmitter<SessionDisconnectEvent>;
+  readonly onSessionReconnecting: EventEmitter<EmptyEvent>;
+  readonly onSessionReconnected: EventEmitter<EmptyEvent>;
   readonly onStreamCreated: EventEmitter<StreamEvent>;
   readonly onStreamDestroyed: EventEmitter<StreamEvent>;
+  readonly onStreamPropertyChanged: EventEmitter<StreamPropertyChangedEvent>;
   readonly onSignalReceived: EventEmitter<SignalEvent>;
   readonly onSessionError: EventEmitter<SessionErrorEvent>;
   initSession(

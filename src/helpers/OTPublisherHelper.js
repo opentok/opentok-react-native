@@ -28,14 +28,20 @@ const sanitizeFrameRate = (frameRate) => {
   }
 };
 
-const sanitizeCameraPosition = (cameraPosition = 'front') => (cameraPosition === 'front' ? 'front' : cameraPosition);
+const sanitizeCameraPosition = (cameraPosition = 'front') =>
+  cameraPosition === 'front' ? 'front' : cameraPosition;
 
-const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera' ? 'camera' : 'screen');
+const sanitizeVideoSource = (videoSource = 'camera') =>
+  videoSource === 'camera' ? 'camera' : 'screen';
 
 const sanitizeAudioBitrate = (audioBitrate = 40000) =>
-  (audioBitrate < 6000 || audioBitrate > 510000 ? 40000 : audioBitrate);
+  audioBitrate < 6000 || audioBitrate > 510000 ? 40000 : audioBitrate;
 
-const sanitizeSubscriberAudioFallback = (audioFallback, audioFallbackEnabled, videoSource) => {
+const sanitizeSubscriberAudioFallback = (
+  audioFallback,
+  audioFallbackEnabled,
+  videoSource
+) => {
   if (typeof audioFallback === 'undefined') {
     if (typeof audioFallbackEnabled !== 'undefined') {
       return !!audioFallbackEnabled;
@@ -60,8 +66,8 @@ const sanitizePublisherAudioFallback = (audioFallback, videoSource) => {
   return !(videoSource === 'screen');
 };
 
-const sanitizeVideoContentHint = (sanitizeVideoContentHint = '') => {
-  switch (sanitizeVideoContentHint) {
+const sanitizeVideoContentHint = (videoContentHint = '') => {
+  switch (videoContentHint) {
     case 'motion':
       return 'motion';
     case 'detail':
@@ -92,7 +98,7 @@ const sanitizeProperties = (properties) => {
       videoContentHint: '',
       videoSource: 'camera',
       scalableScreenshare: false,
-  };
+    };
   }
 
   if (typeof properties.audioFallbackEnabled !== 'undefined') {
@@ -112,15 +118,17 @@ const sanitizeProperties = (properties) => {
     cameraPosition: sanitizeCameraPosition(properties.cameraPosition),
     publisherAudioFallback: sanitizePublisherAudioFallback(
       properties.audioFallback,
-      properties.videoSource,
+      properties.videoSource
     ),
     subscriberAudioFallback: sanitizeSubscriberAudioFallback(
       properties.audioFallback,
       properties.audioFallbackEnabled,
-      properties.videoSource,
+      properties.videoSource
     ),
     audioBitrate: sanitizeAudioBitrate(properties.audioBitrate),
-    enableDtx: sanitizeBooleanProperty(properties.enableDtx ? properties.enableDtx : false),
+    enableDtx: sanitizeBooleanProperty(
+      properties.enableDtx ? properties.enableDtx : false
+    ),
     frameRate: sanitizeFrameRate(properties.frameRate),
     resolution: sanitizeResolution(properties.resolution),
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
@@ -166,7 +174,4 @@ const sanitizePublisherEvents = (publisherId, events) => {
   return reassignEvents('publisher', customEvents, events, publisherId);
 };
 
-export {
-  sanitizeProperties,
-  sanitizePublisherEvents,
-};
+export { sanitizeProperties, sanitizePublisherEvents };

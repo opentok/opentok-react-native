@@ -29,7 +29,7 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.flex1}>
       <Text style={styles.text}>
         SubscribeToVideo: {subscribeToVideo.toString()}
       </Text>
@@ -107,6 +107,7 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  flex1: { flex: 1 },
   text: {
     margin: 10,
     fontSize: 20,

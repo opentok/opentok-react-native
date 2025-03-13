@@ -57,7 +57,7 @@ export default class OTSubscriberView extends React.Component {
 OTSubscriberView.propTypes = {
   sessionId: PropTypes.string.isRequired,
   streamId: PropTypes.string.isRequired,
-  eventHandlers: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  eventHandlers: PropTypes.object,
   subscribeToAudio: PropTypes.bool,
   subscribeToVideo: PropTypes.bool,
   style: ViewPropTypes.style,

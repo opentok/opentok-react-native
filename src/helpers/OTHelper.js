@@ -9,11 +9,16 @@ const reassignEvents = (type, customEvents, events, eventKey) => {
   const platform = Platform.OS;
 
   each(events, (eventHandler, eventType) => {
-    if (customEvents[platform][eventType] !== undefined && eventKey !== undefined) {
-      newEvents[`${eventKey}:${preface}${customEvents[platform][eventType]}`] = eventHandler;
+    if (
+      customEvents[platform][eventType] !== undefined &&
+      eventKey !== undefined
+    ) {
+      newEvents[`${eventKey}:${preface}${customEvents[platform][eventType]}`] =
+        eventHandler;
     } else if (customEvents[platform][eventType] !== undefined) {
-      newEvents[`${preface}${customEvents[platform][eventType]}`] = eventHandler;
-    } else if (events['otrnError']) {
+      newEvents[`${preface}${customEvents[platform][eventType]}`] =
+        eventHandler;
+    } else if (events.otrnError) {
       // ignore otrnError event because it's for the js layer
     } else {
       handleError(`${eventType} is not a supported event`);
@@ -22,24 +27,28 @@ const reassignEvents = (type, customEvents, events, eventKey) => {
 
   // Set a default handler
   each(customEvents[platform], (event) => {
-    if (eventKey !== undefined && !newEvents[`${eventKey}:${preface}${event}`]) {
-      newEvents[`${eventKey}:${preface}${event}`] = () => { };
+    if (
+      eventKey !== undefined &&
+      !newEvents[`${eventKey}:${preface}${event}`]
+    ) {
+      newEvents[`${eventKey}:${preface}${event}`] = () => {};
     }
   });
 
   return newEvents;
 };
 
-const sanitizeBooleanProperty = property => (property || property === undefined ? true : property);
+const sanitizeBooleanProperty = (property) =>
+  property || property === undefined ? true : property;
 
 const getOtrnErrorEventHandler = (events) => {
-  let otrnEventHandler = event => {
+  let otrnEventHandler = (event) => {
     handleError(event);
-  }
+  };
   if (typeof events !== 'object') {
     return otrnEventHandler;
-  } else if (events['otrnError']) {
-    otrnEventHandler = events['otrnError'];
+  } else if (events.otrnError) {
+    otrnEventHandler = events.otrnError;
   }
   return otrnEventHandler;
 };

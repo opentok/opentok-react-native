@@ -1,5 +1,5 @@
-import type {HostComponent, ViewProps} from 'react-native';
-import type {BubblingEventHandler} from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps } from 'react-native';
+import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 type StreamEvent = {
@@ -16,16 +16,16 @@ type RTCStatsReportEvent = {
 };
 
 export interface NativeProps extends ViewProps {
-    sessionId: string;
-    streamId: string;
-    subscribeToAudio?: boolean;
-    subscribeToVideo?: boolean;
-    onSubscriberConnected?: BubblingEventHandler<StreamEvent> | null;
-    onStreamDestroyed?: BubblingEventHandler<StreamEvent> | null;
-    onSubscriberError?: BubblingEventHandler<StreamErrorEvent> | null;
-    onRtcStatsReport?: BubblingEventHandler<RTCStatsReportEvent> | null;
+  sessionId: string;
+  streamId: string;
+  subscribeToAudio?: boolean;
+  subscribeToVideo?: boolean;
+  onSubscriberConnected?: BubblingEventHandler<StreamEvent> | null;
+  onStreamDestroyed?: BubblingEventHandler<StreamEvent> | null;
+  onSubscriberError?: BubblingEventHandler<StreamErrorEvent> | null;
+  onRtcStatsReport?: BubblingEventHandler<RTCStatsReportEvent> | null;
 }
 
 export default codegenNativeComponent<NativeProps>(
-  'OTSubscriberViewNative',
+  'OTSubscriberViewNative'
 ) as HostComponent<NativeProps>;
