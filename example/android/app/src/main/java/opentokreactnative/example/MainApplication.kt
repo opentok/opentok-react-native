@@ -12,6 +12,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import com.opentokreactnative.OTSubscriberViewNativePackage
+import com.opentokreactnative.OTPublisherViewNativePackage
 import com.opentokreactnative.OpentokReactNativePackage;
 
 class MainApplication : Application(), ReactApplication {
@@ -20,6 +21,7 @@ class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
+              add(OTPublisherViewNativePackage())
               add(OTSubscriberViewNativePackage())
               add(OpentokReactNativePackage())
             }

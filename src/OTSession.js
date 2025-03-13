@@ -3,12 +3,15 @@ import { View } from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
+import { dispatchEvent, setIsConnected } from './helpers/OTSessionHelper';
 
 export default class OTSession extends Component {
   eventHandlers = {};
   async initSession(apiKey, sessionId, token) {
-    OT.onSessionConnected((event: SessionConnectEvent) => {
+    OT.onSessionConnected((event) => {
       this.eventHandlers.sessionConnected(event);
+      setIsConnected(true);
+      dispatchEvent('sessionConnected', event);
       if (Object.keys(this.props.signal).length > 0) {
         this.signal(this.props.signal);
       }
