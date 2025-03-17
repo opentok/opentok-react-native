@@ -1,3 +1,9 @@
+# 2.29.1 (March 2025)
+
+- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.29.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+
+- [Update]: For Android, this version requires the `ACCESS_NETWORK_STATE` permission, and on Android API level 35+ it also requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission. You do not need to add these to your app manifest. The OpenTok Android SDK adds them automatically. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
+
 # 2.29.0 (February 2025)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.29.0. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
