@@ -24,6 +24,9 @@ class OTPublisherViewNative: FrameLayout, PublisherListener {
   private var publisherId: String?= ""
   private var publishAudio = true
   private var publishVideo = true
+  private var audioBitRate = 40000
+  private var subscriberAudioFallback = true
+  private var publisherAudioFallback = true
   private var publisher: Publisher? = null
   private var sharedState = OTRN.getSharedState();
 
@@ -78,6 +81,58 @@ class OTPublisherViewNative: FrameLayout, PublisherListener {
     publisher?.setPublishVideo(value)
   }
 
+  public fun setAudioBitrate(value: Int) {
+    audioBitRate = value
+  }
+
+  public fun setPublisherAudioFallback(value: Boolean) {
+    publisherAudioFallback = value
+  }
+
+  public fun setSubscriberAudioFallback(value: Boolean) {
+    subscriberAudioFallback = value
+  }
+
+  public fun setCameraPosition(value: String?) {
+    // TODO
+  }
+
+  public fun setAudioTrack(value: Boolean) {
+    // TODO
+  }
+
+  public fun setVideoTrack(value: Boolean) {
+    // TODO
+  }
+
+  public fun setVideoSource(value: String?) {
+    // TODO
+  }
+
+  public fun setVideoContentHint(value: String?) {
+    // TODO
+  }
+
+  public fun setEnableDtx(value: Boolean) {
+    // TODO
+  }
+
+  public fun setFrameRate(value: Int) {
+    // TODO
+  }
+
+  public fun setName(value: String?) {
+    // TODO
+  }
+
+  public fun setResolution(value: String?) {
+    // TODO
+  }
+
+  public fun setScalableScreenshare(value: Boolean) {
+    // TODO
+  }
+
   fun publishStream(session: Session) {
     publisher = Publisher.Builder(context).build()
     publisher?.setStyle(
@@ -86,8 +141,8 @@ class OTPublisherViewNative: FrameLayout, PublisherListener {
     )
     publisher?.setPublisherListener(this)
     // publisher?.setRtcStatsReportListener(this)
-    publisher?.setPublishAudio(true)
-    publisher?.setPublishVideo(true)
+    publisher?.setPublishAudio(publishAudio)
+    publisher?.setPublishVideo(publishVideo)
 
     sharedState.getPublishers().put(publisherId?: return, publisher?: return);
     if (publisher?.view != null) {

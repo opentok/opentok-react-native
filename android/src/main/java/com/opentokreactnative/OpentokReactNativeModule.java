@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
@@ -83,7 +84,6 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     }
   }
 
-  /*
   @Override
   public void getPublisherRtcStatsReport(String publisherId) {
     ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
@@ -92,7 +92,16 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
       publisher.getRtcStatsReport();
     }
   }
-  */
+
+  @Override
+  public void setAudioTransformers(String publisherId, ReadableArray audioTransformers) {
+    // TODO
+  }
+
+  @Override
+  public void setVideoTransformers(String publisherId, ReadableArray videoTransformers) {
+    // TODO
+  }
 
   @Override
   public void onConnected(Session session) {

@@ -1,11 +1,7 @@
 import React, { useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import {
-  OTSession,
-  OTSubscriberView,
-  OTPublisherView,
-} from 'opentok-react-native';
+import { OTSession, OTSubscriberView, OTPublisher } from 'opentok-react-native';
 
 function App(): React.JSX.Element {
   const apiKey = '';
@@ -21,6 +17,7 @@ function App(): React.JSX.Element {
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
   };
+  const logAllEvents = false;
 
   React.useEffect(() => {
     setInterval(() => {
@@ -63,12 +60,42 @@ function App(): React.JSX.Element {
         style={styles.session}
       >
         {publishStream ? (
-          <OTPublisherView
+          <OTPublisher
             sessionId={sessionId}
             key="publisher"
+            properties={{
+              publishVideo: subscribeToVideo,
+            }}
             eventHandlers={{
-              error: (event) => console.log('pub error', event),
-              streamCreated: (event) => console.log('pub streamCreated', event),
+              error: (event: any) => console.log('pub error', event),
+              streamCreated: (event: any) =>
+                console.log('pub streamCreated', event),
+              streamDestroyed: (event: any) =>
+                console.log('pub streamDestroyed', event),
+              audioLevel: (event: any) => {
+                logAllEvents && console.log('pub audioLevel', event);
+              },
+              audioNetworkStats: (event: any) => {
+                logAllEvents && console.log('pub audioNetworkStats', event);
+              },
+              rtcStatsReport: (event: any) => {
+                console.log('pub rtcStatsReport', event);
+              },
+              videoDisabled: (event: any) => {
+                console.log('pub videoDisabled', event);
+              },
+              videoDisableWarning: (event: any) => {
+                console.log('pub videoDisableWarning', event);
+              },
+              videoDisableWarningLifted: (event: any) => {
+                console.log('pub videoDisableWarningLifted', event);
+              },
+              videoEnabled: (event: any) => {
+                console.log('pub videoEnabled', event);
+              },
+              videoNetworkStats: (event: any) => {
+                logAllEvents && console.log('pub videoNetworkStats', event);
+              },
             }}
             style={styles.videoview}
           />

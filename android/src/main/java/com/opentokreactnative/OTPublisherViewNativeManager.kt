@@ -40,6 +40,71 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) : SimpleVie
     view.setPublishVideo(value)
   }
 
+  @ReactProp(name = "audioBitrate")
+  override public fun setAudioBitrate(view: OTPublisherViewNative, value: Int) {
+    view.setAudioBitrate(value)
+  }
+
+  @ReactProp(name = "publisherAudioFallback")
+  override public fun setPublisherAudioFallback(view: OTPublisherViewNative, value: Boolean) {
+    view.setPublisherAudioFallback(value)
+  }
+
+  @ReactProp(name = "subscriberAudioFallback")
+  override public fun setSubscriberAudioFallback(view: OTPublisherViewNative, value: Boolean) {
+    view.setSubscriberAudioFallback(value)
+  }
+
+  @ReactProp(name = "audioTrack")
+  override public fun setAudioTrack(view: OTPublisherViewNative, value: Boolean) {
+    view.setAudioTrack(value)
+  }
+
+  @ReactProp(name = "videoTrack")
+  override public fun setVideoTrack(view: OTPublisherViewNative, value: Boolean) {
+    view.setVideoTrack(value)
+  }
+
+  @ReactProp(name = "videoSource")
+  override public fun setVideoSource(view: OTPublisherViewNative, value: String?) {
+    view.setVideoSource(value)
+  }
+
+  @ReactProp(name = "videoContentHint")
+  override public fun setVideoContentHint(view: OTPublisherViewNative, value: String?) {
+    view.setVideoContentHint(value)
+  }
+
+  @ReactProp(name = "cameraPosition")
+  override public fun setCameraPosition(view: OTPublisherViewNative, value: String?) {
+    view.setCameraPosition(value)
+  }
+
+  @ReactProp(name = "enableDtx")
+  override public fun setEnableDtx(view: OTPublisherViewNative, value: Boolean) {
+    view.setEnableDtx(value)
+  }
+
+  @ReactProp(name = "frameRate")
+  override public fun setFrameRate(view: OTPublisherViewNative, value: Int) {
+    view.setFrameRate(value)
+  }
+
+  @ReactProp(name = "name")
+  override public fun setName(view: OTPublisherViewNative, value: String?) {
+    view.setName(value)
+  }
+
+  @ReactProp(name = "resolution")
+  override public fun setResolution(view: OTPublisherViewNative, value: String?) {
+    view.setResolution(value)
+  }
+
+  @ReactProp(name = "scalableScreenshare")
+  override public fun setScalableScreenshare(view: OTPublisherViewNative, value: Boolean) {
+    view.setScalableScreenshare(value)
+  }
+
   companion object {
     const val REACT_CLASS = "OTPublisherViewNative"
   }

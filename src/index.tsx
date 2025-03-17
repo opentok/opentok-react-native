@@ -1,5 +1,5 @@
-import OTPublisherView from './OTPublisherView';
+import OTPublisher from './OTPublisher';
 import OTSession from './OTSession';
 import OTSubscriberView from './OTSubscriberView';
 
-export { OTSession, OTSubscriberView, OTPublisherView };
+export { OTSession, OTSubscriberView, OTPublisher };

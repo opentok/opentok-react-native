@@ -120,6 +120,21 @@ export interface Spec extends TurboModule {
   connect(sessionId: string, token: string): Promise<void>;
   disconnect(sessionId: string): Promise<void>;
   getSubscriberRtcStatsReport(): void;
+  getPublisherRtcStatsReport(publisherId: string): void;
+  setAudioTransformers(
+    publisherId: string,
+    transformers: Array<{
+      name: string;
+      properties?: string;
+    }>
+  ): void;
+  setVideoTransformers(
+    publisherId: string,
+    transformers: Array<{
+      name: string;
+      properties?: string;
+    }>
+  ): void;
   publish(publisherId: string): void;
   sendSignal(sessionId: string, type: string, data: string): void;
 }
