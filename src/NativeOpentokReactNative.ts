@@ -16,9 +16,9 @@ export type Connection = {
 
 export type ConnectionEvent = {
   sessionId: string;
-  creationTime: string;
-  data: string;
   connectionId: string;
+  creationTime?: string;
+  data?: string;
 };
 
 export type EmptyEvent = {};
@@ -78,10 +78,24 @@ export type StreamEvent = {
 };
 
 export type StreamPropertyChangedEvent = {
-  newValue: boolean;
-  oldValue: boolean;
-  changedProperty: string; // 'hasAudio' | 'hasCaptions' | 'hasVideo' | 'videoDimensions';
-  stream: Stream;
+  oldValue: {
+    width?: number;
+    height?: number;
+  } | boolean;
+  newValue: {
+    width?: number;
+    height?: number;
+  } | boolean;
+  stream: {
+    hasAudio: boolean;
+    hasVideo: boolean;
+    hasCaptions: boolean;
+    videoDimensions: {
+      width: number;
+      height: number;
+    };
+  };
+  changedProperty: string;
 };
 
 export type SignalEvent = {
@@ -105,7 +119,7 @@ export interface Spec extends TurboModule {
   readonly onMuteForced: EventEmitter<MuteForcedEvent>;
   readonly onSessionConnected: EventEmitter<SessionConnectEvent>;
   readonly onSessionDisconnected: EventEmitter<SessionDisconnectEvent>;
-  readonly onSessionReconnecting: EventEmitter<EmptyEvent>;
+  readonly onSessionDidBeginReconnecting: EventEmitter<EmptyEvent>;
   readonly onSessionReconnected: EventEmitter<EmptyEvent>;
   readonly onStreamCreated: EventEmitter<StreamEvent>;
   readonly onStreamDestroyed: EventEmitter<StreamEvent>;
@@ -137,6 +151,11 @@ export interface Spec extends TurboModule {
   ): void;
   publish(publisherId: string): void;
   sendSignal(sessionId: string, type: string, data: string): void;
+  setEncryptionSecret(sessionId: string, secret: string): Promise<void>;
+  reportIssue(sessionId: string): Promise<string>;
+  forceMuteAll(sessionId: string, excludedStreamIds: string[]): Promise<boolean>;
+  forceMuteStream(sessionId: string, streamId: string): Promise<boolean>;
+  disableForceMute(sessionId: string): Promise<boolean>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('OpentokReactNative');

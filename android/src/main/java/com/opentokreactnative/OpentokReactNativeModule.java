@@ -85,6 +85,21 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
   }
 
   @Override
+  public void disableForceMute(String sessionId, Promise promise) {
+    // TODO
+  }
+
+  @Override
+  public void forceMuteAll(String sesssionId, ReadableArray excludedStreamIds, Promise promise) {
+    // TODO
+  }
+
+  @Override
+  public void forceMuteStream(String sesssionId, String streamId, Promise promise) {
+    // TODO
+  }
+
+  @Override
   public void getPublisherRtcStatsReport(String publisherId) {
     ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
     Publisher publisher = publishers.get(publisherId);
@@ -100,6 +115,16 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
   @Override
   public void setVideoTransformers(String publisherId, ReadableArray videoTransformers) {
+    // TODO
+  }
+
+  @Override
+  public void reportIssue(String sessionId, Promise promise) {
+    // TODO
+  }
+
+  @Override
+  public void setEncryptionSecret(String sessionId, String secret, Promise promise) {
     // TODO
   }
 

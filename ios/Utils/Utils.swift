@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OpenTok
 
 class Utils {
     static func sanitizeCameraResolution(_ resolution: Any) -> OTCameraCaptureResolution {
