@@ -372,7 +372,7 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     }
     public func sessionDidBeginReconnecting(_ session: OTSession) {
         let sessionInfo = EventUtils.prepareJSSessionEventData(session)
-        impl?.ot?.emit(onSessionDidBeginReconnecting: sessionInfo)
+        impl?.ot?.emit(onSessionReconnecting: sessionInfo)
     }
     
     public func sessionDidReconnect(_ session: OTSession) {

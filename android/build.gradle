@@ -81,12 +81,12 @@ android {
 
   sourceSets {
     main {
-      if (isNewArchitectureEnabled()) {
+      //if (isNewArchitectureEnabled()) {
           java.srcDirs += [
             "generated/java",
             "generated/jni"
           ]
-      }
+      //}
     }
   }
 }

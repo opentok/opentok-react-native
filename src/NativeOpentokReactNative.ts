@@ -16,9 +16,7 @@ export type Connection = {
 
 export type ConnectionEvent = {
   sessionId: string;
-  connectionId: string;
-  creationTime?: string;
-  data?: string;
+  connection: Connection;
 };
 
 export type EmptyEvent = {};
@@ -78,14 +76,18 @@ export type StreamEvent = {
 };
 
 export type StreamPropertyChangedEvent = {
-  oldValue: {
-    width?: number;
-    height?: number;
-  } | boolean;
-  newValue: {
-    width?: number;
-    height?: number;
-  } | boolean;
+  oldValue:
+    | {
+        width?: number;
+        height?: number;
+      }
+    | boolean;
+  newValue:
+    | {
+        width?: number;
+        height?: number;
+      }
+    | boolean;
   stream: {
     hasAudio: boolean;
     hasVideo: boolean;
@@ -119,7 +121,7 @@ export interface Spec extends TurboModule {
   readonly onMuteForced: EventEmitter<MuteForcedEvent>;
   readonly onSessionConnected: EventEmitter<SessionConnectEvent>;
   readonly onSessionDisconnected: EventEmitter<SessionDisconnectEvent>;
-  readonly onSessionDidBeginReconnecting: EventEmitter<EmptyEvent>;
+  readonly onSessionReconnecting: EventEmitter<EmptyEvent>;
   readonly onSessionReconnected: EventEmitter<EmptyEvent>;
   readonly onStreamCreated: EventEmitter<StreamEvent>;
   readonly onStreamDestroyed: EventEmitter<StreamEvent>;
@@ -153,7 +155,10 @@ export interface Spec extends TurboModule {
   sendSignal(sessionId: string, type: string, data: string): void;
   setEncryptionSecret(sessionId: string, secret: string): Promise<void>;
   reportIssue(sessionId: string): Promise<string>;
-  forceMuteAll(sessionId: string, excludedStreamIds: string[]): Promise<boolean>;
+  forceMuteAll(
+    sessionId: string,
+    excludedStreamIds: string[]
+  ): Promise<boolean>;
   forceMuteStream(sessionId: string, streamId: string): Promise<boolean>;
   disableForceMute(sessionId: string): Promise<boolean>;
 }

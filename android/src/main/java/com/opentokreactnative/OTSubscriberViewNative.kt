@@ -18,7 +18,13 @@ import com.opentok.android.SubscriberKit
 import com.opentok.android.SubscriberKit.SubscriberListener
 import com.opentok.android.SubscriberKit.SubscriberRtcStatsReportListener
 
-class OTSubscriberViewNative: FrameLayout, SubscriberListener, SubscriberRtcStatsReportListener {
+class OTSubscriberViewNative: FrameLayout, SubscriberListener,
+  SubscriberRtcStatsReportListener, SubscriberKit.AudioLevelListener,
+  SubscriberKit.CaptionsListener,
+  SubscriberKit.AudioStatsListener,
+  SubscriberKit.VideoStatsListener,
+  SubscriberKit.VideoListener,
+  SubscriberKit.StreamListener {
   private var session: Session? = null
   private var stream: Stream? = null
   private var sessionId: String?= ""
@@ -89,6 +95,13 @@ class OTSubscriberViewNative: FrameLayout, SubscriberListener, SubscriberRtcStat
     )
     subscriber?.setSubscriberListener(this)
     subscriber?.setRtcStatsReportListener(this)
+    /*
+    subscriber?.setCaptionsListener(this)
+    subscriber?.setAudioStatsListener(this)
+    subscriber?.setVideoStatsListener(this)
+    subscriber?.setVideoListener(this)
+    subscriber?.setStreamListener(this)
+    */
     subscriber?.setSubscribeToAudio(subscribeToAudio)
     subscriber?.setSubscribeToVideo(subscribeToVideo)
     // FrameLayout mubscriberViewContainer = FrameLayout(context);
@@ -145,6 +158,46 @@ class OTSubscriberViewNative: FrameLayout, SubscriberListener, SubscriberRtcStat
           putString("jsonArrayOfReports", jsonArrayOfReports)
         }
       emitOpenTokEvent("onRtcStatsReport", payload)
+  }
+
+  override fun onAudioLevelUpdated(p0: SubscriberKit?, p1: Float) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onCaptionText(p0: SubscriberKit?, p1: String?, p2: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onAudioStats(p0: SubscriberKit?, p1: SubscriberKit.SubscriberAudioStats?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoStats(p0: SubscriberKit?, p1: SubscriberKit.SubscriberVideoStats?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoDataReceived(p0: SubscriberKit?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoDisabled(p0: SubscriberKit?, p1: String?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoEnabled(p0: SubscriberKit?, p1: String?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoDisableWarning(p0: SubscriberKit?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onVideoDisableWarningLifted(p0: SubscriberKit?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onReconnected(p0: SubscriberKit?) {
+    TODO("Not yet implemented")
   }
 
   inner class OpenTokEvent(

@@ -7,9 +7,10 @@ import { dispatchEvent, setIsConnected } from './helpers/OTSessionHelper';
 
 export default class OTSession extends Component {
   eventHandlers = {};
+
   async initSession(apiKey, sessionId, token) {
     OT.onSessionConnected((event) => {
-      this.eventHandlers.sessionConnected(event);
+      this.eventHandlers?.sessionConnected(event);
       setIsConnected(true);
       dispatchEvent('sessionConnected', event);
       if (Object.keys(this.props.signal).length > 0) {
@@ -18,20 +19,42 @@ export default class OTSession extends Component {
     });
     OT.initSession(apiKey, sessionId, {});
     OT.onStreamCreated((event) => {
-      this.eventHandlers.streamCreated(event);
+      this.eventHandlers?.streamCreated?.(event);
     });
-    /* TO DO:
     OT.onStreamDestroyed((event) => {
-      this.eventHandlers.onStreamDestroyed(event);
+      this.eventHandlers?.onStreamDestroyed?.(event);
     });
-    */
     OT.onSignalReceived((event) => {
-      this.eventHandlers.signal(event);
+      this.eventHandlers?.signal?.(event);
+    });
+    OT.onSessionError((event) => {
+      this.eventHandlers?.error?.(event);
+    });
+    OT.onConnectionCreated((event) => {
+      this.eventHandlers?.connectionCreated?.(event);
+    });
+    OT.onConnectionDestroyed((event) => {
+      this.eventHandlers?.connectionDestroyed?.(event);
+    });
+    OT.onArchiveStarted((event) => {
+      this.eventHandlers?.archiveStarted?.(event);
+    });
+    OT.onArchiveStopped((event) => {
+      this.eventHandlers?.archiveStopped?.(event);
+    });
+    OT.onMuteForced((event) => {
+      this.eventHandlers?.muteForced?.(event);
+    });
+    OT.onSessionReconnecting((event) => {
+      this.eventHandlers?.sessionReconnecting?.(event);
+    });
+    OT.onSessionReconnected((event) => {
+      this.eventHandlers?.sessionReconnected?.(event);
+    });
+    OT.onStreamPropertyChanged((event) => {
+      this.eventHandlers?.streamPropertyChanged?.(event);
     });
 
-    OT.onSessionError((event) => {
-      this.eventHandlers.error(event);
-    });
     OT.connect(sessionId, token);
   }
 

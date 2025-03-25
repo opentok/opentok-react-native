@@ -9,7 +9,7 @@
 - (void)emitOnConnectionDestroyed:(NSDictionary *)value;
 - (void)emitOnSessionConnected:(NSDictionary *)value;
 - (void)emitOnSessionDisconnected:(NSDictionary *)value;
-- (void)emitOnSessionDidBeginReconnecting:(NSDictionary *)value;
+- (void)emitOnSessionReconnecting:(NSDictionary *)value;
 - (void)emitOnSessionDidReconnect:(NSDictionary *)value;
 - (void)emitOnStreamCreated:(NSDictionary *)value;
 - (void)emitOnStreamDestroyed:(NSDictionary *)value;

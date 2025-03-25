@@ -52,6 +52,15 @@ function App(): React.JSX.Element {
             console.log('streamDestroyed', event),
           signal: (event: any) => console.log('signal event', event),
           error: (event: any) => console.log('error event', event),
+          connectionCreated: (event: any) =>
+            console.log('connectionCreated event', event),
+          archiveStarted: (event: any) =>
+            console.log('archiveStarted event', event),
+          archiveStopped: (event: any) =>
+            console.log('archiveStopped event', event),
+          muteForced: (event: any) => console.log('muteForced event', event),
+          streamPropertyChanged: (event: any) =>
+            console.log('streamPropertyChanged event', event),
         }}
         signal={{
           type: 'greeting2',
