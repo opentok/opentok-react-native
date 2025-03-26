@@ -1,5 +1,9 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import type { BubblingEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import type {
+  BubblingEventHandler,
+  Int32,
+  Float,
+} from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 export type StreamEvent = {
@@ -14,12 +18,7 @@ export type ErrorEvent = {
 export type EmptyEvent = {};
 
 export type PublisherVideoNetworkStats = {
-  connectionId?: string;
-  subscriberId?: string;
-  videoPacketsLost: Int32;
-  videoBytesSent: Int32;
-  videoPacketsSent: Int32;
-  timestamp: Double;
+  jsonStats: string; // JSON string containing all video stats
 };
 
 export type PublisherVideoNetworkStatsEvent = PublisherVideoNetworkStats[];
@@ -29,12 +28,7 @@ export type AudioLevelEvent = {
 };
 
 export type AudioNetworkStatsEvent = {
-  connectionId?: string;
-  subscriberId?: string;
-  audioPacketsLost: Double;
-  audioBytesSent: Double;
-  audioPacketsSent: Double;
-  timeStamp: Double;
+  jsonStats: string; // JSON string containing all audio stats
 };
 
 export type PublisherRTCStatsReport = {
@@ -49,6 +43,7 @@ export interface NativeProps extends ViewProps {
   publisherId: string;
   publishAudio?: boolean;
   publishVideo?: boolean;
+  publishCaptions?: boolean;
   audioBitrate?: Int32;
   publisherAudioFallback?: boolean;
   subscriberAudioFallback?: boolean;
@@ -59,9 +54,11 @@ export interface NativeProps extends ViewProps {
   name?: string;
   resolution?: string;
   scalableScreenshare?: boolean;
+  audioFallbackEnabled?: boolean;
   videoTrack?: boolean;
   videoSource?: string;
   videoContentHint?: string;
+
   onError?: BubblingEventHandler<ErrorEvent> | null;
   onStreamCreated?: BubblingEventHandler<StreamEvent> | null;
   onStreamDestroyed?: BubblingEventHandler<StreamEvent> | null;

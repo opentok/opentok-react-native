@@ -35,6 +35,11 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) : SimpleVie
     view.setPublishAudio(value)
   }
 
+  @ReactProp(name = "publishCaptions")
+  override public fun setPublishCaptions(view: OTPublisherViewNative, value: Boolean) {
+    view.setPublishCaptions(value)
+  }
+
   @ReactProp(name = "publishVideo")
   override public fun setPublishVideo(view: OTPublisherViewNative, value: Boolean) {
     view.setPublishVideo(value)
@@ -43,6 +48,11 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) : SimpleVie
   @ReactProp(name = "audioBitrate")
   override public fun setAudioBitrate(view: OTPublisherViewNative, value: Int) {
     view.setAudioBitrate(value)
+  }
+
+  @ReactProp(name = "audioFallbackEnabled")
+  override public fun setAudioFallbackEnabled(view: OTPublisherViewNative, value: Boolean) {
+    view.setAudioFallbackEnabled(value)
   }
 
   @ReactProp(name = "publisherAudioFallback")

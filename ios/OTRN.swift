@@ -12,6 +12,7 @@ import React
 
 class OTRN : NSObject {
   static let sharedState = OTRN()
+  var opentokModule: OpentokReactNative?
   var sessions = [String: OTSession]()
   var subscriberStreams = [String: OTStream]()
   var subscribers = [String: OTSubscriber]()

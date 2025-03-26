@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <OpentokReactNative/RNOpentokReactNativeSpec.h>
 #import <OpentokReactNative-Swift.h> 
-#import <OpenTok/OpenTok.h>
+
 
 
 typedef JS::NativeOpentokReactNative::SessionOptions RN_SessionOptions;
@@ -10,7 +10,6 @@ typedef JS::NativeOpentokReactNative::SessionOptions RN_SessionOptions;
 @end
 
 @implementation OpentokReactNative {
-    OTSession *_session;
     OpentokReactNativeImpl *impl;
 }
 
@@ -115,9 +114,31 @@ RCT_EXPORT_MODULE()
     [impl disableForceMute:sessionId resolve:resolve reject:reject];
 }
 
-- (void)publish:(nonnull NSString *)publisherId { 
+- (void)getPublisherRtcStatsReport:(nonnull NSString *)publisherId { 
     
 }
+
+
+- (void)publish:(nonnull NSString *)publisherId {
+    [impl publish:publisherId];
+}
+
+
+- (void)setAudioTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
+    
+}
+
+
+- (void)setVideoTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
+    
+}
+
+
+//- (void)publish:(nonnull NSString *)publisherId
+//        resolve:(nonnull RCTPromiseResolveBlock)resolve
+//         reject:(nonnull RCTPromiseRejectBlock)reject {
+//    [impl publish:publisherId resolve:resolve reject:reject];
+//}
 
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

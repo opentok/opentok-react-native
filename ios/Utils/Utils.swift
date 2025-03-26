@@ -133,4 +133,109 @@ class Utils {
                 return OTVideoContentHint.none
         }
     }
+    
+    static func setStreamObservers(stream: OTStream, isPublisherStream: Bool) {
+        let streamId = stream.streamId
+        
+        // Video dimensions observer
+        let dimensionsObserver = stream.observe(\.videoDimensions, options: [.old, .new]) { stream, change in
+            guard let oldDimensions = change.oldValue,
+                  let newDimensions = change.newValue,
+                  oldDimensions != newDimensions
+            else { return }
+            
+            let oldValue = [
+                "width": oldDimensions.width,
+                "height": oldDimensions.height,
+            ]
+            let newValue = [
+                "width": newDimensions.width,
+                "height": newDimensions.height,
+            ]
+            
+            checkAndEmitStreamPropertyChangeEvent(
+                streamId,
+                changedProperty: "videoDimensions",
+                oldValue: oldValue,
+                newValue: newValue,
+                isPublisherStream: isPublisherStream
+            )
+        }
+        
+        // Audio observer
+        let audioObserver = stream.observe(\.hasAudio, options: [.old, .new]) { stream, change in
+            guard let oldValue = change.oldValue,
+                  let newValue = change.newValue,
+                  oldValue != newValue
+            else { return }
+            
+            checkAndEmitStreamPropertyChangeEvent(
+                streamId,
+                changedProperty: "hasAudio",
+                oldValue: oldValue,
+                newValue: newValue,
+                isPublisherStream: isPublisherStream
+            )
+        }
+        
+        // Video observer
+        let videoObserver = stream.observe(\.hasVideo, options: [.old, .new]) { stream, change in
+            guard let oldValue = change.oldValue,
+                  let newValue = change.newValue,
+                  oldValue != newValue
+            else { return }
+            
+            checkAndEmitStreamPropertyChangeEvent(
+                streamId,
+                changedProperty: "hasVideo",
+                oldValue: oldValue,
+                newValue: newValue,
+                isPublisherStream: isPublisherStream
+            )
+        }
+        
+        // Captions observer
+        let captionsObserver = stream.observe(\.hasCaptions, options: [.old, .new]) { stream, change in
+            guard let oldValue = change.oldValue,
+                  let newValue = change.newValue,
+                  oldValue != newValue
+            else { return }
+            
+            checkAndEmitStreamPropertyChangeEvent(
+                streamId,
+                changedProperty: "hasCaptions",
+                oldValue: oldValue,
+                newValue: newValue,
+                isPublisherStream: isPublisherStream
+            )
+        }
+        
+        // Store all observers
+        OTRN.sharedState.streamObservers.updateValue(
+            [dimensionsObserver, audioObserver, videoObserver, captionsObserver],
+            forKey: streamId
+        )
+    }
+
+    static func checkAndEmitStreamPropertyChangeEvent(
+        _ streamId: String,
+        changedProperty: String,
+        oldValue: Any,
+        newValue: Any,
+        isPublisherStream: Bool
+    ) {
+        guard let stream = isPublisherStream
+            ? OTRN.sharedState.publisherStreams[streamId]
+            : OTRN.sharedState.subscriberStreams[streamId]
+        else { return }
+        
+        let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(stream)
+        let eventData: [String: Any] = EventUtils.prepareStreamPropertyChangedEventData(
+            changedProperty,
+            oldValue: oldValue,
+            newValue: newValue,
+            stream: streamInfo
+        )
+        OTRN.sharedState.opentokModule?.emit(onStreamPropertyChanged: eventData)
+    }
 }
