@@ -43,6 +43,8 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
+example/ios/.xcode.env.local
+example/ios/OpentokReactNativeExample.xcodeproj/project.pbxproj
 
 # Ruby
 example/vendor/
