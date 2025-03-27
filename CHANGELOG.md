@@ -1,3 +1,7 @@
+# 2.30.0-alpha.0 (March 2025)
+
+- [Update]: This version is a pre-release alpha version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Alpha version notes" in the README.md file.
+
 # 2.29.1 (March 2025)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.29.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).

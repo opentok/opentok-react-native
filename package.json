@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "0.1.0",
+  "version": "2.30.0-alpha.0",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
