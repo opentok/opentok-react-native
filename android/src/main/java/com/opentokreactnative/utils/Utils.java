@@ -48,7 +48,7 @@ public final class Utils {
     public static String getPublisherId(PublisherKit publisherKit) {
 
         Map<String, Publisher> publishers = OTRN.sharedState.getPublishers();
-        for (Map.Entry<String, Publisher> entry: publishers.entrySet()) {
+        for (Map.Entry<String, Publisher> entry : publishers.entrySet()) {
             Publisher mPublisher = entry.getValue();
             if (mPublisher.equals(publisherKit)) {
                 return entry.getKey();
@@ -60,7 +60,7 @@ public final class Utils {
     public static String getStreamIdBySubscriber(SubscriberKit subscriberKit) {
 
         Map<String, Subscriber> subscribers = OTRN.sharedState.getSubscribers();
-        for (Map.Entry<String, Subscriber> entry: subscribers.entrySet()) {
+        for (Map.Entry<String, Subscriber> entry : subscribers.entrySet()) {
             Subscriber mSubcriber = entry.getValue();
             if (mSubcriber.equals(subscriberKit)) {
                 return entry.getKey();
@@ -70,7 +70,7 @@ public final class Utils {
     }
 
     public static IncludeServers sanitizeIncludeServer(String value) {
-        IncludeServers includeServers =  IncludeServers.All;
+        IncludeServers includeServers = IncludeServers.All;
         if (value != null && value.equals("custom")) {
             includeServers = IncludeServers.Custom;
         }
@@ -78,10 +78,10 @@ public final class Utils {
     }
 
     public static TransportPolicy sanitizeTransportPolicy(String value) {
-        TransportPolicy transportPolicy =  TransportPolicy.All;
+        TransportPolicy transportPolicy = TransportPolicy.All;
         if (value != null && value.equals("relay")) {
-            transportPolicy =  TransportPolicy.Relay;
-        }  
+            transportPolicy = TransportPolicy.Relay;
+        }
         return transportPolicy;
     }
 
@@ -108,8 +108,8 @@ public final class Utils {
             for (int i = 0; i < transformerList.size(); i++) {
                 String transformerName = transformerList.getMap(i).getString("name");
                 AudioTransformer transformer = publisher.new AudioTransformer(
-                    transformerName,
-                    transformerList.getMap(i).getString("properties")
+                        transformerName,
+                        transformerList.getMap(i).getString("properties")
                 );
                 nativeAudioTransformers.add(transformer);
             }
@@ -123,8 +123,8 @@ public final class Utils {
             for (int i = 0; i < transformerList.size(); i++) {
                 String transformerName = transformerList.getMap(i).getString("name");
                 VideoTransformer transformer = publisher.new VideoTransformer(
-                    transformerName,
-                    transformerList.getMap(i).getString("properties")
+                        transformerName,
+                        transformerList.getMap(i).getString("properties")
                 );
                 nativeVideoTransformers.add(transformer);
             }

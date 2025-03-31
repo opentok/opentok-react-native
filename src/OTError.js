@@ -8,7 +8,4 @@ const handleSignalError = (error) => {
   }
 };
 
-export {
-  handleError,
-  handleSignalError,
-};
+export { handleError, handleSignalError };

@@ -50,10 +50,13 @@ const sanitizeSubscriberEvents = (events) => {
 };
 
 const sanitizeResolution = (resolution) => {
-  if ((typeof resolution !== 'object') || (resolution &&
-    resolution.width === void 0 &&
-    resolution.height === void 0) || 
-    (resolution === null)) {
+  if (
+    typeof resolution !== 'object' ||
+    (resolution &&
+      resolution.width === void 0 && // TODO use typeof !== 'number'
+      resolution.height === void 0) ||
+    resolution === null
+  ) {
     return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER };
   }
   const videoDimensions = {};
@@ -93,7 +96,8 @@ const sanitizeFrameRate = (frameRate) => {
   }
 };
 
-const sanitizeAudioVolume = audioVolume => (typeof audioVolume === 'number') ? audioVolume : 100;
+const sanitizeAudioVolume = (audioVolume) =>
+  typeof audioVolume === 'number' ? audioVolume : 100;
 
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
@@ -109,7 +113,9 @@ const sanitizeProperties = (properties) => {
   return {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
-    subscribeToCaptions: sanitizeBooleanProperty(properties.subscribeToCaptions),
+    subscribeToCaptions: sanitizeBooleanProperty(
+      properties.subscribeToCaptions
+    ),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
     preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
     audioVolume: sanitizeAudioVolume(properties.audioVolume),
@@ -121,5 +127,5 @@ export {
   sanitizeProperties,
   sanitizeFrameRate,
   sanitizeResolution,
-  sanitizeAudioVolume
+  sanitizeAudioVolume,
 };

@@ -8,6 +8,36 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
+**Important:** This version is an early alpha build of the OpenTok React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Alpha version notes") for important details on using this alpha version.
+
+## Alpha version notes
+
+This alpha version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
+
+This alpha pre-release version is not intended for use in final production apps.
+
+This pre-release alpha version is not available at npm.js. In your app's package.json file, load it into your app from the new-architecture branch of the opentok/opentok-react-native GitHub repo:
+
+```
+    "opentok-react-native": "opentok/opentok-react-native#new-architecture",
+```
+
+We intend to support the same API that was used in previous versions of OpenTok React Native SDK. However this alpha version does not support all API features.
+
+In order to run on Android, you need to register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+
+The following features are unsupported in this alpha version:
+
+* `OTPublisher rtcStatsReport` event
+* Screen-sharing (`OTPublisher.videoSource 'screen'`)
+* Some `OTSubscriber` events
+
+Some event properties are missing.
+
+Some events are not handled correctly, such as when an app is temporarily disconnected from and reconnected to the session. Clients are not properly disconnected and streams are not automatically unpublished when the `OTSession` component is unmounted.
+
+For [custom rendering of subscribers](https://tokbox.com/developer/guides/subscribe-stream/react-native/#custom_rendering), you need to pass the session ID into the `OTSubscriberView` component (as a `sessionId` prop).
+
 ## Prerequisites
 
 1. Install [node.js](https://nodejs.org/)
@@ -63,7 +93,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-3. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
+4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
    pod 'VonageClientSDKVideoTransformers'
@@ -93,7 +123,19 @@ If you try to archive the app and it fails, please do the following:
 
 5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
 
-3. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
+6. In the MainActivity.kt file for you app, register the OpenTok OpentokReactNativePackage, OTPublisherViewNativePackage, and OTSubscriberViewNativePackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function
+
+    ```
+    override fun getPackages(): List<ReactPackage> =
+        PackageList(this).packages.apply {
+            add(OTPublisherViewNativePackage())
+            add(OTSubscriberViewNativePackage())
+            add(OpentokReactNativePackage())
+        }
+        // ...
+    ```
+
+7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
    implementation "com.vonage:client-sdk-video-transformers:2.28.0"

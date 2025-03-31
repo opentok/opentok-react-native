@@ -1,31 +1,113 @@
-apply plugin: 'com.android.library'
+buildscript {
+  ext.getExtOrDefault = {name ->
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['OpentokReactNative_' + name]
+  }
 
-def _ext = rootProject.ext
-def _reactNativeVersion = _ext.has('reactNative') ? _ext.reactNative : '+'
-def _compileSdkVersion = _ext.has('compileSdkVersion') ? _ext.compileSdkVersion : 24
-def _buildToolsVersion = _ext.has('buildToolsVersion') ? _ext.buildToolsVersion : '24.0.3'
-def _minSdkVersion = _ext.has('minSdkVersion') ? _ext.minSdkVersion : 24
-def _targetSdkVersion = _ext.has('targetSdkVersion') ? _ext.targetSdkVersion : 24
+  repositories {
+    google()
+    mavenCentral()
+  }
 
-android {
-    compileSdkVersion _compileSdkVersion
-    buildToolsVersion _buildToolsVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    defaultConfig {
-        minSdkVersion _minSdkVersion
-        targetSdkVersion _targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-    }
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.7.2"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+  }
 }
 
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["OpentokReactNative_" + name]).toInteger()
+}
+
+def supportsNamespace() {
+  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
+  def major = parsed[0].toInteger()
+  def minor = parsed[1].toInteger()
+
+  // Namespace support was added in 7.3.0
+  return (major == 7 && minor >= 3) || major >= 8
+}
+
+android {
+  if (supportsNamespace()) {
+    namespace "com.opentokreactnative"
+
+    sourceSets {
+      main {
+        manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+    }
+  }
+
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
+
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
+  }
+
+  buildFeatures {
+    buildConfig true
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    main {
+      //if (isNewArchitectureEnabled()) {
+          java.srcDirs += [
+            "generated/java",
+            "generated/jni"
+          ]
+      //}
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:${_reactNativeVersion}"  // From node_modules
-    implementation 'com.opentok.android:opentok-android-sdk:2.29.1'
+  implementation "com.facebook.react:react-android:0.78.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'com.opentok.android:opentok-android-sdk:2.28.3'
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "OpentokReactNative"
+    codegenJavaPackageName = "com.opentokreactnative"
+  }
 }
