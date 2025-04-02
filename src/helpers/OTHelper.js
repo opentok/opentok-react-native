@@ -57,14 +57,14 @@ const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
-      otrn_version: require('../../package.json').version,
+      // otrn_version: require('../../package.json').version,
       platform_version: Platform.Version,
     },
     payload_type: 'info',
     action,
     partner_id: apiKey,
     session_id: sessionId,
-    source: require('../../package.json').repository.url,
+    // source: require('../../package.json').repository.url,
   };
   if (connectionId) {
     body.connectionId = connectionId;
