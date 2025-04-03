@@ -3,12 +3,13 @@ package com.opentokreactnative
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableArray
+import com.facebook.react.uimanager.ReactStylesDiffMap
 
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
@@ -31,6 +32,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     private var session: Session? = null
     private var sessionId: String? = ""
     private var publisherId: String? = ""
+    /*
     private var publishAudio = true
     private var publishVideo = true
     private var publishCaptions = false
@@ -38,9 +40,13 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     private var audioFallbackEnabled = true
     private var subscriberAudioFallback = true
     private var publisherAudioFallback = true
+
+     */
     private var publisher: Publisher? = null
     private var sharedState = OTRN.getSharedState();
-    private var TAG = this.javaClass.simpleName
+   // private var name: String? = ""
+    private var TAG: String? = this.javaClass.simpleName
+    private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
         configureComponent(context)
@@ -58,11 +64,40 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         configureComponent(context)
     }
 
+    fun updateProperties(props: ReactStylesDiffMap?) {
+        if (this.props == null) {
+            this.props = props?.toMap()
+            for ((key, value) in this.props?.toMap() ?: emptyMap()) {
+                //Log.d(TAG, "updateProperties: $key $value")
+            }
+            return
+        }
+
+        //var mgr : OTPublisherViewNativeManager = context as OTPublisherViewNativeManager
+
+        for (key in this.props!!.keys) {
+            if (props?.hasKey(key) == true) {
+                val newValue = when (this.props!![key]) {
+                    is Boolean -> props.getBoolean(key, false)
+                    is Int -> props.getInt(key, Int.MIN_VALUE)
+                    is Double -> props.getDouble(key, Double.MIN_VALUE)
+                    is String -> props.getString(key)
+                    else -> props.getDynamic(key)
+                }
+                if (newValue != null) {
+                    var oldValue = this.props!![key]
+                    this.props!![key] = newValue
+                    Log.d(TAG, "updateProperties: $key updated to $newValue from $oldValue")
+                }
+            }
+        }
+    }
+
     override fun onAttachedToWindow() {
         Log.d(TAG, "onAttachedToWindow: ")
-        session = sharedState.getSessions().get(sessionId)
+        //session = sharedState.getSessions().get(sessionId)
         super.onAttachedToWindow()
-        publishStream(session ?: return)
+        publishStream(/*session ?: return*/)
     }
 
     private fun configureComponent(context: Context) {
@@ -75,7 +110,6 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         val surfaceId = UIManagerHelper.getSurfaceId(reactContext)
         val eventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, id)
         val event = OpenTokEvent(surfaceId, id, name, payload)
-
         eventDispatcher?.dispatchEvent(event)
     }
 
@@ -84,39 +118,40 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setPublisherId(str: String?) {
+        Log.d(TAG, "setPublisherId: " + str)
         publisherId = str
     }
 
     public fun setPublishAudio(value: Boolean) {
-        publishAudio = value
+        //publishAudio = value
         publisher?.setPublishAudio(value)
     }
 
     public fun setPublishVideo(value: Boolean) {
-        publishVideo = value
+        //publishVideo = value
         publisher?.setPublishVideo(value)
     }
 
     public fun setPublishCaptions(value: Boolean) {
-        publishCaptions = value
+        //publishCaptions = value
         publisher?.setPublishCaptions(value)
     }
 
     public fun setAudioBitrate(value: Int) {
-        audioBitRate = value
+        //audioBitRate = value
     }
 
     public fun setAudioFallbackEnabled(value: Boolean) {
-        audioFallbackEnabled = value
+        //audioFallbackEnabled = value
         publisher?.setAudioFallbackEnabled(value)
     }
 
     public fun setPublisherAudioFallback(value: Boolean) {
-        publisherAudioFallback = value
+        //publisherAudioFallback = value
     }
 
     public fun setSubscriberAudioFallback(value: Boolean) {
-        subscriberAudioFallback = value
+        //subscriberAudioFallback = value
     }
 
     public fun setCameraPosition(value: String?) {
@@ -149,6 +184,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
 
     public fun setName(value: String?) {
         // TODO
+        //name = value
     }
 
     public fun setResolution(value: String?) {
@@ -159,8 +195,28 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         // TODO
     }
 
-    fun publishStream(session: Session) {
-        publisher = Publisher.Builder(context).build()
+    fun publishStream(/*session: Session*/) {
+        //Log.d(TAG, "publishStream: " + session.sessionId)
+        //Log.d(TAG, "FPS_" + this.props?.get("resolution") as String)
+        publisher = Publisher.Builder(context)
+            .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
+            //.publisherAudioFallbackEnabled(publisherAudioFallback)
+            //.subscriberAudioFallbackEnabled(subscriberAudioFallback)
+            .name(this.props?.get("name") as String)
+            .frameRate(Publisher.CameraCaptureFrameRate.valueOf("FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString())) //test
+            .resolution(Publisher.CameraCaptureResolution.valueOf( this.props?.get("resolution") as String)) //test
+            .audioTrack(this.props?.get("audioTrack") as Boolean)
+            .videoTrack(this.props?.get("videoTrack") as Boolean)
+            .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
+            .build()
+
+        publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
+        publisher?.setPublishVideo(this.props?.get("publishVideo") as Boolean)
+        publisher?.setPublishCaptions(this.props?.get("publishCaptions") as Boolean)
+        publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
+        publisher?.getCapturer()?.setVideoContentHint(
+            Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String))
+
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
             BaseVideoRenderer.STYLE_VIDEO_FILL
@@ -172,14 +228,17 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         //publisher?.setRtcStatsReportListener(this)
         publisher?.setVideoListener(this)
         publisher?.setVideoStatsListener(this)
-        publisher?.setPublishAudio(publishAudio)
-        publisher?.setPublishVideo(publishVideo)
 
-        sharedState.getPublishers().put(publisherId ?: return, publisher ?: return);
+
+        sharedState.getPublishers().put(this.props?.get("publisherId") as String ?: return, publisher ?: return);
         if (publisher?.view != null) {
             this.addView(publisher?.view)
             requestLayout()
         }
+        props!!.clear() //we do not need to keep this around ?
+        props = null
+
+        Log.d(TAG, "publishStream: " + publisher!!.stream?.streamId)
     }
 
     override fun onStreamCreated(publisher: PublisherKit, stream: Stream) {
@@ -227,7 +286,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     */
 
     override fun onAudioLevelUpdated(publisher: PublisherKit?, audioLevel: Float) {
-        val publisherId = Utils.getPublisherId(publisher)
+        val publisherId = Utils.getPublisherId(publisher) // Do we need this?
         if (publisherId.isNotEmpty()) {
             val payload =
                 Arguments.createMap().apply {
