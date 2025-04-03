@@ -146,8 +146,11 @@ function App(): React.JSX.Element {
                             subscriberRef.current?.getRtcStatsReport();
                           }, 4000);
                         },
-                        onRtcStatsReport: (event: any) => {
-                          console.log('onRtcStatsReport', event);
+                        videoEnabled: (event: any) => {
+                          console.log('sub videoEnabled', event);
+                        },
+                        rtcStatsReport: (event: any) => {
+                          console.log('sub rtcStatsReport', event);
                         },
                       }}
                     />
