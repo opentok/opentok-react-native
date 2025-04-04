@@ -99,6 +99,7 @@
     "react": "*",
     "react-native": "*"
   },
+  "react-native": "src/index.tsx",
   "workspaces": [
     "example"
   ],
