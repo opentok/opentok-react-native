@@ -46,7 +46,10 @@ export default class OTSubscriberView extends React.Component {
           this.eventHandlers?.subscriberConnected?.(event.nativeEvent);
         }}
         onRtcStatsReport={(event) => {
-          this.eventHandlers?.onRtcStatsReport?.(event.nativeEvent);
+          this.eventHandlers?.rtcStatsReport?.(event.nativeEvent);
+        }}
+        onVideoEnabled={(event) => {
+          this.eventHandlers?.videoEnabled?.(event.nativeEvent);
         }}
         style={style}
       />

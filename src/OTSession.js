@@ -12,7 +12,6 @@ export default class OTSession extends Component {
   async initSession(apiKey, sessionId, token) {
     OT.onSessionConnected((event) => {
       this.connectionId = event.connectionId;
-      this.eventHandlers?.sessionConnected(event);
       setIsConnected(true);
       this.eventHandlers?.sessionConnected?.(event);
       if (Object.keys(this.props.signal).length > 0) {
