@@ -24,7 +24,13 @@ This pre-release alpha version is not available at npm.js. In your app's package
 
 We intend to support the same API that was used in previous versions of OpenTok React Native SDK. However this alpha version does not support all API features.
 
-In order to run on Android, you need to register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+### Registering the OpenTok packages in your application
+
+For Android, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+
+For iOS, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 4 of the "iOS Installation" section below.
+
+### Known issues
 
 The following features are unsupported in this alpha version:
 
@@ -93,7 +99,26 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
+4. In the AppDelegate.mm file for you app, register the OpenTok OTPublisherViewNative and OTSubscriberViewNative classes. Do this by modifying the AppDelegate implementation by adding these to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
+
+    ```
+#import "OTPublisherViewNativeComponentView.h"
+#import "OTSubscriberViewNativeComponentView.h"
+
+@implementation AppDelegate
+        // ...
+- (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
+{
+  NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
+  dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
+  dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
+  return dictionary;
+}
+
+@end
+    ```
+
+5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
    pod 'VonageClientSDKVideoTransformers'
