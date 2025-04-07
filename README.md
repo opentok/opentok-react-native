@@ -97,26 +97,26 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    <string>Your message to user when the microphone is accessed for the first time</string>
    ```
 
-When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
+  When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
 4. In the AppDelegate.mm file for you app, register the OpenTok OTPublisherViewNative and OTSubscriberViewNative classes. Do this by modifying the AppDelegate implementation by adding these to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
-    ```
-#import "OTPublisherViewNativeComponentView.h"
-#import "OTSubscriberViewNativeComponentView.h"
+   <pre>
+     #import "OTPublisherViewNativeComponentView.h"
+     #import "OTSubscriberViewNativeComponentView.h"
 
-@implementation AppDelegate
-        // ...
-- (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
-{
-  NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
-  dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
-  dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
-  return dictionary;
-}
-
-@end
-    ```
+     @implementation AppDelegate
+          // ...
+        - (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
+     {
+      NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
+      dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
+      dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
+      return dictionary;
+     }
+     
+     @end
+   </pre>
 
 5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
