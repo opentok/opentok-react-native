@@ -99,24 +99,28 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
   When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-4. In the AppDelegate.mm file for you app, register the OpenTok OTPublisherViewNative and OTSubscriberViewNative classes. Do this by modifying the AppDelegate implementation by adding these to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
+4. Register the OpenTok OTPublisherViewNative and OTSubscriberViewNative classes. Do this by modifying the AppDelegate implementation.
 
-   <pre>
-     #import "OTPublisherViewNativeComponentView.h"
-     #import "OTSubscriberViewNativeComponentView.h"
+   * If you app has an Objective-C++ AppDelegate file (AppDelegate.mm), add these classes to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
-     @implementation AppDelegate
-          // ...
-        - (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
-     {
-      NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
-      dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
-      dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
-      return dictionary;
-     }
-     
-     @end
-   </pre>
+    <pre>
+        #import "OTPublisherViewNativeComponentView.h"
+        #import "OTSubscriberViewNativeComponentView.h"
+
+        @implementation AppDelegate
+            // ...
+            - (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
+        {
+        NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
+        dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
+        dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
+        return dictionary;
+        }
+        
+        @end
+    </pre>
+
+   * If your app uses a Swift AppDelegate file (AppDelegate.swift), you will need to have its implementation of the `RCTAppDelegate.application(_, didFinishLaunchingWithOptions)` method use a bridging header to call a method in an Objective-C++ file that calls the `[RCTComponentViewFactory registerComponentViewClass:]` method, passing in the `OTPublisherViewNativeComponentView` and `OTSubscriberViewNativeComponentView` classes.
 
 5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
