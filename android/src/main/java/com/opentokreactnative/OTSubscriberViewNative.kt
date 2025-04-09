@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
 import com.opentok.android.BaseVideoRenderer
@@ -154,6 +155,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onError(subscriber: SubscriberKit, opentokError: OpentokError) {
+        Log.d(TAG, "onError: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber.getStream().streamId)
@@ -163,6 +165,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onRtcStatsReport(subscriber: SubscriberKit, jsonArrayOfReports: String) {
+        Log.d(TAG, "onRtcStatsReport: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("jsonArrayOfReports", jsonArrayOfReports)
@@ -171,6 +174,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onAudioLevelUpdated(subscriber: SubscriberKit?, audioLevel: Float) {
+        Log.d(TAG, "onAudioLevelUpdated: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
@@ -179,6 +183,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {
+        Log.d(TAG, "onCaptionText: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("text", text);
@@ -191,14 +196,26 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberAudioStats?
     ) {
-        // TODO("Not yet implemented")
+        Log.d(TAG, "onAudioStats: " + subscriber?.getStream()?.streamId)
+        val audioStats: WritableMap = Arguments.createMap()
+        audioStats.putDouble("audioPacketsLost", stats?.audioPacketsLost?.toDouble() ?: 0.0)
+        audioStats.putDouble("audioPacketsReceived", stats?.audioPacketsReceived?.toDouble() ?: 0.0)
+        audioStats.putDouble("audioBytesReceived", stats?.audioBytesReceived?.toDouble() ?: 0.0)
+        audioStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+        emitOpenTokEvent("onAudioStats", audioStats)
     }
 
     override fun onVideoStats(
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        // TODO("Not yet implemented")
+        Log.d(TAG, "onVideoStats: " + subscriber?.getStream()?.streamId)
+        val videoStats: WritableMap = Arguments.createMap()
+        videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
+        videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
+        videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
+        videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+        //emitOpenTokEvent("onVideoStats", videoStats)
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {

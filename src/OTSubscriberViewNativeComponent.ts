@@ -48,7 +48,7 @@ export interface NativeProps extends ViewProps {
   onSubscriberError?: BubblingEventHandler<StreamErrorEvent> | null;
   onRtcStatsReport?: BubblingEventHandler<RTCStatsReportEvent> | null;
   onAudioLevel?: BubblingEventHandler<SubscriberAudioLevelEvent> | null;
-  onAudioStates?: BubblingEventHandler<SubscriberAudioStatsEvent> | null;
+  onAudioStats?: BubblingEventHandler<SubscriberAudioStatsEvent> | null;
   onCaptionReceived?: BubblingEventHandler<SubscriberCaptionEvent> | null;
   onVideoDataReceived?: BubblingEventHandler<StreamEvent> | null;
   onVideoDisabled?: BubblingEventHandler<StreamEvent> | null;

@@ -13,6 +13,7 @@ import com.facebook.react.uimanager.ReactStylesDiffMap
 
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
+import com.opentok.android.BaseVideoCapturer
 import com.opentok.android.BaseVideoRenderer
 import com.opentok.android.OpentokError
 import com.opentok.android.Publisher
@@ -29,9 +30,10 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     PublisherKit.MuteListener,
     PublisherKit.VideoStatsListener,
     PublisherKit.VideoListener {
-    private var session: Session? = null
+    //private var session: Session? = null
     private var sessionId: String? = ""
     private var publisherId: String? = ""
+
     /*
     private var publishAudio = true
     private var publishVideo = true
@@ -44,7 +46,8 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
      */
     private var publisher: Publisher? = null
     private var sharedState = OTRN.getSharedState();
-   // private var name: String? = ""
+
+    // private var name: String? = ""
     private var TAG: String? = this.javaClass.simpleName
     private var props: MutableMap<String, Any>? = null
 
@@ -143,7 +146,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
 
     public fun setAudioFallbackEnabled(value: Boolean) {
         //audioFallbackEnabled = value
-        publisher?.setAudioFallbackEnabled(value)
+        //publisher?.setAudioFallbackEnabled(value)
     }
 
     public fun setPublisherAudioFallback(value: Boolean) {
@@ -155,7 +158,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setCameraPosition(value: String?) {
-        // TODO
+        publisher?.cycleCamera()
     }
 
     public fun setAudioTrack(value: Boolean) {
@@ -195,42 +198,73 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         // TODO
     }
 
+    // TODO ("May be change the name to createPublisher")
+    // Make this private?
     fun publishStream(/*session: Session*/) {
         //Log.d(TAG, "publishStream: " + session.sessionId)
         //Log.d(TAG, "FPS_" + this.props?.get("resolution") as String)
-        publisher = Publisher.Builder(context)
-            .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
-            //.publisherAudioFallbackEnabled(publisherAudioFallback)
-            //.subscriberAudioFallbackEnabled(subscriberAudioFallback)
-            .name(this.props?.get("name") as String)
-            .frameRate(Publisher.CameraCaptureFrameRate.valueOf("FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString())) //test
-            .resolution(Publisher.CameraCaptureResolution.valueOf( this.props?.get("resolution") as String)) //test
-            .audioTrack(this.props?.get("audioTrack") as Boolean)
-            .videoTrack(this.props?.get("videoTrack") as Boolean)
-            .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
-            .build()
+        if (this.props?.get("videoSource") == "screen") {
+            publisher = Publisher.Builder(context)
+                .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
+                .name(this.props?.get("name") as String)
+                .frameRate(
+                    Publisher.CameraCaptureFrameRate.valueOf(
+                        "FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString()
+                    )
+                ) //test
+                .resolution(Publisher.CameraCaptureResolution.valueOf(this.props?.get("resolution") as String)) //test
+                .audioTrack(this.props?.get("audioTrack") as Boolean)
+                .videoTrack(this.props?.get("videoTrack") as Boolean)
+                .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
+                .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
+                .capturer(OTScreenCapturer(this))
+                .build()
+            publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)
+        } else if (this.props?.get("videoSource") == "camera") {
+            publisher = Publisher.Builder(context)
+                .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
+                .publisherAudioFallbackEnabled(this.props?.get("publisherAudioFallback") as Boolean)
+                .subscriberAudioFallbackEnabled(this.props?.get("subscriberAudioFallback") as Boolean)
+                .name(this.props?.get("name") as String)
+                .frameRate(
+                    Publisher.CameraCaptureFrameRate.valueOf(
+                        "FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString()
+                    )
+                ) //test
+                .resolution(Publisher.CameraCaptureResolution.valueOf(this.props?.get("resolution") as String)) //test
+                .audioTrack(this.props?.get("audioTrack") as Boolean)
+                .videoTrack(this.props?.get("videoTrack") as Boolean)
+                .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
+                .build()
+            publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
+            if (this.props?.get("cameraPosition") == "back") {
+                publisher?.cycleCamera()
+            }
+            publisher?.getCapturer()?.setVideoContentHint(
+                Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
+            )
+        }
 
         publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
         publisher?.setPublishVideo(this.props?.get("publishVideo") as Boolean)
         publisher?.setPublishCaptions(this.props?.get("publishCaptions") as Boolean)
-        publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
-        publisher?.getCapturer()?.setVideoContentHint(
-            Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String))
-
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
             BaseVideoRenderer.STYLE_VIDEO_FILL
         )
+
+        //Listeners
         publisher?.setPublisherListener(this)
         publisher?.setAudioLevelListener(this)
         publisher?.setAudioStatsListener(this)
         publisher?.setMuteListener(this)
-        //publisher?.setRtcStatsReportListener(this)
         publisher?.setVideoListener(this)
         publisher?.setVideoStatsListener(this)
+        publisher?.setRtcStatsReportListener(this)
 
-
-        sharedState.getPublishers().put(this.props?.get("publisherId") as String ?: return, publisher ?: return);
+        // Move this to streamcreated? Can we get the publisherID there? or streamID is enough
+        sharedState.getPublishers()
+            .put(this.props?.get("publisherId") as String ?: return, publisher ?: return);
         if (publisher?.view != null) {
             this.addView(publisher?.view)
             requestLayout()
@@ -252,7 +286,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     override fun onStreamDestroyed(publisher: PublisherKit, stream: Stream) {
-        //Log.d(TAG, "onStreamDestroyed: " + stream?.streamId)
+        Log.d(TAG, "onStreamDestroyed: " + stream?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", stream.streamId)
@@ -270,21 +304,6 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         emitOpenTokEvent("onError", payload)
     }
 
-    /*
-    override fun onRtcStatsReport(publisher: PublisherKit, jsonArrayOfReports: String) {
-        val statsArrayMap = Arguments.createArray().apply {
-          for (stat: PublisherKit.PublisherRtcStats in stats) {
-            val statMap = Arguments.createMap().apply {
-              putString("connectionId", stat.connectionId);
-              putString("jsonArrayOfReports", stat.jsonArrayOfReports);
-            }
-            pushMap(statMap);
-          }
-        }
-        emitOpenTokEvent("onRtcStatsReport", statsArrayMap)
-    }
-    */
-
     override fun onAudioLevelUpdated(publisher: PublisherKit?, audioLevel: Float) {
         val publisherId = Utils.getPublisherId(publisher) // Do we need this?
         if (publisherId.isNotEmpty()) {
@@ -301,6 +320,18 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         stats: Array<out PublisherKit.PublisherRtcStats>?
     ) {
         // TODO("Not yet implemented")
+        /*
+        val statsArrayMap = Arguments.createArray().apply {
+          for (stat: PublisherKit.PublisherRtcStats in stats) {
+            val statMap = Arguments.createMap().apply {
+              putString("connectionId", stat.connectionId);
+              putString("jsonArrayOfReports", stat.jsonArrayOfReports);
+            }
+            pushMap(statMap);
+          }
+        }
+        emitOpenTokEvent("onRtcStatsReport", statsArrayMap)
+         */
     }
 
     override fun onAudioStats(
