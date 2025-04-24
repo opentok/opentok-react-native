@@ -17,26 +17,21 @@ export type ErrorEvent = {
 
 export type EmptyEvent = {};
 
-export type PublisherVideoNetworkStats = {
-  jsonStats: string; // JSON string containing all video stats
+export type PublisherVideoNetworkStatsEvent = {
+  json: string; // JSON string containing all video stats
 };
-
-export type PublisherVideoNetworkStatsEvent = PublisherVideoNetworkStats[];
 
 export type AudioLevelEvent = {
   audioLevel: Float;
 };
 
 export type AudioNetworkStatsEvent = {
-  jsonStats: string; // JSON string containing all audio stats
+  json: string; // JSON string containing all audio stats
 };
 
-export type PublisherRTCStatsReport = {
-  connectionId: string;
-  jsonArrayOfReports: string;
+export type PublisherRTCStatsReportEvent = {
+  json: string; // JSON string containing all event data
 };
-
-export type PublisherRTCStatsReportEvent = PublisherRTCStatsReport[];
 
 export interface NativeProps extends ViewProps {
   sessionId: string;
@@ -65,12 +60,12 @@ export interface NativeProps extends ViewProps {
   onAudioLevel?: BubblingEventHandler<AudioLevelEvent> | null;
   onAudioNetworkStats?: BubblingEventHandler<AudioNetworkStatsEvent> | null;
   onMuteForced?: BubblingEventHandler<EmptyEvent> | null;
-  onRtcStatsReport?: BubblingEventHandler<PublisherRTCStatsReport> | null;
+  onRtcStatsReport?: BubblingEventHandler<PublisherRTCStatsReportEvent> | null;
   onVideoDisabled?: BubblingEventHandler<EmptyEvent> | null;
   onVideoDisableWarning?: BubblingEventHandler<EmptyEvent> | null;
   onVideoDisableWarningLifted?: BubblingEventHandler<EmptyEvent> | null;
   onVideoEnabled?: BubblingEventHandler<EmptyEvent> | null;
-  onVideoNetworkStats?: BubblingEventHandler<PublisherVideoNetworkStats> | null;
+  onVideoNetworkStats?: BubblingEventHandler<PublisherVideoNetworkStatsEvent> | null;
 }
 
 export default codegenNativeComponent<NativeProps>(

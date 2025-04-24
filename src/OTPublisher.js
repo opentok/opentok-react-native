@@ -100,10 +100,14 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.audioLevel?.(event.nativeEvent);
         }}
         onAudioNetworkStats={(event) => {
-          this.props.eventHandlers?.audioNetworkStats?.(event.nativeEvent);
+          this.props.eventHandlers?.audioNetworkStats?.(
+            JSON.parse(event.nativeEvent.json)
+          );
         }}
         onRtcStatsReport={(event) => {
-          this.props.eventHandlers?.rtcStatsReport?.(event.nativeEvent);
+          this.props.eventHandlers?.rtcStatsReport?.(
+            JSON.parse(event.nativeEvent.json)
+          );
         }}
         onVideoDisabled={(event) => {
           this.props.eventHandlers?.videoDisabled?.(event.nativeEvent);
@@ -120,7 +124,9 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.videoEnabled?.(event.nativeEvent);
         }}
         onVideoNetworkStats={(event) => {
-          this.props.eventHandlers?.videoNetworkStats?.(event.nativeEvent);
+          this.props.eventHandlers?.videoNetworkStats?.(
+            JSON.parse(event.nativeEvent.json)
+          );
         }}
         style={this.props.style}
         {...this.props.properties}
