@@ -18,7 +18,7 @@ export type ErrorEvent = {
 export type EmptyEvent = {};
 
 export type PublisherVideoNetworkStatsEvent = {
-  json: string; // JSON string containing all video stats
+  jsonStats: string; // JSON string containing all video stats
 };
 
 export type AudioLevelEvent = {
@@ -26,11 +26,11 @@ export type AudioLevelEvent = {
 };
 
 export type AudioNetworkStatsEvent = {
-  json: string; // JSON string containing all audio stats
+  jsonStats: string; // JSON string containing all audio stats
 };
 
 export type PublisherRTCStatsReportEvent = {
-  json: string; // JSON string containing all event data
+  jsonStats: string; // JSON string containing all event data
 };
 
 export interface NativeProps extends ViewProps {

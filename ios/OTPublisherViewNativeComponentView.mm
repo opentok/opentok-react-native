@@ -143,7 +143,7 @@ using namespace facebook::react;
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTPublisherViewNativeEventEmitter::OnAudioNetworkStats payload{
-            .json = std::string([jsonString UTF8String])};
+            .jsonStats = std::string([jsonString UTF8String])};
         eventEmitter->onAudioNetworkStats(std::move(payload));
     }
 }
@@ -152,7 +152,7 @@ using namespace facebook::react;
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTPublisherViewNativeEventEmitter::OnVideoNetworkStats payload{
-            .json = std::string([jsonString UTF8String])};
+            .jsonStats = std::string([jsonString UTF8String])};
         eventEmitter->onVideoNetworkStats(std::move(payload));
     }
 }
