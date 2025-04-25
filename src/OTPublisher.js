@@ -100,9 +100,11 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.audioLevel?.(event.nativeEvent);
         }}
         onAudioNetworkStats={(event) => {
-          this.props.eventHandlers?.audioNetworkStats?.(
-            JSON.parse(event.nativeEvent.json)
-          );
+          // TODO - remove workaround for Android stats prop
+          const eventData = event.nativeEvent.json
+            ? JSON.parse(event.nativeEvent.json)
+            : event.nativeEvent.stats;
+          this.props.eventHandlers?.audioNetworkStats?.(eventData);
         }}
         onRtcStatsReport={(event) => {
           this.props.eventHandlers?.rtcStatsReport?.(
@@ -124,9 +126,11 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.videoEnabled?.(event.nativeEvent);
         }}
         onVideoNetworkStats={(event) => {
-          this.props.eventHandlers?.videoNetworkStats?.(
-            JSON.parse(event.nativeEvent.json)
-          );
+          // TODO - remove workaround for Android stats prop
+          const eventData = event.nativeEvent.json
+            ? JSON.parse(event.nativeEvent.json)
+            : event.nativeEvent.stats;
+          this.props.eventHandlers?.videoNetworkStats?.(eventData);
         }}
         style={this.props.style}
         {...this.props.properties}
