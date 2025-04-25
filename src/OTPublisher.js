@@ -76,7 +76,7 @@ export default class OTPublisher extends React.Component {
 
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
-    OT.getPublisherRtcStatsReport();
+    OT.getPublisherRtcStatsReport(this.state.publisherId);
   }
 
   render() {
@@ -100,10 +100,16 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.audioLevel?.(event.nativeEvent);
         }}
         onAudioNetworkStats={(event) => {
-          this.props.eventHandlers?.audioNetworkStats?.(event.nativeEvent);
+          // TODO - remove workaround for Android stats prop
+          const eventData = event.nativeEvent.jsonStats
+            ? JSON.parse(event.nativeEvent.jsonStats)
+            : event.nativeEvent.stats;
+          this.props.eventHandlers?.audioNetworkStats?.(eventData);
         }}
         onRtcStatsReport={(event) => {
-          this.props.eventHandlers?.rtcStatsReport?.(event.nativeEvent);
+          this.props.eventHandlers?.rtcStatsReport?.(
+            JSON.parse(event.nativeEvent.json)
+          );
         }}
         onVideoDisabled={(event) => {
           this.props.eventHandlers?.videoDisabled?.(event.nativeEvent);
@@ -120,7 +126,11 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.videoEnabled?.(event.nativeEvent);
         }}
         onVideoNetworkStats={(event) => {
-          this.props.eventHandlers?.videoNetworkStats?.(event.nativeEvent);
+          // TODO - remove workaround for Android stats prop
+          const eventData = event.nativeEvent.jsonStats
+            ? JSON.parse(event.nativeEvent.jsonStats)
+            : event.nativeEvent.stats;
+          this.props.eventHandlers?.videoNetworkStats?.(eventData);
         }}
         style={this.props.style}
         {...this.props.properties}
