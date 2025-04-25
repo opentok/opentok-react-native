@@ -76,7 +76,7 @@ export default class OTPublisher extends React.Component {
 
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
-    OT.getPublisherRtcStatsReport();
+    OT.getPublisherRtcStatsReport(this.state.publisherId);
   }
 
   render() {
