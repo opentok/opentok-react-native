@@ -144,7 +144,9 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
 
         subscriber?.setSubscribeToAudio(this.props?.get("subscribeToAudio") as Boolean)
         subscriber?.setSubscribeToVideo(this.props?.get("subscribeToVideo") as Boolean)
-        subscriber?.setSubscribeToCaptions(this.props?.get("subscribeToCaptions") as Boolean)
+        if (this.props?.get("subscribeToCaptions") != null) {
+            subscriber?.setSubscribeToCaptions(this.props?.get("subscribeToCaptions") as Boolean)
+        }
         if (this.props?.get("audioVolume") != null) {
             subscriber?.setAudioVolume(this.props?.get("audioVolume") as Double)
         }
@@ -158,6 +160,9 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             var height: Int = values[1].toInt()
             subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
         }
+
+        //clear the props map here..
+        this.props?.clear()
 
         session.subscribe(subscriber)
         if (subscriber?.view != null) {
@@ -212,7 +217,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
             }
-        emitOpenTokEvent("onAudioLevelUpdated", payload)
+        emitOpenTokEvent("onAudioLevel", payload)
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {
@@ -248,7 +253,8 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
-        //emitOpenTokEvent("onVideoStats", videoStats)
+        Log.d(TAG, "onVideoStats: " + videoStats.toString())
+        emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {

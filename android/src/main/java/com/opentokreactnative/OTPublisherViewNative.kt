@@ -6,20 +6,17 @@ import android.util.Log
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
-import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.uimanager.ReactStylesDiffMap
 
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
-import com.opentok.android.BaseVideoCapturer
 import com.opentok.android.BaseVideoRenderer
 import com.opentok.android.OpentokError
 import com.opentok.android.Publisher
 import com.opentok.android.PublisherKit
 import com.opentok.android.PublisherKit.PublisherListener
-import com.opentok.android.Session
 import com.opentok.android.Stream
 import com.opentokreactnative.utils.Utils
 
@@ -68,6 +65,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     fun updateProperties(props: ReactStylesDiffMap?) {
+        Log.d(TAG, "updateProperties: isAttachedToWindow = " + this.isAttachedToWindow)
         if (this.props == null) {
             this.props = props?.toMap()
             for ((key, value) in this.props?.toMap() ?: emptyMap()) {
@@ -75,8 +73,6 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             }
             return
         }
-
-        //var mgr : OTPublisherViewNativeManager = context as OTPublisherViewNativeManager
 
         for (key in this.props!!.keys) {
             if (props?.hasKey(key) == true) {
@@ -270,7 +266,6 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             requestLayout()
         }
         props!!.clear() //we do not need to keep this around ?
-        props = null
 
         Log.d(TAG, "publishStream: " + publisher!!.stream?.streamId)
     }
@@ -319,44 +314,40 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         publisher: PublisherKit?,
         stats: Array<out PublisherKit.PublisherRtcStats>?
     ) {
-        // TODO("Not yet implemented")
-        /*
-        val statsArrayMap = Arguments.createArray().apply {
-          for (stat: PublisherKit.PublisherRtcStats in stats) {
-            val statMap = Arguments.createMap().apply {
-              putString("connectionId", stat.connectionId);
-              putString("jsonArrayOfReports", stat.jsonArrayOfReports);
-            }
-            pushMap(statMap);
-          }
+        val statsArray: WritableArray = Arguments.createArray()
+        for (stat in stats!!) {
+            val rtcStats: WritableMap = Arguments.createMap()
+            rtcStats.putString("connectionId", stat.connectionId)
+            rtcStats.putString("jsonArrayOfReports", stat.jsonArrayOfReports)
+            statsArray.pushMap(rtcStats)
         }
-        emitOpenTokEvent("onRtcStatsReport", statsArrayMap)
-         */
+        val payload =
+            Arguments.createMap().apply {
+                putString("stats", statsArray.toString())
+            }
+        emitOpenTokEvent("onRtcStatsReport", payload)
     }
 
     override fun onAudioStats(
         publisher: PublisherKit?,
         stats: Array<out PublisherKit.PublisherAudioStats>?
     ) {
-        val publisherId = Utils.getPublisherId(publisher)
-        if (publisherId.isNotEmpty()) {
-            val statsArrayMap: WritableArray = Arguments.createArray()
-            for (stat in stats!!) {
-                val audioStats: WritableMap = Arguments.createMap()
-                audioStats.putString("connectionId", stat.connectionId)
-                audioStats.putString("subscriberId", stat.subscriberId)
-                audioStats.putDouble("audioPacketsLost", stat.audioPacketsLost.toDouble())
-                audioStats.putDouble("audioPacketsSent", stat.audioPacketsSent.toDouble())
-                audioStats.putDouble("audioBytesSent", stat.audioBytesSent.toDouble())
-                audioStats.putDouble("startTime", stat.startTime)
-                statsArrayMap.pushMap(audioStats)
-            }
-            val payload =
-                Arguments.createMap().apply {
-                    putArray("stats", statsArrayMap)
-                }
-            emitOpenTokEvent("onAudioNetworkStats", payload)
+        val statsArray: WritableArray = Arguments.createArray()
+        for (stat in stats!!) {
+            val audioStats: WritableMap = Arguments.createMap()
+            audioStats.putString("connectionId", stat.connectionId)
+            audioStats.putString("subscriberId", stat.subscriberId)
+            audioStats.putDouble("audioPacketsLost", stat.audioPacketsLost.toDouble())
+            audioStats.putDouble("audioPacketsSent", stat.audioPacketsSent.toDouble())
+            audioStats.putDouble("audioBytesSent", stat.audioBytesSent.toDouble())
+            audioStats.putDouble("startTime", stat.startTime)
+            statsArray.pushMap(audioStats)
         }
+        val payload =
+            Arguments.createMap().apply {
+                putString("stats", statsArray.toString())
+            }
+        emitOpenTokEvent("onAudioNetworkStats", payload)
     }
 
     override fun onMuteForced(publisher: PublisherKit?) {
@@ -383,7 +374,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             }
             val payload =
                 Arguments.createMap().apply {
-                    putArray("stats", statsArrayMap)
+                    putString("stats", statsArrayMap.toString())
                 }
             emitOpenTokEvent("onVideoNetworkStats", payload)
         }
