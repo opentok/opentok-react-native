@@ -287,6 +287,13 @@ import React
         }
         resolve(true)
     }
+
+    @objc public func getPublisherRtcStatsReport(_ publisherId: String) {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return
+        }
+        publisher.getRtcStatsReport()
+    }
 }
 
 class DebugAlertHelper {

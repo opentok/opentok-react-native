@@ -398,10 +398,20 @@ private class PublisherRtcStatsDelegateHandler: NSObject, OTPublisherKitRtcStats
         super.init()
     }
     
-    func publisher(_ publisher: OTPublisherKit, rtcStatsReport: OTPublisherRtcStats) {
-        impl?.strictUIViewContainer?.handleRtcStatsReport([
-            "connectionId": rtcStatsReport.connectionId,
-            "jsonArrayOfReports": rtcStatsReport.jsonArrayOfReports
-        ])
+    
+    func publisher(_ publisher: OTPublisherKit, rtcStatsReport: [OTPublisherRtcStats]) {
+        let statsArray = rtcStatsReport.map { stat -> [String: Any] in
+            return [
+                "connectionId": stat.connectionId,
+                "jsonArrayOfReports": stat.jsonArrayOfReports
+            ]
+        }
+        
+        if let jsonData = try? JSONSerialization.data(withJSONObject: statsArray),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            impl?.strictUIViewContainer?.handleRtcStatsReport([
+                "json": jsonString
+            ])
+        }
     }
 }

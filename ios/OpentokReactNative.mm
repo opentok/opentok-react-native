@@ -115,7 +115,7 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)getPublisherRtcStatsReport:(nonnull NSString *)publisherId { 
-    
+      [impl getPublisherRtcStatsReport:publisherId];
 }
 
 

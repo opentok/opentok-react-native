@@ -169,8 +169,7 @@ using namespace facebook::react;
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTPublisherViewNativeEventEmitter::OnRtcStatsReport payload{
-            .connectionId = std::string([eventData[@"connectionId"] UTF8String]),
-            .jsonArrayOfReports = std::string([eventData[@"jsonArrayOfReports"] UTF8String])
+            .json = std::string([eventData[@"json"] UTF8String])
         };
         eventEmitter->onRtcStatsReport(std::move(payload));
     }
