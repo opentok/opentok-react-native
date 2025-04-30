@@ -165,11 +165,11 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleRtcStatsReport:(NSDictionary *)eventData {
+- (void)handleRtcStatsReport:(NSString *)jsonString {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTPublisherViewNativeEventEmitter::OnRtcStatsReport payload{
-            .json = std::string([eventData[@"json"] UTF8String])
+            .jsonStats = std::string([jsonString UTF8String])
         };
         eventEmitter->onRtcStatsReport(std::move(payload));
     }

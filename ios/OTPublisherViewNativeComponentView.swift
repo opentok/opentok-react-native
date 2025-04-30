@@ -12,6 +12,7 @@ import React
     fileprivate var publisherAudioLevelDelegateHandler: PublisherAudioLevelDelegateHandler?
     fileprivate var publisherNetworkStatsDelegateHandler: PublisherNetworkStatsDelegateHandler?
     fileprivate var publisherRtcStatsDelegateHandler: PublisherRtcStatsDelegateHandler?
+
     fileprivate var publisherUIView: UIView?
 
     @objc public var publisherView: UIView {
@@ -88,6 +89,7 @@ import React
         publisher.audioLevelDelegate = publisherAudioLevelDelegateHandler
         publisher.networkStatsDelegate = publisherNetworkStatsDelegateHandler
         publisher.rtcStatsReportDelegate = publisherRtcStatsDelegateHandler
+
         OTRN.sharedState.publishers.updateValue(publisher, forKey: publisherId)
 
         if let videoSource = properties["videoSource"] as? String,
@@ -281,13 +283,7 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
              impl?.strictUIViewContainer?.handleMuteForced()
          }
     }
-    
-    func publisher(_ publisher: OTPublisherKit, rtcStatsReport: OTPublisherRtcStats) {
-        impl?.strictUIViewContainer?.handleRtcStatsReport([
-            "connectionId": rtcStatsReport.connectionId,
-            "jsonArrayOfReports": rtcStatsReport.jsonArrayOfReports
-        ])
-    }
+
     
     func publisherVideoDisableWarning(_ publisher: OTPublisherKit) {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
@@ -397,8 +393,7 @@ private class PublisherRtcStatsDelegateHandler: NSObject, OTPublisherKitRtcStats
         self.impl = impl
         super.init()
     }
-    
-    
+        
     func publisher(_ publisher: OTPublisherKit, rtcStatsReport: [OTPublisherRtcStats]) {
         let statsArray = rtcStatsReport.map { stat -> [String: Any] in
             return [
@@ -409,9 +404,8 @@ private class PublisherRtcStatsDelegateHandler: NSObject, OTPublisherKitRtcStats
         
         if let jsonData = try? JSONSerialization.data(withJSONObject: statsArray),
            let jsonString = String(data: jsonData, encoding: .utf8) {
-            impl?.strictUIViewContainer?.handleRtcStatsReport([
-                "json": jsonString
-            ])
-        }
+            impl?.strictUIViewContainer?.handleRtcStatsReport(jsonString)
+           }
     }
 }
+
