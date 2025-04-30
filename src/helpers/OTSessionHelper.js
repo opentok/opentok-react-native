@@ -84,6 +84,8 @@ const sanitizeCustomTurnOptions = (options) => {
         sessionOptions[key] = validateString(value);
       } else if (optionType === 'Array') {
         sessionOptions[key] = validateArray(value);
+      } else if (optionType === 'boolean') {
+        sessionOptions[key] = validateBoolean(value);
       }
     } else {
       handleError(`${key} is not a valid option`);

@@ -110,6 +110,10 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
+            publisher.cameraTorch = Utils.sanitizeBooleanProperty(properties["cameraTorch"] as Any);
+            if let cameraZoomFactor = cameraZoomFactor["cameraZoomFactor"] as? Float {
+                publisherProperties.cameraZoomFactor = cameraZoomFactor;
+            }
             publisher.audioLevelDelegate = self;
             publisher.networkStatsDelegate = self;
             publisher.rtcStatsReportDelegate = self;
@@ -222,6 +226,16 @@ class OTSessionManager: RCTEventEmitter {
     @objc func publishCaptions(_ publisherId: String, pubCaptions: Bool) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.publishCaptions = pubCaptions;
+    }
+    
+    @objc func cameraTorch(_ publisherId: String, cameraTorch: Bool) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.cameraTorch = cameraTorch;
+    }
+    
+    @objc func cameraZoomFactor(_ publisherId: String, cameraZoomFactor: Float) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.cameraZoomFactor = cameraZoomFactor;
     }
     
     @objc func getRtcStatsReport(_ publisherId: String) -> Void {

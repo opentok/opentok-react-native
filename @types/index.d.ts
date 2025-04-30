@@ -391,6 +391,16 @@ declare module "opentok-react-native" {
     cameraPosition?: "front" | "back";
 
     /**
+     * Whether the publisher should enable or disable the camera's torch when available.
+     */
+    cameraTorch?: number;
+
+    /**
+     * The preferred zoom factor for the camera.
+     */
+    cameraZoomFactor?: number;
+
+    /**
      * Whether to enable Opus DTX. The default value is false. Setting this to true can reduce bandwidth usage in streams that have long periods of silence.
      */
     enableDtx?: boolean;
