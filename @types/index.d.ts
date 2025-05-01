@@ -218,6 +218,7 @@ declare module "opentok-react-native" {
     iceConfig?: {
       includeServers: 'all' | 'custom';
       transportPolicy: 'all' | 'relay';
+      filterOutLanCandidates: boolean;
       customServers: {
         urls: string[];
         username?: string;

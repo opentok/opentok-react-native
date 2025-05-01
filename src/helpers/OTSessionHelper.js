@@ -68,12 +68,14 @@ const sanitizeCustomTurnOptions = (options) => {
   const validCustomTurnOptions = {
     includeServers: 'string',
     transportPolicy: 'string',
+    filterOutLanCandidates: 'boolean',
     customServers: 'Array'
   };
 
   const customTurnOptions = {
     includeServers: 'all',
     transportPolicy: 'all',
+    filterOutLanCandidates: 'boolean',
     customServers: []
   };
 
