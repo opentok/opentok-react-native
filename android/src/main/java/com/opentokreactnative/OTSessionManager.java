@@ -169,8 +169,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Boolean publishCaptions = properties.getBoolean("publishCaptions");
         String videoSource = properties.getString("videoSource");
         Boolean scalableScreenshare = properties.getBoolean("scalableScreenshare");
-        Boolean cameraTorch = properties.getBoolean("cameraZoomFactor");
-        Double cameraZoomFactor = properties.getDouble("cameraZoomFactor");
+        Boolean cameraTorch = properties.getBoolean("cameraTorch");
+        Float cameraZoomFactor = (float)properties.getDouble("cameraZoomFactor");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
@@ -410,7 +410,6 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @ReactMethod
     public void setCameraTorch(String publisherId, Boolean cameraTorch) {
-
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
@@ -419,7 +418,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void setCameraZoomFactor(String publisherId, Double cameraZoomFactor) {
+    public void setCameraZoomFactor(String publisherId, Float cameraZoomFactor) {
 
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);

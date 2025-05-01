@@ -111,8 +111,8 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
             publisher.cameraTorch = Utils.sanitizeBooleanProperty(properties["cameraTorch"] as Any);
-            if let cameraZoomFactor = cameraZoomFactor["cameraZoomFactor"] as? Float {
-                publisherProperties.cameraZoomFactor = cameraZoomFactor;
+            if let cameraZoomFactor = properties["cameraZoomFactor"] as? Float {
+                publisher.cameraZoomFactor = cameraZoomFactor;
             }
             publisher.audioLevelDelegate = self;
             publisher.networkStatsDelegate = self;
