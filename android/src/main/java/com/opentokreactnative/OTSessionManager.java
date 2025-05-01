@@ -170,7 +170,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         String videoSource = properties.getString("videoSource");
         Boolean scalableScreenshare = properties.getBoolean("scalableScreenshare");
         Boolean cameraTorch = properties.getBoolean("cameraZoomFactor");
-        Boolean cameraZoomFactor = properties.getDouble("cameraZoomFactor");
+        Double cameraZoomFactor = properties.getDouble("cameraZoomFactor");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
