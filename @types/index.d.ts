@@ -230,6 +230,12 @@ declare module "opentok-react-native" {
      * Enable single peer connection for the client.
      */
     enableSinglePeerConnection?: boolean;
+
+    /**
+     * Enable session migration for the client.
+     * See https://tokbox.com/developer/guides/server-rotation/.
+     */
+    sessionMigration?: boolean;
   }
 
   interface OTSessionEventHandlers {

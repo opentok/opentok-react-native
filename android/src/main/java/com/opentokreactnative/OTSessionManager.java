@@ -109,7 +109,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, String> mAndroidOnTopMap = sharedState.getAndroidOnTopMap();
         ConcurrentHashMap<String, String> mAndroidZOrderMap = sharedState.getAndroidZOrderMap();
         final boolean singlePeerConnection = sessionOptions.getBoolean("enableSinglePeerConnection");
-
+        final boolean sessionMigration = sessionOptions.getBoolean("sessionMigration");
 
         Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
                 .sessionOptions(new Session.SessionOptions() {
@@ -124,6 +124,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 .setIpWhitelist(ipWhitelist)
                 .setProxyUrl(proxyUrl)
                 .setSinglePeerConnection(singlePeerConnection)
+                .setSessionMigration(sessionMigration)
                 .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);
