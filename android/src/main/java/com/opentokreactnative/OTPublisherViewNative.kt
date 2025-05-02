@@ -323,7 +323,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         }
         val payload =
             Arguments.createMap().apply {
-                putString("stats", statsArray.toString())
+                putString("jsonStats", statsArray.toString())
             }
         emitOpenTokEvent("onRtcStatsReport", payload)
     }

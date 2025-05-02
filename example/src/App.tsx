@@ -17,8 +17,8 @@ function App(): React.JSX.Element {
   const [publishStream, setPublishStream] = React.useState<boolean>(false);
 
   const sessionRef = useRef<OTSession>(null);
-  const subscriberRef = useRef<OTSubscriberViewNative>(null);
-  const publisherRef = useRef<OTPublisherViewNative>(null);
+  const subscriberRef = useRef<OTSubscriberView>(null);
+  const publisherRef = useRef<OTPublisherView>(null);
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
   };
@@ -85,11 +85,10 @@ function App(): React.JSX.Element {
             eventHandlers={{
               error: (event: any) => console.log('pub error', event),
               streamCreated: (event: any) => {
-                console.log('pub streamCreated', event),
-                  setTimeout(
-                    () => publisherRef.current.getRtcStatsReport(),
-                    5000
-                  );
+                console.log('pub streamCreated', event);
+                setTimeout(() => {
+                  publisherRef.current?.getRtcStatsReport();
+                }, 4000);
               },
               streamDestroyed: (event: any) =>
                 console.log('pub streamDestroyed', event),
