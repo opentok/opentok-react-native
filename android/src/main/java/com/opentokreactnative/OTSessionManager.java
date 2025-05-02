@@ -411,6 +411,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @ReactMethod
     public void setCameraTorch(String publisherId, Boolean cameraTorch) {
+
         ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
