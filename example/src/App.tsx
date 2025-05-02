@@ -18,6 +18,7 @@ function App(): React.JSX.Element {
 
   const sessionRef = useRef<OTSession>(null);
   const subscriberRef = useRef<OTSubscriberViewNative>(null);
+  const publisherRef = useRef<OTPublisherViewNative>(null);
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
   };
@@ -77,13 +78,19 @@ function App(): React.JSX.Element {
           <OTPublisher
             sessionId={sessionId}
             key="publisher"
+            ref={publisherRef}
             properties={{
               publishVideo: subscribeToVideo,
             }}
             eventHandlers={{
               error: (event: any) => console.log('pub error', event),
-              streamCreated: (event: any) =>
+              streamCreated: (event: any) => {
                 console.log('pub streamCreated', event),
+                  setTimeout(
+                    () => publisherRef.current.getRtcStatsReport(),
+                    5000
+                  );
+              },
               streamDestroyed: (event: any) =>
                 console.log('pub streamDestroyed', event),
               audioLevel: (event: any) => {
