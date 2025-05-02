@@ -4,12 +4,24 @@ import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
 import { dispatchEvent, setIsConnected } from './helpers/OTSessionHelper';
+import { handleError } from './OTError';
+import { logOT } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
 
 export default class OTSession extends Component {
   eventHandlers = {};
 
   async initSession(apiKey, sessionId, token) {
+    if (apiKey && sessionId && token) {
+      logOT({
+        apiKey,
+        sessionId,
+        action: 'rn_initialize',
+        proxyUrl: this.props.options?.proxyUrl,
+      });
+    } else {
+      handleError('Please check your OpenTok credentials.');
+    }
     OT.onSessionConnected((event) => {
       this.connectionId = event.connectionId;
       setIsConnected(true);
