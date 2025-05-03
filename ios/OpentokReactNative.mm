@@ -62,11 +62,6 @@ RCT_EXPORT_MODULE()
 }
 
 
-- (void)getSubscriberRtcStatsReport { 
-  
-}
-
-
 - (void)sendSignal:(nonnull NSString *)sessionId 
     type:(nonnull NSString *)type 
     data:(nonnull NSString *)data { 
@@ -118,6 +113,9 @@ RCT_EXPORT_MODULE()
       [impl getPublisherRtcStatsReport:publisherId];
 }
 
+- (void)getSubscriberRtcStatsReport { 
+      [impl getSubscriberRtcStatsReport];
+}
 
 - (void)publish:(nonnull NSString *)publisherId {
     [impl publish:publisherId];

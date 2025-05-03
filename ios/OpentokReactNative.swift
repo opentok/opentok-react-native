@@ -294,6 +294,31 @@ import React
         }
         publisher.getRtcStatsReport()
     }
+
+    @objc public func getSubscriberRtcStatsReport() -> Void {
+        var error: OTError?
+        for subscriber in OTRN.sharedState.subscribers {
+             if let streamId = subscriber.value.stream?.streamId,
+               OTRN.sharedState.subscriberStreams[streamId] != nil {
+                 let o : OTSubscriber = subscriber.value
+                 if o.rtcStatsReportDelegate == nil {
+                     print("stats delegate NOT there")
+                 }
+                 o.getRtcStatsReport(&error)
+//                 subscriber.value.rtcStatsReportDelegate?.subscriber?(
+//                    subscriber.value,
+//                    rtcStatsReport: "hi"
+//                 )
+                  if let error = error {
+                    print("getSubscriberRtcStatsReport event_failure \(error.localizedDescription)")
+               
+                  }
+
+               }
+           
+           
+        }
+    }
 }
 
 class DebugAlertHelper {
@@ -342,8 +367,9 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     {
         let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
             stream)
-        impl?.ot?.emit(onStreamDestroyed: streamInfo)
         OTRN.sharedState.subscriberStreams.removeValue(forKey: stream.streamId)
+        impl?.ot?.emit(onStreamDestroyed: streamInfo)
+        impl?.getSubscriberRtcStatsReport()
     }
 
     public func sessionDidDisconnect(_ session: OTSession) {

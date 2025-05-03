@@ -96,6 +96,7 @@ using namespace facebook::react;
 }
 
 - (void)handleError:(NSDictionary *)eventData {
+     NSAssert(NO, @"jay Subscriber error: %@", eventData);
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnSubscriberError payload{
@@ -106,13 +107,43 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleRtcStatsReport:(NSDictionary *)eventData {
+- (void)handleRtcStatsReport:(NSString *)jsonString {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnRtcStatsReport payload{
-            .jsonArrayOfReports = std::string([eventData[@"jsonArrayOfReports"] UTF8String])
+             .jsonStats = std::string([jsonString UTF8String])
         };
         eventEmitter->onRtcStatsReport(std::move(payload));
+    }
+}
+
+- (void)handleAudioLevel:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnAudioLevel payload{
+            .audioLevel = [eventData[@"audioLevel"] floatValue]
+        };
+        eventEmitter->onAudioLevel(std::move(payload));
+    }
+}
+
+- (void)handleVideoNetworkStats:(NSString *)jsonString {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnVideoNetworkStats payload{
+            .jsonStats = std::string([jsonString UTF8String])
+        };
+        eventEmitter->onVideoNetworkStats(std::move(payload));
+    }
+}
+
+- (void)handleAudioNetworkStats:(NSString *)jsonString {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnAudioNetworkStats payload{
+            .xyz = std::string([jsonString UTF8String])
+        };
+        eventEmitter->onAudioNetworkStats(std::move(payload));
     }
 }
 
