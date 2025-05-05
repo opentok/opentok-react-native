@@ -23,90 +23,13 @@ import React
     @objc public init(view: OTSubscriberViewNativeComponentView) {
         super.init()
         self.strictUIViewContainer = view
+        subscriberDelegateHandler = SubscriberDelegateHandler(impl: self)
         subscriberRtcStatsDelegateHandler = SubscriberRtcStatsDelegateHandler(impl: self)
         subscriberAudioLevelDelegateHandler = SubscriberAudioLevelDelegateHandler(impl: self)
         subscriberNetworkStatsDelegateHandler = SubscriberNetworkStatsDelegateHandler(impl: self)
     }
 
-    @objc private func subscribeToStream(
-        _ streamId: String, sessionId: String, properties: [String: Any]
-    ) {
-        guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-            strictUIViewContainer?.handleError([
-                "streamId": streamId,
-                "errorMessage":
-                    "Error subscribing. Could not find native stream for subscriber.",
-            ])
-            return
-        }
-
-        subscriberDelegateHandler = SubscriberDelegateHandler(impl: self)
-        
-
-        guard
-            let subscriber = OTSubscriber(
-                stream: stream, delegate: subscriberDelegateHandler)
-        else {
-            strictUIViewContainer?.handleError([
-                "streamId": streamId,
-                "errorMessage":
-                    "Error subscribing. Could not create subscriber.",
-            ])
-            return
-        }
-
-        guard let session = OTRN.sharedState.sessions[sessionId] else {
-            strictUIViewContainer?.handleError([
-                "streamId": streamId,
-                "errorMessage":
-                    "Error subscribing. Could not find native session instance.",
-            ])
-            return
-        }
-
-        subscriber.rtcStatsReportDelegate = subscriberRtcStatsDelegateHandler
-        subscriber.audioLevelDelegate = subscriberAudioLevelDelegateHandler
-        subscriber.networkStatsDelegate = subscriberNetworkStatsDelegateHandler
-        
-       
-        subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(
-            properties["subscribeToVideo"] as Any)
-        subscriber.subscribeToCaptions = Utils.sanitizeBooleanProperty(
-            properties["subscribeToCaptions"] as Any)
-        subscriber.preferredFrameRate = Utils.sanitizePreferredFrameRate(
-            properties["preferredFrameRate"] as Any)
-        subscriber.preferredResolution = Utils.sanitizePreferredResolution(
-            properties["preferredResolution"] as Any)
-        
-        OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
-
-        // subscriber.networkStatsDelegate = self
-        // subscriber.audioLevelDelegate = self
-        // subscriber.captionsDelegate = self
-        //     subscriber.rtcStatsReportDelegate = self
-        // subscriber.captionsDelegate = self
-
-        var error: OTError?
-        session.subscribe(subscriber, error: &error)
-        if let err = error {
-            strictUIViewContainer?.handleError([
-                "streamId": streamId,
-                "errorMessage": err.localizedDescription,
-            ])
-        }
-
-        subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(
-            properties["subscribeToAudio"] as Any)
-
-        if let audioVolume = properties["audioVolume"] as? Double {
-            subscriber.audioVolume = audioVolume
-        }
-        if let subView = subscriber.view {
-            subView.frame = strictUIViewContainer?.bounds ?? .zero
-            subscriberUIView = subView
-        }
-    }
-
+   
     @objc public func createSubscriber(_ properties: NSDictionary) {
         self.sessionId = Utils.sanitizeStringProperty(
             properties["sessionId"] as Any)
@@ -122,20 +45,7 @@ import React
             ])
             return
         }
-
-        //begin
-        guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-            strictUIViewContainer?.handleError([
-                "streamId": streamId,
-                "errorMessage":
-                    "Error subscribing. Could not find native stream for subscriber.",
-            ])
-            return
-        }
-
-        subscriberDelegateHandler = SubscriberDelegateHandler(impl: self)
         
-
         guard
             let subscriber = OTSubscriber(
                 stream: stream, delegate: subscriberDelegateHandler)
@@ -161,6 +71,8 @@ import React
         subscriber.audioLevelDelegate = subscriberAudioLevelDelegateHandler
         subscriber.networkStatsDelegate = subscriberNetworkStatsDelegateHandler
        
+        subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(
+            properties["subscribeToAudio"] as Any)
         subscriber.subscribeToVideo = Utils.sanitizeBooleanProperty(
             properties["subscribeToVideo"] as Any)
         subscriber.subscribeToCaptions = Utils.sanitizeBooleanProperty(
@@ -169,14 +81,6 @@ import React
             properties["preferredFrameRate"] as Any)
         subscriber.preferredResolution = Utils.sanitizePreferredResolution(
             properties["preferredResolution"] as Any)
-        
-        OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
-
-        // subscriber.networkStatsDelegate = self
-        // subscriber.audioLevelDelegate = self
-        // subscriber.captionsDelegate = self
-        //     subscriber.rtcStatsReportDelegate = self
-        // subscriber.captionsDelegate = self
 
         var error: OTError?
         session.subscribe(subscriber, error: &error)
@@ -185,10 +89,9 @@ import React
                 "streamId": streamId,
                 "errorMessage": err.localizedDescription,
             ])
+            return
         }
-
-        subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(
-            properties["subscribeToAudio"] as Any)
+        OTRN.sharedState.subscribers.updateValue(subscriber, forKey: streamId)
 
         if let audioVolume = properties["audioVolume"] as? Double {
             subscriber.audioVolume = audioVolume
@@ -197,11 +100,6 @@ import React
             subView.frame = strictUIViewContainer?.bounds ?? .zero
             subscriberUIView = subView
         }
-        //end
-//        subscribeToStream(
-//            streamId, sessionId: self.sessionId ?? "",
-//            properties: properties as! [String: Any])
-
     }
 
     @objc public func setSessionId(_ sessionId: String) {
@@ -240,9 +138,9 @@ import React
         subscriber.delegate = nil
         subscriber.audioLevelDelegate = nil
         subscriber.networkStatsDelegate = nil
-       // subscriber.rtcStatsReportDelegate = nil
+        subscriber.rtcStatsReportDelegate = nil
         subscriberDelegateHandler = nil
-       // subscriberRtcStatsDelegateHandler = nil
+        subscriberRtcStatsDelegateHandler = nil
         subscriberAudioLevelDelegateHandler = nil
         subscriberNetworkStatsDelegateHandler = nil
         OTRN.sharedState.subscribers.removeValue(forKey: streamId)
@@ -262,23 +160,12 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
             let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
                 stream)
             impl?.strictUIViewContainer?.handleSubscriberConnected(streamInfo)
-
+            
         } else {
             impl?.strictUIViewContainer?.handleSubscriberConnected([:])
         }
-
-        var error: OTError?
-        print("JAY subscriber created for \(subscriber.stream?.streamId ?? "jay error")")
-        subscriber.getRtcStatsReport(&error)
         
-      
-        if let error = error {
-           
-            print("jay getRtcStatsReport event_failure \(error.localizedDescription)")
-            return
-        }
-        self.impl!.subscriberRtcStatsDelegateHandler?.printHello()        
-        }
+    }
     
 
     func subscriber(
@@ -315,16 +202,9 @@ private class SubscriberRtcStatsDelegateHandler: NSObject, OTSubscriberKitRtcSta
         self.impl = impl
         super.init()
     }
-    func printHello() {
-        print("Hello from OTSubscriberKitRtcStatsReportDelegate")
-    }
     
     func subscriber(_ subscriber: OTSubscriberKit, rtcStatsReport: String) {
-        print("rtcStatsReport rtcStatsReport rtcStatsReport rtcStatsReport")
         impl?.strictUIViewContainer?.handleRtcStatsReport(rtcStatsReport)
-    }
-    deinit {
-        print("Deinit from OTSubscriberKitRtcStatsReportDelegate")
     }
 }
 
@@ -337,14 +217,9 @@ private class SubscriberAudioLevelDelegateHandler: NSObject, OTSubscriberKitAudi
     }
     
     func subscriber(_ subscriber: OTSubscriberKit, audioLevelUpdated audioLevel: Float) {
-        //print("Subscriber audio level updated: \(audioLevel)")
         impl?.strictUIViewContainer?.handleAudioLevel([
             "audioLevel": audioLevel
         ])
-    }
-    
-    deinit {
-        print("Deinit from OTSubscriberKitAudioLevelDelegate")
     }
 }
 
@@ -356,8 +231,7 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject, OTSubscriberKitNe
         super.init()
     }
     
-    public func subscriber(_ subscriber: OTSubscriberKit, videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats) {
-        print("Subscriber video network stats updated")
+    func subscriber(_ subscriber: OTSubscriberKit, videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats) {
         let statsDict: [String: Any] = [
             "videoPacketsLost": stats.videoPacketsLost,
             "videoBytesReceived": stats.videoBytesReceived,
@@ -371,8 +245,7 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject, OTSubscriberKitNe
         }
     }
     
-    public func subscriber(_ subscriber: OTSubscriberKit, audioNetworkStatsUpdated stats: OTSubscriberKitAudioNetworkStats) {
-        print("Subscriber audio network stats updated")
+    func subscriber(_ subscriber: OTSubscriberKit, audioNetworkStatsUpdated stats: OTSubscriberKitAudioNetworkStats) {
         let statsDict: [String: Any] = [
             "audioPacketsLost": stats.audioPacketsLost,
             "audioBytesReceived": stats.audioBytesReceived,
@@ -384,10 +257,6 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject, OTSubscriberKitNe
            let jsonString = String(data: jsonData, encoding: .utf8) {
             impl?.strictUIViewContainer?.handleAudioNetworkStats(jsonString)
         }
-    }
-    
-    deinit {
-        print("Deinit from OTSubscriberKitNetworkStatsDelegate")
     }
 }
 

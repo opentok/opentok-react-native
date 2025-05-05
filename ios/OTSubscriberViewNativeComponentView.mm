@@ -96,7 +96,6 @@ using namespace facebook::react;
 }
 
 - (void)handleError:(NSDictionary *)eventData {
-     NSAssert(NO, @"jay Subscriber error: %@", eventData);
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnSubscriberError payload{

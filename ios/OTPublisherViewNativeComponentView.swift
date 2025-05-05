@@ -327,7 +327,7 @@ private class PublisherAudioLevelDelegateHandler: NSObject, OTPublisherKitAudioL
         super.init()
     }
     
-    public func publisher(_ publisher: OTPublisherKit, audioLevelUpdated audioLevel: Float) {
+    func publisher(_ publisher: OTPublisherKit, audioLevelUpdated audioLevel: Float) {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
          if (publisherId.count > 0) {
              impl?.strictUIViewContainer?.handleAudioLevel([
@@ -347,7 +347,7 @@ private class PublisherNetworkStatsDelegateHandler: NSObject, OTPublisherKitNetw
     }
     
     
-    public func publisher(_ publisher: OTPublisherKit, audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]) {
+    func publisher(_ publisher: OTPublisherKit, audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]) {
         let statsArray = stats.map { stat -> [String: Any] in
             return [
                 "connectionId": stat.connectionId,
@@ -367,7 +367,7 @@ private class PublisherNetworkStatsDelegateHandler: NSObject, OTPublisherKitNetw
     
 
     
-    public func publisher(_ publisher: OTPublisherKit, videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]) {
+    func publisher(_ publisher: OTPublisherKit, videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]) {
         let statsArray = stats.map { stat -> [String: Any] in
             return [
                 "connectionId": stat.connectionId,
