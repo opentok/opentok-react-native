@@ -153,18 +153,26 @@ export default class OTSubscriber extends Component {
         */
         const style = this.props.style;
         return (
-          <OTSubscriberView
-            key={streamId}
-            streamId={streamId}
-            sessionId={this.sessionId}
-            style={style}
-            {...this.props.properties}
-          />
+          <OTContext.Provider value={{ sessionId: this.sessionId }}>
+            <OTSubscriberView
+              key={streamId}
+              streamId={streamId}
+              style={style}
+              {...this.props.properties}
+            />
+          </OTContext.Provider>
         );
       });
       return <View style={containerStyle}>{childrenWithStreams}</View>;
     }
-    return this.props.children(this.state.streams) || null;
+    if (this.props.children(this.state.streams)) {
+      return (
+        <OTContext.Provider value={{ sessionId: this.sessionId }}>
+          this.props.children(this.state.streams);
+        </OTContext.Provider>
+      );
+    }
+    return null;
   }
 }
 

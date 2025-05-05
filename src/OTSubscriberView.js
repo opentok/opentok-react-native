@@ -3,6 +3,7 @@ import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
 import OTSubscriberViewNative from './OTSubscriberViewNativeComponent';
+import OTContext from './contexts/OTContext';
 
 export default class OTSubscriberView extends React.Component {
   static defaultProps = {
@@ -13,10 +14,12 @@ export default class OTSubscriberView extends React.Component {
     },
   };
 
+  sessionId = this.context.sessionId;
+
   eventHandlers = {};
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.eventHandlers = props.eventHandlers;
     this.initComponent(props.eventHandlers);
   }
@@ -34,11 +37,10 @@ export default class OTSubscriberView extends React.Component {
   }
 
   render() {
-    const { style, sessionId, streamId, subscribeToAudio, subscribeToVideo } =
-      this.props;
+    const { style, streamId, subscribeToAudio, subscribeToVideo } = this.props;
     return (
       <OTSubscriberViewNative
-        sessionId={sessionId}
+        sessionId={this.sessionId}
         streamId={streamId}
         subscribeToAudio={subscribeToAudio}
         subscribeToVideo={subscribeToVideo}
@@ -58,7 +60,6 @@ export default class OTSubscriberView extends React.Component {
 }
 
 OTSubscriberView.propTypes = {
-  sessionId: PropTypes.string.isRequired,
   streamId: PropTypes.string.isRequired,
   eventHandlers: PropTypes.object,
   subscribeToAudio: PropTypes.bool,
@@ -74,3 +75,5 @@ OTSubscriberView.defaultProps = {
     flex: 1,
   },
 };
+
+OTSubscriberView.contextType = OTContext;
