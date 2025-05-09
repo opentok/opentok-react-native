@@ -73,7 +73,6 @@ using namespace facebook::react;
             [self createPublisherPropsFromViewProps:newViewProps];
         [_impl createPublisher:publisherProperties];
         self.contentView = _impl.publisherView;
-        return;
     }
 
     if (oldViewProps.sessionId != newViewProps.sessionId) {
@@ -130,11 +129,11 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleAudioLevel:(NSDictionary *)eventData {
+- (void)handleAudioLevel:(float)audioLevel {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTPublisherViewNativeEventEmitter::OnAudioLevel payload{
-            .audioLevel = [eventData[@"audioLevel"] floatValue]};
+            .audioLevel = audioLevel};
         eventEmitter->onAudioLevel(std::move(payload));
     }
 }

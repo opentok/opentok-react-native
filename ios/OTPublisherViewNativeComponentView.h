@@ -3,7 +3,7 @@
 - (void)handleStreamCreated:(NSDictionary *)eventData;
 - (void)handleStreamDestroyed:(NSDictionary *)eventData;
 - (void)handleError:(NSDictionary *)eventData;
-- (void)handleAudioLevel:(NSDictionary *)eventData;
+- (void)handleAudioLevel:(float)audioLevel;
 - (void)handleAudioNetworkStats:(NSString *)jsonString;
 - (void)handleVideoNetworkStats:(NSString *)jsonString;
 - (void)handleMuteForced;

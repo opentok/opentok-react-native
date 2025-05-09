@@ -22,7 +22,7 @@ export type SubscriberVideoNetworkStatsEvent = {
 };
 
 export type SubscriberAudioStatsEvent = {
-  xyz: string; // JSON string containing all audio stats
+  jsonStats: string; // JSON string containing all audio stats
 };
 
 export type SubscriberAudioLevelEvent = {
@@ -54,7 +54,6 @@ export interface NativeProps extends ViewProps {
 
   onSubscriberConnected?: BubblingEventHandler<StreamEvent> | null;
   onSubscriberDisconnected?: BubblingEventHandler<StreamEvent> | null;
-  onStreamDestroyed?: BubblingEventHandler<StreamEvent> | null;
   onSubscriberError?: BubblingEventHandler<StreamErrorEvent> | null;
   onRtcStatsReport?: BubblingEventHandler<SubscriberRTCStatsReportEvent> | null;
   onAudioLevel?: BubblingEventHandler<SubscriberAudioLevelEvent> | null;
