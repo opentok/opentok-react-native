@@ -50,6 +50,12 @@ RCT_EXTERN_METHOD(publishVideo:
 RCT_EXTERN_METHOD(publishCaptions:
                   (NSString*)publisherId
                   pubCaptions:(BOOL)publishCaptions)
+RCT_EXTERN_METHOD(cameraTorch:
+                  (NSString*)publisherId
+                  cameraTorch:(BOOL)cameraTorch)
+RCT_EXTERN_METHOD(cameraZoomFactor:
+                  (NSString*)publisherId
+                  cameraZoomFactor:(nonnull NSNumber*)cameraZoomFactor)
 RCT_EXTERN_METHOD(getRtcStatsReport:
                   (NSString*)publisherId)
 RCT_EXTERN_METHOD(getSubscriberRtcStatsReport)

@@ -30,6 +30,10 @@ const sanitizeFrameRate = (frameRate) => {
 
 const sanitizeCameraPosition = (cameraPosition = 'front') => (cameraPosition === 'front' ? 'front' : cameraPosition);
 
+const sanitizeCameraTorch = (cameraTorch = false) => Boolean(cameraTorch);
+
+const sanitizeCameraZoomFactor = (cameraZoomFactor = 1) => Number(cameraZoomFactor);
+
 const sanitizeVideoSource = (videoSource = 'camera') => (videoSource === 'camera' ? 'camera' : 'screen');
 
 const sanitizeAudioBitrate = (audioBitrate = 40000) =>
@@ -82,6 +86,8 @@ const sanitizeProperties = (properties) => {
       publishVideo: true,
       publishCaptions: false,
       name: '',
+      cameraZoomFactor: 1,
+      cameraTorch: false,
       cameraPosition: 'front',
       publisherAudioFallback: false,
       subscriberAudioFallback: true,
@@ -110,6 +116,8 @@ const sanitizeProperties = (properties) => {
     publishCaptions: sanitizeBooleanProperty(properties.publishCaptions),
     name: properties.name ? properties.name : '',
     cameraPosition: sanitizeCameraPosition(properties.cameraPosition),
+    cameraTorch:  sanitizeCameraTorch(properties.cameraTorch),
+    cameraZoomFactor: sanitizeCameraZoomFactor(properties.cameraZoomFactor),
     publisherAudioFallback: sanitizePublisherAudioFallback(
       properties.audioFallback,
       properties.videoSource,

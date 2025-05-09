@@ -106,7 +106,7 @@ class Utils {
         return iceServerList
     }
     
-    static func sanitizeIceServer(_ serverList: Any, _ transportPolicy: Any, _ includeServer: Any) -> OTSessionICEConfig {
+    static func sanitizeIceServer(_ serverList: Any, _ transportPolicy: Any, _ includeServer: Any, _ filterOutLanCandidates: filterOutLanCandidates: Boolean) -> OTSessionICEConfig {
         let myICEServerConfiguration: OTSessionICEConfig = OTSessionICEConfig();
         myICEServerConfiguration.includeServers = Utils.sanitizeIncludeServer(includeServer);
         myICEServerConfiguration.transportPolicy = Utils.sanitizeTransportPolicy(transportPolicy);
@@ -116,6 +116,7 @@ class Utils {
                 myICEServerConfiguration.addICEServer(withURL: url, userName: server.userName, credential: server.credential, error: nil);
             }
         }
+        myICEServerConfiguration.filterOutLanCandidates = filterOutLanCandidates;
         return myICEServerConfiguration;
     }
     

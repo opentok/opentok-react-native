@@ -68,12 +68,14 @@ const sanitizeCustomTurnOptions = (options) => {
   const validCustomTurnOptions = {
     includeServers: 'string',
     transportPolicy: 'string',
+    filterOutLanCandidates: 'boolean',
     customServers: 'Array'
   };
 
   const customTurnOptions = {
     includeServers: 'all',
     transportPolicy: 'all',
+    filterOutLanCandidates: 'boolean',
     customServers: []
   };
 
@@ -84,6 +86,8 @@ const sanitizeCustomTurnOptions = (options) => {
         sessionOptions[key] = validateString(value);
       } else if (optionType === 'Array') {
         sessionOptions[key] = validateArray(value);
+      } else if (optionType === 'boolean') {
+        sessionOptions[key] = validateBoolean(value);
       }
     } else {
       handleError(`${key} is not a valid option`);
@@ -107,6 +111,7 @@ const sanitizeSessionOptions = (options) => {
       androidOnTop: '', // 'publisher' || 'subscriber'
       androidZOrder: '', // 'mediaOverlay' || 'onTop'
       enableSinglePeerConnection: false,
+      sessionMigration: false,
     };
   } else {
     sessionOptions = {
@@ -116,6 +121,7 @@ const sanitizeSessionOptions = (options) => {
       proxyUrl: '',
       enableStereoOutput: false,
       enableSinglePeerConnection: false,
+      sessionMigration: false,
     };
   }
 
@@ -131,6 +137,7 @@ const sanitizeSessionOptions = (options) => {
       proxyUrl: 'string',
       enableStereoOutput: 'boolean',
       enableSinglePeerConnection: 'boolean',
+      sessionMigration: 'boolean',
     },
     android: {
       connectionEventsSuppressed: 'boolean',
@@ -142,6 +149,7 @@ const sanitizeSessionOptions = (options) => {
       proxyUrl: 'string',
       enableStereoOutput: 'boolean',
       enableSinglePeerConnection: 'boolean',
+      sessionMigration: 'boolean',
     },
   };
 

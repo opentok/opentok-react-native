@@ -53,6 +53,7 @@ class OTSessionManager: RCTEventEmitter {
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(sessionOptions["ipWhitelist"] as Any);
         settings.iceConfig = Utils.sanitizeIceServer(sessionOptions["customServers"] as Any, sessionOptions["transportPolicy"] as Any, sessionOptions["includeServers"] as Any);
         settings.singlePeerConnection = Utils.sanitizeBooleanProperty(sessionOptions["enableSinglePeerConnection"] as Any);
+        settings.sessionMigration = Utils.sanitizeBooleanProperty(sessionOptions["sessionMigration"] as Any);
         OTRN.sharedState.sessions.updateValue(OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self, settings: settings)!, forKey: sessionId);
     }
     
@@ -110,6 +111,10 @@ class OTSessionManager: RCTEventEmitter {
             publisher.publishAudio = Utils.sanitizeBooleanProperty(properties["publishAudio"] as Any);
             publisher.publishVideo = Utils.sanitizeBooleanProperty(properties["publishVideo"] as Any);
             publisher.publishCaptions = Utils.sanitizeBooleanProperty(properties["publishCaptions"] as Any);
+            publisher.cameraTorch = Utils.sanitizeBooleanProperty(properties["cameraTorch"] as Any);
+            if let cameraZoomFactor = properties["cameraZoomFactor"] as? Float {
+                publisher.cameraZoomFactor = cameraZoomFactor;
+            }
             publisher.audioLevelDelegate = self;
             publisher.networkStatsDelegate = self;
             publisher.rtcStatsReportDelegate = self;
@@ -222,6 +227,16 @@ class OTSessionManager: RCTEventEmitter {
     @objc func publishCaptions(_ publisherId: String, pubCaptions: Bool) -> Void {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
         publisher.publishCaptions = pubCaptions;
+    }
+    
+    @objc func cameraTorch(_ publisherId: String, cameraTorch: Bool) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.cameraTorch = cameraTorch;
+    }
+    
+    @objc func cameraZoomFactor(_ publisherId: String, cameraZoomFactor: Float) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else { return }
+        publisher.cameraZoomFactor = cameraZoomFactor;
     }
     
     @objc func getRtcStatsReport(_ publisherId: String) -> Void {

@@ -90,6 +90,8 @@ class OTPublisher extends Component {
     updatePublisherProperty('publishVideo', true);
     updatePublisherProperty('publishCaptions', false);
     updatePublisherProperty('cameraPosition', 'front');
+    updatePublisherProperty('cameraTorch', false);
+    updatePublisherProperty('cameraZoomFactor', 1);
     updatePublisherProperty('videoContentHint', '');
   }
   componentWillUnmount() {
