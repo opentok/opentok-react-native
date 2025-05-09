@@ -53,8 +53,8 @@ const sanitizeResolution = (resolution) => {
   if (
     typeof resolution !== 'object' ||
     (resolution &&
-      resolution.width === void 0 && // TODO use typeof !== 'number'
-      resolution.height === void 0) ||
+      resolution.width === undefined && // TODO use typeof !== 'number'
+      resolution.height === undefined) ||
     resolution === null
   ) {
     return { width: MAX_SAFE_INTEGER, height: MAX_SAFE_INTEGER };
@@ -62,21 +62,21 @@ const sanitizeResolution = (resolution) => {
   const videoDimensions = {};
   if (resolution && resolution.height) {
     if (isNaN(parseInt(resolution.height, 10))) {
-      videoDimensions.height = void 0;
+      videoDimensions.height = undefined;
     }
 
     videoDimensions.height = parseInt(resolution.height, 10);
   } else {
-    videoDimensions.height = void 0;
+    videoDimensions.height = undefined;
   }
   if (resolution && resolution.width) {
     if (isNaN(parseInt(resolution.width, 10))) {
-      videoDimensions.width = void 0;
+      videoDimensions.width = undefined;
     }
 
     videoDimensions.width = parseInt(resolution.width, 10);
   } else {
-    videoDimensions.width = void 0;
+    videoDimensions.width = undefined;
   }
   return videoDimensions;
 };
