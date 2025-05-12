@@ -109,7 +109,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         ConcurrentHashMap<String, String> mAndroidOnTopMap = sharedState.getAndroidOnTopMap();
         ConcurrentHashMap<String, String> mAndroidZOrderMap = sharedState.getAndroidZOrderMap();
         final boolean singlePeerConnection = sessionOptions.getBoolean("enableSinglePeerConnection");
-
+        final boolean sessionMigration = sessionOptions.getBoolean("sessionMigration");
 
         Session mSession = new Session.Builder(this.getReactApplicationContext(), apiKey, sessionId)
                 .sessionOptions(new Session.SessionOptions() {
@@ -124,6 +124,7 @@ public class OTSessionManager extends ReactContextBaseJavaModule
                 .setIpWhitelist(ipWhitelist)
                 .setProxyUrl(proxyUrl)
                 .setSinglePeerConnection(singlePeerConnection)
+                .setSessionMigration(sessionMigration)
                 .build();
         mSession.setSessionListener(this);
         mSession.setSignalListener(this);
@@ -169,6 +170,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Boolean publishCaptions = properties.getBoolean("publishCaptions");
         String videoSource = properties.getString("videoSource");
         Boolean scalableScreenshare = properties.getBoolean("scalableScreenshare");
+        Boolean cameraTorch = properties.getBoolean("cameraTorch");
+        Float cameraZoomFactor = (float)properties.getDouble("cameraZoomFactor");
         Publisher mPublisher = null;
         if (videoSource.equals("screen")) {
             View view = getCurrentActivity().getWindow().getDecorView().getRootView();
@@ -210,6 +213,8 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mPublisher.setPublishVideo(publishVideo);
         mPublisher.setPublishAudio(publishAudio);
         mPublisher.setPublishCaptions(publishCaptions);
+        mPublisher.setCameraTorch(cameraTorch);
+        mPublisher.setCameraZoomFactor(cameraZoomFactor);
         mPublisher.setAudioStatsListener(this);
         mPublisher.setVideoStatsListener(this);
         mPublisher.setVideoListener(this);
@@ -401,6 +406,26 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         Publisher mPublisher = mPublishers.get(publisherId);
         if (mPublisher != null) {
             mPublisher.setPublishVideo(publishVideo);
+        }
+    }
+
+    @ReactMethod
+    public void setCameraTorch(String publisherId, Boolean cameraTorch) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.setCameraTorch(cameraTorch);
+        }
+    }
+
+    @ReactMethod
+    public void setCameraZoomFactor(String publisherId, Float cameraZoomFactor) {
+
+        ConcurrentHashMap<String, Publisher> mPublishers = sharedState.getPublishers();
+        Publisher mPublisher = mPublishers.get(publisherId);
+        if (mPublisher != null) {
+            mPublisher.setCameraZoomFactor(cameraZoomFactor);
         }
     }
 
