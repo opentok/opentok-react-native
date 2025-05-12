@@ -14,4 +14,5 @@
 - (void)handleVideoDisableWarningLifted:(NSDictionary *)eventData;
 - (void)handleVideoDataReceived:(NSDictionary *)eventData;
 - (void)handleReconnected:(NSDictionary *)eventData;
+- (void)handleCaptionReceived:(NSDictionary *)eventData;
 @end

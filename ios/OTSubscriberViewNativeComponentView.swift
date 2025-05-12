@@ -15,6 +15,8 @@ import React
         SubscriberAudioLevelDelegateHandler?
     fileprivate var subscriberNetworkStatsDelegateHandler:
         SubscriberNetworkStatsDelegateHandler?
+    fileprivate var subscriberCaptionsDelegateHandler:
+        SubscriberCaptionsDelegateHandler?
 
     @objc public var subscriberView: UIView {
         if let subscriberUIView = subscriberUIView {
@@ -33,6 +35,8 @@ import React
             SubscriberAudioLevelDelegateHandler(impl: self)
         subscriberNetworkStatsDelegateHandler =
             SubscriberNetworkStatsDelegateHandler(impl: self)
+        subscriberCaptionsDelegateHandler =
+            SubscriberCaptionsDelegateHandler(impl: self)
     }
 
     @objc public func createSubscriber(_ properties: NSDictionary) {
@@ -75,6 +79,7 @@ import React
         subscriber.rtcStatsReportDelegate = subscriberRtcStatsDelegateHandler
         subscriber.audioLevelDelegate = subscriberAudioLevelDelegateHandler
         subscriber.networkStatsDelegate = subscriberNetworkStatsDelegateHandler
+        subscriber.captionsDelegate = subscriberCaptionsDelegateHandler
 
         subscriber.subscribeToAudio = Utils.sanitizeBooleanProperty(
             properties["subscribeToAudio"] as Any)
@@ -132,6 +137,12 @@ import React
 
     }
 
+    @objc public func setSubscribeToCaptions(_ subscribeToCaptions: Bool) {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId ?? ""]
+        else { return }
+        subscriber.subscribeToCaptions = subscribeToCaptions
+    }
+
     deinit {
         guard let streamId = self.streamId,
             let subscriber = OTRN.sharedState.subscribers[streamId]
@@ -144,10 +155,12 @@ import React
         subscriber.audioLevelDelegate = nil
         subscriber.networkStatsDelegate = nil
         subscriber.rtcStatsReportDelegate = nil
+        subscriber.captionsDelegate = nil
         subscriberDelegateHandler = nil
         subscriberRtcStatsDelegateHandler = nil
         subscriberAudioLevelDelegateHandler = nil
         subscriberNetworkStatsDelegateHandler = nil
+        subscriberCaptionsDelegateHandler = nil
         OTRN.sharedState.subscribers.removeValue(forKey: streamId)
     }
 }
@@ -380,6 +393,29 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
             let impl = impl
         {
             impl.strictUIViewContainer?.handleAudioNetworkStats(jsonString)
+        }
+    }
+}
+
+private class SubscriberCaptionsDelegateHandler: NSObject, OTSubscriberKitCaptionsDelegate {
+    weak var impl: OTSubscriberViewNativeImpl?
+    
+    init(impl: OTSubscriberViewNativeImpl) {
+        super.init()
+        self.impl = impl
+    }
+    
+    func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal: Bool) {
+        var subscriberInfo: [String: Any] = [:]
+        subscriberInfo["text"] = text
+        subscriberInfo["isFinal"] = isFinal
+        
+        if let stream = subscriber.stream {
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        }
+        
+        if let impl = impl {
+            impl.strictUIViewContainer?.handleCaptionReceived(subscriberInfo)
         }
     }
 }

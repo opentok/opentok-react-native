@@ -237,6 +237,20 @@ using namespace facebook::react;
     }
 }
 
+- (void)handleCaptionReceived:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *text = eventData[@"text"] ? [eventData[@"text"] description] : @"";
+        BOOL isFinal = [eventData[@"isFinal"] boolValue];
+        
+        OTSubscriberViewNativeEventEmitter::OnCaptionReceived payload{
+            .text = std::string([text UTF8String]),
+            .isFinal = isFinal
+        };
+        eventEmitter->onCaptionReceived(std::move(payload));
+    }
+}
+
 //TODO
 //- (void)handleReconnected:(NSDictionary *)eventData {
 //    auto eventEmitter = [self getEventEmitter];
