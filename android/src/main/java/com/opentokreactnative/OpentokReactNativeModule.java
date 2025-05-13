@@ -112,17 +112,55 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
     @Override
     public void disableForceMute(String sessionId, Promise promise) {
-        // TODO
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        mSession.disableForceMute();
+        promise.resolve(true);
     }
 
     @Override
-    public void forceMuteAll(String sesssionId, ReadableArray excludedStreamIds, Promise promise) {
-        // TODO
+    public void forceMuteAll(String sessionId, ReadableArray excludedStreamIds, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+        ArrayList<Stream> mExcludedStreams = new ArrayList<Stream>();
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        for (int i = 0; i < excludedStreamIds.size(); i++) {
+            String streamId = excludedStreamIds.getString(i);
+            Stream mStream = streams.get(streamId);
+            if (mStream == null) {
+                promise.reject("Stream not found.");
+                continue;
+            }
+            mExcludedStreams.add(mStream);
+        }
+        mSession.forceMuteAll(mExcludedStreams);
+        promise.resolve(null);
     }
 
     @Override
-    public void forceMuteStream(String sesssionId, String streamId, Promise promise) {
-        // TODO
+    public void forceMuteStream(String sessionId, String streamId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        Stream mStream = streams.get(streamId);
+        if (mStream == null) {
+            promise.reject("Stream not found.");
+            return;
+        }
+        mSession.forceMuteStream(mStream);
+        promise.resolve(null);
     }
 
     @Override
@@ -156,12 +194,25 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
     @Override
     public void reportIssue(String sessionId, Promise promise) {
-        // TODO
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null){
+            promise.resolve(mSession.reportIssue());
+        } else {
+            promise.reject("Error connecting to session. Could not find native session instance.");
+        }
     }
 
     @Override
     public void setEncryptionSecret(String sessionId, String secret, Promise promise) {
-        // TODO
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null) {
+            mSession.setEncryptionSecret(secret);
+            promise.resolve(null);
+        } else {
+            promise.reject("There was an error setting the encryption secret. The native session instance could not be found.");
+        }
     }
 
     @Override

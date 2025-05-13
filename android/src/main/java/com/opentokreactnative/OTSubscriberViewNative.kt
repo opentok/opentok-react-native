@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
 import com.opentok.android.BaseVideoRenderer
@@ -17,6 +18,10 @@ import com.opentok.android.Subscriber
 import com.opentok.android.SubscriberKit
 import com.opentok.android.SubscriberKit.SubscriberListener
 import com.opentok.android.SubscriberKit.SubscriberRtcStatsReportListener
+import com.opentok.android.VideoUtils
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
 
 class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     SubscriberRtcStatsReportListener, SubscriberKit.AudioLevelListener,
@@ -29,11 +34,12 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     private var stream: Stream? = null
     private var sessionId: String? = ""
     private var streamId: String? = ""
-    private var subscribeToAudio = true
-    private var subscribeToVideo = true
+    //private var subscribeToAudio = true
+    //private var subscribeToVideo = true
     private var subscriber: Subscriber? = null
     private var sharedState = OTRN.getSharedState();
     private var TAG = this.javaClass.simpleName
+    private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
         configureComponent(context)
@@ -49,6 +55,15 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         defStyleAttr
     ) {
         configureComponent(context)
+    }
+
+    fun updateProperties(props: ReactStylesDiffMap?) {
+        if (this.props == null) {
+            this.props = props?.toMap()
+            for ((key, value) in this.props?.toMap() ?: emptyMap()) {
+                Log.d(TAG, "updateProperties: $key $value")
+            }
+        }
     }
 
     override fun onAttachedToWindow() {
@@ -77,12 +92,12 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     public fun setSubscribeToAudio(value: Boolean) {
-        subscribeToAudio = value
+        //subscribeToAudio = value
         subscriber?.subscribeToAudio = value
     }
 
     public fun setSubscribeToVideo(value: Boolean) {
-        subscribeToVideo = value
+        //subscribeToVideo = value
         subscriber?.subscribeToVideo = value
     }
 
@@ -103,13 +118,16 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     fun setPreferredResolution(value: String?) {
-        //size: VideoUtils.VideoSiz
-        //subscriber?.preferredResolution = value
+        var values: List<String> = value?.split("x") ?: return
+        var width: Int = values[0].toInt()
+        var height: Int = values[1].toInt()
+        subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
     }
 
     fun subscribeToStream(session: Session, stream: Stream) {
         Log.d(TAG, "subscribeToStream: " + stream.streamId)
-        subscriber = Subscriber.Builder(context, stream).build()
+        subscriber = Subscriber.Builder(context, stream)
+            .build()
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
         subscriber?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
@@ -122,8 +140,29 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber?.setVideoStatsListener(this)
         subscriber?.setVideoListener(this)
         subscriber?.setStreamListener(this)
-        subscriber?.setSubscribeToAudio(subscribeToAudio)
-        subscriber?.setSubscribeToVideo(subscribeToVideo)
+        subscriber?.setAudioLevelListener(this)
+
+        subscriber?.setSubscribeToAudio(this.props?.get("subscribeToAudio") as Boolean)
+        subscriber?.setSubscribeToVideo(this.props?.get("subscribeToVideo") as Boolean)
+        if (this.props?.get("subscribeToCaptions") != null) {
+            subscriber?.setSubscribeToCaptions(this.props?.get("subscribeToCaptions") as Boolean)
+        }
+        if (this.props?.get("audioVolume") != null) {
+            subscriber?.setAudioVolume(this.props?.get("audioVolume") as Double)
+        }
+        if (this.props?.get("preferredFrameRate") != null) {
+            subscriber?.setPreferredFrameRate(this.props?.get("preferredFrameRate") as Float)
+        }
+        if (this.props?.get("preferredResolution") != null) {
+            var res : String = this.props?.get("preferredResolution") as String
+            var values: List<String> = res.split("x")
+            var width: Int = values[0].toInt()
+            var height: Int = values[1].toInt()
+            subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
+        }
+
+        //clear the props map here..
+        this.props?.clear()
 
         session.subscribe(subscriber)
         if (subscriber?.view != null) {
@@ -154,6 +193,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onError(subscriber: SubscriberKit, opentokError: OpentokError) {
+        Log.d(TAG, "onError: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber.getStream().streamId)
@@ -163,6 +203,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onRtcStatsReport(subscriber: SubscriberKit, jsonArrayOfReports: String) {
+        Log.d(TAG, "onRtcStatsReport: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("jsonArrayOfReports", jsonArrayOfReports)
@@ -171,14 +212,16 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onAudioLevelUpdated(subscriber: SubscriberKit?, audioLevel: Float) {
+        Log.d(TAG, "onAudioLevelUpdated: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
             }
-        emitOpenTokEvent("onAudioLevelUpdated", payload)
+        emitOpenTokEvent("onAudioLevel", payload)
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {
+        Log.d(TAG, "onCaptionText: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("text", text);
@@ -191,14 +234,27 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberAudioStats?
     ) {
-        // TODO("Not yet implemented")
+        Log.d(TAG, "onAudioStats: " + subscriber?.getStream()?.streamId)
+        val audioStats: WritableMap = Arguments.createMap()
+        audioStats.putDouble("audioPacketsLost", stats?.audioPacketsLost?.toDouble() ?: 0.0)
+        audioStats.putDouble("audioPacketsReceived", stats?.audioPacketsReceived?.toDouble() ?: 0.0)
+        audioStats.putDouble("audioBytesReceived", stats?.audioBytesReceived?.toDouble() ?: 0.0)
+        audioStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+        emitOpenTokEvent("onAudioStats", audioStats)
     }
 
     override fun onVideoStats(
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        // TODO("Not yet implemented")
+        Log.d(TAG, "onVideoStats: " + subscriber?.getStream()?.streamId)
+        val videoStats: WritableMap = Arguments.createMap()
+        videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
+        videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
+        videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
+        videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+        Log.d(TAG, "onVideoStats: " + videoStats.toString())
+        emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {

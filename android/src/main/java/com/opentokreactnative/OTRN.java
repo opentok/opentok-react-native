@@ -8,16 +8,13 @@ import com.opentok.android.Publisher;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OTRN {
-
     public static OTRN sharedState;
-
     private ConcurrentHashMap<String, Stream> subscriberStreams = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Publisher> publishers = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
-
         if (sharedState == null) {
             sharedState = new OTRN();
         }
@@ -25,13 +22,11 @@ public class OTRN {
     }
 
     public ConcurrentHashMap<String, Stream> getSubscriberStreams() {
-
         return this.subscriberStreams;
     }
 
 
     public ConcurrentHashMap<String, Session> getSessions() {
-
         return this.sessions;
     }
 
