@@ -108,7 +108,7 @@ export default class OTPublisher extends React.Component {
         }}
         onRtcStatsReport={(event) => {
           this.props.eventHandlers?.rtcStatsReport?.(
-            JSON.parse(event.nativeEvent.json)
+            JSON.parse(event.nativeEvent.jsonStats)
           );
         }}
         onVideoDisabled={(event) => {

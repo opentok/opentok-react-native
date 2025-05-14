@@ -46,7 +46,6 @@ using namespace facebook::react;
         };
         [_impl createSubscriber:subscriberProperties];
         self.contentView = _impl.subscriberView;
-        return;
     }
 
     if (oldViewProps.sessionId != newViewProps.sessionId) {
@@ -85,13 +84,13 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleStreamDestroyed:(NSDictionary *)eventData {
+- (void)handleSubscriberDisconnected:(NSDictionary *)eventData {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnStreamDestroyed payload{
+        OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnected payload{
             .streamId = std::string([eventData[@"streamId"] UTF8String])
         };
-        eventEmitter->onStreamDestroyed(std::move(payload));
+        eventEmitter->onSubscriberDisconnected(std::move(payload));
     }
 }
 
@@ -106,15 +105,170 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleRtcStatsReport:(NSDictionary *)eventData {
+- (void)handleRtcStatsReport:(NSString *)jsonString {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnRtcStatsReport payload{
-            .jsonArrayOfReports = std::string([eventData[@"jsonArrayOfReports"] UTF8String])
+             .jsonStats = std::string([jsonString UTF8String])
         };
         eventEmitter->onRtcStatsReport(std::move(payload));
     }
 }
+
+- (void)handleAudioLevel:(float)audioLevel {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnAudioLevel payload{
+            .audioLevel = audioLevel
+        };
+        eventEmitter->onAudioLevel(std::move(payload));
+    }
+}
+
+- (void)handleVideoNetworkStats:(NSString *)jsonString {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnVideoNetworkStats payload{
+            .jsonStats = std::string([jsonString UTF8String])
+        };
+        eventEmitter->onVideoNetworkStats(std::move(payload));
+    }
+}
+
+- (void)handleAudioNetworkStats:(NSString *)jsonString {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnAudioNetworkStats payload{
+            .jsonStats = std::string([jsonString UTF8String])
+        };
+        eventEmitter->onAudioNetworkStats(std::move(payload));
+    }
+}
+
+- (void)handleVideoEnabled:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *streamId = @"";
+        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *streamData = eventData[@"stream"];
+            if (streamData[@"streamId"]) {
+                streamId = streamData[@"streamId"];
+            }
+        }
+        
+        OTSubscriberViewNativeEventEmitter::OnVideoEnabled payload{
+            .streamId = std::string([streamId UTF8String]),
+           //TODO .reason = std::string([eventData[@"reason"] UTF8String])
+        };
+        eventEmitter->onVideoEnabled(std::move(payload));
+    }
+}
+
+- (void)handleVideoDisabled:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *streamId = @"";
+        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *streamData = eventData[@"stream"];
+            if (streamData[@"streamId"]) {
+                streamId = streamData[@"streamId"];
+            }
+        }
+        
+        OTSubscriberViewNativeEventEmitter::OnVideoDisabled payload{
+            .streamId = std::string([streamId UTF8String]),
+            //.reason = std::string([eventData[@"reason"] UTF8String])
+        };
+        eventEmitter->onVideoDisabled(std::move(payload));
+    }
+}
+
+- (void)handleVideoDisableWarning:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *streamId = @"";
+        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *streamData = eventData[@"stream"];
+            if (streamData[@"streamId"]) {
+                streamId = streamData[@"streamId"];
+            }
+        }
+        
+        OTSubscriberViewNativeEventEmitter::OnVideoDisableWarning payload{
+            .streamId = std::string([streamId UTF8String])
+        };
+        eventEmitter->onVideoDisableWarning(std::move(payload));
+    }
+}
+
+- (void)handleVideoDisableWarningLifted:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *streamId = @"";
+        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *streamData = eventData[@"stream"];
+            if (streamData[@"streamId"]) {
+                streamId = streamData[@"streamId"];
+            }
+        }
+        
+        OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLifted payload{
+            .streamId = std::string([streamId UTF8String])
+        };
+        eventEmitter->onVideoDisableWarningLifted(std::move(payload));
+    }
+}
+
+- (void)handleVideoDataReceived:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *streamId = @"";
+        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *streamData = eventData[@"stream"];
+            if (streamData[@"streamId"]) {
+                streamId = streamData[@"streamId"];
+            }
+        }
+        
+        OTSubscriberViewNativeEventEmitter::OnVideoDataReceived payload{
+            .streamId = std::string([streamId UTF8String])
+        };
+        eventEmitter->onVideoDataReceived(std::move(payload));
+    }
+}
+
+- (void)handleCaptionReceived:(NSDictionary *)eventData {
+    auto eventEmitter = [self getEventEmitter];
+    if (eventEmitter) {
+        NSString *text = eventData[@"text"] ? [eventData[@"text"] description] : @"";
+        BOOL isFinal = [eventData[@"isFinal"] boolValue];
+        
+        OTSubscriberViewNativeEventEmitter::OnCaptionReceived payload{
+            .text = std::string([text UTF8String]),
+            .isFinal = isFinal
+        };
+        eventEmitter->onCaptionReceived(std::move(payload));
+    }
+}
+
+//TODO
+//- (void)handleReconnected:(NSDictionary *)eventData {
+//    auto eventEmitter = [self getEventEmitter];
+//    if (eventEmitter) {
+//        NSString *streamId = @"";
+//        if (eventData[@"stream"] && [eventData[@"stream"] isKindOfClass:[NSDictionary class]]) {
+//            NSDictionary *streamData = eventData[@"stream"];
+//            if (streamData[@"streamId"]) {
+//                streamId = streamData[@"streamId"];
+//            }
+//        }
+//        
+//        OTSubscriberViewNativeEventEmitter::OnReconnected payload{
+//            .streamId = std::string([streamId UTF8String])
+//        };
+//        eventEmitter->onReconnected(std::move(payload));
+//    }
+//}
 
 @end
 

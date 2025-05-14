@@ -62,11 +62,6 @@ RCT_EXPORT_MODULE()
 }
 
 
-- (void)getSubscriberRtcStatsReport { 
-  
-}
-
-
 - (void)sendSignal:(nonnull NSString *)sessionId 
     type:(nonnull NSString *)type 
     data:(nonnull NSString *)data { 
@@ -115,9 +110,12 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)getPublisherRtcStatsReport:(nonnull NSString *)publisherId { 
-    
+      [impl getPublisherRtcStatsReport:publisherId];
 }
 
+- (void)getSubscriberRtcStatsReport { 
+      [impl getSubscriberRtcStatsReport];
+}
 
 - (void)publish:(nonnull NSString *)publisherId {
     [impl publish:publisherId];
@@ -125,12 +123,11 @@ RCT_EXPORT_MODULE()
 
 
 - (void)setAudioTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    
+    [impl setAudioTransformers:publisherId transformers:transformers];
 }
 
-
 - (void)setVideoTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    
+    [impl setVideoTransformers:publisherId transformers:transformers];
 }
 
 
