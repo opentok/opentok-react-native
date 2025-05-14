@@ -211,10 +211,11 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
         if let stream = subscriber.stream {
             subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
                 stream)
+            subscriberInfo["streamId"] = stream.streamId
         }
 
         if let impl = impl {
-            impl.strictUIViewContainer?.handleStreamDestroyed(subscriberInfo)
+            impl.strictUIViewContainer?.handleSubscriberDisconnected(subscriberInfo)
         }
     }
 

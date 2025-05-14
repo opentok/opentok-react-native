@@ -123,12 +123,11 @@ RCT_EXPORT_MODULE()
 
 
 - (void)setAudioTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    
+    [impl setAudioTransformers:publisherId transformers:transformers];
 }
 
-
 - (void)setVideoTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    
+    [impl setVideoTransformers:publisherId transformers:transformers];
 }
 
 

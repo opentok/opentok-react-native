@@ -2,7 +2,7 @@
 
 @interface OTSubscriberViewNativeComponentView : UIView
 - (void)handleSubscriberConnected:(NSDictionary *)eventData;
-- (void)handleStreamDestroyed:(NSDictionary *)eventData;
+- (void)handleSubscriberDisconnected:(NSDictionary *)eventData;
 - (void)handleError:(NSDictionary *)eventData;
 - (void)handleRtcStatsReport:(NSString *)jsonString;
 - (void)handleAudioLevel:(float)audioLevel;

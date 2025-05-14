@@ -84,13 +84,13 @@ using namespace facebook::react;
     }
 }
 
-- (void)handleStreamDestroyed:(NSDictionary *)eventData {
+- (void)handleSubscriberDisconnected:(NSDictionary *)eventData {
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnStreamDestroyed payload{
+        OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnected payload{
             .streamId = std::string([eventData[@"streamId"] UTF8String])
         };
-        eventEmitter->onStreamDestroyed(std::move(payload));
+        eventEmitter->onSubscriberDisconnected(std::move(payload));
     }
 }
 
