@@ -22,3 +22,9 @@ DerivedData
 project.xcworkspace
 
 android/.gradle
+
+# From the new-architecture version
+.yarn/
+android/generated/
+ios/generated/
+example/
