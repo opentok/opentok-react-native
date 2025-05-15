@@ -49,7 +49,7 @@ jobs:
             pod update opentok-react-native
             pod install
             cat Podfile.lock
-            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,iPhone 16,OS=18.2' -- CODE_SIGNING_ALLOWED=NO
+            xcodebuild clean build -quiet -workspace ${{ matrix.project }}.xcworkspace -scheme ${{ matrix.project }} -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' -- CODE_SIGNING_ALLOWED=NO
           else
             ./gradlew -Dorg.gradle.jvmargs=-Xmx4g app:assembleRelease
           fi
