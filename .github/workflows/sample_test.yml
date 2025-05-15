@@ -34,6 +34,7 @@ jobs:
         uses: actions/setup-java@v4.7.1
         with:
           java-version: 17
+          distribution: zulu
       - name: NPM install ${{ matrix.project }}
         run: |
           cd samples/${{ matrix.project }}
