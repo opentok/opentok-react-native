@@ -38,37 +38,13 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view: OTSubscriberViewNative?,
         value: Boolean
     ) {
-        // TODO("Not yet implemented")
         view?.setSubscribeToAudio(value)
     }
-    /*
-        @ReactProp(name = "subscribeToAudio")
-        override public fun setSubscribeToAudio(view: OTSubscriberViewNative, value: Boolean) {
-            view.setSubscribeToAudio(value)
-        }
-
-
-
-    @ReactProp(name = "subscribeToVideo")
-    override public fun setSubscribeToVideo(view: OTSubscriberViewNative, value: Boolean) {
-        view.setSubscribeToVideo(value)
-    }
-
-    @ReactProp(name = "subscribeToCaptions")
-    override fun setSubscribeToCaptions(
-        view: OTSubscriberViewNative?,
-        value: Boolean
-    ) {
-        view?.setSubscribeToCaptions(value)
-    }
-
-     */
 
     override fun setSubscribeToVideo(
         view: OTSubscriberViewNative?,
         value: Boolean
     ) {
-        // TODO("Not yet implemented")
         view?.setSubscribeToVideo(value)
     }
 
@@ -76,11 +52,9 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view: OTSubscriberViewNative?,
         value: Boolean
     ) {
-        // TODO("Not yet implemented")
         view?.setSubscribeToCaptions(value)
     }
 
-    @ReactProp(name = "audioVolume")
     override fun setAudioVolume(
         view: OTSubscriberViewNative?,
         value: Double
@@ -88,7 +62,6 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view?.setAudioVolume(value)
     }
 
-    @ReactProp(name = "preferredFrameRate")
     override fun setPreferredFrameRate(
         view: OTSubscriberViewNative?,
         value: Int
@@ -96,7 +69,6 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view?.setPreferredFrameRate(value)
     }
 
-    @ReactProp(name = "preferredResolution")
     override fun setPreferredResolution(
         view: OTSubscriberViewNative?,
         value: String?

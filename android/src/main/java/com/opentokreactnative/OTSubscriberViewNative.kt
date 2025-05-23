@@ -2,7 +2,6 @@ package com.opentokreactnative
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
@@ -34,8 +33,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     private var stream: Stream? = null
     private var sessionId: String? = ""
     private var streamId: String? = ""
-    //private var subscribeToAudio = true
-    //private var subscribeToVideo = true
     private var subscriber: Subscriber? = null
     private var sharedState = OTRN.getSharedState();
     private var TAG = this.javaClass.simpleName
@@ -60,9 +57,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     fun updateProperties(props: ReactStylesDiffMap?) {
         if (this.props == null) {
             this.props = props?.toMap()
-            for ((key, value) in this.props?.toMap() ?: emptyMap()) {
-                Log.d(TAG, "updateProperties: $key $value")
-            }
         }
     }
 
@@ -92,12 +86,10 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     public fun setSubscribeToAudio(value: Boolean) {
-        //subscribeToAudio = value
         subscriber?.subscribeToAudio = value
     }
 
     public fun setSubscribeToVideo(value: Boolean) {
-        //subscribeToVideo = value
         subscriber?.subscribeToVideo = value
     }
 
@@ -125,7 +117,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     fun subscribeToStream(session: Session, stream: Stream) {
-        Log.d(TAG, "subscribeToStream: " + stream.streamId)
         subscriber = Subscriber.Builder(context, stream)
             .build()
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
@@ -161,7 +152,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
         }
 
-        //clear the props map here..
         this.props?.clear()
 
         session.subscribe(subscriber)
@@ -172,28 +162,22 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
-        Log.d(TAG, "onConnected: " + subscriber.stream.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", stream!!.streamId)
             }
         emitOpenTokEvent("onSubscriberConnected", payload)
-        // TODO ("Do we need to add to sharedState")
-
     }
 
     override fun onDisconnected(subscriber: SubscriberKit) {
-        Log.d(TAG, "onDisconnected: " + subscriber.stream.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber.getStream().streamId)
             }
         emitOpenTokEvent("onSubscriberDisconnected", payload)
-        // TODO ("Do we need to remove from sharedState")
     }
 
     override fun onError(subscriber: SubscriberKit, opentokError: OpentokError) {
-        Log.d(TAG, "onError: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber.getStream().streamId)
@@ -203,7 +187,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onRtcStatsReport(subscriber: SubscriberKit, jsonArrayOfReports: String) {
-        Log.d(TAG, "onRtcStatsReport: " + subscriber.getStream().streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("jsonArrayOfReports", jsonArrayOfReports)
@@ -212,7 +195,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onAudioLevelUpdated(subscriber: SubscriberKit?, audioLevel: Float) {
-        Log.d(TAG, "onAudioLevelUpdated: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
@@ -221,7 +203,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {
-        Log.d(TAG, "onCaptionText: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("text", text);
@@ -234,7 +215,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberAudioStats?
     ) {
-        Log.d(TAG, "onAudioStats: " + subscriber?.getStream()?.streamId)
         val audioStats: WritableMap = Arguments.createMap()
         audioStats.putDouble("audioPacketsLost", stats?.audioPacketsLost?.toDouble() ?: 0.0)
         audioStats.putDouble("audioPacketsReceived", stats?.audioPacketsReceived?.toDouble() ?: 0.0)
@@ -247,18 +227,15 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        Log.d(TAG, "onVideoStats: " + subscriber?.getStream()?.streamId)
         val videoStats: WritableMap = Arguments.createMap()
         videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
         videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
-        Log.d(TAG, "onVideoStats: " + videoStats.toString())
         emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {
-        Log.d(TAG, "onVideoDataReceived: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -267,7 +244,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoDisabled(subscriber: SubscriberKit?, reason: String?) {
-        Log.d(TAG, "onVideoDisabled: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -277,7 +253,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoEnabled(subscriber: SubscriberKit?, reason: String?) {
-        Log.d(TAG, "onVideoEnabled: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -287,7 +262,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoDisableWarning(subscriber: SubscriberKit?) {
-        Log.d(TAG, "onVideoDisableWarning: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -296,7 +270,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoDisableWarningLifted(subscriber: SubscriberKit?) {
-        Log.d(TAG, "onVideoDisableWarningLifted: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -305,7 +278,6 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onReconnected(subscriber: SubscriberKit?) {
-        Log.d(TAG, "onReconnected: " + subscriber?.getStream()?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", subscriber?.getStream()?.streamId)
@@ -322,5 +294,4 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         override fun getEventName() = name
         override fun getEventData() = payload
     }
-
 }

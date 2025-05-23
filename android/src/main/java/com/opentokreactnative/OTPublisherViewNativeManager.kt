@@ -42,17 +42,24 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) :
         viewToUpdate.updateProperties(props)
     }
 
-    @ReactProp(name = "sessionId")
-    override public fun setSessionId(view: OTPublisherViewNative, sessionId: String?) {
-        view.setSessionId(sessionId)
+    override fun setSessionId(
+        view: OTPublisherViewNative?,
+        value: String?
+    ) {
+        view?.setSessionId(value)
     }
 
-    @ReactProp(name = "publisherId")
+    //@ReactProp(name = "sessionId")
+    //override public fun setSessionId(view: OTPublisherViewNative, sessionId: String?) {
+       // view.setSessionId(sessionId)
+    //}
+
+    //@ReactProp(name = "publisherId")
     override public fun setPublisherId(view: OTPublisherViewNative, publisherId: String?) {
         view.setPublisherId(publisherId)
     }
 
-    @ReactProp(name = "publishAudio")
+    //@ReactProp(name = "publishAudio")
     override public fun setPublishAudio(view: OTPublisherViewNative, value: Boolean) {
         view.setPublishAudio(value)
     }

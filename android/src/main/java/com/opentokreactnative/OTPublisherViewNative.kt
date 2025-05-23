@@ -2,7 +2,6 @@ package com.opentokreactnative
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
@@ -27,25 +26,11 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     PublisherKit.MuteListener,
     PublisherKit.VideoStatsListener,
     PublisherKit.VideoListener {
-    //private var session: Session? = null
     private var sessionId: String? = ""
     private var publisherId: String? = ""
 
-    /*
-    private var publishAudio = true
-    private var publishVideo = true
-    private var publishCaptions = false
-    private var audioBitRate = 40000
-    private var audioFallbackEnabled = true
-    private var subscriberAudioFallback = true
-    private var publisherAudioFallback = true
-
-     */
     private var publisher: Publisher? = null
     private var sharedState = OTRN.getSharedState();
-
-    // private var name: String? = ""
-    private var TAG: String? = this.javaClass.simpleName
     private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
@@ -65,36 +50,13 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     fun updateProperties(props: ReactStylesDiffMap?) {
-        Log.d(TAG, "updateProperties: isAttachedToWindow = " + this.isAttachedToWindow)
         if (this.props == null) {
             this.props = props?.toMap()
-            for ((key, value) in this.props?.toMap() ?: emptyMap()) {
-                //Log.d(TAG, "updateProperties: $key $value")
-            }
             return
-        }
-
-        for (key in this.props!!.keys) {
-            if (props?.hasKey(key) == true) {
-                val newValue = when (this.props!![key]) {
-                    is Boolean -> props.getBoolean(key, false)
-                    is Int -> props.getInt(key, Int.MIN_VALUE)
-                    is Double -> props.getDouble(key, Double.MIN_VALUE)
-                    is String -> props.getString(key)
-                    else -> props.getDynamic(key)
-                }
-                if (newValue != null) {
-                    var oldValue = this.props!![key]
-                    this.props!![key] = newValue
-                    Log.d(TAG, "updateProperties: $key updated to $newValue from $oldValue")
-                }
-            }
         }
     }
 
     override fun onAttachedToWindow() {
-        Log.d(TAG, "onAttachedToWindow: ")
-        //session = sharedState.getSessions().get(sessionId)
         super.onAttachedToWindow()
         publishStream(/*session ?: return*/)
     }
@@ -117,22 +79,18 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setPublisherId(str: String?) {
-        Log.d(TAG, "setPublisherId: " + str)
         publisherId = str
     }
 
     public fun setPublishAudio(value: Boolean) {
-        //publishAudio = value
         publisher?.setPublishAudio(value)
     }
 
     public fun setPublishVideo(value: Boolean) {
-        //publishVideo = value
         publisher?.setPublishVideo(value)
     }
 
     public fun setPublishCaptions(value: Boolean) {
-        //publishCaptions = value
         publisher?.setPublishCaptions(value)
     }
 
@@ -194,11 +152,8 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         // TODO
     }
 
-    // TODO ("May be change the name to createPublisher")
     // Make this private?
-    fun publishStream(/*session: Session*/) {
-        //Log.d(TAG, "publishStream: " + session.sessionId)
-        //Log.d(TAG, "FPS_" + this.props?.get("resolution") as String)
+    private fun publishStream(/*session: Session*/) {
         if (this.props?.get("videoSource") == "screen") {
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
@@ -207,7 +162,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
                     Publisher.CameraCaptureFrameRate.valueOf(
                         "FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString()
                     )
-                ) //test
+                )
                 .resolution(Publisher.CameraCaptureResolution.valueOf(this.props?.get("resolution") as String)) //test
                 .audioTrack(this.props?.get("audioTrack") as Boolean)
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
@@ -226,7 +181,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
                     Publisher.CameraCaptureFrameRate.valueOf(
                         "FPS_" + (((this.props?.get("frameRate") as Double)).toInt()).toString()
                     )
-                ) //test
+                )
                 .resolution(Publisher.CameraCaptureResolution.valueOf(this.props?.get("resolution") as String)) //test
                 .audioTrack(this.props?.get("audioTrack") as Boolean)
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
@@ -266,28 +221,22 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             requestLayout()
         }
         props!!.clear() //we do not need to keep this around ?
-
-        Log.d(TAG, "publishStream: " + publisher!!.stream?.streamId)
     }
 
     override fun onStreamCreated(publisher: PublisherKit, stream: Stream) {
-        Log.d(TAG, "onStreamCreated: " + stream.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", stream!!.streamId)
             }
         emitOpenTokEvent("onStreamCreated", payload)
-        // TODO ("Do we need to add to sharedState")
     }
 
     override fun onStreamDestroyed(publisher: PublisherKit, stream: Stream) {
-        Log.d(TAG, "onStreamDestroyed: " + stream?.streamId)
         val payload =
             Arguments.createMap().apply {
                 putString("streamId", stream.streamId)
             }
         emitOpenTokEvent("onStreamDestroyed", payload)
-        // TODO ("Do we need to remove from sharedState")
     }
 
     override fun onError(publisher: PublisherKit, opentokError: OpentokError) {
@@ -351,7 +300,6 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     override fun onMuteForced(publisher: PublisherKit?) {
-        Log.d(TAG, "onMuteForced: " + publisher?.getStream()?.streamId)
         emitOpenTokEvent("onMuteForced", Arguments.createMap())
     }
 
@@ -381,22 +329,18 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     override fun onVideoDisabled(publisher: PublisherKit?, reason: String?) {
-        Log.d(TAG, "onVideoDisabled: " + publisher?.getStream()?.streamId)
         emitOpenTokEvent("onVideoDisabled", Arguments.createMap())
     }
 
     override fun onVideoEnabled(publisher: PublisherKit?, reason: String?) {
-        Log.d(TAG, "onVideoEnabled: " + publisher?.getStream()?.streamId)
         emitOpenTokEvent("onVideoEnabled", Arguments.createMap())
     }
 
     override fun onVideoDisableWarning(publisher: PublisherKit?) {
-        Log.d(TAG, "onVideoDisableWarning: " + publisher?.getStream()?.streamId)
         emitOpenTokEvent("onVideoDisableWarning", Arguments.createMap())
     }
 
     override fun onVideoDisableWarningLifted(publisher: PublisherKit?) {
-        Log.d(TAG, "onVideoDisableWarningLifted: " + publisher?.getStream()?.streamId)
         emitOpenTokEvent("onVideoDisableWarningLifted", Arguments.createMap())
     }
 
