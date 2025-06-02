@@ -150,9 +150,9 @@ export default class OTSubscriber extends Component {
               subscriberProperties: this.props.properties,
               streamProperties: this.props.streamProperties,
             }}
+            key={streamId}
           >
             <OTSubscriberView
-              key={streamId}
               streamId={streamId}
               style={style}
               {...this.props.properties}
@@ -170,7 +170,7 @@ export default class OTSubscriber extends Component {
             subscriberProperties: this.props.properties,
             streamProperties: this.props.streamProperties,
           }}
-          key={`sub-context-${elem.streamId}`}
+          key={elem.props.streamId}
         >
           {elem}
         </OTContext.Provider>
