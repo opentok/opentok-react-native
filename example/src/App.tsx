@@ -144,6 +144,50 @@ function App(): React.JSX.Element {
             subscribeToVideo,
           }}
           streamProperties={useStreamProperties ? streamProperties : undefined}
+          eventHandlers={{
+            audioLevel: (event: any) => {
+              console.log('sub audioLevel', event);
+            },
+            audioNetworkStats: (event: any) => {
+              console.log('sub audioNetworkStats', event);
+            },
+            captionReceived: (event: any) => {
+              console.log('sub captionReceived', event);
+            },
+            disconnected: (event: any) => {
+              console.log('sub disconnected', event);
+            },
+            error: (event: any) => {
+              console.log('sub error', event);
+            },
+            rtcStatsReport: (event: any) => {
+              console.log('sub rtcStatsReport', event);
+            },
+            subscriberConnected: (event: any) => {
+              console.log('subscriberConnected', event);
+              setTimeout(() => {
+                // subscriberRef.current?.getRtcStatsReport();
+              }, 4000);
+            },
+            videoDataReceived: (event: any) => {
+              console.log('sub videoDataReceived', event);
+            },
+            videoDisabled: (event: any) => {
+              console.log('sub videoDisabled', event);
+            },
+            videoDisableWarning: (event: any) => {
+              console.log('sub videoDisableWarning', event);
+            },
+            videoDisableWarningLifted: (event: any) => {
+              console.log('sub videoDisableWarningLifted', event);
+            },
+            videoEnabled: (event: any) => {
+              console.log('sub videoEnabled', event);
+            },
+            videoNetworkStats: (event: any) => {
+              console.log('sub videoNetworkStats', event);
+            },
+          }}
         >
           {useIndividualSubscriberViews
             ? (streamIds) => {
@@ -154,24 +198,9 @@ function App(): React.JSX.Element {
                   return (
                     <OTSubscriberView
                       streamId={streamId}
-                      sessionId={sessionId}
                       key={streamId}
                       ref={subscriberRef}
                       style={styles.videoview}
-                      eventHandlers={{
-                        subscriberConnected: (event: any) => {
-                          console.log('subscriberConnected', event);
-                          setTimeout(() => {
-                            subscriberRef.current?.getRtcStatsReport();
-                          }, 4000);
-                        },
-                        videoEnabled: (event: any) => {
-                          console.log('sub videoEnabled', event);
-                        },
-                        rtcStatsReport: (event: any) => {
-                          console.log('sub rtcStatsReport', event);
-                        },
-                      }}
                     />
                   );
                 });

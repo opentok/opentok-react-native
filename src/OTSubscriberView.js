@@ -20,15 +20,7 @@ export default class OTSubscriberView extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.eventHandlers = props.eventHandlers;
-    this.initComponent(props.eventHandlers);
   }
-
-  initComponent = () => {
-    this.eventHandlers.subscriberConnected =
-      this.props.eventHandlers?.subscriberConnected;
-    this.eventHandlers.onRtcStatsReport =
-      this.props.eventHandlers?.onRtcStatsReport;
-  };
 
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
@@ -38,6 +30,7 @@ export default class OTSubscriberView extends React.Component {
   render() {
     const { streamId } = this.props;
     const subscriberProperties = this.context.subscriberProperties;
+    const eventHandlers = this.context.eventHandlers;
     const streamProperties = this.context.streamProperties
       ? this.context.streamProperties[streamId]
       : undefined;
@@ -71,14 +64,23 @@ export default class OTSubscriberView extends React.Component {
         preferredFrameRate={preferredFrameRate}
         preferredResolution={preferredResolution}
         audioVolume={audioVolume}
+        onAudioLevel={(event) => {
+          eventHandlers.audioLevel?.(event.nativeEvent);
+        }}
+        onAudioNetworkStats={(event) => {
+          eventHandlers.audioNetworkStats?.(event.nativeEvent);
+        }}
         onSubscriberConnected={(event) => {
-          this.eventHandlers?.subscriberConnected?.(event.nativeEvent);
+          eventHandlers.subscriberConnected?.(event.nativeEvent);
         }}
         onRtcStatsReport={(event) => {
-          this.eventHandlers?.rtcStatsReport?.(event.nativeEvent);
+          eventHandlers.rtcStatsReport?.(event.nativeEvent);
         }}
         onVideoEnabled={(event) => {
-          this.eventHandlers?.videoEnabled?.(event.nativeEvent);
+          eventHandlers.videoEnabled?.(event.nativeEvent);
+        }}
+        onVideoNetworkStats={(event) => {
+          eventHandlers.onVideoNetworkStats?.(event.nativeEvent);
         }}
         style={style}
       />
@@ -88,11 +90,6 @@ export default class OTSubscriberView extends React.Component {
 
 OTSubscriberView.propTypes = {
   streamId: PropTypes.string.isRequired,
-  eventHandlers: PropTypes.object,
-};
-
-OTSubscriberView.defaultProps = {
-  eventHandlers: {},
 };
 
 OTSubscriberView.contextType = OTContext;

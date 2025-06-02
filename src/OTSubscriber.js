@@ -149,6 +149,7 @@ export default class OTSubscriber extends Component {
               sessionId: this.sessionId,
               subscriberProperties: this.props.properties,
               streamProperties: this.props.streamProperties,
+              eventHandlers: this.props.eventHandlers,
             }}
             key={streamId}
           >
@@ -169,6 +170,7 @@ export default class OTSubscriber extends Component {
             sessionId: this.sessionId,
             subscriberProperties: this.props.properties,
             streamProperties: this.props.streamProperties,
+            eventHandlers: this.props.eventHandlers,
           }}
           key={elem.props.streamId}
         >
