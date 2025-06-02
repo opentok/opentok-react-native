@@ -1,5 +1,4 @@
 import React from 'react';
-import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
 import OTSubscriberViewNative from './OTSubscriberViewNativeComponent';
@@ -37,13 +36,41 @@ export default class OTSubscriberView extends React.Component {
   }
 
   render() {
-    const { style, streamId, subscribeToAudio, subscribeToVideo } = this.props;
+    const { streamId } = this.props;
+    const subscriberProperties = this.context.subscriberProperties;
+    const streamProperties = this.context.streamProperties
+      ? this.context.streamProperties[streamId]
+      : undefined;
+    let {
+      audioVolume,
+      preferredFrameRate,
+      preferredResolution,
+      subscribeToAudio,
+      subscribeToCaptions,
+      subscribeToVideo,
+      style,
+    } = subscriberProperties;
+    if (streamProperties) {
+      ({
+        audioVolume,
+        preferredFrameRate,
+        preferredResolution,
+        subscribeToAudio,
+        subscribeToCaptions,
+        subscribeToVideo,
+        style,
+      } = streamProperties);
+    }
     return (
       <OTSubscriberViewNative
         sessionId={this.sessionId}
         streamId={streamId}
         subscribeToAudio={subscribeToAudio}
         subscribeToVideo={subscribeToVideo}
+        subscribeToCaptions={subscribeToCaptions}
+        preferredFrameRate={preferredFrameRate}
+        preferredResolution={preferredResolution}
+        audioVolume={audioVolume}
         onSubscriberConnected={(event) => {
           this.eventHandlers?.subscriberConnected?.(event.nativeEvent);
         }}
@@ -62,18 +89,10 @@ export default class OTSubscriberView extends React.Component {
 OTSubscriberView.propTypes = {
   streamId: PropTypes.string.isRequired,
   eventHandlers: PropTypes.object,
-  subscribeToAudio: PropTypes.bool,
-  subscribeToVideo: PropTypes.bool,
-  style: ViewPropTypes.style,
 };
 
 OTSubscriberView.defaultProps = {
   eventHandlers: {},
-  subscribeToAudio: true,
-  subscribeToVideo: true,
-  style: {
-    flex: 1,
-  },
 };
 
 OTSubscriberView.contextType = OTContext;
