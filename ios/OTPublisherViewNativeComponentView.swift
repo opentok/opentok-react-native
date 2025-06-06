@@ -9,8 +9,13 @@ import React
     fileprivate weak var strictUIViewContainer:
         OTPublisherViewNativeComponentView?
     fileprivate var publisherDelegateHandler: PublisherDelegateHandler?
-    fileprivate var publisherAudioLevelDelegateHandler: PublisherAudioLevelDelegateHandler?
-    fileprivate var publisherNetworkStatsDelegateHandler: PublisherNetworkStatsDelegateHandler?
+    fileprivate var publisherAudioLevelDelegateHandler:
+        PublisherAudioLevelDelegateHandler?
+    fileprivate var publisherNetworkStatsDelegateHandler:
+        PublisherNetworkStatsDelegateHandler?
+    fileprivate var publisherRtcStatsDelegateHandler:
+        PublisherRtcStatsDelegateHandler?
+
     fileprivate var publisherUIView: UIView?
 
     @objc public var publisherView: UIView {
@@ -23,8 +28,15 @@ import React
     @objc public init(
         view: OTPublisherViewNativeComponentView
     ) {
-        self.strictUIViewContainer = view
         super.init()
+        self.strictUIViewContainer = view
+        publisherDelegateHandler = PublisherDelegateHandler(impl: self)
+        publisherAudioLevelDelegateHandler = PublisherAudioLevelDelegateHandler(
+            impl: self)
+        publisherNetworkStatsDelegateHandler =
+            PublisherNetworkStatsDelegateHandler(impl: self)
+        publisherRtcStatsDelegateHandler = PublisherRtcStatsDelegateHandler(
+            impl: self)
     }
 
     @objc public func createPublisher(_ properties: NSDictionary) {
@@ -56,10 +68,6 @@ import React
         settings.scalableScreenshare = Utils.sanitizeBooleanProperty(
             properties["scalableScreenshare"] as Any)
 
-        publisherDelegateHandler = PublisherDelegateHandler(impl: self)
-        publisherAudioLevelDelegateHandler = PublisherAudioLevelDelegateHandler(impl: self)
-        publisherNetworkStatsDelegateHandler = PublisherNetworkStatsDelegateHandler(impl: self)
-
         self.publisherId = Utils.sanitizeStringProperty(
             properties["publisherId"] as Any)
 
@@ -85,6 +93,8 @@ import React
 
         publisher.audioLevelDelegate = publisherAudioLevelDelegateHandler
         publisher.networkStatsDelegate = publisherNetworkStatsDelegateHandler
+        publisher.rtcStatsReportDelegate = publisherRtcStatsDelegateHandler
+
         OTRN.sharedState.publishers.updateValue(publisher, forKey: publisherId)
 
         if let videoSource = properties["videoSource"] as? String,
@@ -114,8 +124,6 @@ import React
         publisher.publishCaptions = Utils.sanitizeBooleanProperty(
             properties["publishCaptions"] as Any)
 
-
-
         if let pubView = publisher.view {
             pubView.frame = strictUIViewContainer?.bounds ?? .zero
             publisherUIView = pubView
@@ -130,43 +138,43 @@ import React
         self.publisherId = publisherId
     }
 
-    @objc public func setPublishAudio(_ publishAudio: Bool) -> Void {
+    @objc public func setPublishAudio(_ publishAudio: Bool) {
         guard let publisherId = self.publisherId else {
             strictUIViewContainer?.handleError([
                 "code": "OTPublisherError",
-                "message": "Publisher ID is not set"
+                "message": "Publisher ID is not set",
             ])
             return
         }
-        
+
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
             strictUIViewContainer?.handleError([
                 "code": "OTPublisherError",
-                "message": "Could not find publisher instance"
+                "message": "Could not find publisher instance",
             ])
             return
         }
-        
+
         publisher.publishAudio = publishAudio
     }
 
-    @objc public func setPublishVideo(_ publishVideo: Bool) -> Void  {
+    @objc public func setPublishVideo(_ publishVideo: Bool) {
         guard let publisherId = self.publisherId else {
             strictUIViewContainer?.handleError([
                 "code": "OTPublisherError",
-                "message": "Publisher ID is not set"
+                "message": "Publisher ID is not set",
             ])
             return
         }
-        
+
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
             strictUIViewContainer?.handleError([
                 "code": "OTPublisherError",
-                "message": "Could not find publisher instance"
+                "message": "Could not find publisher instance",
             ])
             return
         }
-        
+
         publisher.publishVideo = publishVideo
     }
 
@@ -192,7 +200,7 @@ import React
                             ])
                             return
                         }
-                        if session.sessionConnectionStatus.rawValue == 1 {
+                        if session.sessionConnectionStatus == .connected {
                             session.unpublish(publisher, error: &error)
                         }
                     }
@@ -213,6 +221,8 @@ import React
                 publisherAudioLevelDelegateHandler = nil
                 publisher.networkStatsDelegate = nil
                 publisherNetworkStatsDelegateHandler = nil
+                publisher.rtcStatsReportDelegate = nil
+                publisherRtcStatsDelegateHandler = nil
                 OTRN.sharedState.publishers[publisherId] = nil
                 OTRN.sharedState.isPublishing[publisherId] = nil
             }
@@ -226,30 +236,37 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
     weak var impl: OTPublisherViewNativeImpl?
 
     init(impl: OTPublisherViewNativeImpl) {
-        self.impl = impl
         super.init()
+        self.impl = impl
     }
 
-    func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream) {
-        OTRN.sharedState.publisherStreams.updateValue(stream, forKey: stream.streamId)
-        OTRN.sharedState.subscriberStreams.updateValue(stream, forKey: stream.streamId)
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-        if (publisherId.count > 0) {
-            OTRN.sharedState.isPublishing[publisherId] = true;
-            var streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
-            streamInfo["publisherId"] = publisherId;
-            impl?.strictUIViewContainer?.handleStreamCreated(streamInfo)
+    func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream)
+    {
+        OTRN.sharedState.publisherStreams.updateValue(
+            stream, forKey: stream.streamId)
+        OTRN.sharedState.subscriberStreams.updateValue(
+            stream, forKey: stream.streamId)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty,
+            let impl = impl
+        {
+            OTRN.sharedState.isPublishing[publisherId] = true
+            var streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
+                stream)
+            streamInfo["publisherId"] = publisherId
             Utils.setStreamObservers(stream: stream, isPublisherStream: true)
+            impl.strictUIViewContainer?.handleStreamCreated(streamInfo)
         }
     }
 
     func publisher(_ publisher: OTPublisherKit, didFailWithError error: OTError)
     {
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-           if (publisherId.count > 0) {
-               let errorInfo: Dictionary<String, Any> = EventUtils.prepareJSErrorEventData(error);
-               impl?.strictUIViewContainer?.handleError(errorInfo)
-           }
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty, let impl = impl {
+            let errorInfo: [String: Any] = EventUtils.prepareJSErrorEventData(
+                error)
+            impl.strictUIViewContainer?.handleError(errorInfo)
+        }
     }
 
     func publisher(
@@ -258,95 +275,100 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
         OTRN.sharedState.streamObservers.removeValue(forKey: stream.streamId)
         OTRN.sharedState.publisherStreams.removeValue(forKey: stream.streamId)
         OTRN.sharedState.subscriberStreams.removeValue(forKey: stream.streamId)
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-        OTRN.sharedState.isPublishing[publisherId] = false;
-        if (publisherId.count > 0) {
-            OTRN.sharedState.isPublishing[publisherId] = false;
-            var streamInfo: Dictionary<String, Any> = EventUtils.prepareJSStreamEventData(stream);
-            streamInfo["publisherId"] = publisherId;
-            impl?.strictUIViewContainer?.handleStreamDestroyed(streamInfo);
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty {
+            OTRN.sharedState.isPublishing[publisherId] = false
+            var streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
+                stream)
+            streamInfo["publisherId"] = publisherId
+            OTRN.sharedState.publishers[publisherId] = nil
+            impl?.strictUIViewContainer?.handleStreamDestroyed(streamInfo)
         }
-        OTRN.sharedState.publishers[publisherId] = nil;
-        OTRN.sharedState.isPublishing[publisherId] = nil;
     }
 
     func publisher(_ publisher: OTPublisherKit, muteForced: Bool) {
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-         if (publisherId.count > 0) {
-             impl?.strictUIViewContainer?.handleMuteForced()
-         }
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty, let impl = impl {
+            impl.strictUIViewContainer?.handleMuteForced()
+        }
     }
-    
-    // func publisher(_ publisher: OTPublisherKit, rtcStatsReport: OTPublisherRtcStats) {
-    //     impl?.strictUIViewContainer?.handleRtcStatsReport([
-    //         "connectionId": rtcStatsReport.connectionId,
-    //         "jsonArrayOfReports": rtcStatsReport.jsonArrayOfReports
-    //     ])
-    // }
-    
+
     func publisherVideoDisableWarning(_ publisher: OTPublisherKit) {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
-         if (publisherId.count > 0) {
-             impl?.strictUIViewContainer?.handleVideoDisableWarning()
-         }
-    }
-    
-    func publisherVideoDisableWarningLifted(_ publisher: OTPublisherKit) {
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-            if (publisherId.count > 0) {
-                impl?.strictUIViewContainer?.handleVideoDisableWarningLifted()
-            }
-    }
-    
-    func publisherVideoEnabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
-        var publisherInfo: Dictionary<String, Any> = [:]
-         publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
-         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
-         if (publisherId.count > 0) {
-             impl?.strictUIViewContainer?.handleVideoEnabled()  //todo send publisherInfo?
-         }
-    }
-    func publisherVideoDisabled(_ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason) {
-        var publisherInfo: Dictionary<String, Any> = [:]
-        publisherInfo["reason"] = Utils.convertOTPublisherVideoEventReasonToString(reason)
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
-        if (publisherId.count > 0) {
-            impl?.strictUIViewContainer?
-                .handleVideoDisabled()  //todo send publisherInfo?
+        if !publisherId.isEmpty, let impl = impl {
+            impl.strictUIViewContainer?.handleVideoDisableWarning()
         }
-       
+    }
+
+    func publisherVideoDisableWarningLifted(_ publisher: OTPublisherKit) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty, let impl = impl {
+            impl.strictUIViewContainer?.handleVideoDisableWarningLifted()
+        }
+    }
+
+    func publisherVideoEnabled(
+        _ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason
+    ) {
+        var publisherInfo: [String: Any] = [:]
+        publisherInfo["reason"] =
+            Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty, let impl = impl {
+            impl.strictUIViewContainer?.handleVideoEnabled()  //TODO send publisherInfo?
+        }
+    }
+    func publisherVideoDisabled(
+        _ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason
+    ) {
+        var publisherInfo: [String: Any] = [:]
+        publisherInfo["reason"] =
+            Utils.convertOTPublisherVideoEventReasonToString(reason)
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty, let impl = impl {
+            impl.strictUIViewContainer?
+                .handleVideoDisabled()  //TODO send publisherInfo?
+        }
+
     }
 }
 
-private class PublisherAudioLevelDelegateHandler: NSObject, OTPublisherKitAudioLevelDelegate {
+private class PublisherAudioLevelDelegateHandler: NSObject,
+    OTPublisherKitAudioLevelDelegate
+{
     weak var impl: OTPublisherViewNativeImpl?
-    
+
     init(impl: OTPublisherViewNativeImpl) {
-        self.impl = impl
         super.init()
+        self.impl = impl
     }
-    
-    public func publisher(_ publisher: OTPublisherKit, audioLevelUpdated audioLevel: Float) {
-        let publisherId = Utils.getPublisherId(publisher as! OTPublisher);
-         if (publisherId.count > 0) {
-             impl?.strictUIViewContainer?.handleAudioLevel([
-                 "audioLevel": audioLevel
-             ])
-          
-         }
+
+    func publisher(
+        _ publisher: OTPublisherKit, audioLevelUpdated audioLevel: Float
+    ) {
+        let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
+        if !publisherId.isEmpty,
+            let impl = impl
+        {
+            impl.strictUIViewContainer?.handleAudioLevel(audioLevel)
+        }
     }
 }
 
-private class PublisherNetworkStatsDelegateHandler: NSObject, OTPublisherKitNetworkStatsDelegate {
+private class PublisherNetworkStatsDelegateHandler: NSObject,
+    OTPublisherKitNetworkStatsDelegate
+{
     weak var impl: OTPublisherViewNativeImpl?
-    
+
     init(impl: OTPublisherViewNativeImpl) {
-        self.impl = impl
         super.init()
+        self.impl = impl
     }
-    
-    
-    public func publisher(_ publisher: OTPublisherKit, audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]) {
+
+    func publisher(
+        _ publisher: OTPublisherKit,
+        audioNetworkStatsUpdated stats: [OTPublisherKitAudioNetworkStats]
+    ) {
         let statsArray = stats.map { stat -> [String: Any] in
             return [
                 "connectionId": stat.connectionId,
@@ -354,19 +376,23 @@ private class PublisherNetworkStatsDelegateHandler: NSObject, OTPublisherKitNetw
                 "audioPacketsLost": stat.audioPacketsLost,
                 "audioBytesSent": stat.audioBytesSent,
                 "audioPacketsSent": stat.audioPacketsSent,
-                "timestamp": stat.timestamp
+                "timestamp": stat.timestamp,
             ]
         }
-        
-        if let jsonData = try? JSONSerialization.data(withJSONObject: statsArray),
-           let jsonString = String(data: jsonData, encoding: .utf8) {
-            impl?.strictUIViewContainer?.handleAudioNetworkStats(jsonString)
+
+        if let jsonData = try? JSONSerialization.data(
+            withJSONObject: statsArray),
+            let jsonString = String(data: jsonData, encoding: .utf8),
+            let impl = impl
+        {
+            impl.strictUIViewContainer?.handleAudioNetworkStats(jsonString)
         }
     }
-    
 
-    
-    public func publisher(_ publisher: OTPublisherKit, videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]) {
+    func publisher(
+        _ publisher: OTPublisherKit,
+        videoNetworkStatsUpdated stats: [OTPublisherKitVideoNetworkStats]
+    ) {
         let statsArray = stats.map { stat -> [String: Any] in
             return [
                 "connectionId": stat.connectionId,
@@ -374,13 +400,46 @@ private class PublisherNetworkStatsDelegateHandler: NSObject, OTPublisherKitNetw
                 "videoPacketsLost": stat.videoPacketsLost,
                 "videoBytesSent": stat.videoBytesSent,
                 "videoPacketsSent": stat.videoPacketsSent,
-                "timestamp": stat.timestamp
+                "timestamp": stat.timestamp,
             ]
         }
-        
-        if let jsonData = try? JSONSerialization.data(withJSONObject: statsArray),
-           let jsonString = String(data: jsonData, encoding: .utf8) {
-            impl?.strictUIViewContainer?.handleVideoNetworkStats(jsonString)
+
+        if let jsonData = try? JSONSerialization.data(
+            withJSONObject: statsArray),
+            let jsonString = String(data: jsonData, encoding: .utf8),
+            let impl = impl
+        {
+            impl.strictUIViewContainer?.handleVideoNetworkStats(jsonString)
+        }
+    }
+}
+
+private class PublisherRtcStatsDelegateHandler: NSObject,
+    OTPublisherKitRtcStatsReportDelegate
+{
+    weak var impl: OTPublisherViewNativeImpl?
+
+    init(impl: OTPublisherViewNativeImpl) {
+        super.init()
+        self.impl = impl
+    }
+
+    func publisher(
+        _ publisher: OTPublisherKit, rtcStatsReport: [OTPublisherRtcStats]
+    ) {
+        let statsArray = rtcStatsReport.map { stat -> [String: Any] in
+            return [
+                "connectionId": stat.connectionId,
+                "jsonArrayOfReports": stat.jsonArrayOfReports,
+            ]
+        }
+
+        if let jsonData = try? JSONSerialization.data(
+            withJSONObject: statsArray),
+            let jsonString = String(data: jsonData, encoding: .utf8),
+            let impl = impl
+        {
+            impl.strictUIViewContainer?.handleRtcStatsReport(jsonString)
         }
     }
 }

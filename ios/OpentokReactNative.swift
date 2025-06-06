@@ -257,8 +257,11 @@ import React
             reject("event_failure", "Session ID not found", nil)
             return
         }
-        guard let stream = OTRN.sharedState.subscriberStreams[streamId] else {
-            reject("event_failure", "Stream ID not found", nil)
+        guard
+            let stream = OTRN.sharedState.subscriberStreams[streamId]
+                ?? OTRN.sharedState.publisherStreams[streamId]
+        else {
+            reject("ERROR", "Stream ID not found", nil)
             return
         }
         var error: OTError?
@@ -286,6 +289,86 @@ import React
             return
         }
         resolve(true)
+    }
+
+    @objc public func getPublisherRtcStatsReport(_ publisherId: String) {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return
+        }
+        publisher.getRtcStatsReport()
+    }
+
+    @objc public func getSubscriberRtcStatsReport() -> Void {
+        var error: OTError?
+        for subscriber in OTRN.sharedState.subscribers {
+            if let streamId = subscriber.value.stream?.streamId,
+               OTRN.sharedState.subscriberStreams[streamId] != nil {
+                subscriber.value.getRtcStatsReport(&error)
+                if let error = error {
+                    print("getSubscriberRtcStatsReport event_failure \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    @objc public func setAudioTransformers(_ publisherId: String, transformers: NSArray) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            print("ERROR: Could not find publisher with ID \(publisherId)")
+            return
+        }
+        
+        var nativeTransformers: [OTAudioTransformer] = []
+
+        for case let transformer as [String: Any] in transformers {
+            guard let transformerName = transformer["name"] as? String else {
+                print("ERROR: Invalid transformer format. Each transformer must have a 'name' key")
+                return
+            }
+            
+            let transformerProperties = transformer["properties"] as? String ?? ""
+            
+            guard let nativeTransformer = OTAudioTransformer(
+                name: transformerName,
+                properties: transformerProperties
+            ) else {
+                print("ERROR: Failed to create audio transformer with name: \(transformerName)")
+                return
+            }
+            
+            nativeTransformers.append(nativeTransformer)
+        }
+        
+        publisher.audioTransformers = nativeTransformers
+    }
+
+    @objc public func setVideoTransformers(_ publisherId: String, transformers: NSArray) -> Void {
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            print("ERROR: Could not find publisher with ID \(publisherId)")
+            return
+        }
+        
+        var nativeTransformers: [OTVideoTransformer] = []
+
+        for case let transformer as [String: Any] in transformers {
+            guard let transformerName = transformer["name"] as? String else {
+                print("ERROR: Invalid transformer format. Each transformer must have a 'name' key")
+                return
+            }
+            
+            let transformerProperties = transformer["properties"] as? String ?? ""
+            
+            guard let nativeTransformer = OTVideoTransformer(
+                name: transformerName,
+                properties: transformerProperties
+            ) else {
+                print("ERROR: Failed to create video transformer with name: \(transformerName)")
+                return
+            }
+            
+            nativeTransformers.append(nativeTransformer)
+        }
+        
+        publisher.videoTransformers = nativeTransformers
     }
 }
 
@@ -335,8 +418,8 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     {
         let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
             stream)
-        impl?.ot?.emit(onStreamDestroyed: streamInfo)
         OTRN.sharedState.subscriberStreams.removeValue(forKey: stream.streamId)
+        impl?.ot?.emit(onStreamDestroyed: streamInfo)
     }
 
     public func sessionDidDisconnect(_ session: OTSession) {
@@ -411,7 +494,7 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
 
     public func sessionDidReconnect(_ session: OTSession) {
         let sessionInfo = EventUtils.prepareJSSessionEventData(session)
-        impl?.ot?.emit(onSessionDidReconnect: sessionInfo)
+        impl?.ot?.emit(onSessionReconnected: sessionInfo)
     }
 }
 
