@@ -175,7 +175,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
             }
-        emitOpenTokEvent("onAudioLevelUpdated", payload)
+        emitOpenTokEvent("onAudioLevel", payload)
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {

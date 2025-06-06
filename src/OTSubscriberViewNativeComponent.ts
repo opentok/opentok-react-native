@@ -1,8 +1,8 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import type {
   BubblingEventHandler,
-  Int32,
   Float,
+  Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
@@ -29,12 +29,9 @@ export type SubscriberAudioLevelEvent = {
   audioLevel: Float;
 };
 
-
-
 export type SubscriberRTCStatsReportEvent = {
   jsonStats: string;
 };
-
 
 export type SubscriberCaptionEvent = {
   text: string;
