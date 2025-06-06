@@ -94,8 +94,8 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber?.subscribeToCaptions = value
     }
 
-    fun setAudioVolume(value: Double) {
-        subscriber?.audioVolume = value
+    fun setAudioVolume(value: Float) {
+        subscriber?.audioVolume = value.toDouble()
     }
 
     fun setPreferredFrameRate(value: Int) {
