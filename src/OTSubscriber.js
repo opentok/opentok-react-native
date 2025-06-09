@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 // import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
-import { each, isEqual } from 'underscore';
+// import { each, isEqual } from 'underscore';
 import { OT } from './OT';
 import { addEventListener } from './helpers/OTSessionHelper';
 import OTSubscriberView from './OTSubscriberView';
+/*
 import {
   // sanitizeSubscriberEvents,
   // sanitizeProperties,
@@ -17,6 +18,7 @@ import {
   // getOtrnErrorEventHandler,
   sanitizeBooleanProperty,
 } from './helpers/OTHelper';
+*/
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
@@ -46,6 +48,8 @@ export default class OTSubscriber extends Component {
     addEventListener('streamDestroyed', this.streamDestroyedHandler);
     addEventListener('subscriberConnected', this.subscriberConnectedHandler);
   };
+
+  /*
   componentDidUpdate() {
     const { streamProperties } = this.props;
     if (!isEqual(this.state.streamProperties, streamProperties)) {
@@ -59,42 +63,29 @@ export default class OTSubscriber extends Component {
           audioVolume,
         } = individualStreamProperties;
         if (subscribeToAudio !== undefined) {
-          OT.subscribeToAudio(
-            streamId,
-            sanitizeBooleanProperty(subscribeToAudio)
-          );
+          sanitizeBooleanProperty(subscribeToAudio)
         }
         if (subscribeToVideo !== undefined) {
-          OT.subscribeToVideo(
-            streamId,
-            sanitizeBooleanProperty(subscribeToVideo)
-          );
+          sanitizeBooleanProperty(subscribeToVideo)
         }
         if (subscribeToCaptions !== undefined) {
-          OT.subscribeToCaptions(
-            streamId,
-            sanitizeBooleanProperty(subscribeToCaptions)
-          );
+          sanitizeBooleanProperty(subscribeToCaptions)
         }
         if (preferredResolution !== undefined) {
-          OT.setPreferredResolution(
-            streamId,
-            sanitizeResolution(preferredResolution)
-          );
+          sanitizeResolution(preferredResolution)
         }
         if (preferredFrameRate !== undefined) {
-          OT.setPreferredFrameRate(
-            streamId,
-            sanitizeFrameRate(preferredFrameRate)
-          );
+          sanitizeFrameRate(preferredFrameRate)
         }
         if (audioVolume !== undefined) {
-          OT.setAudioVolume(streamId, sanitizeAudioVolume(audioVolume));
+          sanitizeAudioVolume(audioVolume);
         }
       });
       this.setState({ streamProperties });
     }
   }
+  */
+
   publisherStreamCreatedHandler = (stream) => {
     if (this.props.subscribeToSelf) {
       this.streamCreatedHandler(stream);
@@ -153,18 +144,41 @@ export default class OTSubscriber extends Component {
         */
         const style = this.props.style;
         return (
-          <OTSubscriberView
+          <OTContext.Provider
+            value={{
+              sessionId: this.sessionId,
+              subscriberProperties: this.props.properties,
+              streamProperties: this.props.streamProperties,
+              eventHandlers: this.props.eventHandlers,
+            }}
             key={streamId}
-            streamId={streamId}
-            sessionId={this.sessionId}
-            style={style}
-            {...this.props.properties}
-          />
+          >
+            <OTSubscriberView
+              streamId={streamId}
+              style={style}
+              {...this.props.properties}
+            />
+          </OTContext.Provider>
         );
       });
       return <View style={containerStyle}>{childrenWithStreams}</View>;
     }
-    return this.props.children(this.state.streams) || null;
+    if (this.props.children(this.state.streams)) {
+      return this.props.children(this.state.streams).map((elem) => (
+        <OTContext.Provider
+          value={{
+            sessionId: this.sessionId,
+            subscriberProperties: this.props.properties,
+            streamProperties: this.props.streamProperties,
+            eventHandlers: this.props.eventHandlers,
+          }}
+          key={elem.props.streamId}
+        >
+          {elem}
+        </OTContext.Provider>
+      ));
+    }
+    return null;
   }
 }
 
@@ -187,7 +201,6 @@ OTSubscriber.defaultProps = {
   containerStyle: {},
   subscribeToSelf: false,
   // getRtcStatsReport: {},
-  // subscribeToCaptions: false,
 };
 
 OTSubscriber.contextType = OTContext;
