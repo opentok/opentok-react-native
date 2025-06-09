@@ -2,6 +2,7 @@ package com.opentokreactnative
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
@@ -33,18 +34,20 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view.setSessionId(sessionId)
     }
 
-
-    @ReactProp(name = "subscribeToAudio")
-    override public fun setSubscribeToAudio(view: OTSubscriberViewNative, value: Boolean) {
-        view.setSubscribeToAudio(value)
+    override fun setSubscribeToAudio(
+        view: OTSubscriberViewNative?,
+        value: Boolean
+    ) {
+        view?.setSubscribeToAudio(value)
     }
 
-    @ReactProp(name = "subscribeToVideo")
-    override public fun setSubscribeToVideo(view: OTSubscriberViewNative, value: Boolean) {
-        view.setSubscribeToVideo(value)
+    override fun setSubscribeToVideo(
+        view: OTSubscriberViewNative?,
+        value: Boolean
+    ) {
+        view?.setSubscribeToVideo(value)
     }
 
-    @ReactProp(name = "subscribeToCaptions")
     override fun setSubscribeToCaptions(
         view: OTSubscriberViewNative?,
         value: Boolean
@@ -52,7 +55,6 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view?.setSubscribeToCaptions(value)
     }
 
-    @ReactProp(name = "audioVolume")
     override fun setAudioVolume(
         view: OTSubscriberViewNative?,
         value: Float
@@ -60,7 +62,6 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view?.setAudioVolume(value)
     }
 
-    @ReactProp(name = "preferredFrameRate")
     override fun setPreferredFrameRate(
         view: OTSubscriberViewNative?,
         value: Int
@@ -68,12 +69,19 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
         view?.setPreferredFrameRate(value)
     }
 
-    @ReactProp(name = "preferredResolution")
     override fun setPreferredResolution(
         view: OTSubscriberViewNative?,
         value: String?
     ) {
         view?.setPreferredResolution(value)
+    }
+
+    override fun updateProperties(
+        viewToUpdate: OTSubscriberViewNative,
+        props: ReactStylesDiffMap?
+    ) {
+        super.updateProperties(viewToUpdate, props)
+        viewToUpdate.updateProperties(props)
     }
 
     companion object {

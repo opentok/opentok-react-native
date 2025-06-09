@@ -1,5 +1,6 @@
 package com.opentokreactnative
 
+import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -8,6 +9,9 @@ import com.facebook.react.uimanager.ViewManagerDelegate;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.viewmanagers.OTPublisherViewNativeManagerInterface;
 import com.facebook.react.viewmanagers.OTPublisherViewNativeManagerDelegate;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ReactStylesDiffMap
+
 
 @ReactModule(name = OTPublisherViewNativeManager.REACT_CLASS)
 class OTPublisherViewNativeManager(context: ReactApplicationContext) :
@@ -20,26 +24,49 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) :
 
     override fun getName(): String = REACT_CLASS
 
-    override fun createViewInstance(context: ThemedReactContext): OTPublisherViewNative =
-        OTPublisherViewNative(context)
-
-    @ReactProp(name = "sessionId")
-    override public fun setSessionId(view: OTPublisherViewNative, sessionId: String?) {
-        view.setSessionId(sessionId)
+    override fun createViewInstance(context: ThemedReactContext): OTPublisherViewNative {
+        Log.d("OTPublisherViewNativeManager", "createViewInstance: $nativeProps")
+        return OTPublisherViewNative(context)
     }
 
-    @ReactProp(name = "publisherId")
+    override fun getNativeProps(): Map<String?, String?>? {
+        return super.getNativeProps()
+    }
+
+    override fun updateProperties(
+        viewToUpdate: OTPublisherViewNative,
+        props: ReactStylesDiffMap?
+    ) {
+        super.updateProperties(viewToUpdate, props)
+        Log.d("OTPublisherViewNativeManager", "updateProperties: $props")
+        viewToUpdate.updateProperties(props)
+    }
+
+    override fun setSessionId(
+        view: OTPublisherViewNative?,
+        value: String?
+    ) {
+        view?.setSessionId(value)
+    }
+
+    //@ReactProp(name = "sessionId")
+    //override public fun setSessionId(view: OTPublisherViewNative, sessionId: String?) {
+       // view.setSessionId(sessionId)
+    //}
+
+    //@ReactProp(name = "publisherId")
     override public fun setPublisherId(view: OTPublisherViewNative, publisherId: String?) {
         view.setPublisherId(publisherId)
     }
 
-    @ReactProp(name = "publishAudio")
+    //@ReactProp(name = "publishAudio")
     override public fun setPublishAudio(view: OTPublisherViewNative, value: Boolean) {
         view.setPublishAudio(value)
     }
 
     @ReactProp(name = "publishVideo")
     override public fun setPublishVideo(view: OTPublisherViewNative, value: Boolean) {
+        Log.d("OTPublisherViewNativeManager", "setPublishVideo: $value")
         view.setPublishVideo(value)
     }
 
