@@ -57,7 +57,7 @@ class OTSubscriberViewNativeManager(context: ReactApplicationContext) :
 
     override fun setAudioVolume(
         view: OTSubscriberViewNative?,
-        value: Double
+        value: Float
     ) {
         view?.setAudioVolume(value)
     }
