@@ -80,7 +80,7 @@ export default class OTSubscriberView extends React.Component {
           eventHandlers.videoEnabled?.(event.nativeEvent);
         }}
         onVideoNetworkStats={(event) => {
-          eventHandlers.onVideoNetworkStats?.(event.nativeEvent);
+          eventHandlers.videoNetworkStats?.(event.nativeEvent);
         }}
         style={style}
       />
