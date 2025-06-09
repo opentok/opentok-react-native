@@ -220,7 +220,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         audioStats.putDouble("audioPacketsReceived", stats?.audioPacketsReceived?.toDouble() ?: 0.0)
         audioStats.putDouble("audioBytesReceived", stats?.audioBytesReceived?.toDouble() ?: 0.0)
         audioStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
-        emitOpenTokEvent("onAudioStats", audioStats)
+        emitOpenTokEvent("onAudioNetworkStats", audioStats)
     }
 
     override fun onVideoStats(
