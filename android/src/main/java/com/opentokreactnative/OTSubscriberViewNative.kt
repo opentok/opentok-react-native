@@ -247,51 +247,57 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDataReceived", payload)
     }
 
     override fun onVideoDisabled(subscriber: SubscriberKit?, reason: String?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
                 putString("reason", reason)
             }
         emitOpenTokEvent("onVideoDisabled", payload)
     }
 
     override fun onVideoEnabled(subscriber: SubscriberKit?, reason: String?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
                 putString("reason", reason)
             }
         emitOpenTokEvent("onVideoEnabled", payload)
     }
 
     override fun onVideoDisableWarning(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDisableWarning", payload)
     }
 
     override fun onVideoDisableWarningLifted(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDisableWarningLifted", payload)
     }
 
     override fun onReconnected(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onReconnected", payload)
     }

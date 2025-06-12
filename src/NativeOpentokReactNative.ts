@@ -49,7 +49,11 @@ export type SessionOptions = {
 
 export type SessionConnectEvent = {
   sessionId: string;
-  connectionId: string;
+  connection: {
+    connectionId: string;
+    creationTime: string;
+    data: string;
+  };
 };
 
 export type SessionDisconnectEvent = Stream;
