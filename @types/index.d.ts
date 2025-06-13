@@ -408,7 +408,7 @@ declare module 'opentok-react-native' {
     /**
      * Whether the publisher should enable or disable the camera's torch when available.
      */
-    cameraTorch?: number;
+    cameraTorch?: boolean;
 
     /**
      * The preferred zoom factor for the camera.
