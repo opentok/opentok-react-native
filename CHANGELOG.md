@@ -2,6 +2,41 @@
 
 - [Update]: This version is a pre-release alpha version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Alpha version notes" in the README.md file.
 
+# 2.30.2 (May 2025)
+
+- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.30.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+
+# 2.30.1 (May 2025)
+
+- [Fix]: This version fixes a crashing bug (on iOS) that was introduced in version 2.30.0.
+
+# 2.30.0 (May 2025)
+
+- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.30.0. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+
+- [Update]: This version adds support for enabling the camera torch (flashlight) and setting the zoom factor for the Publisher camera. See the `cameraTorch` and `cameraZoomFactor` properties of the `properties` prop of the OTPublisher component.
+
+- [Update]: This version includes an option to skip local network checks when establishing media connectivity on iOS. This prevents the app from prompting the user for permission when it attempts to subscribe to clients on the same local network in a relayed session.
+
+  Set the `filterOutLanCandidates` property of the object set as the  `iceConfig` property `options` prop of the OTSession component to `true`:
+
+  ```
+  <OTSession
+    options={{
+      iceConfig:{
+        filterOutLanCandidates: true,
+      },
+      // other options
+    }}
+  />
+  ```
+
+  Note that -- unlike the other `iceConfig` settings -- this setting does *not* require the [configurable TURN server](https://tokbox.com/developer/guides/configurable-turn-servers/) add-on feature.
+
+  For more information see [this documentation](https://tokbox.com/developer/guides/mobile/ios/#ios-14-networking).
+
+- [Update]: This version adds support for session migration. Set the `sessionMigration` property of the `options` prop of the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/server-rotation). This is a beta feature.
+
 # 2.29.1 (March 2025)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.29.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
