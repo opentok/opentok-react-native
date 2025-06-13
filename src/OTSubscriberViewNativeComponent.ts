@@ -84,10 +84,10 @@ export interface NativeProps extends ViewProps {
   onAudioNetworkStats?: BubblingEventHandler<SubscriberAudioStatsEvent> | null;
   onCaptionReceived?: BubblingEventHandler<SubscriberCaptionEvent> | null;
   onVideoDataReceived?: BubblingEventHandler<StreamEvent> | null;
-  onVideoDisabled?: BubblingEventHandler<StreamEvent> | null;
+  onVideoDisabled?: BubblingEventHandler<VideoDisabledEvent> | null;
   onVideoDisableWarning?: BubblingEventHandler<StreamEvent> | null;
   onVideoDisableWarningLifted?: BubblingEventHandler<StreamEvent> | null;
-  onVideoEnabled?: BubblingEventHandler<StreamEvent> | null;
+  onVideoEnabled?: BubblingEventHandler<VideoEnabledEvent> | null;
   onVideoNetworkStats?: BubblingEventHandler<SubscriberVideoNetworkStatsEvent> | null;
 }
 
