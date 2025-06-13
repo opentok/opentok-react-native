@@ -120,6 +120,16 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) :
         view.setCameraPosition(value)
     }
 
+    @ReactProp(name = "cameraTorch")
+    override public fun setCameraTorch(view: OTPublisherViewNative, value: Boolean) {
+        view.setCameraTorch(value)
+    }
+
+    @ReactProp(name = "cameraZoomFactor")
+    override public fun setCameraZoomFactor(view: OTPublisherViewNative, value: Float) {
+        view.setCameraZoomFactor(value)
+    }
+
     @ReactProp(name = "enableDtx")
     override public fun setEnableDtx(view: OTPublisherViewNative, value: Boolean) {
         view.setEnableDtx(value)

@@ -54,6 +54,13 @@ class Utils {
             height: preferredRes["height"] as! CGFloat)
     }
 
+    static func sanitizeCameraZoomFactor(_ cameraZoomFactor: Any) -> Float {
+        guard let sanitizedZoomFactor = cameraZoomFactor as? Float else {
+            return 1.0
+        }
+        return sanitizedZoomFactor
+    }
+
     static func sanitizeBooleanProperty(_ property: Any) -> Bool {
         guard let prop = property as? Bool else { return true }
         return prop
@@ -141,13 +148,15 @@ class Utils {
     }
 
     static func sanitizeIceServer(
-        _ serverList: Any, _ transportPolicy: Any, _ includeServer: Any
+        _ serverList: Any, _ transportPolicy: Any, _ filterOutLanCandidates: Any, _ includeServer: Any
     ) -> OTSessionICEConfig {
         let myICEServerConfiguration: OTSessionICEConfig = OTSessionICEConfig()
         myICEServerConfiguration.includeServers = Utils.sanitizeIncludeServer(
             includeServer)
         myICEServerConfiguration.transportPolicy =
             Utils.sanitizeTransportPolicy(transportPolicy)
+        myICEServerConfiguration.filterOutLanCandidates = Utils.sanitizeBooleanProperty(
+            filterOutLanCandidates)
         let serverList = Utils.sanitiseServerList(serverList)
         for server in serverList {
             for url in server.urls {

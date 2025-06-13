@@ -36,9 +36,12 @@ import React
         settings.iceConfig = Utils.sanitizeIceServer(
             sessionOptions["customServers"] as Any,
             sessionOptions["transportPolicy"] as Any,
+            sessionOptions["filterOutLanCandidates"] as Any,
             sessionOptions["includeServers"] as Any)
         settings.singlePeerConnection = Utils.sanitizeBooleanProperty(
             sessionOptions["enableSinglePeerConnection"] as Any)
+        settings.sessionMigration = Utils.sanitizeBooleanProperty(
+            sessionOptions["sessionMigration"] as Any)
         sessionDelegateHandler = SessionDelegateHandler(impl: self)
         otSession = OTSession(
             apiKey: apiKey, sessionId: sessionId,

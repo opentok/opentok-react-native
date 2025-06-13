@@ -8,21 +8,19 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version is an early alpha build of the OpenTok React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Alpha version notes") for important details on using this alpha version.
+**Important:** This version is a beta build of the OpenTok React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Beta version notes") for important details on using this beta version.
 
-## Alpha version notes
+## Beta version notes
 
-This alpha version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
+This Beta version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
 
-This alpha pre-release version is not intended for use in final production apps.
+This beta pre-release version is not intended for use in final production apps.
 
-This pre-release alpha version is not available at npm.js. In your app's package.json file, load it into your app from the new-architecture branch of the opentok/opentok-react-native GitHub repo:
+This pre-release beat version is not available at npm.js. In your app's package.json file, load it into your app from the new-architecture branch of the opentok/opentok-react-native GitHub repo:
 
 ```
     "opentok-react-native": "opentok/opentok-react-native#new-architecture",
 ```
-
-We intend to support the same API that was used in previous versions of OpenTok React Native SDK. However this alpha version does not support all API features.
 
 ### Registering the OpenTok packages in your application
 
@@ -32,7 +30,7 @@ For iOS, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage
 
 ### Known issues
 
-The following features are unsupported in this alpha version:
+The following features are unsupported in this beta version:
 
 * `OTPublisher rtcStatsReport` event
 * Screen-sharing (`OTPublisher.videoSource 'screen'`)
@@ -80,7 +78,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
      ```
      target '<YourProjectName>' do
          # Pods for <YourProject>
-         pod 'OTXCFramework', '2.29.1'
+         pod 'OTXCFramework', '2.30.1'
      end
      ```
    
@@ -167,7 +165,7 @@ If you try to archive the app and it fails, please do the following:
 7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.28.0"
+   implementation "com.vonage:client-sdk-video-transformers:2.30.1"
    ```
 
 #### Bintray sunset
