@@ -217,42 +217,32 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
     @Override
     public void onConnected(Session session) {
-        WritableMap payload = Arguments.createMap();
-        payload.putString("sessionId", session.getSessionId());
-        payload.putString("connectionId", session.getConnection().getConnectionId());
+        WritableMap payload = EventUtils.prepareJSSessionMap(session);
         emitOnSessionConnected(payload);
     }
 
     @Override
     public void onDisconnected(Session session) {
-        WritableMap payload = Arguments.createMap();
-        payload.putString("sessionId", session.getSessionId());
-        payload.putString("connectionId", session.getConnection().getConnectionId());
+        WritableMap payload = EventUtils.prepareJSSessionMap(session);
         emitOnSessionDisconnected(payload);
     }
 
     @Override
     public void onStreamReceived(Session session, Stream stream) {
         sharedState.getSubscriberStreams().put(stream.getStreamId(), stream);
-        WritableMap payload = Arguments.createMap();
-        payload.putString("streamId", stream.getStreamId());
+        WritableMap payload = EventUtils.prepareJSStreamMap(stream, session);
         emitOnStreamCreated(payload);
     }
 
     @Override
     public void onStreamDropped(Session session, Stream stream) {
-        WritableMap payload = Arguments.createMap();
-        payload.putString("streamId", stream.getStreamId());
+        WritableMap payload = EventUtils.prepareJSStreamMap(stream, session);
         emitOnStreamDestroyed(payload);
     }
 
     @Override
     public void onError(Session session, OpentokError opentokError) {
-        WritableMap payload = Arguments.createMap();
-        payload.putString("sessionId", session.getSessionId());
-        payload.putString("code", opentokError.getErrorCode().toString());
-        payload.putString("message", opentokError.getMessage());
-
+        WritableMap payload = EventUtils.prepareJSErrorMap(opentokError);
         emitOnSessionError(payload);
     }
 
@@ -289,10 +279,8 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
         //sharedState.getConnections().put(connection.getConnectionId(), connection);
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = Arguments.createMap();
-        connectionInfo.putString("connectionId", connection.getConnectionId());
-        connectionInfo.putString("data", connection.getData());
-        connectionInfo.putString("creationTime", connection.getCreationTime().toString());
+        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        connection);
         eventData.putMap("connection", connectionInfo);
         emitOnConnectionCreated(eventData);
     }
@@ -301,10 +289,8 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     public void onConnectionDestroyed(Session session, Connection connection) {
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = Arguments.createMap();
-        connectionInfo.putString("connectionId", connection.getConnectionId());
-        connectionInfo.putString("data", connection.getData());
-        connectionInfo.putString("creationTime", connection.getCreationTime().toString());
+        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        connection);
         eventData.putMap("connection", connectionInfo);
         emitOnConnectionDestroyed(eventData);
     }

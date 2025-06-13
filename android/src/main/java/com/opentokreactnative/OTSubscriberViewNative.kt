@@ -18,6 +18,7 @@ import com.opentok.android.SubscriberKit
 import com.opentok.android.SubscriberKit.SubscriberListener
 import com.opentok.android.SubscriberKit.SubscriberRtcStatsReportListener
 import com.opentok.android.VideoUtils
+import com.opentokreactnative.utils.EventUtils;
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
@@ -162,51 +163,61 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", stream!!.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onSubscriberConnected", payload)
     }
 
     override fun onDisconnected(subscriber: SubscriberKit) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber.getStream().streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onSubscriberDisconnected", payload)
     }
 
     override fun onError(subscriber: SubscriberKit, opentokError: OpentokError) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
+        val error = EventUtils.prepareJSErrorMap(opentokError)
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber.getStream().streamId)
-                putString("errorMessage", opentokError.message)
+                putMap("stream", stream)
+                putMap("error", error)
             }
         emitOpenTokEvent("onSubscriberError", payload)
     }
 
     override fun onRtcStatsReport(subscriber: SubscriberKit, jsonArrayOfReports: String) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
                 putString("jsonArrayOfReports", jsonArrayOfReports)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onRtcStatsReport", payload)
     }
 
     override fun onAudioLevelUpdated(subscriber: SubscriberKit?, audioLevel: Float) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
                 putDouble("audioLevel", audioLevel.toDouble())
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onAudioLevel", payload)
     }
 
     override fun onCaptionText(subscriber: SubscriberKit?, text: String?, isFinal: Boolean) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("text", text);
-                putBoolean("isFinal", isFinal);
+                putString("text", text)
+                putBoolean("isFinal", isFinal)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onCaptionReceived", payload)
     }
@@ -236,51 +247,57 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     override fun onVideoDataReceived(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDataReceived", payload)
     }
 
     override fun onVideoDisabled(subscriber: SubscriberKit?, reason: String?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
                 putString("reason", reason)
             }
         emitOpenTokEvent("onVideoDisabled", payload)
     }
 
     override fun onVideoEnabled(subscriber: SubscriberKit?, reason: String?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
                 putString("reason", reason)
             }
         emitOpenTokEvent("onVideoEnabled", payload)
     }
 
     override fun onVideoDisableWarning(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDisableWarning", payload)
     }
 
     override fun onVideoDisableWarningLifted(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onVideoDisableWarningLifted", payload)
     }
 
     override fun onReconnected(subscriber: SubscriberKit?) {
+        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
         val payload =
             Arguments.createMap().apply {
-                putString("streamId", subscriber?.getStream()?.streamId)
+                putMap("stream", stream)
             }
         emitOpenTokEvent("onReconnected", payload)
     }

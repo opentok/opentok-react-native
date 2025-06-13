@@ -17,6 +17,7 @@ import com.opentok.android.Publisher
 import com.opentok.android.PublisherKit
 import com.opentok.android.PublisherKit.PublisherListener
 import com.opentok.android.Stream
+import com.opentokreactnative.utils.EventUtils;
 import com.opentokreactnative.utils.Utils
 
 class OTPublisherViewNative : FrameLayout, PublisherListener,
@@ -224,27 +225,17 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     override fun onStreamCreated(publisher: PublisherKit, stream: Stream) {
-        val payload =
-            Arguments.createMap().apply {
-                putString("streamId", stream!!.streamId)
-            }
+        val payload = EventUtils.prepareJSStreamMap(stream, publisher.getSession())
         emitOpenTokEvent("onStreamCreated", payload)
     }
 
     override fun onStreamDestroyed(publisher: PublisherKit, stream: Stream) {
-        val payload =
-            Arguments.createMap().apply {
-                putString("streamId", stream.streamId)
-            }
+        val payload = EventUtils.prepareJSStreamMap(stream, publisher.getSession())
         emitOpenTokEvent("onStreamDestroyed", payload)
     }
 
     override fun onError(publisher: PublisherKit, opentokError: OpentokError) {
-        val payload =
-            Arguments.createMap().apply {
-                putString("code", opentokError.errorCode.toString())
-                putString("message", opentokError.message)
-            }
+        val payload = EventUtils.prepareJSErrorMap(opentokError);
         emitOpenTokEvent("onError", payload)
     }
 
