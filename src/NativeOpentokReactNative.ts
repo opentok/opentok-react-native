@@ -49,12 +49,14 @@ export type SessionOptions = {
 
 export type SessionConnectEvent = {
   sessionId: string;
-  connectionId: string;
+  connection: {
+    connectionId: string;
+    creationTime: string;
+    data: string;
+  };
 };
 
-export type SessionDisconnectEvent = {
-  sessionId: string;
-};
+export type SessionDisconnectEvent = Stream;
 
 export type Stream = {
   name: string;
@@ -63,7 +65,6 @@ export type Stream = {
   hasCaptions: boolean;
   hasVideo: boolean;
   sessionId: string;
-  connectionId: string;
   width: number;
   height: number;
   videoType: string; //  "screen" | "camera";
@@ -71,9 +72,7 @@ export type Stream = {
   creationTime: string;
 };
 
-export type StreamEvent = {
-  streamId: string;
-};
+export type StreamEvent = Stream;
 
 export type StreamPropertyChangedEvent = {
   oldValue:
@@ -88,15 +87,7 @@ export type StreamPropertyChangedEvent = {
         height?: number;
       }
     | boolean;
-  stream: {
-    hasAudio: boolean;
-    hasVideo: boolean;
-    hasCaptions: boolean;
-    videoDimensions: {
-      width: number;
-      height: number;
-    };
-  };
+  stream: Stream;
   changedProperty: string;
 };
 
@@ -108,7 +99,6 @@ export type SignalEvent = {
 };
 
 export type SessionErrorEvent = {
-  sessionId: string;
   code: string;
   message: string;
 };
@@ -119,8 +109,8 @@ export interface Spec extends TurboModule {
   readonly onConnectionCreated: EventEmitter<ConnectionEvent>;
   readonly onConnectionDestroyed: EventEmitter<ConnectionEvent>;
   readonly onMuteForced: EventEmitter<MuteForcedEvent>;
-  readonly onSessionConnected: EventEmitter<SessionConnectEvent>;
-  readonly onSessionDisconnected: EventEmitter<SessionDisconnectEvent>;
+  readonly onSessionConnected: EventEmitter<ConnectionEvent>;
+  readonly onSessionDisconnected: EventEmitter<ConnectionEvent>;
   readonly onSessionReconnecting: EventEmitter<EmptyEvent>;
   readonly onSessionReconnected: EventEmitter<EmptyEvent>;
   readonly onStreamCreated: EventEmitter<StreamEvent>;

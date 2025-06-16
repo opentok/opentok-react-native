@@ -177,27 +177,26 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
         if let stream = subscriber.stream,
             let impl = impl
         {
-            let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
-                stream)
+            let streamInfo: [String: Any] = [
+                "stream": EventUtils.prepareJSStreamEventData(stream)
+             ]
             impl.strictUIViewContainer?.handleSubscriberConnected(streamInfo)
 
-        } else {
-            if let impl = impl {
-                impl.strictUIViewContainer?.handleSubscriberConnected([:])
-            }
         }
-
     }
 
     func subscriber(
         _ subscriber: OTSubscriberKit, didFailWithError error: OTError
     ) {
-        var subscriberInfo: [String: Any] = [:]
-        subscriberInfo["error"] = EventUtils.prepareJSErrorEventData(error)
+        var subscriberInfo: [String: Any] = [
+            "error": EventUtils.prepareJSErrorEventData(error)
+        ]
 
+        // Always include "stream" key, even if nil (to match TS definition)
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
 
         if let impl = impl {
@@ -206,29 +205,27 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
     }
 
     func subscriberDidDisconnect(fromStream subscriber: OTSubscriberKit) {
-        var subscriberInfo: [String: Any] = [:]
-
-        if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
-            subscriberInfo["streamId"] = stream.streamId
-        }
-
-        if let impl = impl {
-            impl.strictUIViewContainer?.handleSubscriberDisconnected(subscriberInfo)
+        if let stream = subscriber.stream,
+           let impl = impl
+        {
+            let streamInfo: [String: Any] = [
+                "stream": EventUtils.prepareJSStreamEventData(stream)
+             ]
+            impl.strictUIViewContainer?.handleSubscriberDisconnected(streamInfo)
         }
     }
 
     func subscriberVideoEnabled(
         _ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason
     ) {
-        var subscriberInfo: [String: Any] = [:]
-        subscriberInfo["reason"] =
-            Utils.convertOTSubscriberVideoEventReasonToString(reason)
+        var subscriberInfo: [String: Any] = [
+            "reason": Utils.convertOTSubscriberVideoEventReasonToString(reason)
+        ]
 
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
 
         if let impl = impl {
@@ -239,13 +236,15 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
     func subscriberVideoDisabled(
         _ subscriber: OTSubscriberKit, reason: OTSubscriberVideoEventReason
     ) {
-        var subscriberInfo: [String: Any] = [:]
-        subscriberInfo["reason"] =
-            Utils.convertOTSubscriberVideoEventReasonToString(reason)
+        var subscriberInfo: [String: Any] = [
+            "reason": Utils.convertOTSubscriberVideoEventReasonToString(reason)
+        ]
 
+        // Always include "stream" key, even if nil (to match TS definition)
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
 
         if let impl = impl {
@@ -255,40 +254,35 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
 
     func subscriberVideoDisableWarning(_ subscriber: OTSubscriberKit) {
         var subscriberInfo: [String: Any] = [:]
-
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-
         if let impl = impl {
-            impl.strictUIViewContainer?.handleVideoDisableWarning(
-                subscriberInfo)
+            impl.strictUIViewContainer?.handleVideoDisableWarning(subscriberInfo)
         }
     }
 
     func subscriberVideoDisableWarningLifted(_ subscriber: OTSubscriberKit) {
         var subscriberInfo: [String: Any] = [:]
-
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-
         if let impl = impl {
-            impl.strictUIViewContainer?.handleVideoDisableWarningLifted(
-                subscriberInfo)
+            impl.strictUIViewContainer?.handleVideoDisableWarningLifted(subscriberInfo)
         }
     }
 
     func subscriberVideoDataReceived(_ subscriber: OTSubscriber) {
         var subscriberInfo: [String: Any] = [:]
-
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-
         if let impl = impl {
             impl.strictUIViewContainer?.handleVideoDataReceived(subscriberInfo)
         }
@@ -296,12 +290,11 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
 
     func subscriberDidReconnect(toStream subscriber: OTSubscriberKit) {
         var subscriberInfo: [String: Any] = [:]
-
         if let stream = subscriber.stream {
-            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(
-                stream)
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-
         if let impl = impl {
             impl.strictUIViewContainer?.handleReconnected(subscriberInfo)
         }
@@ -320,10 +313,17 @@ private class SubscriberRtcStatsDelegateHandler: NSObject,
     }
 
     func subscriber(_ subscriber: OTSubscriberKit, rtcStatsReport: String) {
-        if let impl = impl {
-            impl.strictUIViewContainer?.handleRtcStatsReport(rtcStatsReport)
+        var subscriberInfo: [String: Any] = [
+            "jsonStats": rtcStatsReport
+        ]
+        if let stream = subscriber.stream {
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-
+        if let impl = impl {
+            impl.strictUIViewContainer?.handleRtcStatsReport(subscriberInfo)
+        }
     }
 }
 
@@ -341,8 +341,16 @@ private class SubscriberAudioLevelDelegateHandler: NSObject,
     func subscriber(
         _ subscriber: OTSubscriberKit, audioLevelUpdated audioLevel: Float
     ) {
+        var subscriberInfo: [String: Any] = [
+            "audioLevel": audioLevel
+        ]
+        if let stream = subscriber.stream {
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
+        }
         if let impl = impl {
-            impl.strictUIViewContainer?.handleAudioLevel(audioLevel)
+            impl.strictUIViewContainer?.handleAudioLevel(subscriberInfo)
         }
     }
 }
@@ -368,12 +376,22 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
             "timestamp": stats.timestamp,
         ]
 
-        if let jsonData = try? JSONSerialization.data(
-            withJSONObject: statsDict),
-            let jsonString = String(data: jsonData, encoding: .utf8),
-            let impl = impl
-        {
-            impl.strictUIViewContainer?.handleVideoNetworkStats(jsonString)
+        var subscriberInfo: [String: Any] = [:]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: statsDict),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            subscriberInfo["jsonStats"] = jsonString
+        } else {
+            subscriberInfo["jsonStats"] = ""
+        }
+
+        if let stream = subscriber.stream {
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
+        }
+
+        if let impl = impl {
+            impl.strictUIViewContainer?.handleVideoNetworkStats(subscriberInfo)
         }
     }
 
@@ -388,12 +406,22 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
             "timestamp": stats.timestamp,
         ]
 
-        if let jsonData = try? JSONSerialization.data(
-            withJSONObject: statsDict),
-            let jsonString = String(data: jsonData, encoding: .utf8),
-            let impl = impl
-        {
-            impl.strictUIViewContainer?.handleAudioNetworkStats(jsonString)
+        var subscriberInfo: [String: Any] = [:]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: statsDict),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            subscriberInfo["jsonStats"] = jsonString
+        } else {
+            subscriberInfo["jsonStats"] = ""
+        }
+
+        if let stream = subscriber.stream {
+            subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
+        }
+
+        if let impl = impl {
+            impl.strictUIViewContainer?.handleAudioNetworkStats(subscriberInfo)
         }
     }
 }
@@ -407,14 +435,15 @@ private class SubscriberCaptionsDelegateHandler: NSObject, OTSubscriberKitCaptio
     }
     
     func subscriber(_ subscriber: OTSubscriberKit, caption text: String, isFinal: Bool) {
-        var subscriberInfo: [String: Any] = [:]
-        subscriberInfo["text"] = text
-        subscriberInfo["isFinal"] = isFinal
-        
+        var subscriberInfo: [String: Any] = [
+            "text": text,
+            "isFinal": isFinal
+        ]
         if let stream = subscriber.stream {
             subscriberInfo["stream"] = EventUtils.prepareJSStreamEventData(stream)
+        } else {
+            subscriberInfo["stream"] = NSNull()
         }
-        
         if let impl = impl {
             impl.strictUIViewContainer?.handleCaptionReceived(subscriberInfo)
         }

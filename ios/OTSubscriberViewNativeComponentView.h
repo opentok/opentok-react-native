@@ -4,10 +4,10 @@
 - (void)handleSubscriberConnected:(NSDictionary *)eventData;
 - (void)handleSubscriberDisconnected:(NSDictionary *)eventData;
 - (void)handleError:(NSDictionary *)eventData;
-- (void)handleRtcStatsReport:(NSString *)jsonString;
-- (void)handleAudioLevel:(float)audioLevel;
-- (void)handleVideoNetworkStats:(NSString *)jsonString;
-- (void)handleAudioNetworkStats:(NSString *)jsonString;
+- (void)handleRtcStatsReport:(NSDictionary *)eventData;
+- (void)handleAudioLevel:(NSDictionary *)eventData;
+- (void)handleVideoNetworkStats:(NSDictionary *)eventData;
+- (void)handleAudioNetworkStats:(NSDictionary *)eventData;
 - (void)handleVideoEnabled:(NSDictionary *)eventData;
 - (void)handleVideoDisabled:(NSDictionary *)eventData;
 - (void)handleVideoDisableWarning:(NSDictionary *)eventData;
