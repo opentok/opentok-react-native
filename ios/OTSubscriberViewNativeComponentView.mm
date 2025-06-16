@@ -9,6 +9,33 @@
 #import <React/RCTViewComponentView.h>
 #import <OpentokReactNative-Swift.h>
 
+template <typename T>
+T makeConnectionStruct(NSDictionary *connectionDict) {
+    return T{
+        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
+        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
+        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
+    };
+}
+
+template <typename StreamStruct, typename ConnectionStruct>
+StreamStruct makeStreamStruct(NSDictionary *streamDict) {
+    NSDictionary *connectionDict = streamDict[@"connection"] ?: @{};
+    return StreamStruct{
+        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
+        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
+        .hasAudio = [streamDict[@"hasAudio"] boolValue],
+        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
+        .hasVideo = [streamDict[@"hasVideo"] boolValue],
+        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
+        .width = [streamDict[@"width"] doubleValue],
+        .height = [streamDict[@"height"] doubleValue],
+        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
+        .connection = makeConnectionStruct<ConnectionStruct>(connectionDict),
+        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
+    };
+}
+
 using namespace facebook::react;
 
 @interface OTSubscriberViewNativeComponentView : RCTViewComponentView <RCTOTSubscriberViewNativeViewProtocol>
@@ -75,34 +102,14 @@ using namespace facebook::react;
 }
 
 - (void)handleSubscriberConnected:(NSDictionary *)stream {
-
     NSDictionary *streamDict = stream[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
-
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnSubscriberConnected payload{
-            .stream = streamStruct
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStream,
+                OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStreamConnection
+            >(streamDict)
         };
         eventEmitter->onSubscriberConnected(std::move(payload));
     }
@@ -110,32 +117,13 @@ using namespace facebook::react;
 
 - (void)handleSubscriberDisconnected:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
-
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnected payload{
-            .stream = streamStruct
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStream,
+                OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStreamConnection
+            >(streamDict)
         };
         eventEmitter->onSubscriberDisconnected(std::move(payload));
     }
@@ -143,40 +131,19 @@ using namespace facebook::react;
 
 - (void)handleError:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
     NSDictionary *errorDict = eventData[@"error"];
-
-    // Build connection struct
-    OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    // Build stream struct
-    OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnSubscriberErrorError errorStruct{
-        .code = std::string([errorDict[@"code"] ?: @"" UTF8String]),
-        .message = std::string([errorDict[@"message"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
+        OTSubscriberViewNativeEventEmitter::OnSubscriberErrorError errorStruct{
+            .code = std::string([errorDict[@"code"] ?: @"" UTF8String]),
+            .message = std::string([errorDict[@"message"] ?: @"" UTF8String])
+        };
         OTSubscriberViewNativeEventEmitter::OnSubscriberError payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStream,
+                OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStreamConnection
+            >(streamDict),
             .error = errorStruct
         };
         eventEmitter->onSubscriberError(std::move(payload));
@@ -187,69 +154,30 @@ using namespace facebook::react;
     NSDictionary *streamDict = eventData[@"stream"];
     NSString *jsonStats = eventData[@"jsonStats"] ?: @"";
 
-    // Build connection struct
-    NSDictionary *connectionDict = streamDict[@"connection"];
-    OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    // Build stream struct
-    OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
-
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnRtcStatsReport payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStream,
+                OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStreamConnection
+            >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
         eventEmitter->onRtcStatsReport(std::move(payload));
     }
 }
 
-// With stream and audioLevel
 - (void)handleAudioLevel:(NSDictionary *)eventData {
     float audioLevel = [eventData[@"audioLevel"] floatValue];
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnAudioLevelStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnAudioLevelStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnAudioLevel payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnAudioLevelStream,
+                OTSubscriberViewNativeEventEmitter::OnAudioLevelStreamConnection
+            >(streamDict),
             .audioLevel = audioLevel
         };
         eventEmitter->onAudioLevel(std::move(payload));
@@ -259,32 +187,14 @@ using namespace facebook::react;
 - (void)handleVideoNetworkStats:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
     NSString *jsonStats = eventData[@"jsonStats"] ?: @"";
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoNetworkStats payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStreamConnection
+            >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
         eventEmitter->onVideoNetworkStats(std::move(payload));
@@ -294,32 +204,14 @@ using namespace facebook::react;
 - (void)handleAudioNetworkStats:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
     NSString *jsonStats = eventData[@"jsonStats"] ?: @"";
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnAudioNetworkStats payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStream,
+                OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStreamConnection
+            >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
         eventEmitter->onAudioNetworkStats(std::move(payload));
@@ -328,33 +220,15 @@ using namespace facebook::react;
 
 - (void)handleVideoEnabled:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
     NSString *reason = eventData[@"reason"] ?: @"";
-
-    OTSubscriberViewNativeEventEmitter::OnVideoEnabledStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoEnabledStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoEnabled payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoEnabledStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoEnabledStreamConnection
+            >(streamDict),
             .reason = std::string([reason UTF8String])
         };
         eventEmitter->onVideoEnabled(std::move(payload));
@@ -363,33 +237,15 @@ using namespace facebook::react;
 
 - (void)handleVideoDisabled:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
     NSString *reason = eventData[@"reason"] ?: @"";
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisabledStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisabledStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoDisabled payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoDisabledStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoDisabledStreamConnection
+            >(streamDict),
             .reason = std::string([reason UTF8String])
         };
         eventEmitter->onVideoDisabled(std::move(payload));
@@ -398,32 +254,14 @@ using namespace facebook::react;
 
 - (void)handleVideoDisableWarning:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoDisableWarning payload{
-            .stream = streamStruct
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStreamConnection
+            >(streamDict)
         };
         eventEmitter->onVideoDisableWarning(std::move(payload));
     }
@@ -431,32 +269,14 @@ using namespace facebook::react;
 
 - (void)handleVideoDisableWarningLifted:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLifted payload{
-            .stream = streamStruct
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStreamConnection
+            >(streamDict)
         };
         eventEmitter->onVideoDisableWarningLifted(std::move(payload));
     }
@@ -464,32 +284,14 @@ using namespace facebook::react;
 
 - (void)handleVideoDataReceived:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnVideoDataReceived payload{
-            .stream = streamStruct
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStream,
+                OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStreamConnection
+            >(streamDict)
         };
         eventEmitter->onVideoDataReceived(std::move(payload));
     }
@@ -497,34 +299,16 @@ using namespace facebook::react;
 
 - (void)handleCaptionReceived:(NSDictionary *)eventData {
     NSDictionary *streamDict = eventData[@"stream"];
-    NSDictionary *connectionDict = streamDict[@"connection"];
     NSString *text = eventData[@"text"] ? [eventData[@"text"] description] : @"";
     BOOL isFinal = [eventData[@"isFinal"] boolValue];
-
-    OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStreamConnection connectionStruct{
-        .creationTime = std::string([connectionDict[@"creationTime"] ?: @"" UTF8String]),
-        .data = std::string([connectionDict[@"data"] ?: @"" UTF8String]),
-        .connectionId = std::string([connectionDict[@"connectionId"] ?: @"" UTF8String])
-    };
-
-    OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStream streamStruct{
-        .name = std::string([streamDict[@"name"] ?: @"" UTF8String]),
-        .streamId = std::string([streamDict[@"streamId"] ?: @"" UTF8String]),
-        .hasAudio = [streamDict[@"hasAudio"] boolValue],
-        .hasCaptions = [streamDict[@"hasCaptions"] boolValue],
-        .hasVideo = [streamDict[@"hasVideo"] boolValue],
-        .sessionId = std::string([streamDict[@"sessionId"] ?: @"" UTF8String]),
-        .width = [streamDict[@"width"] doubleValue],
-        .height = [streamDict[@"height"] doubleValue],
-        .videoType = std::string([streamDict[@"videoType"] ?: @"" UTF8String]),
-        .connection = connectionStruct,
-        .creationTime = std::string([streamDict[@"creationTime"] ?: @"" UTF8String])
-    };
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
         OTSubscriberViewNativeEventEmitter::OnCaptionReceived payload{
-            .stream = streamStruct,
+            .stream = makeStreamStruct<
+                OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStream,
+                OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStreamConnection
+            >(streamDict),
             .text = std::string([text UTF8String]),
             .isFinal = isFinal
         };
