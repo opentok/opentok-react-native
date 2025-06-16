@@ -437,8 +437,7 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     ) {
         OTRN.sharedState.connections.updateValue(
             connection, forKey: connection.connectionId)
-        var connectionInfo = EventUtils.prepareJSConnectionEventData(connection)
-        connectionInfo["sessionId"] = session.sessionId
+        let connectionInfo = EventUtils.prepareJSSessionEventData(session)
         impl?.ot?.emit(onConnectionCreated: connectionInfo)
     }
 
@@ -447,8 +446,7 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     ) {
         OTRN.sharedState.connections.removeValue(
             forKey: connection.connectionId)
-        var connectionInfo = EventUtils.prepareJSConnectionEventData(connection)
-        connectionInfo["sessionId"] = session.sessionId
+        let connectionInfo = EventUtils.prepareJSSessionEventData(session)
         impl?.ot?.emit(onConnectionDestroyed: connectionInfo)
     }
     public func session(_ session: OTSession, receivedSignalType type: String?, from connection: OTConnection?, with string: String?) {
