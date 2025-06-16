@@ -221,6 +221,7 @@ declare module 'opentok-react-native' {
     iceConfig?: {
       includeServers: 'all' | 'custom';
       transportPolicy: 'all' | 'relay';
+      filterOutLanCandidates: boolean;
       customServers: {
         urls: string[];
         username?: string;
@@ -232,6 +233,12 @@ declare module 'opentok-react-native' {
      * Enable single peer connection for the client.
      */
     enableSinglePeerConnection?: boolean;
+
+    /**
+     * Enable session migration for the client.
+     * See https://tokbox.com/developer/guides/server-rotation/.
+     */
+    sessionMigration?: boolean;
   }
 
   interface OTSessionEventHandlers {
@@ -399,6 +406,16 @@ declare module 'opentok-react-native' {
     cameraPosition?: 'front' | 'back';
 
     /**
+     * Whether the publisher should enable or disable the camera's torch when available.
+     */
+    cameraTorch?: boolean;
+
+    /**
+     * The preferred zoom factor for the camera.
+     */
+    cameraZoomFactor?: number;
+
+    /**
      * Whether to enable Opus DTX. The default value is false. Setting this to true can reduce bandwidth usage in streams that have long periods of silence.
      */
     enableDtx?: boolean;
@@ -525,7 +542,7 @@ declare module 'opentok-react-native' {
     /**
      * Sets audio transformers for the publisher (or clears them if passed an empty array).
      * To use this method, add `pod 'VonageClientSDKVideoTransformers'` to your
-     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.28.0"`
+     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.x.x"`
      * to your your app/build.gradle file.
      */
     setAudioTransformers: (
@@ -538,7 +555,7 @@ declare module 'opentok-react-native' {
     /**
      * Sets video transformers for the publisher (or clears them if passed an empty array).
      * To use this method, add `pod 'VonageClientSDKVideoTransformers'` to your
-     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.28.0"`
+     * Podfile and add `implementation "com.vonage:client-sdk-video-transformers:2.x.X"`
      * to your your app/build.gradle file.
      */
     setVideoTransformers: (

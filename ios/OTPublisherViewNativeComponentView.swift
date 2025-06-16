@@ -115,6 +115,10 @@ import React
                 cameraPosition == "front" ? .front : .back
         }
 
+        publisher.cameraTorch = Utils.sanitizeBooleanProperty(
+            properties["cameraTorch"] as Any)
+        publisher.cameraZoomFactor = Utils.sanitizeCameraZoomFactor(
+            properties["cameraZoomFactor"] as Any)
         publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(
             properties["audioFallbackEnabled"] as Any)
         publisher.publishAudio = Utils.sanitizeBooleanProperty(

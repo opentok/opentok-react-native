@@ -24,6 +24,7 @@ export type EmptyEvent = {};
 export type IceConfig = {
   includeServers: string; // 'all' | 'custom';
   transportPolicy: string; // 'all' | 'relay';
+  filterOutLanCandidates: boolean;
   customServers: {
     urls: string[];
     username?: string;
@@ -40,6 +41,7 @@ export type SessionOptions = {
   connectionEventsSuppressed?: boolean;
   enableStereoOutput?: boolean;
   enableSinglePeerConnection?: boolean;
+  sessionMigration?: boolean;
   iceConfig: IceConfig;
   ipWhitelist?: boolean;
   isCamera2Capable?: boolean;

@@ -94,6 +94,8 @@ function App(): React.JSX.Element {
             ref={publisherRef}
             properties={{
               publishVideo: subscribeToVideo,
+              // cameraZoomFactor: 2,
+              // cameraTorch: false,
             }}
             eventHandlers={{
               error: (event: any) => console.log('pub error', event),

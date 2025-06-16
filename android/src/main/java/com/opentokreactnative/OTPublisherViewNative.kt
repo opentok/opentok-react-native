@@ -116,6 +116,14 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         publisher?.cycleCamera()
     }
 
+    public fun setCameraTorch(value: Boolean) {
+        publisher?.setCameraTorch(value)
+    }
+
+    public fun setCameraZoomFactor(value: Float) {
+        publisher?.setCameraZoomFactor(value)
+    }
+
     public fun setAudioTrack(value: Boolean) {
         // TODO
     }

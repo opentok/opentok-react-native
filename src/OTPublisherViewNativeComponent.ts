@@ -44,6 +44,8 @@ export interface NativeProps extends ViewProps {
   subscriberAudioFallback?: boolean;
   audioTrack?: boolean;
   cameraPosition?: string;
+  cameraTorch?: boolean;
+  cameraZoomFactor?: Float;
   enableDtx?: boolean;
   frameRate?: Int32;
   name?: string;
