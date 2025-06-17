@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +23,10 @@ import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Session;
+import com.opentok.android.Session.Builder.TransportPolicy;
+import com.opentok.android.Session.Builder.IncludeServers;
+import com.opentok.android.Session.Builder.IceServer;
+import com.opentok.android.Session.SessionOptions;
 import com.opentok.android.Session.SessionListener;
 import com.opentok.android.Session.SignalListener;
 import com.opentok.android.Stream;
@@ -60,8 +65,33 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     @Override
     public void initSession(String apiKey, String sessionId, ReadableMap options) {
 
+        final boolean useTextureViews = options.getBoolean("useTextureViews");
+        final boolean connectionEventsSuppressed = options.getBoolean("connectionEventsSuppressed");
+        final boolean ipWhitelist = options.getBoolean("ipWhitelist");
+        final List<IceServer> iceServersList = Utils.sanitizeIceServer(options.getArray("customServers"));
+        final IncludeServers includeServers = Utils.sanitizeIncludeServer(options.getString("includeServers"));
+        final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(options.getString("transportPolicy"));
+        final String proxyUrl = options.getString("proxyUrl");
+        // String androidOnTop = options.getString("androidOnTop");
+        // String androidZOrder = options.getString("androidZOrder");
+        final boolean singlePeerConnection = options.getBoolean("enableSinglePeerConnection");
+        final boolean sessionMigration = options.getBoolean("sessionMigration");
+
         session = new Session.Builder(context, apiKey, sessionId)
-                .build();
+            .sessionOptions(new Session.SessionOptions() {
+                @Override
+                public boolean useTextureViews() {
+                    return useTextureViews;
+                }
+            })
+            .connectionEventsSuppressed(connectionEventsSuppressed)
+            .setCustomIceServers(iceServersList, includeServers)
+            .setIceRouting(transportPolicy)
+            .setIpWhitelist(ipWhitelist)
+            .setProxyUrl(proxyUrl)
+            .setSinglePeerConnection(singlePeerConnection)
+            .setSessionMigration(sessionMigration)
+            .build();
 
         sharedState.getSessions().put(sessionId, session);
 
