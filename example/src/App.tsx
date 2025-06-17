@@ -94,8 +94,15 @@ function App(): React.JSX.Element {
             ref={publisherRef}
             properties={{
               publishVideo: subscribeToVideo,
+              publishAudio: subscribeToVideo,
               // cameraZoomFactor: 2,
               // cameraTorch: false,
+              // videoTrack: true,
+              // audioTrack: false,
+              // audioBitrate: 8000,
+              // enableDtx: true,
+              name: 'OTRN',
+              // videoContentHint: 'text',
             }}
             eventHandlers={{
               error: (event: any) => console.log('pub error', event),
@@ -148,10 +155,10 @@ function App(): React.JSX.Element {
           streamProperties={useStreamProperties ? streamProperties : undefined}
           eventHandlers={{
             audioLevel: (event: any) => {
-              console.log('sub audioLevel', event);
+              logAllEvents && console.log('sub audioLevel', event);
             },
             audioNetworkStats: (event: any) => {
-              console.log('sub audioNetworkStats', event);
+              logAllEvents && console.log('sub audioNetworkStats', event);
             },
             captionReceived: (event: any) => {
               console.log('sub captionReceived', event);
@@ -172,7 +179,7 @@ function App(): React.JSX.Element {
               }, 4000);
             },
             videoDataReceived: (event: any) => {
-              console.log('sub videoDataReceived', event);
+              logAllEvents && console.log('sub videoDataReceived', event);
             },
             videoDisabled: (event: any) => {
               console.log('sub videoDisabled', event);
@@ -187,7 +194,7 @@ function App(): React.JSX.Element {
               console.log('sub videoEnabled', event);
             },
             videoNetworkStats: (event: any) => {
-              console.log('sub videoNetworkStats', event);
+              logAllEvents && console.log('sub videoNetworkStats', event);
             },
           }}
         >
