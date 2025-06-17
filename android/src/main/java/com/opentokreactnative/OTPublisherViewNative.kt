@@ -96,7 +96,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setAudioBitrate(value: Int) {
-        //audioBitRate = value
+        // Ignore -- set as initialization option only
     }
 
     public fun setAudioFallbackEnabled(value: Boolean) {
@@ -125,40 +125,41 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setAudioTrack(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoTrack(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoSource(value: String?) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoContentHint(value: String?) {
-        // TODO
+        publisher?.getCapturer()?.setVideoContentHint(
+            Utils.convertVideoContentHint(value)
+        )
     }
 
     public fun setEnableDtx(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setFrameRate(value: Int) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setName(value: String?) {
-        // TODO
-        //name = value
+        // Ignore -- set as initialization option only
     }
 
     public fun setResolution(value: String?) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setScalableScreenshare(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     // Make this private?
@@ -200,9 +201,11 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             if (this.props?.get("cameraPosition") == "back") {
                 publisher?.cycleCamera()
             }
-            publisher?.getCapturer()?.setVideoContentHint(
-                Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
-            )
+            if (this.props?.get("videoTrack") as Boolean) {
+                publisher?.getCapturer()?.setVideoContentHint(
+                    Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
+                )
+            }
         }
 
         publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
@@ -212,6 +215,8 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
             BaseVideoRenderer.STYLE_VIDEO_FILL
         )
+        publisher?.setCameraTorch(this.props?.get("cameraTorch") as Boolean)
+        publisher?.setCameraZoomFactor((this.props?.get("cameraZoomFactor") as Double).toFloat())
 
         //Listeners
         publisher?.setPublisherListener(this)
