@@ -59,7 +59,7 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) :
         view.setPublisherId(publisherId)
     }
 
-    //@ReactProp(name = "publishAudio")
+    @ReactProp(name = "publishAudio")
     override public fun setPublishAudio(view: OTPublisherViewNative, value: Boolean) {
         view.setPublishAudio(value)
     }

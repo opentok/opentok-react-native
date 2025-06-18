@@ -7,6 +7,7 @@ import { dispatchEvent, setIsConnected } from './helpers/OTSessionHelper';
 import { handleError } from './OTError';
 import { logOT } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
+import { sanitizeSessionOptions } from './helpers/OTSessionHelper';
 
 export default class OTSession extends Component {
   eventHandlers = {};
@@ -30,7 +31,11 @@ export default class OTSession extends Component {
         this.signal(this.props.signal);
       }
     });
-    OT.initSession(apiKey, sessionId, {});
+    OT.initSession(
+      apiKey,
+      sessionId,
+      sanitizeSessionOptions(this.props.options)
+    );
     OT.onStreamCreated((event) => {
       this.eventHandlers?.streamCreated?.(event);
       dispatchEvent('streamCreated', event);

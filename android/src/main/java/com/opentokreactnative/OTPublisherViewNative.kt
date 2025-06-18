@@ -1,6 +1,7 @@
 package com.opentokreactnative
 
 import android.content.Context
+import android.opengl.GLSurfaceView;
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Arguments
@@ -32,6 +33,8 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
 
     private var publisher: Publisher? = null
     private var sharedState = OTRN.getSharedState();
+    private var androidOnTopMap = sharedState.getAndroidOnTopMap();
+    private var androidZOrderMap = sharedState.getAndroidZOrderMap();
     private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
@@ -96,7 +99,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setAudioBitrate(value: Int) {
-        //audioBitRate = value
+        // Ignore -- set as initialization option only
     }
 
     public fun setAudioFallbackEnabled(value: Boolean) {
@@ -125,44 +128,46 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
     }
 
     public fun setAudioTrack(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoTrack(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoSource(value: String?) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setVideoContentHint(value: String?) {
-        // TODO
+        publisher?.getCapturer()?.setVideoContentHint(
+            Utils.convertVideoContentHint(value)
+        )
     }
 
     public fun setEnableDtx(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setFrameRate(value: Int) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setName(value: String?) {
-        // TODO
-        //name = value
+        // Ignore -- set as initialization option only
     }
 
     public fun setResolution(value: String?) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
     public fun setScalableScreenshare(value: Boolean) {
-        // TODO
+        // Ignore -- set as initialization option only
     }
 
-    // Make this private?
     private fun publishStream(/*session: Session*/) {
+        var pubOrSub: String? = ""
+        var zOrder: String? = ""
         if (this.props?.get("videoSource") == "screen") {
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
@@ -200,9 +205,11 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             if (this.props?.get("cameraPosition") == "back") {
                 publisher?.cycleCamera()
             }
-            publisher?.getCapturer()?.setVideoContentHint(
-                Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
-            )
+            if (this.props?.get("videoTrack") as Boolean) {
+                publisher?.getCapturer()?.setVideoContentHint(
+                    Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
+                )
+            }
         }
 
         publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
@@ -212,6 +219,24 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
             BaseVideoRenderer.STYLE_VIDEO_FILL
         )
+
+        if (androidOnTopMap.get(sessionId) != null) {
+            pubOrSub = androidOnTopMap.get(sessionId);
+        }
+        if (androidZOrderMap.get(sessionId) != null) {
+            zOrder = androidZOrderMap.get(sessionId);
+        }
+
+        if (pubOrSub.equals("publisher") && publisher?.getView() is GLSurfaceView) {
+            if (zOrder.equals("mediaOverlay")) {
+                (publisher?.getView() as GLSurfaceView).setZOrderMediaOverlay(true)
+            } else {
+                (publisher?.getView() as GLSurfaceView).setZOrderOnTop(true)
+            }
+        }
+
+        publisher?.setCameraTorch(this.props?.get("cameraTorch") as Boolean)
+        publisher?.setCameraZoomFactor((this.props?.get("cameraZoomFactor") as Double).toFloat())
 
         //Listeners
         publisher?.setPublisherListener(this)

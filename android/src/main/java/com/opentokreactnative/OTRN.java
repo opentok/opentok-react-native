@@ -13,12 +13,24 @@ public class OTRN {
     private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Subscriber> subscribers = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Publisher> publishers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> androidOnTopMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, String> androidZOrderMap = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
         if (sharedState == null) {
             sharedState = new OTRN();
         }
         return sharedState;
+    }
+
+    public ConcurrentHashMap<String, String> getAndroidOnTopMap() {
+
+        return this.androidOnTopMap;
+    }
+
+    public ConcurrentHashMap<String, String> getAndroidZOrderMap() {
+
+        return this.androidZOrderMap;
     }
 
     public ConcurrentHashMap<String, Stream> getSubscriberStreams() {
