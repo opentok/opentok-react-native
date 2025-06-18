@@ -72,10 +72,12 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
         final IncludeServers includeServers = Utils.sanitizeIncludeServer(options.getString("includeServers"));
         final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(options.getString("transportPolicy"));
         final String proxyUrl = options.getString("proxyUrl");
-        // String androidOnTop = options.getString("androidOnTop");
-        // String androidZOrder = options.getString("androidZOrder");
+        final String androidOnTop = options.getString("androidOnTop");
+        final String androidZOrder = options.getString("androidZOrder");
         final boolean singlePeerConnection = options.getBoolean("enableSinglePeerConnection");
         final boolean sessionMigration = options.getBoolean("sessionMigration");
+        ConcurrentHashMap<String, String> androidOnTopMap = sharedState.getAndroidOnTopMap();
+        ConcurrentHashMap<String, String> androidZOrderMap = sharedState.getAndroidZOrderMap();
 
         session = new Session.Builder(context, apiKey, sessionId)
             .sessionOptions(new Session.SessionOptions() {
@@ -103,6 +105,8 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
         session.setSignalListener(this);
         session.setStreamCaptionsPropertiesListener(this);
         session.setStreamPropertiesListener(this);
+        androidOnTopMap.put(sessionId, androidOnTop);
+        androidZOrderMap.put(sessionId, androidZOrder);
     }
 
     @Override

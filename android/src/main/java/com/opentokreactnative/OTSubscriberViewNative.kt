@@ -1,6 +1,7 @@
 package com.opentokreactnative
 
 import android.content.Context
+import android.opengl.GLSurfaceView;
 import android.util.AttributeSet
 import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments
@@ -37,6 +38,8 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     private var subscriber: Subscriber? = null
     private var sharedState = OTRN.getSharedState();
     private var TAG = this.javaClass.simpleName
+    private var androidOnTopMap = sharedState.getAndroidOnTopMap();
+    private var androidZOrderMap = sharedState.getAndroidZOrderMap();
     private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
@@ -118,6 +121,8 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
     }
 
     fun subscribeToStream(session: Session, stream: Stream) {
+        var pubOrSub: String? = ""
+        var zOrder: String? = ""
         subscriber = Subscriber.Builder(context, stream)
             .build()
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
@@ -125,6 +130,22 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
             BaseVideoRenderer.STYLE_VIDEO_FILL
         )
+
+        if (androidOnTopMap.get(sessionId) != null) {
+            pubOrSub = androidOnTopMap.get(sessionId);
+        }
+        if (androidZOrderMap.get(sessionId) != null) {
+            zOrder = androidZOrderMap.get(sessionId);
+        }
+
+        if (pubOrSub.equals("subscriber") && subscriber?.getView() is GLSurfaceView) {
+            if (zOrder.equals("mediaOverlay")) {
+                (subscriber?.getView() as GLSurfaceView).setZOrderMediaOverlay(true)
+            } else {
+                (subscriber?.getView() as GLSurfaceView).setZOrderOnTop(true)
+            }
+        }
+
         subscriber?.setSubscriberListener(this)
         subscriber?.setRtcStatsReportListener(this)
         subscriber?.setCaptionsListener(this)
