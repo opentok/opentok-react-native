@@ -182,11 +182,20 @@ import React
         publisher.publishVideo = publishVideo
     }
 
-    deinit {
+    @objc public func cleanup() {
+        if Thread.isMainThread {
+            self._cleanupImpl()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?._cleanupImpl()
+            }
+        }
+    }
+    
+    private func _cleanupImpl()  {
+    
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self,
-                let publisherId = self.publisherId,
+            guard let publisherId = self.publisherId,
                 let publisher = OTRN.sharedState.publishers[publisherId]
             else { return }
 
@@ -230,9 +239,9 @@ import React
                 OTRN.sharedState.publishers[publisherId] = nil
                 OTRN.sharedState.isPublishing[publisherId] = nil
             }
-        }
-
+        
     }
+
 }
 
 private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
