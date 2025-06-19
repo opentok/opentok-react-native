@@ -221,6 +221,39 @@ import React
 
         }
     }
+
+    @objc public func unpublish(_ publisherId: String) {
+        var error: OTError?
+
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            return
+        }
+
+        guard let otSession = otSession else {
+            return
+        }
+
+        otSession.unpublish(publisher, error: &error)
+        OTRN.sharedState.publishers.removeValue(forKey: publisherId)
+    }
+
+    @objc public func removeSubscriber(_ streamId: String) {
+        var error: OTError?
+
+        guard let otSession = otSession else {
+            return
+        }
+
+        guard
+            let subscriber = OTRN.sharedState.subscribers[streamId]
+        else {
+            return
+        }
+
+        otSession.unsubscribe(subscriber, error: &error)
+        OTRN.sharedState.subscribers.removeValue(forKey: streamId)
+    }
+
     @objc public func forceMuteAll(
         _ sessionId: String,
         excludedStreamIds: [String],

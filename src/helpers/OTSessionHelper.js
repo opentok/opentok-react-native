@@ -39,6 +39,13 @@ const addEventListener = (type, listener) => {
   }
 };
 
+const removeEventListener = (type, listener) => {
+  if (!eventHandlers[type]) {
+    const newArray = eventHandlers[type].filter((el) => el !== listener);
+    eventHandlers[type] = newArray;
+  }
+};
+
 const sanitizeCustomTurnOptions = (options) => {
   let sessionOptions = {};
   if (typeof options !== 'object') {
@@ -165,5 +172,6 @@ export {
   setIsConnected,
   dispatchEvent,
   addEventListener,
+  removeEventListener,
   sanitizeSessionOptions,
 };

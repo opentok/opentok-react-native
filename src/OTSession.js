@@ -96,6 +96,14 @@ export default class OTSession extends Component {
     OT.sendSignal(this.props.sessionId, signalObj.type, signalObj.data);
   }
 
+  disconnectSession(sessionId) {
+    OT.disconnectSession(sessionId);
+  }
+
+  componentWillUnmount() {
+    this.disconnectSession(this.props.sessionId);
+  }
+
   render() {
     const { style, children, sessionId, apiKey, token } = this.props;
 

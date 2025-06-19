@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, Button } from 'react-native';
 
 import {
   OTSession,
@@ -14,7 +14,9 @@ function App(): React.JSX.Element {
   const token = '';
 
   const [subscribeToVideo, setSubscribeToVideo] = React.useState<boolean>(true);
-  const [publishStream, setPublishStream] = React.useState<boolean>(false);
+  const [publishStream, setPublishStream] = React.useState<boolean>(true);
+  const [subscribeToStreams, setSubscribeToStreams] =
+    React.useState<boolean>(true);
   const [streamProperties, setStreamProperties] = React.useState<Any>({});
 
   const sessionRef = useRef<OTSession>(null);
@@ -24,15 +26,17 @@ function App(): React.JSX.Element {
     setSubscribeToVideo((val) => !val);
   };
   const logAllEvents = false;
-  const useIndividualSubscriberViews = true;
+  const useIndividualSubscriberViews = false;
   const subscribeToSelf = false;
   const useStreamProperties = true;
 
-  React.useEffect(() => {
-    setInterval(() => {
-      toggleVideo();
-    }, 2000);
-  }, []);
+  const toggleSubscribe = () => {
+    setSubscribeToStreams((val) => !val);
+  };
+
+  const togglePublish = () => {
+    setPublishStream((val) => !val);
+  };
 
   useEffect(() => {
     // console.log('streamProperties updated to:', streamProperties);
@@ -48,7 +52,6 @@ function App(): React.JSX.Element {
         eventHandlers={{
           sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
-            setTimeout(() => setPublishStream(true), 5000);
             sessionRef.current?.signal({
               type: 'greeting2',
               data: 'hello again from React Native',
@@ -142,81 +145,87 @@ function App(): React.JSX.Element {
             style={styles.videoview}
           />
         ) : null}
-
-        <OTSubscriber
-          key="subscriber"
-          sessionId={sessionId}
-          style={styles.videoview}
-          subscribeToSelf={subscribeToSelf}
-          properties={{
-            subscribeToAudio: subscribeToVideo,
-            subscribeToVideo,
-          }}
-          streamProperties={useStreamProperties ? streamProperties : undefined}
-          eventHandlers={{
-            audioLevel: (event: any) => {
-              logAllEvents && console.log('sub audioLevel', event);
-            },
-            audioNetworkStats: (event: any) => {
-              logAllEvents && console.log('sub audioNetworkStats', event);
-            },
-            captionReceived: (event: any) => {
-              console.log('sub captionReceived', event);
-            },
-            disconnected: (event: any) => {
-              console.log('sub disconnected', event);
-            },
-            error: (event: any) => {
-              console.log('sub error', event);
-            },
-            rtcStatsReport: (event: any) => {
-              console.log('sub rtcStatsReport', event);
-            },
-            subscriberConnected: (event: any) => {
-              console.log('subscriberConnected', event);
-              setTimeout(() => {
-                // subscriberRef.current?.getRtcStatsReport();
-              }, 4000);
-            },
-            videoDataReceived: (event: any) => {
-              logAllEvents && console.log('sub videoDataReceived', event);
-            },
-            videoDisabled: (event: any) => {
-              console.log('sub videoDisabled', event);
-            },
-            videoDisableWarning: (event: any) => {
-              console.log('sub videoDisableWarning', event);
-            },
-            videoDisableWarningLifted: (event: any) => {
-              console.log('sub videoDisableWarningLifted', event);
-            },
-            videoEnabled: (event: any) => {
-              console.log('sub videoEnabled', event);
-            },
-            videoNetworkStats: (event: any) => {
-              logAllEvents && console.log('sub videoNetworkStats', event);
-            },
-          }}
-        >
-          {useIndividualSubscriberViews
-            ? (streamIds) => {
-                if (streamIds.length === 0) {
-                  return null;
+        {subscribeToStreams ? (
+          <OTSubscriber
+            key="subscriber"
+            sessionId={sessionId}
+            style={styles.videoview}
+            subscribeToSelf={subscribeToSelf}
+            properties={{
+              subscribeToAudio: subscribeToVideo,
+              subscribeToVideo,
+            }}
+            streamProperties={
+              useStreamProperties ? streamProperties : undefined
+            }
+            eventHandlers={{
+              audioLevel: (event: any) => {
+                logAllEvents && console.log('sub audioLevel', event);
+              },
+              audioNetworkStats: (event: any) => {
+                logAllEvents && console.log('sub audioNetworkStats', event);
+              },
+              captionReceived: (event: any) => {
+                console.log('sub captionReceived', event);
+              },
+              disconnected: (event: any) => {
+                console.log('sub disconnected', event);
+              },
+              error: (event: any) => {
+                console.log('sub error', event);
+              },
+              rtcStatsReport: (event: any) => {
+                console.log('sub rtcStatsReport', event);
+              },
+              subscriberConnected: (event: any) => {
+                console.log('subscriberConnected', event);
+                setTimeout(() => {
+                  // subscriberRef.current?.getRtcStatsReport();
+                }, 4000);
+              },
+              videoDataReceived: (event: any) => {
+                logAllEvents && console.log('sub videoDataReceived', event);
+              },
+              videoDisabled: (event: any) => {
+                console.log('sub videoDisabled', event);
+              },
+              videoDisableWarning: (event: any) => {
+                console.log('sub videoDisableWarning', event);
+              },
+              videoDisableWarningLifted: (event: any) => {
+                console.log('sub videoDisableWarningLifted', event);
+              },
+              videoEnabled: (event: any) => {
+                console.log('sub videoEnabled', event);
+              },
+              videoNetworkStats: (event: any) => {
+                logAllEvents && console.log('sub videoNetworkStats', event);
+              },
+            }}
+          >
+            {useIndividualSubscriberViews
+              ? (streamIds) => {
+                  if (streamIds.length === 0) {
+                    return null;
+                  }
+                  return streamIds.map((streamId) => {
+                    return (
+                      <OTSubscriberView
+                        streamId={streamId}
+                        key={streamId}
+                        ref={subscriberRef}
+                        style={styles.videoview}
+                      />
+                    );
+                  });
                 }
-                return streamIds.map((streamId) => {
-                  return (
-                    <OTSubscriberView
-                      streamId={streamId}
-                      key={streamId}
-                      ref={subscriberRef}
-                      style={styles.videoview}
-                    />
-                  );
-                });
-              }
-            : null}
-        </OTSubscriber>
+              : null}
+          </OTSubscriber>
+        ) : null}
       </OTSession>
+      <Button onPress={() => toggleSubscribe()} title="Toggle subscribe" />
+      <Button onPress={() => togglePublish()} title="Toggle publish" />
+      <Button onPress={() => toggleVideo()} title="Toggle audio/video" />
     </SafeAreaView>
   );
 }

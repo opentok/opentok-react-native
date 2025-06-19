@@ -145,6 +145,26 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     }
 
     @Override
+    public void unpublish(String publisherId) {
+        ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
+        Publisher publisher = publishers.get(publisherId);
+        if (publisher != null) {
+            session.unpublish(publisher);
+            publishers.remove(publisher);
+        }
+    }
+
+    @Override
+    public void removeSubscriber(String streamId) {
+        ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
+        Subscriber subscriber = subscribers.get(streamId);
+        if (subscriber != null) {
+            session.unsubscribe(subscriber);
+            subscribers.remove(subscriber);
+        }
+    }
+
+    @Override
     public void disableForceMute(String sessionId, Promise promise) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);

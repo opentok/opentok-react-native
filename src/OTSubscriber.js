@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 // import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 // import { each, isEqual } from 'underscore';
 import { OT } from './OT';
-import { addEventListener } from './helpers/OTSessionHelper';
+import {
+  addEventListener,
+  removeEventListener,
+} from './helpers/OTSessionHelper';
 import OTSubscriberView from './OTSubscriberView';
 /*
 import {
@@ -129,6 +132,21 @@ export default class OTSubscriber extends Component {
   getRtcStatsReport() {
     OT.getSubscriberRtcStatsReport();
   }
+
+  componentWillUnmount() {
+    removeEventListener('streamCreated', this.streamCreatedHandler);
+    removeEventListener(
+      'publisherStreamCreated',
+      this.publisherStreamCreatedHandler
+    );
+    removeEventListener(
+      'publisherStreamDestroyed',
+      this.publisherStreamDestroyedHandler
+    );
+    removeEventListener('streamDestroyed', this.streamDestroyedHandler);
+    removeEventListener('subscriberConnected', this.subscriberConnectedHandler);
+  }
+
   render() {
     if (!this.props.children) {
       const containerStyle = this.props.containerStyle;

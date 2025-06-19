@@ -7,6 +7,7 @@ import { checkAndroidPermissions, OT } from './OT';
 import OTPublisherViewNative from './OTPublisherViewNativeComponent';
 import {
   addEventListener,
+  removeEventListener,
   dispatchEvent,
   isConnected,
 } from './helpers/OTSessionHelper';
@@ -77,6 +78,11 @@ export default class OTPublisher extends React.Component {
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
     OT.getPublisherRtcStatsReport(this.state.publisherId);
+  }
+
+  componentWillUnmount() {
+    OT.unpublish(this.state.publisherId);
+    removeEventListener('sessionConnected', this.onSessionConnected);
   }
 
   render() {
