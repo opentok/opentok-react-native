@@ -229,15 +229,15 @@ import React
                 // Clean up publisher resources
                 publisher.view?.removeFromSuperview()
                 publisher.delegate = nil
-                publisherDelegateHandler = nil
                 publisher.audioLevelDelegate = nil
-                publisherAudioLevelDelegateHandler = nil
                 publisher.networkStatsDelegate = nil
-                publisherNetworkStatsDelegateHandler = nil
                 publisher.rtcStatsReportDelegate = nil
-                publisherRtcStatsDelegateHandler = nil
                 OTRN.sharedState.publishers[publisherId] = nil
                 OTRN.sharedState.isPublishing[publisherId] = nil
+                self.publisherId = ""
+                self.sessionId = ""
+                self.currentSession = nil
+                self.publisherUIView = nil
             }
         
     }
