@@ -7,6 +7,8 @@ import { OT } from './OT';
 import {
   addEventListener,
   removeEventListener,
+  getStreams,
+  getPublisherStream,
 } from './helpers/OTSessionHelper';
 import OTSubscriberView from './OTSubscriberView';
 /*
@@ -30,8 +32,13 @@ export default class OTSubscriber extends Component {
 
   constructor(props, context) {
     super(props, context);
+    let initialStreams = getStreams();
+    let initialPublisherStream = getPublisherStream();
+    if (this.props.subscribeToSelf && initialPublisherStream) {
+      initialStreams.push(initialPublisherStream);
+    }
     this.state = {
-      streams: [],
+      streams: initialStreams,
       subscribeToSelf: props.subscribeToSelf || false,
     };
     // this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
