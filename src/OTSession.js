@@ -3,7 +3,13 @@ import { View } from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
-import { dispatchEvent, setIsConnected } from './helpers/OTSessionHelper';
+import {
+  dispatchEvent,
+  setIsConnected,
+  addStream,
+  removeStream,
+  clearStreams,
+} from './helpers/OTSessionHelper';
 import { handleError } from './OTError';
 import { logOT } from './helpers/OTHelper';
 import OTContext from './contexts/OTContext';
@@ -27,6 +33,7 @@ export default class OTSession extends Component {
       this.connectionId = event.connectionId;
       setIsConnected(true);
       this.eventHandlers?.sessionConnected?.(event);
+      dispatchEvent('sessionConnected', event);
       if (Object.keys(this.props.signal).length > 0) {
         this.signal(this.props.signal);
       }
@@ -38,11 +45,13 @@ export default class OTSession extends Component {
     );
     OT.onStreamCreated((event) => {
       this.eventHandlers?.streamCreated?.(event);
+      addStream(event.streamId);
       dispatchEvent('streamCreated', event);
     });
 
     OT.onStreamDestroyed((event) => {
       this.eventHandlers?.streamDestroyed?.(event);
+      removeStream(event.streamId);
       dispatchEvent('streamDestroyed', event);
     });
 
@@ -94,6 +103,15 @@ export default class OTSession extends Component {
 
   signal(signalObj) {
     OT.sendSignal(this.props.sessionId, signalObj.type, signalObj.data);
+  }
+
+  disconnectSession(sessionId) {
+    OT.disconnectSession(sessionId);
+  }
+
+  componentWillUnmount() {
+    this.disconnectSession(this.props.sessionId);
+    clearStreams();
   }
 
   render() {

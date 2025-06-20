@@ -121,6 +121,13 @@ RCT_EXPORT_MODULE()
     [impl publish:publisherId];
 }
 
+- (void)unpublish:(nonnull NSString *)publisherId {
+    [impl unpublish:publisherId];
+}
+
+- (void)removeSubscriber:(nonnull NSString *)streamId {
+    [impl removeSubscriber:streamId];
+}
 
 - (void)setAudioTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
     [impl setAudioTransformers:publisherId transformers:transformers];

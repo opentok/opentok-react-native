@@ -27,6 +27,10 @@ export default class OTSubscriberView extends React.Component {
     OT.getSubscriberRtcStatsReport();
   }
 
+  componentWillUnmount() {
+    OT.removeSubscriber(this.props.streamId);
+  }
+
   render() {
     const { streamId } = this.props;
     const subscriberProperties = this.context.subscriberProperties;

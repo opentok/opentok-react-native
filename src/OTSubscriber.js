@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 // import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
 // import { each, isEqual } from 'underscore';
 import { OT } from './OT';
-import { addEventListener } from './helpers/OTSessionHelper';
+import {
+  addEventListener,
+  removeEventListener,
+  getStreams,
+  getPublisherStream,
+} from './helpers/OTSessionHelper';
 import OTSubscriberView from './OTSubscriberView';
 /*
 import {
@@ -27,8 +32,13 @@ export default class OTSubscriber extends Component {
 
   constructor(props, context) {
     super(props, context);
+    let initialStreams = getStreams();
+    let initialPublisherStream = getPublisherStream();
+    if (this.props.subscribeToSelf && initialPublisherStream) {
+      initialStreams.push(initialPublisherStream);
+    }
     this.state = {
-      streams: [],
+      streams: initialStreams,
       subscribeToSelf: props.subscribeToSelf || false,
     };
     // this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
@@ -129,6 +139,21 @@ export default class OTSubscriber extends Component {
   getRtcStatsReport() {
     OT.getSubscriberRtcStatsReport();
   }
+
+  componentWillUnmount() {
+    removeEventListener('streamCreated', this.streamCreatedHandler);
+    removeEventListener(
+      'publisherStreamCreated',
+      this.publisherStreamCreatedHandler
+    );
+    removeEventListener(
+      'publisherStreamDestroyed',
+      this.publisherStreamDestroyedHandler
+    );
+    removeEventListener('streamDestroyed', this.streamDestroyedHandler);
+    removeEventListener('subscriberConnected', this.subscriberConnectedHandler);
+  }
+
   render() {
     if (!this.props.children) {
       const containerStyle = this.props.containerStyle;

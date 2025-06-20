@@ -14,11 +14,34 @@ const validateArray = (value) => (isArray(value) ? value : []);
 
 const eventHandlers = {};
 
+let streams = [];
+
+let publisherStream;
+
 let connected = false;
 
 const setIsConnected = (value) => {
   connected = value;
 };
+
+const addStream = (streamId) => {
+  streams.push(streamId);
+};
+
+const removeStream = (streamId) => {
+  const index = streams.findIndex((obj) => obj === streamId);
+  if (index !== -1) {
+    streams.splice(index, 1);
+  }
+};
+
+const clearStreams = () => {
+  streams = [];
+};
+
+const getStreams = () => streams;
+
+const getPublisherStream = () => publisherStream;
 
 const isConnected = () => connected;
 
@@ -29,6 +52,12 @@ const dispatchEvent = (type, event) => {
       listener(event);
     });
   }
+  if (type === 'publisherStreamCreated') {
+    publisherStream = event.streamId;
+  }
+  if (type === 'publisherStreamDestroyed') {
+    publisherStream = undefined;
+  }
 };
 
 const addEventListener = (type, listener) => {
@@ -36,6 +65,13 @@ const addEventListener = (type, listener) => {
     eventHandlers[type] = [listener];
   } else {
     eventHandlers[type].push(listener);
+  }
+};
+
+const removeEventListener = (type, listener) => {
+  if (!eventHandlers[type]) {
+    const newArray = eventHandlers[type].filter((el) => el !== listener);
+    eventHandlers[type] = newArray;
   }
 };
 
@@ -161,9 +197,15 @@ const sanitizeSessionOptions = (options) => {
 };
 
 export {
+  addStream,
+  removeStream,
+  clearStreams,
+  getStreams,
+  getPublisherStream,
   isConnected,
   setIsConnected,
   dispatchEvent,
   addEventListener,
+  removeEventListener,
   sanitizeSessionOptions,
 };

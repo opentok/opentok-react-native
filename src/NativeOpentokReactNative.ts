@@ -144,6 +144,8 @@ export interface Spec extends TurboModule {
     }>
   ): void;
   publish(publisherId: string): void;
+  unpublish(publisherId: string): void;
+  removeSubscriber(streamId: string): void;
   sendSignal(sessionId: string, type: string, data: string): void;
   setEncryptionSecret(sessionId: string, secret: string): Promise<void>;
   reportIssue(sessionId: string): Promise<string>;

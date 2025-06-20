@@ -94,6 +94,15 @@ using namespace facebook::react;
     [super updateProps:props oldProps:oldProps];
 }
 
+//The view instance (and its _impl) is reused after recycling, not recreated.
+- (void)prepareForRecycle {
+    if (_impl) {
+       [_impl cleanup];
+    }
+    self.contentView = nil;
+    [super prepareForRecycle];
+}
+
 - (std::shared_ptr<const OTPublisherViewNativeEventEmitter>)getEventEmitter {
     if (!_eventEmitter) {
         return nullptr;
