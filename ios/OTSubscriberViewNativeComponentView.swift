@@ -166,12 +166,10 @@ import React
         subscriber.networkStatsDelegate = nil
         subscriber.rtcStatsReportDelegate = nil
         subscriber.captionsDelegate = nil
-        subscriberDelegateHandler = nil
-        subscriberRtcStatsDelegateHandler = nil
-        subscriberAudioLevelDelegateHandler = nil
-        subscriberNetworkStatsDelegateHandler = nil
-        subscriberCaptionsDelegateHandler = nil
         OTRN.sharedState.subscribers.removeValue(forKey: streamId)
+        self.sessionId = ""
+        self.streamId = ""
+        self.subscriberUIView = nil
     }
 }
 
