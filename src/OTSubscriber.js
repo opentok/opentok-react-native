@@ -117,7 +117,6 @@ export default class OTSubscriber extends Component {
     });
   };
   streamDestroyedHandler = (stream) => {
-    const modifiedStreams = this.state.streams.filter(obj => obj !== stream.streamId);
     this.setState((prevState) => ({
       streams: prevState.streams.filter((item) => item !== stream.streamId),
     }));
