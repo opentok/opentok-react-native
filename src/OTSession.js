@@ -27,6 +27,7 @@ export default class OTSession extends Component {
       this.connectionId = event.connectionId;
       setIsConnected(true);
       this.eventHandlers?.sessionConnected?.(event);
+      dispatchEvent('sessionConnected', event);
       if (Object.keys(this.props.signal).length > 0) {
         this.signal(this.props.signal);
       }
