@@ -45,7 +45,9 @@ export default class OTSession extends Component {
     );
     OT.onStreamCreated((event) => {
       this.eventHandlers?.streamCreated?.(event);
-      addStream(event.streamId);
+      if (event.connectionId !== this.connectionId) {
+        addStream(event.streamId);
+      }
       dispatchEvent('streamCreated', event);
     });
 
@@ -106,7 +108,7 @@ export default class OTSession extends Component {
   }
 
   disconnectSession(sessionId) {
-    OT.disconnectSession(sessionId);
+    OT.disconnect(sessionId);
   }
 
   componentWillUnmount() {

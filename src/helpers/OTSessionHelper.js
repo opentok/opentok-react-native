@@ -25,7 +25,9 @@ const setIsConnected = (value) => {
 };
 
 const addStream = (streamId) => {
-  streams.push(streamId);
+  if (!streams.includes(streamId)) {
+    streams.push(streamId);
+  }
 };
 
 const removeStream = (streamId) => {

@@ -108,23 +108,19 @@ export default class OTSubscriber extends Component {
       ? sanitizeProperties(streamProperties[stream.streamId])
       : sanitizeProperties(properties);
     */
-    this.setState((prevState) => ({
-      streams: [...prevState.streams, stream.streamId],
-    }));
+    this.setState((prevState) => {
+      const modifiedStreams = prevState.streams;
+      if (!modifiedStreams.includes(stream.streamId)) {
+        modifiedStreams.push(stream.streamId);
+      }
+      return { streams: modifiedStreams };
+    });
   };
   streamDestroyedHandler = (stream) => {
-    this.setState((prevState) => {
-      const indexOfStream = prevState.streams.indexOf(stream.streamId);
-      const newState = prevState.streams.splice(indexOfStream, 1);
-      return newState;
-    });
-    /* TODO
-    OT.removeSubscriber(stream.streamId, (error) => {
-      if (error) {
-        this.otrnEventHandler(error);
-      }
-    });
-    */
+    const modifiedStreams = this.state.streams.filter(obj => obj !== stream.streamId);
+    this.setState((prevState) => ({
+      streams: prevState.streams.filter((item) => item !== stream.streamId),
+    }));
   };
 
   subscriberConnectedHandler = (event) => {
