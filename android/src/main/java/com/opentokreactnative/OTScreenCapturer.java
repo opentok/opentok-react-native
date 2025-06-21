@@ -74,16 +74,19 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
     @Override
     public int startCapture() {
-        capturing = true;
-
-        mHandler.postDelayed(newFrame, 1000 / fps);
+        if(!capturing){
+            capturing = true;
+            mHandler.postDelayed(newFrame, 1000 / fps);
+        }
         return 0;
     }
 
     @Override
     public int stopCapture() {
-        capturing = false;
-        mHandler.removeCallbacks(newFrame);
+        if(capturing){
+            capturing = false;
+            mHandler.removeCallbacks(newFrame);
+        }
         return 0;
     }
 
