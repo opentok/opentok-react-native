@@ -632,7 +632,7 @@ declare module "opentok-react-native" {
     /**
      * Sent when the subscriber successfully connects to the stream.
      */
-    connected?: Callback<any>;
+    connected?: CallbackWithParam<Stream, any>;
 
     /**
      * Sent when the subscriber receives a caption for the stream.
