@@ -210,7 +210,7 @@ OTSubscriber.propTypes = {
   eventHandlers: PropTypes.object,
   streamProperties: PropTypes.object,
   containerStyle: PropTypes.object,
-  // getRtcStatsReport: PropTypes.object,
+  getRtcStatsReport: PropTypes.object,
   subscribeToSelf: PropTypes.bool,
 };
 
@@ -220,7 +220,7 @@ OTSubscriber.defaultProps = {
   streamProperties: {},
   containerStyle: {},
   subscribeToSelf: false,
-  // getRtcStatsReport: {},
+  getRtcStatsReport: {},
 };
 
 OTSubscriber.contextType = OTContext;
