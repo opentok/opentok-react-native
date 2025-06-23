@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
 import uuid from 'react-native-uuid';
@@ -27,6 +27,7 @@ export default class OTPublisher extends React.Component {
     this.state = {
       publisherId: uuid.v4(),
       publishVideo: mergedProperties.publishVideo,
+      permissionsGranted: Platform.OS === 'ios',
     };
     this.eventHandlers = props.eventHandlers;
     this.publisherProperties = sanitizeProperties(mergedProperties);
@@ -34,7 +35,22 @@ export default class OTPublisher extends React.Component {
   }
 
   onSessionConnected = () => {
-    OT.publish(this.state.publisherId);
+    if (Platform.OS === 'android') {
+      const { audioTrack, videoTrack, videoSource } = this.publisherProperties;
+      const isScreenSharing = videoSource === 'screen';
+      checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
+        .then(() => {
+          OT.publish(this.state.publisherId);
+          this.setState({
+            permissionsGranted: true,
+          });
+        })
+        .catch((error) => {
+          // this.otrnEventHandler(error);
+        });
+    } else {
+      OT.publish(this.state.publisherId);
+    }
   };
 
   initComponent = () => {
@@ -66,6 +82,9 @@ export default class OTPublisher extends React.Component {
           if (isConnected()) {
             setTimeout(() => OT.publish(this.state.publisherId), 0);
           }
+          this.setState({
+            permissionsGranted: true,
+          });
         })
         .catch((error) => {
           // this.otrnEventHandler(error);
@@ -85,8 +104,13 @@ export default class OTPublisher extends React.Component {
     removeEventListener('sessionConnected', this.onSessionConnected);
   }
 
+  getPrePermissionViewStyle = (props) => ({
+    backgroundColor: '#000',
+    ...this.props.style,
+  });
+
   render() {
-    return (
+    return this.state.permissionsGranted ? (
       <OTPublisherViewNative
         sessionId={this.context.sessionId}
         publisherId={this.state.publisherId}
@@ -141,6 +165,8 @@ export default class OTPublisher extends React.Component {
         style={this.props.style}
         {...this.props.properties}
       />
+    ) : (
+      <View style={this.getPrePermissionViewStyle()} />
     );
   }
 }
