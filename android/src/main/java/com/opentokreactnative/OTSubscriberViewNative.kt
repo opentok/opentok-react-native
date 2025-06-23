@@ -155,8 +155,12 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
         subscriber?.setStreamListener(this)
         subscriber?.setAudioLevelListener(this)
 
-        subscriber?.setSubscribeToAudio(this.props?.get("subscribeToAudio") as Boolean)
-        subscriber?.setSubscribeToVideo(this.props?.get("subscribeToVideo") as Boolean)
+        if (this.props?.get("subscribeToAudio") != null) {
+            subscriber?.setSubscribeToAudio(this.props?.get("subscribeToAudio") as Boolean)
+        }
+        if (this.props?.get("subscribeToVideo") != null) {
+            subscriber?.setSubscribeToVideo(this.props?.get("subscribeToVideo") as Boolean)
+        }
         if (this.props?.get("subscribeToCaptions") != null) {
             subscriber?.setSubscribeToCaptions(this.props?.get("subscribeToCaptions") as Boolean)
         }
