@@ -20,7 +20,7 @@ function App(): React.JSX.Element {
   const [streamProperties, setStreamProperties] = React.useState<Any>({});
 
   const sessionRef = useRef<OTSession>(null);
-  const subscriberRef = useRef<OTSubscriberView>(null);
+  const subscriberRef = useRef<OTSubscriber>(null);
   const publisherRef = useRef<OTPublisherView>(null);
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
@@ -155,6 +155,7 @@ function App(): React.JSX.Element {
               subscribeToAudio: subscribeToVideo,
               subscribeToVideo,
             }}
+            ref={subscriberRef}
             streamProperties={
               useStreamProperties ? streamProperties : undefined
             }
@@ -180,7 +181,7 @@ function App(): React.JSX.Element {
               subscriberConnected: (event: any) => {
                 console.log('subscriberConnected', event);
                 setTimeout(() => {
-                  // subscriberRef.current?.getRtcStatsReport();
+                  subscriberRef.current?.getRtcStatsReport();
                 }, 4000);
               },
               videoDataReceived: (event: any) => {
@@ -213,7 +214,6 @@ function App(): React.JSX.Element {
                       <OTSubscriberView
                         streamId={streamId}
                         key={streamId}
-                        ref={subscriberRef}
                         style={styles.videoview}
                       />
                     );
