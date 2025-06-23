@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
   const logAllEvents = false;
   const useIndividualSubscriberViews = false;
   const subscribeToSelf = false;
-  const useStreamProperties = true;
+  const useStreamProperties = false;
 
   const toggleSubscribe = () => {
     setSubscribeToStreams((val) => !val);
