@@ -170,6 +170,7 @@ export default class OTSubscriber extends Component {
               subscriberProperties: this.props.properties,
               streamProperties: this.props.streamProperties,
               eventHandlers: this.props.eventHandlers,
+              style: this.props.style,
             }}
             key={streamId}
           >

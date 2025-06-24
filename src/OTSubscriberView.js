@@ -20,6 +20,7 @@ export default class OTSubscriberView extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.eventHandlers = props.eventHandlers;
+    this.style = props.style;
   }
 
   getRtcStatsReport() {
@@ -42,22 +43,25 @@ export default class OTSubscriberView extends React.Component {
       audioVolume,
       preferredFrameRate,
       preferredResolution,
-      subscribeToAudio,
       subscribeToCaptions,
-      subscribeToVideo,
-      style,
     } = subscriberProperties;
     if (streamProperties) {
       ({
         audioVolume,
         preferredFrameRate,
         preferredResolution,
-        subscribeToAudio,
         subscribeToCaptions,
-        subscribeToVideo,
-        style,
       } = streamProperties);
     }
+    const subscribeToVideo =
+      streamProperties?.subscribeToVideo ??
+      subscriberProperties?.subscribeToVideo ??
+      true;
+    const subscribeToAudio =
+      streamProperties?.subscribeToAudio ??
+      subscriberProperties?.subscribeToAudio ??
+      true;
+    const style = streamProperties?.style || this.context.style;
     return (
       <OTSubscriberViewNative
         sessionId={this.sessionId}
