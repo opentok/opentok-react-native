@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
-import { each, isEqual } from 'underscore';
+import { isEqual } from 'underscore';
 import { OT } from './OT';
 import {
   addEventListener,
@@ -13,14 +13,8 @@ import OTSubscriberView from './OTSubscriberView';
 
 import {
   sanitizeProperties,
-  sanitizeFrameRate,
-  sanitizeResolution,
-  sanitizeAudioVolume,
+  sanitizeStreamProperties,
 } from './helpers/OTSubscriberHelper';
-import {
-  // getOtrnErrorEventHandler,
-  sanitizeBooleanProperty,
-} from './helpers/OTHelper';
 
 import OTContext from './contexts/OTContext';
 
@@ -35,34 +29,7 @@ export default class OTSubscriber extends Component {
     if (props.subscribeToSelf && initialPublisherStream) {
       initialStreams.push(initialPublisherStream);
     }
-    each(props.streamProperties, (individualStreamProperties, streamId) => {
-      const {
-        subscribeToAudio,
-        subscribeToVideo,
-        subscribeToCaptions,
-        preferredResolution,
-        preferredFrameRate,
-        audioVolume,
-      } = individualStreamProperties;
-      if (subscribeToAudio !== undefined) {
-        sanitizeBooleanProperty(subscribeToAudio);
-      }
-      if (subscribeToVideo !== undefined) {
-        sanitizeBooleanProperty(subscribeToVideo);
-      }
-      if (subscribeToCaptions !== undefined) {
-        sanitizeBooleanProperty(subscribeToCaptions);
-      }
-      if (preferredResolution !== undefined) {
-        sanitizeResolution(preferredResolution);
-      }
-      if (preferredFrameRate !== undefined) {
-        sanitizeFrameRate(preferredFrameRate);
-      }
-      if (audioVolume !== undefined) {
-        sanitizeAudioVolume(audioVolume);
-      }
-    });
+    sanitizeStreamProperties(props.streamProperties);
     this.state = {
       streams: initialStreams,
       properties: props.properties,
@@ -91,34 +58,7 @@ export default class OTSubscriber extends Component {
     const { streamProperties, properties } = this.props;
     sanitizeProperties(properties);
     if (!isEqual(this.state.streamProperties, streamProperties)) {
-      each(streamProperties, (individualStreamProperties, streamId) => {
-        const {
-          subscribeToAudio,
-          subscribeToVideo,
-          subscribeToCaptions,
-          preferredResolution,
-          preferredFrameRate,
-          audioVolume,
-        } = individualStreamProperties;
-        if (subscribeToAudio !== undefined) {
-          sanitizeBooleanProperty(subscribeToAudio);
-        }
-        if (subscribeToVideo !== undefined) {
-          sanitizeBooleanProperty(subscribeToVideo);
-        }
-        if (subscribeToCaptions !== undefined) {
-          sanitizeBooleanProperty(subscribeToCaptions);
-        }
-        if (preferredResolution !== undefined) {
-          sanitizeResolution(preferredResolution);
-        }
-        if (preferredFrameRate !== undefined) {
-          sanitizeFrameRate(preferredFrameRate);
-        }
-        if (audioVolume !== undefined) {
-          sanitizeAudioVolume(audioVolume);
-        }
-      });
+      sanitizeStreamProperties(properties.streamProperties);
       this.setState({
         properties,
         streamProperties,

@@ -1,4 +1,5 @@
 import { sanitizeBooleanProperty } from './OTHelper';
+import { each } from 'underscore';
 
 /**
  * This is the smallest positive int value for 2 bytes. Using Number.MAX_SAFE_INTEGER at JS level,
@@ -81,9 +82,35 @@ const sanitizeProperties = (properties) => {
   };
 };
 
-export {
-  sanitizeProperties,
-  sanitizeFrameRate,
-  sanitizeResolution,
-  sanitizeAudioVolume,
+const sanitizeStreamProperties = (streamProperties) => {
+  each(streamProperties, (individualStreamProperties, streamId) => {
+    const {
+      subscribeToAudio,
+      subscribeToVideo,
+      subscribeToCaptions,
+      preferredResolution,
+      preferredFrameRate,
+      audioVolume,
+    } = individualStreamProperties;
+    if (subscribeToAudio !== undefined) {
+      sanitizeBooleanProperty(subscribeToAudio);
+    }
+    if (subscribeToVideo !== undefined) {
+      sanitizeBooleanProperty(subscribeToVideo);
+    }
+    if (subscribeToCaptions !== undefined) {
+      sanitizeBooleanProperty(subscribeToCaptions);
+    }
+    if (preferredResolution !== undefined) {
+      sanitizeResolution(preferredResolution);
+    }
+    if (preferredFrameRate !== undefined) {
+      sanitizeFrameRate(preferredFrameRate);
+    }
+    if (audioVolume !== undefined) {
+      sanitizeAudioVolume(audioVolume);
+    }
+  });
 };
+
+export { sanitizeProperties, sanitizeStreamProperties };
