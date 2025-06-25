@@ -58,6 +58,7 @@ function App(): React.JSX.Element {
             });
           },
           streamCreated: (event: any) => {
+            console.log('streamCreated', event);
             setStreamProperties((prevObject: Any) => ({
               ...prevObject,
               [event.streamId]: {
@@ -67,6 +68,8 @@ function App(): React.JSX.Element {
                   width: 240,
                   height: 180,
                 },
+                preferredFrameRate: 1,
+                audioVolume: 0.1,
               },
             }));
           },
@@ -154,6 +157,9 @@ function App(): React.JSX.Element {
             properties={{
               subscribeToAudio: subscribeToVideo,
               subscribeToVideo,
+              // subscribeToCaptions: true,
+              // preferredFrameRate: 444,
+              // audioVolume: 0.2,
             }}
             ref={subscriberRef}
             streamProperties={
