@@ -93,22 +93,27 @@ const sanitizeStreamProperties = (streamProperties) => {
       audioVolume,
     } = individualStreamProperties;
     if (subscribeToAudio !== undefined) {
-      sanitizeBooleanProperty(subscribeToAudio);
+      individualStreamProperties.subscribeToAudio =
+        sanitizeBooleanProperty(subscribeToAudio);
     }
     if (subscribeToVideo !== undefined) {
-      sanitizeBooleanProperty(subscribeToVideo);
+      individualStreamProperties.subscribeToVideo =
+        sanitizeBooleanProperty(subscribeToVideo);
     }
     if (subscribeToCaptions !== undefined) {
-      sanitizeBooleanProperty(subscribeToCaptions);
+      individualStreamProperties.subscribeToCaptions =
+        sanitizeBooleanProperty(subscribeToCaptions);
     }
     if (preferredResolution !== undefined) {
-      sanitizeResolution(preferredResolution);
+      individualStreamProperties.preferredResolution =
+        sanitizeResolution(preferredResolution);
     }
     if (preferredFrameRate !== undefined) {
-      sanitizeFrameRate(preferredFrameRate);
+      individualStreamProperties.preferredFrameRate =
+        sanitizeFrameRate(preferredFrameRate);
     }
     if (audioVolume !== undefined) {
-      sanitizeAudioVolume(audioVolume);
+      individualStreamProperties.audioVolume = sanitizeAudioVolume(audioVolume);
     }
   });
 };
