@@ -120,7 +120,9 @@ const sanitizeProperties = (properties) => {
     audioTrack: sanitizeBooleanProperty(properties.audioTrack),
     publishAudio: sanitizeBooleanProperty(properties.publishAudio),
     publishVideo: sanitizeBooleanProperty(properties.publishVideo),
-    publishCaptions: sanitizeBooleanProperty(properties.publishCaptions),
+    publishCaptions: sanitizeBooleanProperty(
+      properties.publishCaptions ? properties.publishCaptions : false
+    ),
     name: properties.name ? properties.name : '',
     cameraPosition: sanitizeCameraPosition(properties.cameraPosition),
     cameraTorch: sanitizeCameraTorch(properties.cameraTorch),
@@ -145,43 +147,5 @@ const sanitizeProperties = (properties) => {
     scalableScreenshare: Boolean(properties.scalableScreenshare),
   };
 };
-/*
-const sanitizePublisherEvents = (publisherId, events) => {
-  if (typeof events !== 'object') {
-    return {};
-  }
-  const customEvents = {
-    ios: {
-      streamCreated: 'streamCreated',
-      streamDestroyed: 'streamDestroyed',
-      error: 'didFailWithError',
-      audioLevel: 'audioLevelUpdated',
-      audioNetworkStats: 'audioNetworkStatsUpdated',
-      rtcStatsReport: 'rtcStatsReport',
-      videoNetworkStats: 'videoNetworkStatsUpdated',
-      muteForced: 'muteForced',
-      videoDisabled: 'videoDisabled',
-      videoEnabled: 'videoEnabled',
-      videoDisableWarning: 'videoDisableWarning',
-      videoDisableWarningLifted: 'videoDisableWarningLifted',
-    },
-    android: {
-      streamCreated: 'streamCreated',
-      streamDestroyed: 'streamDestroyed',
-      error: 'onError',
-      audioLevel: 'onAudioLevelUpdated',
-      audioNetworkStats: 'onAudioStats',
-      rtcStatsReport: 'onRtcStatsReport',
-      videoNetworkStats: 'onVideoStats',
-      muteForced: 'onMuteForced',
-      videoDisabled: 'onVideoDisabled',
-      videoEnabled: 'onVideoEnabled',
-      videoDisableWarning: 'onVideoDisableWarning',
-      videoDisableWarningLifted: 'onVideoDisableWarningLifted',
-    },
-  };
-  return reassignEvents('publisher', customEvents, events, publisherId);
-};
-*/
 
 export { sanitizeProperties };

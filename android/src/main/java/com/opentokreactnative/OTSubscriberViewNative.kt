@@ -168,7 +168,7 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             subscriber?.setAudioVolume(this.props?.get("audioVolume") as Double)
         }
         if (this.props?.get("preferredFrameRate") != null) {
-            subscriber?.setPreferredFrameRate(this.props?.get("preferredFrameRate") as Float)
+            subscriber?.setPreferredFrameRate((this.props?.get("preferredFrameRate") as Double).toFloat())
         }
         if (this.props?.get("preferredResolution") != null) {
             var res : String = this.props?.get("preferredResolution") as String

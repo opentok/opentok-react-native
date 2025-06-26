@@ -1,42 +1,6 @@
 import { Platform } from 'react-native';
 import { handleError } from '../OTError';
-import { each } from 'underscore';
 import axios from 'axios';
-
-const reassignEvents = (type, customEvents, events, eventKey) => {
-  const newEvents = {};
-  const preface = `${type}:`;
-  const platform = Platform.OS;
-
-  each(events, (eventHandler, eventType) => {
-    if (
-      customEvents[platform][eventType] !== undefined &&
-      eventKey !== undefined
-    ) {
-      newEvents[`${eventKey}:${preface}${customEvents[platform][eventType]}`] =
-        eventHandler;
-    } else if (customEvents[platform][eventType] !== undefined) {
-      newEvents[`${preface}${customEvents[platform][eventType]}`] =
-        eventHandler;
-    } else if (events.otrnError) {
-      // ignore otrnError event because it's for the js layer
-    } else {
-      handleError(`${eventType} is not a supported event`);
-    }
-  });
-
-  // Set a default handler
-  each(customEvents[platform], (event) => {
-    if (
-      eventKey !== undefined &&
-      !newEvents[`${eventKey}:${preface}${event}`]
-    ) {
-      newEvents[`${eventKey}:${preface}${event}`] = () => {};
-    }
-  });
-
-  return newEvents;
-};
 
 const sanitizeBooleanProperty = (property) =>
   property || property === undefined ? true : property;
@@ -92,9 +56,4 @@ const logOT = ({ apiKey, sessionId, action, connectionId, proxyUrl }) => {
   logRequest(getLog(apiKey, sessionId, action, connectionId), proxyUrl);
 };
 
-export {
-  sanitizeBooleanProperty,
-  reassignEvents,
-  logOT,
-  getOtrnErrorEventHandler,
-};
+export { sanitizeBooleanProperty, logOT, getOtrnErrorEventHandler };

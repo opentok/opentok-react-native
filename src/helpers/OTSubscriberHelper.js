@@ -1,4 +1,5 @@
-import { sanitizeBooleanProperty, reassignEvents } from './OTHelper';
+import { sanitizeBooleanProperty } from './OTHelper';
+import { each } from 'underscore';
 
 /**
  * This is the smallest positive int value for 2 bytes. Using Number.MAX_SAFE_INTEGER at JS level,
@@ -7,47 +8,6 @@ import { sanitizeBooleanProperty, reassignEvents } from './OTHelper';
  * we won't have any problem for the foreseeable future
  */
 const MAX_SAFE_INTEGER = 32767;
-
-const sanitizeSubscriberEvents = (events) => {
-  if (typeof events !== 'object') {
-    return {};
-  }
-  const customEvents = {
-    ios: {
-      connected: 'subscriberDidConnect',
-      disconnected: 'subscriberDidDisconnect',
-      reconnected: 'subscriberDidReconnect',
-      error: 'didFailWithError',
-      audioNetworkStats: 'audioNetworkStatsUpdated',
-      videoNetworkStats: 'videoNetworkStatsUpdated',
-      audioLevel: 'audioLevelUpdated',
-      rtcStatsReport: 'rtcStatsReport',
-      videoDisabled: 'subscriberVideoDisabled',
-      videoEnabled: 'subscriberVideoEnabled',
-      videoDisableWarning: 'subscriberVideoDisableWarning',
-      videoDisableWarningLifted: 'subscriberVideoDisableWarningLifted',
-      videoDataReceived: 'subscriberVideoDataReceived',
-      captionReceived: 'subscriberCaptionReceived',
-    },
-    android: {
-      connected: 'onConnected',
-      disconnected: 'onDisconnected',
-      reconnected: 'onReconnected',
-      error: 'onError',
-      audioNetworkStats: 'onAudioStats',
-      rtcStatsReport: 'onRtcStatsReport',
-      videoNetworkStats: 'onVideoStats',
-      audioLevel: 'onAudioLevelUpdated',
-      videoDisabled: 'onVideoDisabled',
-      videoEnabled: 'onVideoEnabled',
-      videoDisableWarning: 'onVideoDisableWarning',
-      videoDisableWarningLifted: 'onVideoDisableWarningLifted',
-      videoDataReceived: 'onVideoDataReceived',
-      captionReceived: 'onCaptionText',
-    },
-  };
-  return reassignEvents('subscriber', customEvents, events);
-};
 
 const sanitizeResolution = (resolution) => {
   if (
@@ -114,7 +74,7 @@ const sanitizeProperties = (properties) => {
     subscribeToAudio: sanitizeBooleanProperty(properties.subscribeToAudio),
     subscribeToVideo: sanitizeBooleanProperty(properties.subscribeToVideo),
     subscribeToCaptions: sanitizeBooleanProperty(
-      properties.subscribeToCaptions
+      properties.subscribeToCaptions ? properties.subscribeToCaptions : false
     ),
     preferredResolution: sanitizeResolution(properties.preferredResolution),
     preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
@@ -122,10 +82,40 @@ const sanitizeProperties = (properties) => {
   };
 };
 
-export {
-  sanitizeSubscriberEvents,
-  sanitizeProperties,
-  sanitizeFrameRate,
-  sanitizeResolution,
-  sanitizeAudioVolume,
+const sanitizeStreamProperties = (streamProperties) => {
+  each(streamProperties, (individualStreamProperties, streamId) => {
+    const {
+      subscribeToAudio,
+      subscribeToVideo,
+      subscribeToCaptions,
+      preferredResolution,
+      preferredFrameRate,
+      audioVolume,
+    } = individualStreamProperties;
+    if (subscribeToAudio !== undefined) {
+      individualStreamProperties.subscribeToAudio =
+        sanitizeBooleanProperty(subscribeToAudio);
+    }
+    if (subscribeToVideo !== undefined) {
+      individualStreamProperties.subscribeToVideo =
+        sanitizeBooleanProperty(subscribeToVideo);
+    }
+    if (subscribeToCaptions !== undefined) {
+      individualStreamProperties.subscribeToCaptions =
+        sanitizeBooleanProperty(subscribeToCaptions);
+    }
+    if (preferredResolution !== undefined) {
+      individualStreamProperties.preferredResolution =
+        sanitizeResolution(preferredResolution);
+    }
+    if (preferredFrameRate !== undefined) {
+      individualStreamProperties.preferredFrameRate =
+        sanitizeFrameRate(preferredFrameRate);
+    }
+    if (audioVolume !== undefined) {
+      individualStreamProperties.audioVolume = sanitizeAudioVolume(audioVolume);
+    }
+  });
 };
+
+export { sanitizeProperties, sanitizeStreamProperties };

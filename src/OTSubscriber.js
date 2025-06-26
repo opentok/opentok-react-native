@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
-// import { isNull, isUndefined, each, isEqual, isEmpty } from 'underscore';
-// import { each, isEqual } from 'underscore';
+import { isEqual } from 'underscore';
 import { OT } from './OT';
 import {
   addEventListener,
@@ -11,19 +10,12 @@ import {
   getPublisherStream,
 } from './helpers/OTSessionHelper';
 import OTSubscriberView from './OTSubscriberView';
-/*
+
 import {
-  // sanitizeSubscriberEvents,
-  // sanitizeProperties,
-  sanitizeFrameRate,
-  sanitizeResolution,
-  sanitizeAudioVolume,
+  sanitizeProperties,
+  sanitizeStreamProperties,
 } from './helpers/OTSubscriberHelper';
-import {
-  // getOtrnErrorEventHandler,
-  sanitizeBooleanProperty,
-} from './helpers/OTHelper';
-*/
+
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriber extends Component {
@@ -34,11 +26,14 @@ export default class OTSubscriber extends Component {
     super(props, context);
     let initialStreams = getStreams();
     let initialPublisherStream = getPublisherStream();
-    if (this.props.subscribeToSelf && initialPublisherStream) {
+    if (props.subscribeToSelf && initialPublisherStream) {
       initialStreams.push(initialPublisherStream);
     }
+    sanitizeStreamProperties(props.streamProperties);
     this.state = {
       streams: initialStreams,
+      properties: props.properties,
+      streamProperties: props.streamProperties,
       subscribeToSelf: props.subscribeToSelf || false,
     };
     // this.otrnEventHandler = getOtrnErrorEventHandler(this.props.eventHandlers);
@@ -59,55 +54,25 @@ export default class OTSubscriber extends Component {
     addEventListener('subscriberConnected', this.subscriberConnectedHandler);
   };
 
-  /*
   componentDidUpdate() {
-    const { streamProperties } = this.props;
+    const { streamProperties, properties } = this.props;
+    sanitizeProperties(properties);
     if (!isEqual(this.state.streamProperties, streamProperties)) {
-      each(streamProperties, (individualStreamProperties, streamId) => {
-        const {
-          subscribeToAudio,
-          subscribeToVideo,
-          subscribeToCaptions,
-          preferredResolution,
-          preferredFrameRate,
-          audioVolume,
-        } = individualStreamProperties;
-        if (subscribeToAudio !== undefined) {
-          sanitizeBooleanProperty(subscribeToAudio)
-        }
-        if (subscribeToVideo !== undefined) {
-          sanitizeBooleanProperty(subscribeToVideo)
-        }
-        if (subscribeToCaptions !== undefined) {
-          sanitizeBooleanProperty(subscribeToCaptions)
-        }
-        if (preferredResolution !== undefined) {
-          sanitizeResolution(preferredResolution)
-        }
-        if (preferredFrameRate !== undefined) {
-          sanitizeFrameRate(preferredFrameRate)
-        }
-        if (audioVolume !== undefined) {
-          sanitizeAudioVolume(audioVolume);
-        }
+      sanitizeStreamProperties(properties.streamProperties);
+      this.setState({
+        properties,
+        streamProperties,
       });
-      this.setState({ streamProperties });
     }
   }
-  */
 
   publisherStreamCreatedHandler = (stream) => {
     if (this.props.subscribeToSelf) {
       this.streamCreatedHandler(stream);
     }
   };
+
   streamCreatedHandler = (stream) => {
-    /*
-    const { subscribeToSelf, streamProperties, properties } = this.props;
-    const subscriberProperties = streamProperties[stream.streamId]
-      ? sanitizeProperties(streamProperties[stream.streamId])
-      : sanitizeProperties(properties);
-    */
     this.setState((prevState) => {
       const modifiedStreams = prevState.streams;
       if (!modifiedStreams.includes(stream.streamId)) {
@@ -153,22 +118,13 @@ export default class OTSubscriber extends Component {
     if (!this.props.children) {
       const containerStyle = this.props.containerStyle;
       const childrenWithStreams = this.state.streams.map((streamId) => {
-        /*
-        const streamProperties = this.props.streamProperties[streamId];
-        const style = isEmpty(streamProperties)
-          ? this.props.style
-          : isUndefined(streamProperties.style) ||
-              isNull(streamProperties.style)
-            ? this.props.style
-            : streamProperties.style;
-        */
-        const style = this.props.style;
+        const style = this.state.style;
         return (
           <OTContext.Provider
             value={{
               sessionId: this.sessionId,
-              subscriberProperties: this.props.properties,
-              streamProperties: this.props.streamProperties,
+              subscriberProperties: this.state.properties,
+              streamProperties: this.state.streamProperties,
               eventHandlers: this.props.eventHandlers,
               style: this.props.style,
             }}
@@ -189,8 +145,8 @@ export default class OTSubscriber extends Component {
         <OTContext.Provider
           value={{
             sessionId: this.sessionId,
-            subscriberProperties: this.props.properties,
-            streamProperties: this.props.streamProperties,
+            subscriberProperties: this.state.properties,
+            streamProperties: this.state.streamProperties,
             style: this.props.style,
             eventHandlers: this.props.eventHandlers,
           }}
