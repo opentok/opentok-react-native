@@ -56,13 +56,18 @@ export default class OTSubscriber extends Component {
 
   componentDidUpdate() {
     const { streamProperties, properties } = this.props;
-    sanitizeProperties(properties);
-    if (!isEqual(this.state.streamProperties, streamProperties)) {
-      sanitizeStreamProperties(properties.streamProperties);
-      this.setState({
+    if (!isEqual(this.state.properties, properties)) {
+      sanitizeProperties(properties);
+      this.setState((prevState) => ({
         properties,
+      }));
+    }
+
+    if (!isEqual(this.state.streamProperties, streamProperties)) {
+      sanitizeStreamProperties(streamProperties);
+      this.setState((prevState) => ({
         streamProperties,
-      });
+      }));
     }
   }
 
