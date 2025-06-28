@@ -39,6 +39,8 @@ using namespace facebook::react;
         @"publisherAudioFallback" : @(viewProps.publisherAudioFallback),
         @"subscriberAudioFallback" : @(viewProps.subscriberAudioFallback),
         @"videoContentHint" : RCTNSStringFromString(viewProps.videoContentHint),
+        @"cameraTorch" : @(viewProps.cameraTorch),
+        @"cameraZoomFactor" : @(viewProps.cameraZoomFactor),
         @"videoSource" : RCTNSStringFromString(viewProps.videoSource),
         @"cameraPosition" : RCTNSStringFromString(viewProps.cameraPosition),
         @"scalableScreenshare" : @(viewProps.scalableScreenshare),
@@ -89,6 +91,18 @@ using namespace facebook::react;
 
     if (oldViewProps.publishVideo != newViewProps.publishVideo) {
         [_impl setPublishVideo:newViewProps.publishVideo];
+    }
+
+    if (oldViewProps.videoContentHint != newViewProps.videoContentHint) {
+        [_impl setVideoContentHint:RCTNSStringFromString(newViewProps.videoContentHint)];
+    }
+
+    if (oldViewProps.cameraTorch != newViewProps.cameraTorch) {
+        [_impl setCameraTorch:newViewProps.cameraTorch];
+    }
+
+    if (oldViewProps.cameraZoomFactor != newViewProps.cameraZoomFactor) {
+        [_impl setCameraZoomFactor:newViewProps.cameraZoomFactor];
     }
 
     [super updateProps:props oldProps:oldProps];
