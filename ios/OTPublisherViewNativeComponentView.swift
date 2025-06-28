@@ -32,11 +32,13 @@ import React
         self.strictUIViewContainer = view
         publisherDelegateHandler = PublisherDelegateHandler(impl: self)
         publisherAudioLevelDelegateHandler = PublisherAudioLevelDelegateHandler(
-            impl: self)
+            impl: self
+        )
         publisherNetworkStatsDelegateHandler =
             PublisherNetworkStatsDelegateHandler(impl: self)
         publisherRtcStatsDelegateHandler = PublisherRtcStatsDelegateHandler(
-            impl: self)
+            impl: self
+        )
     }
 
     @objc public func createPublisher(_ properties: NSDictionary) {
@@ -44,32 +46,41 @@ import React
         let settings = OTPublisherSettings()
 
         settings.videoTrack = Utils.sanitizeBooleanProperty(
-            properties["videoTrack"] as Any)
+            properties["videoTrack"] as Any
+        )
         settings.audioTrack = Utils.sanitizeBooleanProperty(
-            properties["audioTrack"] as Any)
+            properties["audioTrack"] as Any
+        )
         if let audioBitrate = properties["audioBitrate"] as? Int32 {
             settings.audioBitrate = audioBitrate
         }
         settings.cameraFrameRate = Utils.sanitizeFrameRate(
-            properties["frameRate"] as Any)
+            properties["frameRate"] as Any
+        )
         settings.cameraResolution = Utils.sanitizeCameraResolution(
-            properties["resolution"] as? String ?? "MEDIUM")
+            properties["resolution"] as? String ?? "MEDIUM"
+        )
         settings.enableOpusDtx = Utils.sanitizeBooleanProperty(
-            properties["enableDtx"] as Any)
+            properties["enableDtx"] as Any
+        )
         settings.name = properties["name"] as? String
         settings.publisherAudioFallbackEnabled =
             Utils.sanitizeBooleanProperty(
-                properties["publisherAudioFallback"] as Any)
+                properties["publisherAudioFallback"] as Any
+            )
         settings.subscriberAudioFallbackEnabled =
             Utils.sanitizeBooleanProperty(
-                properties["subscriberAudioFallback"] as Any)
+                properties["subscriberAudioFallback"] as Any
+            )
         settings.videoCapture?.videoContentHint =
             Utils.convertVideoContentHint(properties["videoContentHint"] as Any)
         settings.scalableScreenshare = Utils.sanitizeBooleanProperty(
-            properties["scalableScreenshare"] as Any)
+            properties["scalableScreenshare"] as Any
+        )
 
         self.publisherId = Utils.sanitizeStringProperty(
-            properties["publisherId"] as Any)
+            properties["publisherId"] as Any
+        )
 
         guard let publisherId = self.publisherId else {
             strictUIViewContainer?.handleError([
@@ -81,7 +92,9 @@ import React
 
         guard
             let publisher = OTPublisher(
-                delegate: publisherDelegateHandler, settings: settings)
+                delegate: publisherDelegateHandler,
+                settings: settings
+            )
         else {
             strictUIViewContainer?.handleError([
                 "code": "OTPublisherError",
@@ -116,17 +129,23 @@ import React
         }
 
         publisher.cameraTorch = Utils.sanitizeBooleanProperty(
-            properties["cameraTorch"] as Any)
+            properties["cameraTorch"] as Any
+        )
         publisher.cameraZoomFactor = Utils.sanitizeCameraZoomFactor(
-            properties["cameraZoomFactor"] as Any)
+            properties["cameraZoomFactor"] as Any
+        )
         publisher.audioFallbackEnabled = Utils.sanitizeBooleanProperty(
-            properties["audioFallbackEnabled"] as Any)
+            properties["audioFallbackEnabled"] as Any
+        )
         publisher.publishAudio = Utils.sanitizeBooleanProperty(
-            properties["publishAudio"] as Any)
+            properties["publishAudio"] as Any
+        )
         publisher.publishVideo = Utils.sanitizeBooleanProperty(
-            properties["publishVideo"] as Any)
+            properties["publishVideo"] as Any
+        )
         publisher.publishCaptions = Utils.sanitizeBooleanProperty(
-            properties["publishCaptions"] as Any)
+            properties["publishCaptions"] as Any
+        )
 
         if let pubView = publisher.view {
             pubView.frame = strictUIViewContainer?.bounds ?? .zero
@@ -182,6 +201,67 @@ import React
         publisher.publishVideo = publishVideo
     }
 
+    @objc public func setCameraTorch(_ cameraTorch: Bool) {
+        guard let publisherId = self.publisherId else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Publisher ID is not set",
+            ])
+            return
+        }
+
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Could not find publisher instance",
+            ])
+            return
+        }
+
+        publisher.cameraTorch = cameraTorch
+    }
+
+    @objc public func setCameraZoomFactor(_ cameraZoomFactor: Float) {
+        guard let publisherId = self.publisherId else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Publisher ID is not set",
+            ])
+            return
+        }
+
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Could not find publisher instance",
+            ])
+            return
+        }
+
+        publisher.cameraZoomFactor = cameraZoomFactor
+    }
+
+    @objc public func setVideoContentHint(_ videoContentHint: String) {
+        guard let publisherId = self.publisherId else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Publisher ID is not set",
+            ])
+            return
+        }
+
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Could not find publisher instance",
+            ])
+            return
+        }
+
+        publisher.videoCapture?.videoContentHint =
+            Utils.convertVideoContentHint(videoContentHint)
+    }
+
     @objc public func cleanup() {
         if Thread.isMainThread {
             self._cleanupImpl()
@@ -191,55 +271,54 @@ import React
             }
         }
     }
-    
-    private func _cleanupImpl()  {
-    
 
-            guard let publisherId = self.publisherId,
-                let publisher = OTRN.sharedState.publishers[publisherId]
-            else { return }
+    private func _cleanupImpl() {
 
-            var error: OTError?
+        guard let publisherId = self.publisherId,
+            let publisher = OTRN.sharedState.publishers[publisherId]
+        else { return }
 
-            if let isPublishing = OTRN.sharedState.isPublishing[publisherId] {
-                if isPublishing {
-                    if let sessionId = publisher.session?.sessionId {
-                        guard let session = OTRN.sharedState.sessions[sessionId]
-                        else {
-                            self.strictUIViewContainer?.handleError([
-                                "code": "OTPublisherError",
-                                "message":
-                                    "Error destroying publisher. Could not find native session instance",
-                            ])
-                            return
-                        }
-                        if session.sessionConnectionStatus == .connected {
-                            session.unpublish(publisher, error: &error)
-                        }
+        var error: OTError?
+
+        if let isPublishing = OTRN.sharedState.isPublishing[publisherId] {
+            if isPublishing {
+                if let sessionId = publisher.session?.sessionId {
+                    guard let session = OTRN.sharedState.sessions[sessionId]
+                    else {
+                        self.strictUIViewContainer?.handleError([
+                            "code": "OTPublisherError",
+                            "message":
+                                "Error destroying publisher. Could not find native session instance",
+                        ])
+                        return
+                    }
+                    if session.sessionConnectionStatus == .connected {
+                        session.unpublish(publisher, error: &error)
                     }
                 }
             }
+        }
 
-            if let err = error {
-                self.strictUIViewContainer?.handleError([
-                    "code": String(err.code),
-                    "message": err.localizedDescription,
-                ])
-            } else {
-                // Clean up publisher resources
-                publisher.view?.removeFromSuperview()
-                publisher.delegate = nil
-                publisher.audioLevelDelegate = nil
-                publisher.networkStatsDelegate = nil
-                publisher.rtcStatsReportDelegate = nil
-                OTRN.sharedState.publishers[publisherId] = nil
-                OTRN.sharedState.isPublishing[publisherId] = nil
-                self.publisherId = ""
-                self.sessionId = ""
-                self.currentSession = nil
-                self.publisherUIView = nil
-            }
-        
+        if let err = error {
+            self.strictUIViewContainer?.handleError([
+                "code": String(err.code),
+                "message": err.localizedDescription,
+            ])
+        } else {
+            // Clean up publisher resources
+            publisher.view?.removeFromSuperview()
+            publisher.delegate = nil
+            publisher.audioLevelDelegate = nil
+            publisher.networkStatsDelegate = nil
+            publisher.rtcStatsReportDelegate = nil
+            OTRN.sharedState.publishers[publisherId] = nil
+            OTRN.sharedState.isPublishing[publisherId] = nil
+            self.publisherId = ""
+            self.sessionId = ""
+            self.currentSession = nil
+            self.publisherUIView = nil
+        }
+
     }
 
 }
@@ -256,16 +335,21 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
     func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream)
     {
         OTRN.sharedState.publisherStreams.updateValue(
-            stream, forKey: stream.streamId)
+            stream,
+            forKey: stream.streamId
+        )
         OTRN.sharedState.subscriberStreams.updateValue(
-            stream, forKey: stream.streamId)
+            stream,
+            forKey: stream.streamId
+        )
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
         if !publisherId.isEmpty,
             let impl = impl
         {
             OTRN.sharedState.isPublishing[publisherId] = true
             var streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
-                stream)
+                stream
+            )
             streamInfo["publisherId"] = publisherId
             Utils.setStreamObservers(stream: stream, isPublisherStream: true)
             impl.strictUIViewContainer?.handleStreamCreated(streamInfo)
@@ -277,13 +361,15 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
         if !publisherId.isEmpty, let impl = impl {
             let errorInfo: [String: Any] = EventUtils.prepareJSErrorEventData(
-                error)
+                error
+            )
             impl.strictUIViewContainer?.handleError(errorInfo)
         }
     }
 
     func publisher(
-        _ publisher: OTPublisherKit, streamDestroyed stream: OTStream
+        _ publisher: OTPublisherKit,
+        streamDestroyed stream: OTStream
     ) {
         OTRN.sharedState.streamObservers.removeValue(forKey: stream.streamId)
         OTRN.sharedState.publisherStreams.removeValue(forKey: stream.streamId)
@@ -292,7 +378,8 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
         if !publisherId.isEmpty {
             OTRN.sharedState.isPublishing[publisherId] = false
             var streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
-                stream)
+                stream
+            )
             streamInfo["publisherId"] = publisherId
             OTRN.sharedState.publishers[publisherId] = nil
             impl?.strictUIViewContainer?.handleStreamDestroyed(streamInfo)
@@ -321,7 +408,8 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
     }
 
     func publisherVideoEnabled(
-        _ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason
+        _ publisher: OTPublisherKit,
+        reason: OTPublisherVideoEventReason
     ) {
         var publisherInfo: [String: Any] = [:]
         publisherInfo["reason"] =
@@ -332,7 +420,8 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
         }
     }
     func publisherVideoDisabled(
-        _ publisher: OTPublisherKit, reason: OTPublisherVideoEventReason
+        _ publisher: OTPublisherKit,
+        reason: OTPublisherVideoEventReason
     ) {
         var publisherInfo: [String: Any] = [:]
         publisherInfo["reason"] =
@@ -357,7 +446,8 @@ private class PublisherAudioLevelDelegateHandler: NSObject,
     }
 
     func publisher(
-        _ publisher: OTPublisherKit, audioLevelUpdated audioLevel: Float
+        _ publisher: OTPublisherKit,
+        audioLevelUpdated audioLevel: Float
     ) {
         let publisherId = Utils.getPublisherId(publisher as! OTPublisher)
         if !publisherId.isEmpty,
@@ -394,7 +484,8 @@ private class PublisherNetworkStatsDelegateHandler: NSObject,
         }
 
         if let jsonData = try? JSONSerialization.data(
-            withJSONObject: statsArray),
+            withJSONObject: statsArray
+        ),
             let jsonString = String(data: jsonData, encoding: .utf8),
             let impl = impl
         {
@@ -418,7 +509,8 @@ private class PublisherNetworkStatsDelegateHandler: NSObject,
         }
 
         if let jsonData = try? JSONSerialization.data(
-            withJSONObject: statsArray),
+            withJSONObject: statsArray
+        ),
             let jsonString = String(data: jsonData, encoding: .utf8),
             let impl = impl
         {
@@ -438,7 +530,8 @@ private class PublisherRtcStatsDelegateHandler: NSObject,
     }
 
     func publisher(
-        _ publisher: OTPublisherKit, rtcStatsReport: [OTPublisherRtcStats]
+        _ publisher: OTPublisherKit,
+        rtcStatsReport: [OTPublisherRtcStats]
     ) {
         let statsArray = rtcStatsReport.map { stat -> [String: Any] in
             return [
@@ -448,7 +541,8 @@ private class PublisherRtcStatsDelegateHandler: NSObject,
         }
 
         if let jsonData = try? JSONSerialization.data(
-            withJSONObject: statsArray),
+            withJSONObject: statsArray
+        ),
             let jsonString = String(data: jsonData, encoding: .utf8),
             let impl = impl
         {
