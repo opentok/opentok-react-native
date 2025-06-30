@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, View } from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import PropTypes from 'prop-types';
+import { isEqual } from 'underscore';
 import uuid from 'react-native-uuid';
 import { checkAndroidPermissions, OT } from './OT';
 import OTPublisherViewNative from './OTPublisherViewNativeComponent';
@@ -28,15 +29,26 @@ export default class OTPublisher extends React.Component {
       publisherId: uuid.v4(),
       publishVideo: mergedProperties.publishVideo,
       permissionsGranted: Platform.OS === 'ios',
+      publisherProperties: sanitizeProperties(mergedProperties),
     };
     this.eventHandlers = props.eventHandlers;
-    this.publisherProperties = sanitizeProperties(mergedProperties);
     this.initComponent(props.eventHandlers);
+  }
+
+  componentDidUpdate() {
+    const { properties } = this.props;
+    const sanitizedProperties = sanitizeProperties(properties);
+    if (!isEqual(this.state.publisherProperties, sanitizedProperties)) {
+      this.setState((prevState) => ({
+        publisherProperties: sanitizedProperties,
+      }));
+    }
   }
 
   onSessionConnected = () => {
     if (Platform.OS === 'android') {
-      const { audioTrack, videoTrack, videoSource } = this.publisherProperties;
+      const { audioTrack, videoTrack, videoSource } =
+        this.state.publisherProperties;
       const isScreenSharing = videoSource === 'screen';
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
@@ -75,7 +87,7 @@ export default class OTPublisher extends React.Component {
     this.publisherProperties = sanitizeProperties(this.props.properties);
 
     if (Platform.OS === 'android') {
-      const { audioTrack, videoTrack, videoSource } = this.publisherProperties;
+      const { audioTrack, videoTrack, videoSource } = this.props;
       const isScreenSharing = videoSource === 'screen';
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
@@ -114,7 +126,6 @@ export default class OTPublisher extends React.Component {
       <OTPublisherViewNative
         sessionId={this.context.sessionId}
         publisherId={this.state.publisherId}
-        {...this.publisherProperties}
         onError={(event) => {
           this.props.eventHandlers?.error?.(event.nativeEvent);
         }}
@@ -163,7 +174,7 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.videoNetworkStats?.(eventData);
         }}
         style={this.props.style}
-        {...this.props.properties}
+        {...this.state.publisherProperties}
       />
     ) : (
       <View style={this.getPrePermissionViewStyle()} />
