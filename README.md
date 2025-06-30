@@ -16,12 +16,6 @@ This Beta version is only supported in the React Native new architecture. It is 
 
 This beta pre-release version is not intended for use in final production apps.
 
-This pre-release beat version is not available at npm.js. In your app's package.json file, load it into your app from the new-architecture branch of the opentok/opentok-react-native GitHub repo:
-
-```
-    "opentok-react-native": "opentok/opentok-react-native#new-architecture",
-```
-
 ### Registering the OpenTok packages in your application
 
 For Android, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
@@ -30,17 +24,10 @@ For iOS, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage
 
 ### Known issues
 
-The following features are unsupported in this beta version:
+The following are known issues in this beta version:
 
-* `OTPublisher rtcStatsReport` event
-* Screen-sharing (`OTPublisher.videoSource 'screen'`)
-* Some `OTSubscriber` events
-
-Some event properties are missing.
-
-Some events are not handled correctly, such as when an app is temporarily disconnected from and reconnected to the session. Clients are not properly disconnected and streams are not automatically unpublished when the `OTSession` component is unmounted.
-
-For [custom rendering of subscribers](https://tokbox.com/developer/guides/subscribe-stream/react-native/#custom_rendering), you need to pass the session ID into the `OTSubscriberView` component (as a `sessionId` prop).
+* Screen-sharing (`OTPublisher.videoSource 'screen'`) is not yet supported.
+* `otrnError` events are missing.
 
 ## Prerequisites
 
@@ -58,10 +45,10 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 1. In your terminal, change into your React Native project's directory.
 
-2. Add the library using `npm` or `yarn`:
+2. Add the beta versioin of the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native`
-  * `yarn add opentok-react-native`
+  * `npm install opentok-react-native@2.31.0-beta.0`
+  * `yarn add opentok-react-native@2.31.0-beta.0`
 
 ### iOS Installation
 
