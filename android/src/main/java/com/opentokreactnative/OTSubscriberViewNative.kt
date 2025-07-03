@@ -131,6 +131,20 @@ class OTSubscriberViewNative : FrameLayout, SubscriberListener,
             BaseVideoRenderer.STYLE_VIDEO_FILL
         )
 
+        if (androidOnTopMap.get(sessionId) != null) {
+            pubOrSub = androidOnTopMap.get(sessionId);
+        }
+        if (androidZOrderMap.get(sessionId) != null) {
+            zOrder = androidZOrderMap.get(sessionId);
+        }
+
+        if (pubOrSub.equals("subscriber") && subscriber?.getView() is GLSurfaceView) {
+            if (zOrder.equals("mediaOverlay")) {
+                (subscriber?.getView() as GLSurfaceView).setZOrderMediaOverlay(true)
+            } else {
+                (subscriber?.getView() as GLSurfaceView).setZOrderOnTop(true)
+            }
+        }
 
         subscriber?.setSubscriberListener(this)
         subscriber?.setRtcStatsReportListener(this)
