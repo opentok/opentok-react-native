@@ -26,7 +26,7 @@ For iOS, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage
 
 The following are known issues in this beta version:
 
-* Screen-sharing (`OTPublisher.videoSource 'screen'`) is not yet supported.
+* Subscriber video freezes frequently when using VP9 or H264.
 * `otrnError` events are missing.
 
 ## Prerequisites
