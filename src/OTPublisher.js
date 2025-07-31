@@ -15,7 +15,7 @@ import {
 import { sanitizeProperties } from './helpers/OTPublisherHelper';
 import OTContext from './contexts/OTContext';
 
-export default class OTPublisher extends React.Component {
+export default class OTPublisher extends React.PureComponent {
   eventHandlers = {};
   publisherProperties = {};
 

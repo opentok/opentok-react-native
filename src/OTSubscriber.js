@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { isEqual } from 'underscore';
@@ -18,7 +18,7 @@ import {
 
 import OTContext from './contexts/OTContext';
 
-export default class OTSubscriber extends Component {
+export default class OTSubscriber extends PureComponent {
   sessionId = this.context.sessionId;
   // sessionInfo = this.context.sessionInfo;
 
