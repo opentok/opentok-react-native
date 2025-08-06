@@ -18,9 +18,9 @@ This beta pre-release version is not intended for use in final production apps.
 
 ### Registering the OpenTok packages in your application
 
-For Android, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
 
-For iOS, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 4 of the "iOS Installation" section below.
+For iOS, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 4 of the "iOS Installation" section below.
 
 ### Known issues
 
@@ -84,28 +84,28 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
   When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-4. Register the OpenTok OTPublisherViewNative and OTSubscriberViewNative classes. Do this by modifying the AppDelegate implementation.
+4. Register the OpenTok OTPublisher and OTRNSubscriber classes. Do this by modifying the AppDelegate implementation.
 
    * If you app has an Objective-C++ AppDelegate file (AppDelegate.mm), add these classes to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
     <pre>
-        #import "OTPublisherViewNativeComponentView.h"
-        #import "OTSubscriberViewNativeComponentView.h"
+        #import "OTPublisherComponentView.h"
+        #import "OTRNSubscriberComponentView.h"
 
         @implementation AppDelegate
             // ...
             - (NSDictionary<NSString *,Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
         {
         NSMutableDictionary * dictionary = [super thirdPartyFabricComponents].mutableCopy;
-        dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
-        dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
+        dictionary[@"OTPublisher"] = [OTPublisherComponentView class];
+        dictionary[@"OTRNSubscriber"] = [OTRNSubscriberComponentView class];
         return dictionary;
         }
         
         @end
     </pre>
 
-   * If your app uses a Swift AppDelegate file (AppDelegate.swift), you will need to have its implementation of the `RCTAppDelegate.application(_, didFinishLaunchingWithOptions)` method use a bridging header to call a method in an Objective-C++ file that calls the `[RCTComponentViewFactory registerComponentViewClass:]` method, passing in the `OTPublisherViewNativeComponentView` and `OTSubscriberViewNativeComponentView` classes.
+   * If your app uses a Swift AppDelegate file (AppDelegate.swift), you will need to have its implementation of the `RCTAppDelegate.application(_, didFinishLaunchingWithOptions)` method use a bridging header to call a method in an Objective-C++ file that calls the `[RCTComponentViewFactory registerComponentViewClass:]` method, passing in the `OTPublisherComponentView` and `OTRNSubscriberComponentView` classes.
 
 5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
@@ -137,13 +137,13 @@ If you try to archive the app and it fails, please do the following:
 
 5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
 
-6. In the MainActivity.kt file for you app, register the OpenTok OpentokReactNativePackage, OTPublisherViewNativePackage, and OTSubscriberViewNativePackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function
+6. In the MainActivity.kt file for you app, register the OpenTok OpentokReactNativePackage, OTPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function
 
     ```
     override fun getPackages(): List<ReactPackage> =
         PackageList(this).packages.apply {
-            add(OTPublisherViewNativePackage())
-            add(OTSubscriberViewNativePackage())
+            add(OTPublisherPackage())
+            add(OTRNSubscriberPackage())
             add(OpentokReactNativePackage())
         }
         // ...

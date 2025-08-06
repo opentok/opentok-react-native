@@ -1,6 +1,6 @@
 
 
-@interface OTSubscriberViewNativeComponentView : UIView
+@interface OTRNSubscriberComponentView : UIView
 - (void)handleSubscriberConnected:(NSDictionary *)eventData;
 - (void)handleSubscriberDisconnected:(NSDictionary *)eventData;
 - (void)handleError:(NSDictionary *)eventData;

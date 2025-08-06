@@ -2,11 +2,11 @@ import Foundation
 import OpenTok
 import React
 
-@objc public class OTSubscriberViewNativeImpl: NSObject {
+@objc public class OTRNSubscriberImpl: NSObject {
     private var sessionId: String?
     private var streamId: String?
     fileprivate weak var strictUIViewContainer:
-        OTSubscriberViewNativeComponentView?
+        OTRNSubscriberComponentView?
     fileprivate var subscriberDelegateHandler: SubscriberDelegateHandler?
     fileprivate var subscriberUIView: UIView?
     fileprivate var subscriberRtcStatsDelegateHandler:
@@ -25,7 +25,7 @@ import React
         return UIView()
     }
 
-    @objc public init(view: OTSubscriberViewNativeComponentView) {
+    @objc public init(view: OTRNSubscriberComponentView) {
         super.init()
         self.strictUIViewContainer = view
         subscriberDelegateHandler = SubscriberDelegateHandler(impl: self)
@@ -174,9 +174,9 @@ import React
 }
 
 private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
-    weak var impl: OTSubscriberViewNativeImpl?
+    weak var impl: OTRNSubscriberImpl?
 
-    init(impl: OTSubscriberViewNativeImpl) {
+    init(impl: OTRNSubscriberImpl) {
         super.init()
         self.impl = impl
     }
@@ -321,9 +321,9 @@ private class SubscriberDelegateHandler: NSObject, OTSubscriberDelegate {
 private class SubscriberRtcStatsDelegateHandler: NSObject,
     OTSubscriberKitRtcStatsReportDelegate
 {
-    weak var impl: OTSubscriberViewNativeImpl?
+    weak var impl: OTRNSubscriberImpl?
 
-    init(impl: OTSubscriberViewNativeImpl) {
+    init(impl: OTRNSubscriberImpl) {
         super.init()
         self.impl = impl
 
@@ -348,9 +348,9 @@ private class SubscriberRtcStatsDelegateHandler: NSObject,
 private class SubscriberAudioLevelDelegateHandler: NSObject,
     OTSubscriberKitAudioLevelDelegate
 {
-    weak var impl: OTSubscriberViewNativeImpl?
+    weak var impl: OTRNSubscriberImpl?
 
-    init(impl: OTSubscriberViewNativeImpl) {
+    init(impl: OTRNSubscriberImpl) {
         super.init()
         self.impl = impl
 
@@ -377,9 +377,9 @@ private class SubscriberAudioLevelDelegateHandler: NSObject,
 private class SubscriberNetworkStatsDelegateHandler: NSObject,
     OTSubscriberKitNetworkStatsDelegate
 {
-    weak var impl: OTSubscriberViewNativeImpl?
+    weak var impl: OTRNSubscriberImpl?
 
-    init(impl: OTSubscriberViewNativeImpl) {
+    init(impl: OTRNSubscriberImpl) {
         super.init()
         self.impl = impl
     }
@@ -454,9 +454,9 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
 private class SubscriberCaptionsDelegateHandler: NSObject,
     OTSubscriberKitCaptionsDelegate
 {
-    weak var impl: OTSubscriberViewNativeImpl?
+    weak var impl: OTRNSubscriberImpl?
 
-    init(impl: OTSubscriberViewNativeImpl) {
+    init(impl: OTRNSubscriberImpl) {
         super.init()
         self.impl = impl
     }

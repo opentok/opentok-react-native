@@ -21,7 +21,7 @@ function App(): React.JSX.Element {
 
   const sessionRef = useRef<OTSession>(null);
   const subscriberRef = useRef<OTSubscriber>(null);
-  const publisherRef = useRef<OTPublisherView>(null);
+  const publisherRef = useRef<OTPublisher>(null);
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
   };

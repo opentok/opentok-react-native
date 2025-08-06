@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OT } from './OT';
-import OTSubscriberViewNative from './OTSubscriberViewNativeComponent';
+import OTRNSubscriber from './OTSubscriberNativeComponent';
 import OTContext from './contexts/OTContext';
 
 export default class OTSubscriberView extends React.Component {
@@ -63,7 +63,7 @@ export default class OTSubscriberView extends React.Component {
       true;
     const style = streamProperties?.style || this.context.style;
     return (
-      <OTSubscriberViewNative
+      <OTRNSubscriber
         sessionId={this.sessionId}
         streamId={streamId}
         subscribeToAudio={subscribeToAudio}

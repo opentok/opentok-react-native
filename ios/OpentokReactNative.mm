@@ -4,9 +4,9 @@
 
 
 
-typedef JS::NativeOpentokReactNative::SessionOptions RN_SessionOptions;
+typedef JS::NativeOpentok::SessionOptions RN_SessionOptions;
 
-@interface OpentokReactNative : NativeOpentokReactNativeSpecBase <NativeOpentokReactNativeSpec>
+@interface OpentokReactNative : NativeOpentokSpecBase <NativeOpentokSpec>
 @end
 
 @implementation OpentokReactNative {
@@ -148,7 +148,7 @@ RCT_EXPORT_MODULE()
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeOpentokReactNativeSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeOpentokSpecJSI>(params);
 }
 
 

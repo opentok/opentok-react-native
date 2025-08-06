@@ -71,5 +71,5 @@ export interface NativeProps extends ViewProps {
 }
 
 export default codegenNativeComponent<NativeProps>(
-  'OTPublisherViewNative'
+  'OTRNPublisher'
 ) as HostComponent<NativeProps>;

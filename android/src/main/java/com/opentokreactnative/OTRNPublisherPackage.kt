@@ -7,9 +7,9 @@ import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.uimanager.ViewManager
 
-class OTSubscriberViewNativePackage : TurboReactPackage() {
+class OTRNPublisherPackage : TurboReactPackage() {
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return listOf(OTSubscriberViewNativeManager(reactContext))
+        return listOf(OTRNPublisherManager(reactContext))
     }
 
     override fun getModule(
@@ -17,7 +17,7 @@ class OTSubscriberViewNativePackage : TurboReactPackage() {
         reactApplicationContext: ReactApplicationContext
     ): NativeModule? {
         when (s) {
-            OTSubscriberViewNativeManager.REACT_CLASS -> OTSubscriberViewNativeManager(
+            OTRNPublisherManager.REACT_CLASS -> OTRNPublisherManager(
                 reactApplicationContext
             )
         }
@@ -26,9 +26,9 @@ class OTSubscriberViewNativePackage : TurboReactPackage() {
 
     override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
         mapOf(
-            OTSubscriberViewNativeManager.REACT_CLASS to ReactModuleInfo(
-                OTSubscriberViewNativeManager.REACT_CLASS, // _name =
-                OTSubscriberViewNativeManager.REACT_CLASS, // _className =
+            OTRNPublisherManager.REACT_CLASS to ReactModuleInfo(
+                OTRNPublisherManager.REACT_CLASS, // _name =
+                OTRNPublisherManager.REACT_CLASS, // _className =
                 false, // _canOverrideExistingModule =
                 false, // _needsEagerInit =
                 true,  // hasConstants
