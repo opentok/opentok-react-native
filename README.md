@@ -89,7 +89,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    * If you app has an Objective-C++ AppDelegate file (AppDelegate.mm), add these classes to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
     <pre>
-        #import "OTPublisherComponentView.h"
+        #import "OTRNPublisherComponentView.h"
         #import "OTRNSubscriberComponentView.h"
 
         @implementation AppDelegate
