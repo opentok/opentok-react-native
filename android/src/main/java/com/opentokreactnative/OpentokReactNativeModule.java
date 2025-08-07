@@ -218,6 +218,24 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     }
 
     @Override
+    public void forceDisconnect(String sessionId, String connectionId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        ConcurrentHashMap<String, Connection> connections = sharedState.getConnections();
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        Connection mConnection = connections.get(connectionId);
+        if (mConnection == null) {
+            promise.reject("Connection not found.");
+            return;
+        }
+        mSession.forceDisconnect(mConnection);
+        promise.resolve(null);
+    }
+
+    @Override
     public void getPublisherRtcStatsReport(String publisherId) {
         ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
         Publisher publisher = publishers.get(publisherId);
@@ -330,7 +348,7 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
-        //sharedState.getConnections().put(connection.getConnectionId(), connection);
+        sharedState.getConnections().put(connection.getConnectionId(), connection);
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
@@ -341,6 +359,8 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
 
     @Override
     public void onConnectionDestroyed(Session session, Connection connection) {
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        mConnections.remove(connection.getConnectionId());
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(

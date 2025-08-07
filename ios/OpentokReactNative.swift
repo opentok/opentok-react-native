@@ -327,6 +327,29 @@ import React
         resolve(true)
     }
 
+    @objc public func forceDisconnect(
+        _ sessionId: String,
+        connectionId: String,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject("event_failure", "Session ID not found", nil)
+            return
+        }
+        guard let connection = OTRN.sharedState.connections[connectionId] else {
+            reject("ERROR", "Connection ID not found", nil)
+            return
+        }
+        var error: OTError?
+        session.forceDisconnect(connection, error: &error)
+        if let error = error {
+            reject("event_failure", error.localizedDescription, nil)
+            return
+        }
+        resolve(true)
+    }
+
     @objc public func getPublisherRtcStatsReport(_ publisherId: String) {
         guard let publisher = OTRN.sharedState.publishers[publisherId] else {
             return

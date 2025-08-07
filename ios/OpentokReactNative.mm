@@ -103,6 +103,13 @@ RCT_EXPORT_MODULE()
     [impl forceMuteStream:sessionId streamId:streamId resolve:resolve reject:reject];
 }
 
+- (void)forceDisconnect:(nonnull NSString *)sessionId
+              connectionId:(nonnull NSString *)connectionId
+               resolve:(nonnull RCTPromiseResolveBlock)resolve
+                reject:(nonnull RCTPromiseRejectBlock)reject {
+    [impl forceDisconnect:sessionId connectionId:connectionId resolve:resolve reject:reject];
+}
+
 - (void)disableForceMute:(nonnull NSString *)sessionId
                 resolve:(nonnull RCTPromiseResolveBlock)resolve
                  reject:(nonnull RCTPromiseRejectBlock)reject {
