@@ -155,6 +155,11 @@ class OTPublisherViewNativeManager(context: ReactApplicationContext) :
         view.setScalableScreenshare(value)
     }
 
+    @ReactProp(name = "allowAudioCaptureWhileMuted")
+    override public fun setAllowAudioCaptureWhileMuted(view: OTPublisherViewNative, value: Boolean) {
+        view.setAllowAudioCaptureWhileMuted(value)
+    }
+
     companion object {
         const val REACT_CLASS = "OTPublisherViewNative"
     }

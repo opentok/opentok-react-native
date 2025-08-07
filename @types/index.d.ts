@@ -474,6 +474,11 @@ declare module 'opentok-react-native' {
      * Whether to allow use of scalable video for a publisher that has the videoSource set "screen".
      */
     scalableScreenshare?: boolean;
+
+    /**
+     * If set to false, the microphone will be automatically switched off when the publish has muted.
+     */
+    allowAudioCaptureWhileMuted?: boolean;
   }
 
   interface OTPublisherEventHandlers {

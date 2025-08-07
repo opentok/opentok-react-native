@@ -105,6 +105,7 @@ const sanitizeProperties = (properties) => {
       videoContentHint: '',
       videoSource: 'camera',
       scalableScreenshare: false,
+      allowAudioCaptureWhileMuted: false,
     };
   }
 
@@ -145,6 +146,7 @@ const sanitizeProperties = (properties) => {
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
     videoSource: sanitizeVideoSource(properties.videoSource),
     scalableScreenshare: Boolean(properties.scalableScreenshare),
+    allowAudioCaptureWhileMuted: Boolean(properties.allowAudioCaptureWhileMuted),
   };
 };
 

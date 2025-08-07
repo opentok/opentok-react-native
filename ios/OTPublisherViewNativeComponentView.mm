@@ -48,6 +48,7 @@ using namespace facebook::react;
         @"publishAudio" : @(viewProps.publishAudio),
         @"publishVideo" : @(viewProps.publishVideo),
         @"publishCaptions" : @(viewProps.publishCaptions)
+        @"allowAudioCaptureWhileMuted" : @(viewProps.allowAudioCaptureWhileMuted),
     };
 }
 

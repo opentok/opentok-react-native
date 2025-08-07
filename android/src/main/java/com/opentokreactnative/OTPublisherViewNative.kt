@@ -165,6 +165,10 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
         // Ignore -- set as initialization option only
     }
 
+    public fun setAllowAudioCaptureWhileMuted(value: Boolean) {
+        // Ignore -- set as initialization option only
+    }
+
     private fun publishStream(/*session: Session*/) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
@@ -182,6 +186,7 @@ class OTPublisherViewNative : FrameLayout, PublisherListener,
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
+                .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)

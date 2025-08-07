@@ -77,6 +77,9 @@ import React
         settings.scalableScreenshare = Utils.sanitizeBooleanProperty(
             properties["scalableScreenshare"] as Any
         )
+        settings.allowAudioCaptureWhileMuted = Utils.sanitizeBooleanProperty(
+            properties["allowAudioCaptureWhileMuted"] as Any
+        )
 
         self.publisherId = Utils.sanitizeStringProperty(
             properties["publisherId"] as Any
