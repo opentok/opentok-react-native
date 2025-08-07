@@ -464,6 +464,16 @@ declare module 'opentok-react-native' {
      * To publish a screen-sharing stream, set this property to "screen". If you do not specify a value, this will default to "camera".
      */
     videoSource?: VideoSource;
+
+    /**
+     * The video content hint fpr the publisher (either "none", "motion", "detail", or "text").
+     */
+    videoContentHint?: string;
+
+    /**
+     * Whether to allow use of scalable video for a publisher that has the videoSource set "screen".
+     */
+    scalableScreenshare?: boolean;
   }
 
   interface OTPublisherEventHandlers {
