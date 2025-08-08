@@ -329,6 +329,7 @@ declare module 'opentok-react-native' {
       canForceMute: boolean;
       canPublish: boolean;
       canSubscribe: boolean;
+      canForceDisconnect: boolean;
     }>;
 
     /**

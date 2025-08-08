@@ -265,6 +265,24 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     }
 
     @Override
+    public void getSessionCapabilities(String sessionId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        WritableMap sessionCapabilitiesMap = Arguments.createMap();
+        Session.Capabilities sessionCapabilities = mSession.getCapabilities();
+        sessionCapabilitiesMap.putBoolean("canForceMute", sessionCapabilities.canForceMute);
+        sessionCapabilitiesMap.putBoolean("canPublish", sessionCapabilities.canPublish);
+        // Bug in OT Android SDK. This should always be true, but it is set to false:
+        sessionCapabilitiesMap.putBoolean("canSubscribe", true);
+        sessionCapabilitiesMap.putBoolean("canForceDisconnect", sessionCapabilities.canForceDisconnect);
+        promise.resolve(sessionCapabilities);
+    }
+
+    @Override
     public void reportIssue(String sessionId, Promise promise) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
