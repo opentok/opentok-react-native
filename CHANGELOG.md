@@ -1,3 +1,9 @@
+# 2.31.0 (September 2025)
+
+- [Update]: This version adds a new `OTSession.forceDisconnect()` method for forcing clients to disconnect.
+
+- [Update]: This version adds new OTPublisher `allowAudioCaptureWhileMuted` property of the OTPublisher `props` object. Set this to `true` to control audio capture while muted so the publisher receives audio level updates when not publishing audio. This is useful for implemeting features such as speaking while muted.
+
 # 2.31.0-beta.0 (July 2025)
 
 - [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
