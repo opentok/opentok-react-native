@@ -47,7 +47,7 @@ using namespace facebook::react;
         @"audioFallbackEnabled" : @(viewProps.audioFallbackEnabled),
         @"publishAudio" : @(viewProps.publishAudio),
         @"publishVideo" : @(viewProps.publishVideo),
-        @"publishCaptions" : @(viewProps.publishCaptions)
+        @"publishCaptions" : @(viewProps.publishCaptions),
         @"allowAudioCaptureWhileMuted" : @(viewProps.allowAudioCaptureWhileMuted),
     };
 }

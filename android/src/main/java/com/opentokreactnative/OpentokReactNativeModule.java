@@ -265,7 +265,7 @@ public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec imple
     }
 
     @Override
-    public void getSessionCapabilities(String sessionId, Promise promise) {
+    public void getCapabilities(String sessionId, Promise promise) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
         if (mSession == null) {

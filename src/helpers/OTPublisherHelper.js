@@ -146,7 +146,9 @@ const sanitizeProperties = (properties) => {
     videoContentHint: sanitizeVideoContentHint(properties.videoContentHint),
     videoSource: sanitizeVideoSource(properties.videoSource),
     scalableScreenshare: Boolean(properties.scalableScreenshare),
-    allowAudioCaptureWhileMuted: Boolean(properties.allowAudioCaptureWhileMuted),
+    allowAudioCaptureWhileMuted: Boolean(
+      properties.allowAudioCaptureWhileMuted
+    ),
   };
 };
 
