@@ -343,7 +343,7 @@ declare module 'opentok-react-native' {
     forceMuteStream: (streamId: string) => Promise<void>;
 
     /**
-     * Mutes a client to disconnect from the session.
+     * Forces a client to disconnect from the session.
      */
     forceDisconnect: (connectionId: string) => Promise<void>;
 
