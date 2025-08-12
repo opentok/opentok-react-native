@@ -107,6 +107,66 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
    * If your app uses a Swift AppDelegate file (AppDelegate.swift), you will need to have its implementation of the `RCTAppDelegate.application(_, didFinishLaunchingWithOptions)` method use a bridging header to call a method in an Objective-C++ file that calls the `[RCTComponentViewFactory registerComponentViewClass:]` method, passing in the `OTPublisherViewNativeComponentView` and `OTSubscriberViewNativeComponentView` classes.
 
+     For example, add a bridging header for your app:
+
+     <pre>
+     #ifndef BasicVideoTS_Bridging_Header_h
+     #define BasicVideoTS_Bridging_Header_h
+     
+     #import "FabricComponentRegistrar.h"
+     
+     #endif
+     </pre>
+     
+     Then create `FabricComponentRegistrar.h` and `FabricComponentRegistrar.cpp` files:
+     
+     <pre>
+     // FabricComponentRegistrar.hpp
+     
+     #import <Foundation/Foundation.h>
+     
+     @interface FabricComponentRegistrar : NSObject
+     + (void)registerCustomComponents;
+     @end
+     </pre>
+     
+     <pre>
+     //  FabricComponentRegistrar.mm
+     #include "FabricComponentRegistrar.h"
+     #import <React/RCTComponentViewFactory.h>
+     #import <React/RCTViewComponentView.h>
+     #import "OTPublisherViewNativeComponentView.h"
+     #import "OTSubscriberViewNativeComponentView.h"
+     
+     @implementation FabricComponentRegistrar
+     
+     + (void)registerCustomComponents {
+         RCTComponentViewFactory *factory = [RCTComponentViewFactory currentComponentViewFactory];
+         [factory registerComponentViewClass:[OTPublisherViewNativeComponentView class]];
+         [factory registerComponentViewClass:[OTSubscriberViewNativeComponentView class]];
+     }
+     </pre>
+     
+     Finally, call the `FabricComponentRegistrar.registerCustomComponents()` method in the AppDelegate.swift `RCTAppDelegate.application(_, didFinishLaunchingWithOptions)` method:
+     
+     <pre>
+     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+         self.moduleName = "BasicVideoTS"
+         self.dependencyProvider = RCTAppDependencyProvider()
+
+         // You can add your custom initial props in the dictionary below.
+         // They will be passed down to the ViewController used by React Native.
+         self.initialProps = [:]
+     
+     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        FabricComponentRegistrar.registerCustomComponents()
+        return result
+     }
+     </pre>
+   
+   Register the FabricComponentRegistrar.mm file as a build file in XCode.
+
 5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
