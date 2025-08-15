@@ -344,11 +344,9 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
         sharedState.getConnections().put(connection.getConnectionId(), connection);
-        WritableMap eventData = Arguments.createMap();
-        eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        WritableMap eventData = EventUtils.prepareJSConnectionMap(
         connection);
-        eventData.putMap("connection", connectionInfo);
+        eventData.putString("sessionId", session.getSessionId());
         emitOnConnectionCreated(eventData);
     }
 
@@ -356,11 +354,9 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     public void onConnectionDestroyed(Session session, Connection connection) {
         ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
         mConnections.remove(connection.getConnectionId());
-        WritableMap eventData = Arguments.createMap();
-        eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        WritableMap eventData = EventUtils.prepareJSConnectionMap(
         connection);
-        eventData.putMap("connection", connectionInfo);
+        eventData.putString("sessionId", session.getSessionId());
         emitOnConnectionDestroyed(eventData);
     }
 
