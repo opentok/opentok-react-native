@@ -21,7 +21,7 @@ function App(): React.JSX.Element {
 
   const sessionRef = useRef<OTSession>(null);
   const subscriberRef = useRef<OTSubscriber>(null);
-  const publisherRef = useRef<OTPublisherView>(null);
+  const publisherRef = useRef<OTPublisher>(null);
   const toggleVideo = () => {
     setSubscribeToVideo((val) => !val);
   };
@@ -56,6 +56,10 @@ function App(): React.JSX.Element {
               type: 'greeting2',
               data: 'hello again from React Native',
             });
+            sessionRef.current?.getCapabilities()
+              .then((capabilities) =>
+                console.log('capabilities:', capabilities)
+              );
           },
           streamCreated: (event: any) => {
             console.log('streamCreated', event);
@@ -77,8 +81,13 @@ function App(): React.JSX.Element {
             console.log('streamDestroyed', event),
           signal: (event: any) => console.log('signal event', event),
           error: (event: any) => console.log('error event', event),
-          connectionCreated: (event: any) =>
-            console.log('connectionCreated event', event),
+          connectionCreated: (event: any) => {
+            console.log('connectionCreated', event);
+            setTimeout(() => {
+              // sessionRef.current?.forceDisconnect(event.connectionId);
+            }, 5000);
+          },
+          connectionDestroyed: (event: any) => console.log('connectionDestroyed', event),
           archiveStarted: (event: any) =>
             console.log('archiveStarted event', event),
           archiveStopped: (event: any) =>
@@ -101,6 +110,7 @@ function App(): React.JSX.Element {
             properties={{
               publishVideo: subscribeToVideo,
               publishAudio: subscribeToVideo,
+              allowAudioCaptureWhileMuted: true,
               // cameraZoomFactor: 2,
               // cameraTorch: false,
               // videoTrack: true,
