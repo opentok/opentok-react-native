@@ -8,6 +8,7 @@ iOS implementation for the OpenTok React Native library.
 
 - [React Native New Architecture vs Old Architecture](#react-native-new-architecture-vs-old-architecture)
   - [Architecture Components Overview](#architecture-components-overview)
+    - [The Role of Codegen](#the-role-of-codegen)
   - [Fabric: Modern UI Rendering & Event System](#fabric-modern-ui-rendering--event-system)
   - [TurboModules: Type-Safe Native Module Communication](#turbomodules-type-safe-native-module-communication)
 - [Fabric Deep Dive](#fabric-deep-dive)
@@ -20,6 +21,9 @@ iOS implementation for the OpenTok React Native library.
   - [Step 1: TurboModule Initialization](#step-1-turbomodule-initialization)
   - [Step 2: How to Add an Event to TurboModules](#step-2-how-to-add-an-event-to-turbomodules)
   - [Step 3: Event Flow Example - Session Connection](#step-3-event-flow-example---session-connection)
+- [Misc](#misc)
+  - [New Architecture AppDelegate Setup](#new-architecture-appdelegate-setup)
+  - [Third-Party App Integration](#third-party-app-integration)
 
 ## React Native New Architecture vs Old Architecture
 
@@ -29,10 +33,51 @@ The new architecture provides significant improvements in performance, type safe
 
 React Native's new architecture splits into two distinct systems:
 
-- **Fabric**: Handles UI components (views, buttons, custom video components) and their rendering, props, and UI events (onPress, onLayout, onStreamCreated)
-- **TurboModules**: Handles non-UI native modules (business logic, native APIs, device features) and their methods and events (session management, camera access, network calls)
+- **Fabric**: Handles UI components (views or custom video components) and their rendering, props,(cameraPosition), and UI events. 
+- **TurboModules**: Handles non-UI native modules (business logic, native APIs, device features) and their methods and events (session management, stream creation)
 
 This separation allows each system to be optimized for its specific purpose - Fabric for fast UI operations and TurboModules for efficient native API calls.
+
+#### **The Role of Codegen**
+
+Both Fabric and TurboModules rely on **React Native's Codegen** system - a build-time code generation tool that bridges the gap between JavaScript/TypeScript and native code.
+
+**What Codegen Does:**
+- **Analyzes TypeScript Specs**: Reads your TypeScript interface definitions (like `NativeOpentok.ts` and `OTPublisherNativeComponent.ts`)
+- **Generates Native Bindings**: Automatically creates C++ headers, Objective-C++ implementations, and protocol definitions
+- **Ensures Type Safety**: Validates that JavaScript calls match native method signatures at compile time
+- **Creates Bridge Code**: Generates the glue code that connects JavaScript directly to native implementations
+
+**Why Codegen is Essential:**
+- **Eliminates Manual Binding**: No need to manually write bridge code between JavaScript and native platforms
+- **Compile-Time Validation**: Catches type mismatches before runtime, preventing crashes
+- **Performance Optimization**: Generated code is optimized for direct communication without serialization overhead
+- **Consistency**: Ensures identical behavior across iOS and Android platforms
+
+**When Codegen Runs:**
+```bash
+# Codegen executes during iOS build process
+npx pod-install  # Triggers codegen as part of Pod installation
+# OR
+cd ios && pod install  # Direct Pod installation also runs codegen
+```
+
+**Build Flow:**
+1. **TypeScript Specs** → Codegen analyzes `*.ts` interface files
+2. **Code Generation** → Creates native C++ headers and Objective-C++ implementations  
+3. **Compilation** → Generated code is compiled into your iOS app
+4. **Runtime** → Direct JavaScript ↔ Native communication with full type safety
+
+**Example Generated Files:**
+```
+ios/build/generated/ios/
+├── OTRNPublisherComponentDescriptor.h      # Fabric component descriptor
+├── OTRNPublisherProps.h                    # Type-safe props structure
+├── OTRNPublisherEventEmitter.h             # Direct event emission
+└── NativeOpentokSpecBase.h                 # TurboModule interface
+```
+
+This codegen system is what enables the new architecture's **type safety**, **performance**, and **developer experience** improvements over the old bridge-based approach.
 
 ### **Fabric**: Modern UI Rendering & Event System
 
@@ -597,4 +642,166 @@ eventEmitter.addListener('onSessionConnected', (event: ConnectionEvent) => {
 - **Type Safety**: Compile-time validation at every step  
 - **Performance**: 3-5x faster than old bridge events
 - **Auto-Generation**: Native bindings generated from TypeScript specs
+
+## Misc
+
+### New Architecture AppDelegate Setup
+
+The new React Native architecture requires specific AppDelegate configuration to enable Fabric and TurboModules. Here's the required setup:
+
+```swift
+import UIKit
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
+
+@main
+class AppDelegate: RCTAppDelegate {
+  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    self.moduleName = "OpentokReactNativeExample"
+    self.dependencyProvider = RCTAppDependencyProvider()
+
+    // You can add your custom initial props in the dictionary below.
+    // They will be passed down to the ViewController used by React Native.
+    self.initialProps = [:]
+
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+#endif
+  }
+}
+```
+> 📁 **Source:** [AppDelegate.swift](https://github.com/opentok/opentok-react-native/blob/new-architecture/example/ios/OpentokReactNativeExample/AppDelegate.swift#L7-L28)
+
+**Key Points:**
+
+- **RCTAppDelegate**: Inherits from `RCTAppDelegate` instead of `UIResponder` to enable new architecture support
+- **ReactAppDependencyProvider**: Provides dependency injection for TurboModules and Fabric components
+- **Module Name**: Must match your React Native bundle's root component name
+- **Initial Props**: Optional dictionary for passing initial properties to your React Native app
+- **Bundle URL**: Handles both debug (Metro) and release (bundled) JavaScript loading
+
+This configuration automatically enables both Fabric and TurboModules without requiring manual bridge setup.
+
+### Third-Party App Integration
+
+When integrating the OpenTok React Native SDK (version 2.31+) with new architecture into your existing React Native app, you need to register the native Fabric components manually. This section covers the setup required for third-party applications using this SDK.
+
+#### Objective-C++ AppDelegate Setup
+
+If your app uses an **Objective-C++ AppDelegate** file (`AppDelegate.mm`), add the OpenTok Fabric components to your third-party components registry:
+
+```objc
+#import "OTPublisherViewNativeComponentView.h"
+#import "OTSubscriberViewNativeComponentView.h"
+
+@implementation AppDelegate
+    // ...existing code...
+
+- (NSDictionary<NSString *, Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
+{
+    NSMutableDictionary<NSString *, Class<RCTComponentViewProtocol>> *dictionary =
+        [super thirdPartyFabricComponents].mutableCopy;
+    
+    // Register OpenTok Fabric components
+    dictionary[@"OTPublisherViewNative"] = [OTPublisherViewNativeComponentView class];
+    dictionary[@"OTSubscriberViewNative"] = [OTSubscriberViewNativeComponentView class];
+    
+    return dictionary;
+}
+
+@end
+```
+> 📁 **Source:** [Vonage Documentation - iOS Installation](https://tokbox.com/developer/sdks/react-native/new-architecture/#ios-installation)
+
+#### Swift AppDelegate Setup
+
+If your app uses a **Swift AppDelegate** file (`AppDelegate.swift`), you need to use a bridging header approach since Swift cannot directly call the Fabric registration methods:
+
+**1. Create a Bridging Header (OpenTok-Bridging-Header.h):**
+```objc
+#import "OTPublisherViewNativeComponentView.h"
+#import "OTSubscriberViewNativeComponentView.h"
+#import <React/RCTComponentViewFactory.h>
+```
+
+**2. Create an Objective-C++ Helper (OpenTokFabricRegistration.mm):**
+```objc
+#import "OpenTokFabricRegistration.h"
+#import "OTPublisherViewNativeComponentView.h"
+#import "OTSubscriberViewNativeComponentView.h"
+#import <React/RCTComponentViewFactory.h>
+
+@implementation OpenTokFabricRegistration
+
++ (void)registerOpenTokComponents {
+    [RCTComponentViewFactory registerComponentViewClass:[OTPublisherViewNativeComponentView class]];
+    [RCTComponentViewFactory registerComponentViewClass:[OTSubscriberViewNativeComponentView class]];
+}
+
+@end
+```
+
+**3. Update your Swift AppDelegate:**
+```swift
+import UIKit
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
+
+@main
+class AppDelegate: RCTAppDelegate {
+  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    self.moduleName = "YourAppName"
+    self.dependencyProvider = RCTAppDependencyProvider()
+    
+    // Register OpenTok Fabric components
+    OpenTokFabricRegistration.registerOpenTokComponents()
+    
+    self.initialProps = [:]
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+  
+  // ...rest of implementation
+}
+```
+> 📁 **Source:** [Vonage Documentation - iOS Installation](https://tokbox.com/developer/sdks/react-native/new-architecture/#ios-installation)
+
+#### Required Permissions
+
+Ensure your `Info.plist` includes camera and microphone permissions:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>This app uses the camera for video calls</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>This app uses the microphone for video calls</string>
+```
+
+#### Video Transformers Support (Optional)
+
+If you plan to use `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()`, add this to your `Podfile`:
+
+```ruby
+pod 'VonageClientSDKVideoTransformers'
+```
+
+**Key Points:**
+
+- **Manual Registration Required**: Unlike the example app, third-party apps must manually register Fabric components
+- **Architecture Dependency**: This setup only works with React Native new architecture (0.68+)
+- **Swift Limitation**: Swift AppDelegate requires Objective-C++ bridging for Fabric component registration
+- **Version Requirement**: Use OpenTok React Native SDK version 2.31+ for new architecture support
+
+This integration allows your existing React Native app to leverage OpenTok's new architecture benefits while maintaining compatibility with your current codebase.
 
