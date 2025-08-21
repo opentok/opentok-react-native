@@ -156,7 +156,7 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "allowAudioCaptureWhileMuted")
-    override public fun setAllowAudioCaptureWhileMuted(view: OTPublisherViewNative, value: Boolean) {
+    override public fun setAllowAudioCaptureWhileMuted(view: OTRNPublisher, value: Boolean) {
         view.setAllowAudioCaptureWhileMuted(value)
     }
 
