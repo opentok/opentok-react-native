@@ -38,28 +38,28 @@ StreamStruct makeStreamStruct(NSDictionary *streamDict) {
 
 using namespace facebook::react;
 
-@interface OTSubscriberViewNativeComponentView : RCTViewComponentView <RCTOTSubscriberViewNativeViewProtocol>
+@interface OTRNSubscriberComponentView : RCTViewComponentView <RCTOTRNSubscriberViewProtocol>
 @end
 
-@implementation OTSubscriberViewNativeComponentView {
-    OTSubscriberViewNativeImpl *_impl;
+@implementation OTRNSubscriberComponentView {
+    OTRNSubscriberImpl *_impl;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider {
-    return concreteComponentDescriptorProvider<OTSubscriberViewNativeComponentDescriptor>();
+    return concreteComponentDescriptorProvider<OTRNSubscriberComponentDescriptor>();
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _impl = [[OTSubscriberViewNativeImpl alloc] initWithView:self];
+        _impl = [[OTRNSubscriberImpl alloc] initWithView:self];
         self.contentView = nil;
     }
     return self;
 }
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps {
-    const auto &oldViewProps = *std::static_pointer_cast<const OTSubscriberViewNativeProps>(_props);
-    const auto &newViewProps = *std::static_pointer_cast<const OTSubscriberViewNativeProps>(props);
+    const auto &oldViewProps = *std::static_pointer_cast<const OTRNSubscriberProps>(_props);
+    const auto &newViewProps = *std::static_pointer_cast<const OTRNSubscriberProps>(props);
 
     if (!oldProps) {
         // Check if this is the first update (oldProps will be null/empty)
@@ -104,21 +104,21 @@ using namespace facebook::react;
     [super prepareForRecycle];
 }
 
-- (std::shared_ptr<const OTSubscriberViewNativeEventEmitter>)getEventEmitter {
+- (std::shared_ptr<const OTRNSubscriberEventEmitter>)getEventEmitter {
     if (!_eventEmitter) {
         return nullptr;
     }
-    return std::static_pointer_cast<const OTSubscriberViewNativeEventEmitter>(_eventEmitter);
+    return std::static_pointer_cast<const OTRNSubscriberEventEmitter>(_eventEmitter);
 }
 
 - (void)handleSubscriberConnected:(NSDictionary *)stream {
     NSDictionary *streamDict = stream[@"stream"];
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnSubscriberConnected payload{
+        OTRNSubscriberEventEmitter::OnSubscriberConnected payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStream,
-                OTSubscriberViewNativeEventEmitter::OnSubscriberConnectedStreamConnection
+                OTRNSubscriberEventEmitter::OnSubscriberConnectedStream,
+                OTRNSubscriberEventEmitter::OnSubscriberConnectedStreamConnection
             >(streamDict)
         };
         eventEmitter->onSubscriberConnected(std::move(payload));
@@ -129,10 +129,10 @@ using namespace facebook::react;
     NSDictionary *streamDict = eventData[@"stream"];
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnected payload{
+        OTRNSubscriberEventEmitter::OnSubscriberDisconnected payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStream,
-                OTSubscriberViewNativeEventEmitter::OnSubscriberDisconnectedStreamConnection
+                OTRNSubscriberEventEmitter::OnSubscriberDisconnectedStream,
+                OTRNSubscriberEventEmitter::OnSubscriberDisconnectedStreamConnection
             >(streamDict)
         };
         eventEmitter->onSubscriberDisconnected(std::move(payload));
@@ -145,14 +145,14 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnSubscriberErrorError errorStruct{
+        OTRNSubscriberEventEmitter::OnSubscriberErrorError errorStruct{
             .code = std::string([errorDict[@"code"] ?: @"" UTF8String]),
             .message = std::string([errorDict[@"message"] ?: @"" UTF8String])
         };
-        OTSubscriberViewNativeEventEmitter::OnSubscriberError payload{
+        OTRNSubscriberEventEmitter::OnSubscriberError payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStream,
-                OTSubscriberViewNativeEventEmitter::OnSubscriberErrorStreamConnection
+                OTRNSubscriberEventEmitter::OnSubscriberErrorStream,
+                OTRNSubscriberEventEmitter::OnSubscriberErrorStreamConnection
             >(streamDict),
             .error = errorStruct
         };
@@ -166,10 +166,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnRtcStatsReport payload{
+        OTRNSubscriberEventEmitter::OnRtcStatsReport payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStream,
-                OTSubscriberViewNativeEventEmitter::OnRtcStatsReportStreamConnection
+                OTRNSubscriberEventEmitter::OnRtcStatsReportStream,
+                OTRNSubscriberEventEmitter::OnRtcStatsReportStreamConnection
             >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
@@ -183,10 +183,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnAudioLevel payload{
+        OTRNSubscriberEventEmitter::OnAudioLevel payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnAudioLevelStream,
-                OTSubscriberViewNativeEventEmitter::OnAudioLevelStreamConnection
+                OTRNSubscriberEventEmitter::OnAudioLevelStream,
+                OTRNSubscriberEventEmitter::OnAudioLevelStreamConnection
             >(streamDict),
             .audioLevel = audioLevel
         };
@@ -200,10 +200,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoNetworkStats payload{
+        OTRNSubscriberEventEmitter::OnVideoNetworkStats payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoNetworkStatsStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoNetworkStatsStream,
+                OTRNSubscriberEventEmitter::OnVideoNetworkStatsStreamConnection
             >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
@@ -217,10 +217,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnAudioNetworkStats payload{
+        OTRNSubscriberEventEmitter::OnAudioNetworkStats payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStream,
-                OTSubscriberViewNativeEventEmitter::OnAudioNetworkStatsStreamConnection
+                OTRNSubscriberEventEmitter::OnAudioNetworkStatsStream,
+                OTRNSubscriberEventEmitter::OnAudioNetworkStatsStreamConnection
             >(streamDict),
             .jsonStats = std::string([jsonStats UTF8String])
         };
@@ -234,10 +234,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoEnabled payload{
+        OTRNSubscriberEventEmitter::OnVideoEnabled payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoEnabledStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoEnabledStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoEnabledStream,
+                OTRNSubscriberEventEmitter::OnVideoEnabledStreamConnection
             >(streamDict),
             .reason = std::string([reason UTF8String])
         };
@@ -251,10 +251,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoDisabled payload{
+        OTRNSubscriberEventEmitter::OnVideoDisabled payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoDisabledStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoDisabledStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoDisabledStream,
+                OTRNSubscriberEventEmitter::OnVideoDisabledStreamConnection
             >(streamDict),
             .reason = std::string([reason UTF8String])
         };
@@ -267,10 +267,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoDisableWarning payload{
+        OTRNSubscriberEventEmitter::OnVideoDisableWarning payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoDisableWarningStream,
+                OTRNSubscriberEventEmitter::OnVideoDisableWarningStreamConnection
             >(streamDict)
         };
         eventEmitter->onVideoDisableWarning(std::move(payload));
@@ -282,10 +282,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLifted payload{
+        OTRNSubscriberEventEmitter::OnVideoDisableWarningLifted payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoDisableWarningLiftedStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoDisableWarningLiftedStream,
+                OTRNSubscriberEventEmitter::OnVideoDisableWarningLiftedStreamConnection
             >(streamDict)
         };
         eventEmitter->onVideoDisableWarningLifted(std::move(payload));
@@ -297,10 +297,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnVideoDataReceived payload{
+        OTRNSubscriberEventEmitter::OnVideoDataReceived payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStream,
-                OTSubscriberViewNativeEventEmitter::OnVideoDataReceivedStreamConnection
+                OTRNSubscriberEventEmitter::OnVideoDataReceivedStream,
+                OTRNSubscriberEventEmitter::OnVideoDataReceivedStreamConnection
             >(streamDict)
         };
         eventEmitter->onVideoDataReceived(std::move(payload));
@@ -314,10 +314,10 @@ using namespace facebook::react;
 
     auto eventEmitter = [self getEventEmitter];
     if (eventEmitter) {
-        OTSubscriberViewNativeEventEmitter::OnCaptionReceived payload{
+        OTRNSubscriberEventEmitter::OnCaptionReceived payload{
             .stream = makeStreamStruct<
-                OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStream,
-                OTSubscriberViewNativeEventEmitter::OnCaptionReceivedStreamConnection
+                OTRNSubscriberEventEmitter::OnCaptionReceivedStream,
+                OTRNSubscriberEventEmitter::OnCaptionReceivedStreamConnection
             >(streamDict),
             .text = std::string([text UTF8String]),
             .isFinal = isFinal
@@ -327,6 +327,6 @@ using namespace facebook::react;
 }
 @end
 
-Class<RCTComponentViewProtocol> OTSubscriberViewNativeCls(void) {
-    return OTSubscriberViewNativeComponentView.class;
+Class<RCTComponentViewProtocol> OTRNSubscriberCls(void) {
+    return OTRNSubscriberComponentView.class;
 }

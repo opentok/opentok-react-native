@@ -24,7 +24,7 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
 
-class OTSubscriberViewNative : FrameLayout, SubscriberListener,
+class OTRNSubscriber : FrameLayout, SubscriberListener,
     SubscriberRtcStatsReportListener, SubscriberKit.AudioLevelListener,
     SubscriberKit.CaptionsListener,
     SubscriberKit.AudioStatsListener,

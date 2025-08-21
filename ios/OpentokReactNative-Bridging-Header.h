@@ -1,4 +1,4 @@
 #import "OpentokReactNative.h"
-#import "OTPublisherViewNativeComponentView.h"
-#import "OTSubscriberViewNativeComponentView.h"
+#import "OTRNPublisherComponentView.h"
+#import "OTRNSubscriberComponentView.h"
 #import "OTScreenCapture.h"

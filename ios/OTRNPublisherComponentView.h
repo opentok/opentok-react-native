@@ -1,5 +1,5 @@
 
-@interface OTPublisherViewNativeComponentView : UIView
+@interface OTRNPublisherComponentView : UIView
 - (void)handleStreamCreated:(NSDictionary *)eventData;
 - (void)handleStreamDestroyed:(NSDictionary *)eventData;
 - (void)handleError:(NSDictionary *)eventData;

@@ -35,7 +35,7 @@ import com.opentokreactnative.utils.EventUtils;
 import com.opentokreactnative.utils.Utils;
 
 
-public class OpentokReactNativeModule extends NativeOpentokReactNativeSpec implements
+public class OpentokReactNativeModule extends NativeOpentokSpec implements
         SessionListener,
         SignalListener,
         Session.ConnectionListener,

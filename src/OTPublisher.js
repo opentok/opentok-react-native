@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { isEqual } from 'underscore';
 import uuid from 'react-native-uuid';
 import { checkAndroidPermissions, OT } from './OT';
-import OTPublisherViewNative from './OTPublisherViewNativeComponent';
+import OTRNPublisher from './OTPublisherNativeComponent';
 import {
   addEventListener,
   removeEventListener,
@@ -123,7 +123,7 @@ export default class OTPublisher extends React.Component {
 
   render() {
     return this.state.permissionsGranted ? (
-      <OTPublisherViewNative
+      <OTRNPublisher
         sessionId={this.context.sessionId}
         publisherId={this.state.publisherId}
         onError={(event) => {

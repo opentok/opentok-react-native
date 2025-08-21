@@ -2,12 +2,12 @@ import Foundation
 import OpenTok
 import React
 
-@objc public class OTPublisherViewNativeImpl: NSObject {
+@objc public class OTRNPublisherImpl: NSObject {
     private var currentSession: OTSession?
     private var sessionId: String?
     fileprivate var publisherId: String?
     fileprivate weak var strictUIViewContainer:
-        OTPublisherViewNativeComponentView?
+        OTRNPublisherComponentView?
     fileprivate var publisherDelegateHandler: PublisherDelegateHandler?
     fileprivate var publisherAudioLevelDelegateHandler:
         PublisherAudioLevelDelegateHandler?
@@ -26,7 +26,7 @@ import React
     }
 
     @objc public init(
-        view: OTPublisherViewNativeComponentView
+        view: OTRNPublisherComponentView
     ) {
         super.init()
         self.strictUIViewContainer = view
@@ -328,9 +328,9 @@ import React
 
 private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
 
-    weak var impl: OTPublisherViewNativeImpl?
+    weak var impl: OTRNPublisherImpl?
 
-    init(impl: OTPublisherViewNativeImpl) {
+    init(impl: OTRNPublisherImpl) {
         super.init()
         self.impl = impl
     }
@@ -441,9 +441,9 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
 private class PublisherAudioLevelDelegateHandler: NSObject,
     OTPublisherKitAudioLevelDelegate
 {
-    weak var impl: OTPublisherViewNativeImpl?
+    weak var impl: OTRNPublisherImpl?
 
-    init(impl: OTPublisherViewNativeImpl) {
+    init(impl: OTRNPublisherImpl) {
         super.init()
         self.impl = impl
     }
@@ -464,9 +464,9 @@ private class PublisherAudioLevelDelegateHandler: NSObject,
 private class PublisherNetworkStatsDelegateHandler: NSObject,
     OTPublisherKitNetworkStatsDelegate
 {
-    weak var impl: OTPublisherViewNativeImpl?
+    weak var impl: OTRNPublisherImpl?
 
-    init(impl: OTPublisherViewNativeImpl) {
+    init(impl: OTRNPublisherImpl) {
         super.init()
         self.impl = impl
     }
@@ -525,9 +525,9 @@ private class PublisherNetworkStatsDelegateHandler: NSObject,
 private class PublisherRtcStatsDelegateHandler: NSObject,
     OTPublisherKitRtcStatsReportDelegate
 {
-    weak var impl: OTPublisherViewNativeImpl?
+    weak var impl: OTRNPublisherImpl?
 
-    init(impl: OTPublisherViewNativeImpl) {
+    init(impl: OTRNPublisherImpl) {
         super.init()
         self.impl = impl
     }

@@ -21,7 +21,7 @@ import com.opentok.android.Stream
 import com.opentokreactnative.utils.EventUtils;
 import com.opentokreactnative.utils.Utils
 
-class OTPublisherViewNative : FrameLayout, PublisherListener,
+class OTRNPublisher : FrameLayout, PublisherListener,
     PublisherKit.AudioLevelListener,
     PublisherKit.PublisherRtcStatsReportListener,
     PublisherKit.AudioStatsListener,

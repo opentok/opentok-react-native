@@ -1,7 +1,7 @@
 import { PermissionsAndroid } from 'react-native';
 import { each } from 'underscore';
 
-import OpentokReactNative from './NativeOpentokReactNative';
+import OpentokReactNative from './NativeOpentok';
 const nativeEvents = {}; // To do. Impliment callbacks from native.
 const OT = OpentokReactNative;
 
