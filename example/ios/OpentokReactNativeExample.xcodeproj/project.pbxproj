@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		76390C276149C479439BDFD0 /* libPods-OpentokReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5FC178DCC0F910F09158D93 /* libPods-OpentokReactNativeExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		DC813112FBC101602B81FEB5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		FA6F149661C59E90C8453D92 /* libPods-OpentokReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0998570514BB6F585F9779 /* libPods-OpentokReactNativeExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06A53108BBF942B4A890CDED /* Pods-OpentokReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpentokReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* OpentokReactNativeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpentokReactNativeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = OpentokReactNativeExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = OpentokReactNativeExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = OpentokReactNativeExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		21A91430B76831360A593BD2 /* Pods-OpentokReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpentokReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
-		5B65D70F23FB84E7A61B40C6 /* Pods-OpentokReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpentokReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = OpentokReactNativeExample/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = OpentokReactNativeExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		C5FC178DCC0F910F09158D93 /* libPods-OpentokReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpentokReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F0998570514BB6F585F9779 /* libPods-OpentokReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpentokReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C711E46E3AAF17F91D1BAFFE /* Pods-OpentokReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpentokReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -32,7 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76390C276149C479439BDFD0 /* libPods-OpentokReactNativeExample.a in Frameworks */,
+				FA6F149661C59E90C8453D92 /* libPods-OpentokReactNativeExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C5FC178DCC0F910F09158D93 /* libPods-OpentokReactNativeExample.a */,
+				9F0998570514BB6F585F9779 /* libPods-OpentokReactNativeExample.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -92,8 +92,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5B65D70F23FB84E7A61B40C6 /* Pods-OpentokReactNativeExample.debug.xcconfig */,
-				21A91430B76831360A593BD2 /* Pods-OpentokReactNativeExample.release.xcconfig */,
+				C711E46E3AAF17F91D1BAFFE /* Pods-OpentokReactNativeExample.debug.xcconfig */,
+				06A53108BBF942B4A890CDED /* Pods-OpentokReactNativeExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -105,13 +105,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "OpentokReactNativeExample" */;
 			buildPhases = (
-				B5C53727F25891B0BB6B28E1 /* [CP] Check Pods Manifest.lock */,
+				E80F375FFFCBDD28689C8B67 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				56C6458FD7B0C866C08228C1 /* [CP] Embed Pods Frameworks */,
-				33368E849B7D746C6CDAB8C9 /* [CP] Copy Pods Resources */,
+				71344EA6D41C62CEA7738198 /* [CP] Embed Pods Frameworks */,
+				2AD48EEB7D4F4C6964F734EF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -183,7 +183,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		33368E849B7D746C6CDAB8C9 /* [CP] Copy Pods Resources */ = {
+		2AD48EEB7D4F4C6964F734EF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -200,7 +200,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		56C6458FD7B0C866C08228C1 /* [CP] Embed Pods Frameworks */ = {
+		71344EA6D41C62CEA7738198 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,7 +217,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OpentokReactNativeExample/Pods-OpentokReactNativeExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B5C53727F25891B0BB6B28E1 /* [CP] Check Pods Manifest.lock */ = {
+		E80F375FFFCBDD28689C8B67 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,7 +255,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B65D70F23FB84E7A61B40C6 /* Pods-OpentokReactNativeExample.debug.xcconfig */;
+			baseConfigurationReference = C711E46E3AAF17F91D1BAFFE /* Pods-OpentokReactNativeExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -283,7 +283,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21A91430B76831360A593BD2 /* Pods-OpentokReactNativeExample.release.xcconfig */;
+			baseConfigurationReference = 06A53108BBF942B4A890CDED /* Pods-OpentokReactNativeExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

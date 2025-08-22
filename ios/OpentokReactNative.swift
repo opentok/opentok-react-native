@@ -434,6 +434,8 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     }
 
     public func sessionDidConnect(_ session: OTSession) {
+        OTRN.sharedState.connections.updateValue(
+            session.connection!, forKey: session.connection!.connectionId)
         let sessionInfo = EventUtils.prepareJSSessionEventData(session);
         impl?.ot?.emit(onSessionConnected: sessionInfo)
     }

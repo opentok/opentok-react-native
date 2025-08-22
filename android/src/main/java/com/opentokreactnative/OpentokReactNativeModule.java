@@ -122,8 +122,19 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     }
 
     @Override
-    public void sendSignal(String sessionId, String type, String data) {
-        session.sendSignal(type, data);
+    public void sendSignal(String sessionId, String type, String data, String to) {
+        String connectionId = to;
+        if (connectionId == null || connectionId.equals("")) {
+            session.sendSignal(type, data);
+            return;
+        }
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        Connection mConnection = mConnections.get(connectionId);
+        if (mConnection == null) {
+            // TODO: surface errror if Connection not found
+            return;
+        }
+        session.sendSignal(type, data, mConnection);
     }
 
     @Override
@@ -330,7 +341,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
 
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
-        //sharedState.getConnections().put(connection.getConnectionId(), connection);
+        sharedState.getConnections().put(connection.getConnectionId(), connection);
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
@@ -341,6 +352,8 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
 
     @Override
     public void onConnectionDestroyed(Session session, Connection connection) {
+        ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
+        mConnections.remove(connection.getConnectionId());
         WritableMap eventData = Arguments.createMap();
         eventData.putString("sessionId", session.getSessionId());
         WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(

@@ -104,7 +104,13 @@ export default class OTSession extends Component {
   };
 
   signal(signalObj) {
-    OT.sendSignal(this.props.sessionId, signalObj.type, signalObj.data);
+    console.log(333, signalObj);
+    OT.sendSignal(
+      this.props.sessionId,
+      signalObj.type || '',
+      signalObj.data || '',
+      signalObj.to || ''
+    );
   }
 
   disconnectSession(sessionId) {

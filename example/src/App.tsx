@@ -56,6 +56,13 @@ function App(): React.JSX.Element {
               type: 'greeting2',
               data: 'hello again from React Native',
             });
+            setTimeout(() => {
+              sessionRef.current?.signal({
+                type: 'internalGreeting',
+                data: 'hello to myself only',
+                to: event.connection.connectionId,
+              });
+            }, 1000);
           },
           streamCreated: (event: any) => {
             console.log('streamCreated', event);
@@ -77,8 +84,16 @@ function App(): React.JSX.Element {
             console.log('streamDestroyed', event),
           signal: (event: any) => console.log('signal event', event),
           error: (event: any) => console.log('error event', event),
-          connectionCreated: (event: any) =>
-            console.log('connectionCreated event', event),
+          connectionCreated: (event: any) => {
+            console.log('connectionCreated', event);
+            sessionRef.current?.signal({
+              to: event.connection.connectionId,
+              data: `wecome to the session, connection ${event.connection.connectionId}`,
+              type: 'connectionGreeting',
+            });
+          },
+          connectionDestroyed: (event: any) =>
+            console.log('connectionDestroyed', event),
           archiveStarted: (event: any) =>
             console.log('archiveStarted event', event),
           archiveStopped: (event: any) =>
