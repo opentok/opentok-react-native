@@ -5,6 +5,7 @@ import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.PublisherKit.AudioTransformer;
 import com.opentok.android.PublisherKit.VideoTransformer;
+import com.opentok.android.PublisherKit.VideoBitratePreset;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.opentok.android.Session.Builder.TransportPolicy;
@@ -143,6 +144,17 @@ public final class Utils {
                 return VideoContentHint.TEXT;
             default:
                 return VideoContentHint.NONE;
+        }
+    }
+
+public static VideoBitratePreset convertVideoBitratePreset(String videoBitratePreset) {
+        switch (videoBitratePreset) {
+            case "bw_saver":
+                return VideoBitratePreset.VideoBitratePresetBwSaver;
+            case "extra_bw_saver":
+                return VideoBitratePreset.VideoBitratePresetExtraBwSaver;
+            default:
+                return VideoBitratePreset.VideoBitratePresetDefault;
         }
     }
 }

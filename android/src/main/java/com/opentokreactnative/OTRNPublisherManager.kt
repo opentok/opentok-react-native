@@ -115,6 +115,16 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setVideoContentHint(value)
     }
 
+    @ReactProp(name = "maxVideoBitrate")
+    override public fun setMaxVideoBitrate(view: OTRNPublisher, value: Int) {
+        view.setMaxVideoBitrate(value)
+    }
+
+    @ReactProp(name = "videoBitratePreset")
+    override public fun setVideoBitratePreset(view: OTRNPublisher, value: String?) {
+        view.setVideoContentHint(value)
+    }
+
     @ReactProp(name = "cameraPosition")
     override public fun setCameraPosition(view: OTRNPublisher, value: String?) {
         view.setCameraPosition(value)

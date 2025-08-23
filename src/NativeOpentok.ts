@@ -62,7 +62,7 @@ export type SessionConnectEvent = {
 
 export type SessionDisconnectEvent = {
   sessionId: string;
-}
+};
 
 export type Stream = {
   name: string;

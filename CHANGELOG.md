@@ -4,6 +4,14 @@
 
 - [Update]: This version adds an `allowAudioCaptureWhileMuted` property of the OTPublisher `properties` prop. Set this to `true` to have the publisher receive audio level updates when not publishing audio.
 
+- [Update]: This version adds API enhancements for controling the maximum bitrate that a publisher. These are added as new properties of the OTPublisher `properties` prop:
+
+  * `videoBitratePreset` -- Set this to one of the following string values: 'default', 'bw_saver', or 'extra_bw_saver'.
+
+  * `maxVideoBitrate` -- To set the maximum bitrate value (instead of a preset), set the this property to a value between 5,000 and 10,000,000 (in bits per second). This property is ignored if the `videoBitratePreset` property is set.
+
+If neither property is set, the `default` preset is used.
+
 # 2.31.0-beta.0 (July 2025)
 
 - [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
