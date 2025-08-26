@@ -122,7 +122,7 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
 
     @ReactProp(name = "videoBitratePreset")
     override public fun setVideoBitratePreset(view: OTRNPublisher, value: String?) {
-        view.setVideoContentHint(value)
+        view.setVideoBitratePreset(value)
     }
 
     @ReactProp(name = "cameraPosition")
