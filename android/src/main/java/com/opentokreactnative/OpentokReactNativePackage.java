@@ -25,11 +25,10 @@ public class OpentokReactNativePackage extends BaseReactPackage {
             public Map<String, ReactModuleInfo> getReactModuleInfos() {
                 Map<String, ReactModuleInfo> map = new HashMap<>();
                 map.put(OpentokReactNativeModule.NAME, new ReactModuleInfo(
-                        OpentokReactNativeModule.NAME,
-                        OpentokReactNativeModule.NAME,
+                        OpentokReactNativeModule.NAME, // name
+                        OpentokReactNativeModule.NAME, // className
                         false,  // canOverrideExistingModule
                         false,  // needsEagerInit
-                        true,  // hasConstants
                         false,  // isCxxModule
                         true // isTurboModule
                 ));

@@ -38,11 +38,11 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
-        configureComponent(context)
+        configureComponent()
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        configureComponent(context)
+        configureComponent()
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -50,7 +50,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         attrs,
         defStyleAttr
     ) {
-        configureComponent(context)
+        configureComponent()
     }
 
     fun updateProperties(props: ReactStylesDiffMap?) {
@@ -65,7 +65,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         publishStream(/*session ?: return*/)
     }
 
-    private fun configureComponent(context: Context) {
+    private fun configureComponent() {
         var params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         this.setLayoutParams(params)
     }
@@ -98,23 +98,27 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         publisher?.setPublishCaptions(value)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setAudioBitrate(value: Int) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setAudioFallbackEnabled(value: Boolean) {
-        //audioFallbackEnabled = value
-        //publisher?.setAudioFallbackEnabled(value)
+        // Deprecated. Use publisherAudioFallback and subscriberAudioFallback
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setPublisherAudioFallback(value: Boolean) {
-        //publisherAudioFallback = value
+        // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setSubscriberAudioFallback(value: Boolean) {
-        //subscriberAudioFallback = value
+        // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setCameraPosition(value: String?) {
         publisher?.cycleCamera()
     }
@@ -127,14 +131,17 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         publisher?.setCameraZoomFactor(value)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setAudioTrack(value: Boolean) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setVideoTrack(value: Boolean) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setVideoSource(value: String?) {
         // Ignore -- set as initialization option only
     }
@@ -145,22 +152,27 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         )
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setEnableDtx(value: Boolean) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setFrameRate(value: Int) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setName(value: String?) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setResolution(value: String?) {
         // Ignore -- set as initialization option only
     }
 
+    @Suppress("UNUSED_PARAMETER")
     public fun setScalableScreenshare(value: Boolean) {
         // Ignore -- set as initialization option only
     }
@@ -249,7 +261,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
 
         // Move this to streamcreated? Can we get the publisherID there? or streamID is enough
         sharedState.getPublishers()
-            .put(this.props?.get("publisherId") as String ?: return, publisher ?: return);
+            .put(this.props?.get("publisherId") as String, publisher ?: return);
         if (publisher?.view != null) {
             this.addView(publisher?.view)
             requestLayout()

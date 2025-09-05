@@ -14,6 +14,7 @@ import com.facebook.react.uimanager.ReactStylesDiffMap
 
 
 @ReactModule(name = OTRNPublisherManager.REACT_CLASS)
+@Suppress("UNUSED_PARAMETER")
 class OTRNPublisherManager(context: ReactApplicationContext) :
     SimpleViewManager<OTRNPublisher>(),
     OTRNPublisherManagerInterface<OTRNPublisher> {
