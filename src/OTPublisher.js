@@ -210,6 +210,8 @@ OTPublisher.defaultProps = {
     videoTrack: true,
     videoSource: 'camera',
     videoContentHint: '',
+    maxVideoBitrate: 0,
+    videoBitratePreset: 'default',
   },
   style: {
     flex: 1,

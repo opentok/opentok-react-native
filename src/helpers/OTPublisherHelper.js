@@ -84,6 +84,27 @@ const sanitizeVideoContentHint = (videoContentHint = '') => {
   }
 };
 
+const sanitizeMaxVideoBitrate = (maxVideoBitrate, videoBitratePreset) => {
+  if (!videoBitratePreset && !isNaN(maxVideoBitrate)) {
+    return Math.min(Math.max(maxVideoBitrate, 5000), 10000000);
+  }
+  return 0;
+};
+
+const sanitizeVideoBitratePreset = (videoBitratePreset) => {
+  if (!videoBitratePreset) {
+    return '';
+  }
+  switch (videoBitratePreset) {
+    case 'bw_saver':
+      return 'bw_saver';
+    case 'extra_bw_saver':
+      return 'extra_bw_saver';
+    default:
+      return 'default';
+  }
+};
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
@@ -148,6 +169,13 @@ const sanitizeProperties = (properties) => {
     scalableScreenshare: Boolean(properties.scalableScreenshare),
     allowAudioCaptureWhileMuted: Boolean(
       properties.allowAudioCaptureWhileMuted
+    ),
+    maxVideoBitrate: sanitizeMaxVideoBitrate(
+      properties.maxVideoBitrate,
+      properties.videoBitratePreset
+    ),
+    videoBitratePreset: sanitizeVideoBitratePreset(
+      properties.videoBitratePreset
     ),
   };
 };

@@ -145,6 +145,22 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         )
     }
 
+    public fun setMaxVideoBitrate(value: Int) {
+        if (value == 0) {
+            return
+        }
+        publisher?.setMaxVideoBitrate(value)
+    }
+
+    public fun setVideoBitratePreset(value: String?) {
+        if (value == "") {
+            return
+        }
+        publisher?.setVideoBitratePreset(
+            Utils.convertVideoBitratePreset(value)
+        )
+    }
+
     public fun setEnableDtx(value: Boolean) {
         // Ignore -- set as initialization option only
     }

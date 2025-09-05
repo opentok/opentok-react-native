@@ -480,6 +480,16 @@ declare module 'opentok-react-native' {
      * If set to false, the microphone will be automatically switched off when the publish has muted.
      */
     allowAudioCaptureWhileMuted?: boolean;
+
+    /**
+     * The maximum video bitrate for the published stream (between 5,000 and 10,000,000). Ignored if videoBitratePreset is set.
+     */
+    maxVideoBitrate?: number;
+
+    /**
+     * The video bitrate preset to use for the published stream.
+     */
+    videoBitratePreset?: 'default' | 'bw_saver' | 'extra_bw_saver';
   }
 
   interface OTPublisherEventHandlers {
