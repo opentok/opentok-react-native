@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <OpentokReactNativeSpec/OpentokReactNativeSpec.h>
 
 // This interface is specifically for Swift consumption
 // The C++ interface is declared in OpentokNewArch.mm

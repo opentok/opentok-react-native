@@ -58,12 +58,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         configureComponent()
     }
 
-    fun updateProperties(props: ReactStylesDiffMap?) {
-        if (this.props == null) {
-            this.props = props?.toMap()
-        }
-    }
-
     override fun onAttachedToWindow() {
         session = sharedState.getSessions().get(sessionId)
         stream = sharedState.getSubscriberStreams().get(streamId)

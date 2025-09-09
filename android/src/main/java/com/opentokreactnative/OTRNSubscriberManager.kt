@@ -77,14 +77,6 @@ class OTRNSubscriberManager(context: ReactApplicationContext) :
         view?.setPreferredResolution(value)
     }
 
-    override fun updateProperties(
-        viewToUpdate: OTRNSubscriber,
-        props: ReactStylesDiffMap?
-    ) {
-        super.updateProperties(viewToUpdate, props)
-        viewToUpdate.updateProperties(props)
-    }
-
     companion object {
         const val REACT_CLASS = "OTRNSubscriber"
     }

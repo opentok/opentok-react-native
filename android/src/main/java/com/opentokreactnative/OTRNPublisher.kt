@@ -53,13 +53,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         configureComponent()
     }
 
-    fun updateProperties(props: ReactStylesDiffMap?) {
-        if (this.props == null) {
-            this.props = props?.toMap()
-            return
-        }
-    }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         publishStream(/*session ?: return*/)

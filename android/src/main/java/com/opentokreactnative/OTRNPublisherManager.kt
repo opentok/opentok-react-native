@@ -34,15 +34,6 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         return super.getNativeProps()
     }
 
-    override fun updateProperties(
-        viewToUpdate: OTRNPublisher,
-        props: ReactStylesDiffMap?
-    ) {
-        super.updateProperties(viewToUpdate, props)
-        Log.d("OTRNPublisherManager", "updateProperties: $props")
-        viewToUpdate.updateProperties(props)
-    }
-
     override fun setSessionId(
         view: OTRNPublisher?,
         value: String?
