@@ -84,15 +84,15 @@ const sanitizeVideoContentHint = (videoContentHint = '') => {
   }
 };
 
-const sanitizeMaxVideoBitrate = (maxVideoBitrate, videoBitratePreset) => {
-  if (!videoBitratePreset && !isNaN(maxVideoBitrate)) {
+const sanitizeMaxVideoBitrate = (maxVideoBitrate) => {
+  if (maxVideoBitrate && !isNaN(maxVideoBitrate)) {
     return Math.min(Math.max(maxVideoBitrate, 5000), 10000000);
   }
   return 0;
 };
 
-const sanitizeVideoBitratePreset = (videoBitratePreset) => {
-  if (!videoBitratePreset) {
+const sanitizeVideoBitratePreset = (videoBitratePreset, maxVideoBitrate) => {
+  if (maxVideoBitrate) {
     return '';
   }
   switch (videoBitratePreset) {
@@ -170,12 +170,10 @@ const sanitizeProperties = (properties) => {
     allowAudioCaptureWhileMuted: Boolean(
       properties.allowAudioCaptureWhileMuted
     ),
-    maxVideoBitrate: sanitizeMaxVideoBitrate(
-      properties.maxVideoBitrate,
-      properties.videoBitratePreset
-    ),
+    maxVideoBitrate: sanitizeMaxVideoBitrate(properties.videoBitratePreset),
     videoBitratePreset: sanitizeVideoBitratePreset(
-      properties.videoBitratePreset
+      properties.videoBitratePreset,
+      properties.maxVideoBitrate
     ),
   };
 };

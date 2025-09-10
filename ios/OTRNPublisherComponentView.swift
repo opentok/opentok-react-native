@@ -151,12 +151,10 @@ import React
         )
 
         if let maxVideoBitrate = properties["maxVideoBitrate"] as? Int32 {
-            if (maxVideoBitrate != 0) {
-                publisher.maxVideoBitrate = maxVideoBitrate
-            }
+            publisher.maxVideoBitrate = maxVideoBitrate
         }
 
- 	       if let videoBitratePreset = properties["videoBitratePreset"] as? String {
+ 	    if let videoBitratePreset = properties["videoBitratePreset"] as? String {
             if (videoBitratePreset != "") {
                 publisher.videoBitratePreset = Utils.convertVideoBitratePreset(videoBitratePreset)
             }
@@ -294,9 +292,7 @@ import React
             return
         }
 
-        if (maxVideoBitrate != 0) {
-            publisher.maxVideoBitrate = maxVideoBitrate
-        }
+        publisher.maxVideoBitrate = maxVideoBitrate
     }
 
     @objc public func setVideoBitratePreset(_ videoBitratePreset: String) {
