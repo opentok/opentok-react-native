@@ -163,6 +163,26 @@ import React
         }
     }
 
+    @objc public func getCapabilities(
+        _ sessionId: String,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject(
+                "ERROR",
+                "Error reporting issue. Could not find native session instance.",
+                nil)
+            return
+        }
+        var sessionCapabilities: Dictionary<String, Any> = [:];
+        sessionCapabilities["canPublish"] = session.capabilities?.canPublish;
+        // Bug in OT iOS SDK. This is set to false, but it should be true:
+        sessionCapabilities["canSubscribe"] = true;
+        sessionCapabilities["canForceMute"] = session.capabilities?.canForceMute;
+        resolve([sessionCapabilities]);
+    }
+
     @objc public func reportIssue(
         _ sessionId: String,
         resolve: @escaping RCTPromiseResolveBlock,

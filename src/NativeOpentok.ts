@@ -148,6 +148,13 @@ export interface Spec extends TurboModule {
   removeSubscriber(streamId: string): void;
   sendSignal(sessionId: string, type: string, data: string, to: string): void;
   setEncryptionSecret(sessionId: string, secret: string): Promise<void>;
+  getCapabilities(sessionId: string): Promise<
+    Array<{
+      canPublish: boolean;
+      canSubscribe: boolean;
+      canForceMute: boolean;
+    }>
+  >;
   reportIssue(sessionId: string): Promise<string>;
   forceMuteAll(
     sessionId: string,

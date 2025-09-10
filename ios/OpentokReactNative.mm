@@ -85,6 +85,12 @@ RCT_EXPORT_MODULE()
     [impl setEncryptionSecret:sessionId secret:secret resolve:resolve reject:reject];
 }
 
+- (void)getCapabilities:(nonnull NSString *)sessionId
+            resolve:(nonnull RCTPromiseResolveBlock)resolve
+             reject:(nonnull RCTPromiseRejectBlock)reject {
+    [impl getCapabilities:sessionId resolve:resolve reject:reject];
+}
+
 - (void)reportIssue:(nonnull NSString *)sessionId
             resolve:(nonnull RCTPromiseResolveBlock)resolve
              reject:(nonnull RCTPromiseRejectBlock)reject {
