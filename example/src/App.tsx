@@ -84,7 +84,7 @@ function App(): React.JSX.Element {
               sessionRef.current?.signal({
                 type: 'internalGreeting',
                 data: 'hello to myself only',
-                to: event.connection.connectionId,
+                to: event.connectionId,
               });
               setSignalProp({
                 type: 'greeting2',
