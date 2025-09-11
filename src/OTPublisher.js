@@ -87,7 +87,7 @@ export default class OTPublisher extends React.Component {
     this.publisherProperties = sanitizeProperties(this.props.properties);
 
     if (Platform.OS === 'android') {
-      const { audioTrack, videoTrack, videoSource } = this.props;
+      const { audioTrack, videoTrack, videoSource } = this.publisherProperties;
       const isScreenSharing = videoSource === 'screen';
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
