@@ -153,9 +153,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     }
 
     public fun setMaxVideoBitrate(value: Int) {
-        if (value == 0) {
-            return
-        }
         publisher?.setMaxVideoBitrate(value)
     }
 

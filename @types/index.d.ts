@@ -482,12 +482,12 @@ declare module 'opentok-react-native' {
     allowAudioCaptureWhileMuted?: boolean;
 
     /**
-     * The maximum video bitrate for the published stream (between 5,000 and 10,000,000). Ignored if videoBitratePreset is set.
+     * The maximum video bitrate for the published stream (between 5,000 and 10,000,000).
      */
     maxVideoBitrate?: number;
 
     /**
-     * The video bitrate preset to use for the published stream.
+     * The video bitrate preset to use for the published stream. Ignored if maxVideoBitrate is set.
      */
     videoBitratePreset?: 'default' | 'bw_saver' | 'extra_bw_saver';
   }
