@@ -11,6 +11,7 @@ import com.facebook.react.viewmanagers.OTRNSubscriberManagerInterface;
 import com.facebook.react.viewmanagers.OTRNSubscriberManagerDelegate;
 
 @ReactModule(name = OTRNSubscriberManager.REACT_CLASS)
+@Suppress("UNUSED_PARAMETER")
 class OTRNSubscriberManager(context: ReactApplicationContext) :
     SimpleViewManager<OTRNSubscriber>(),
     OTRNSubscriberManagerInterface<OTRNSubscriber> {

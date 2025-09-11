@@ -64,10 +64,12 @@ RCT_EXPORT_MODULE()
 
 - (void)sendSignal:(nonnull NSString *)sessionId 
     type:(nonnull NSString *)type 
-    data:(nonnull NSString *)data { 
+    data:(nonnull NSString *)data
+    to:(nonnull NSString *)to { 
   NSDictionary *signal = @{
     @"type": type,
-    @"data": data
+    @"data": data,
+    @"to": to
   };
   [impl sendSignal:sessionId signal:signal resolve:^(id result) {
     // Success case - nothing needed

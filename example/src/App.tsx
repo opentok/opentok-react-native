@@ -66,6 +66,13 @@ function App(): React.JSX.Element {
               .then((capabilities) =>
                 console.log('capabilities:', capabilities)
               );
+            setTimeout(() => {
+              sessionRef.current?.signal({
+                type: 'internalGreeting',
+                data: 'hello to myself only',
+                to: event.connection.connectionId,
+              });
+            }, 1000);
           },
           streamCreated: (event: any) => {
             console.log('streamCreated', event);
@@ -92,6 +99,11 @@ function App(): React.JSX.Element {
             setTimeout(() => {
               // sessionRef.current?.forceDisconnect(event.connectionId);
             }, 5000);
+            sessionRef.current?.signal({
+              to: event.connection.connectionId,
+              data: `wecome to the session, connection ${event.connection.connectionId}`,
+              type: 'connectionGreeting',
+            });
           },
           connectionDestroyed: (event: any) =>
             console.log('connectionDestroyed', event),

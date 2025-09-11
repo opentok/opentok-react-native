@@ -43,11 +43,11 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     private var props: MutableMap<String, Any>? = null
 
     constructor(context: Context) : super(context) {
-        configureComponent(context)
+        configureComponent()
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        configureComponent(context)
+        configureComponent()
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -55,7 +55,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         attrs,
         defStyleAttr
     ) {
-        configureComponent(context)
+        configureComponent()
     }
 
     fun updateProperties(props: ReactStylesDiffMap?) {
@@ -71,7 +71,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         subscribeToStream(session ?: return, stream ?: return)
     }
 
-    private fun configureComponent(context: Context) {
+    private fun configureComponent() {
         var params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         this.setLayoutParams(params)
     }
@@ -188,7 +188,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
-        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
+        val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val payload =
             Arguments.createMap().apply {
                 putMap("stream", stream)
@@ -197,7 +197,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onDisconnected(subscriber: SubscriberKit) {
-        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
+        val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val payload =
             Arguments.createMap().apply {
                 putMap("stream", stream)
@@ -206,7 +206,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onError(subscriber: SubscriberKit, opentokError: OpentokError) {
-        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
+        val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val error = EventUtils.prepareJSErrorMap(opentokError)
         val payload =
             Arguments.createMap().apply {
@@ -217,7 +217,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onRtcStatsReport(subscriber: SubscriberKit, jsonArrayOfReports: String) {
-        val stream = EventUtils.prepareJSStreamMap(subscriber?.getStream(), subscriber?.getSession())
+        val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val payload =
             Arguments.createMap().apply {
                 putString("jsonArrayOfReports", jsonArrayOfReports)
