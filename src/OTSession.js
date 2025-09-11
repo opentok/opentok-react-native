@@ -135,10 +135,6 @@ export default class OTSession extends Component {
     );
   }
 
-  getCapabilities() {
-    return OT.getCapabilities(this.props.sessionId);
-  }
-
   forceDisconnect(connectionId) {
     return OT.forceDisconnect(this.props.sessionId, connectionId);
   }
