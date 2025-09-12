@@ -10359,7 +10359,7 @@ __metadata:
     jest: ^29.7.0
     metro-react-native-babel-preset: ^0.77.0
     prettier: ^3.0.3
-    react: 18.3.1
+    react: 19.1.0
     react-native: 0.77.3
     react-native-builder-bob: ^0.36.0
     react-native-uuid: ^2.0.3
@@ -11192,6 +11192,13 @@ __metadata:
   dependencies:
     loose-envify: ^1.1.0
   checksum: a27bcfa8ff7c15a1e50244ad0d0c1cb2ad4375eeffefd266a64889beea6f6b64c4966c9b37d14ee32d6c9fcd5aa6ba183b6988167ab4d127d13e7cb5b386a376
+  languageName: node
+  linkType: hard
+
+"react@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react@npm:19.1.0"
+  checksum: c0905f8cfb878b0543a5522727e5ed79c67c8111dc16ceee135b7fe19dce77b2c1c19293513061a8934e721292bfc1517e0487e262d1906f306bdf95fa54d02f
   languageName: node
   linkType: hard
 
