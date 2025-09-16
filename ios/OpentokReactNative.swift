@@ -49,7 +49,7 @@ import React
         let session = OTSession(
             apiKey: apiKey, sessionId: sessionId,
             delegate: sessionDelegateHandler, settings: settings)
-        guard let session = session else {
+        guard let otSession = session else {
             print("[OpentokReactNative] Failed to create OTSession for sessionId: \(sessionId)")
             return
         }
@@ -204,30 +204,6 @@ import React
             reject("ERROR", "Failed to generate issue ID", nil)
         }
     }
-
-    //@objc public func publish(_ sessionId: String, publisherId: String,
-    //                         resolve: @escaping RCTPromiseResolveBlock,
-    //                         reject: @escaping RCTPromiseRejectBlock) -> Void {
-    //    var error: OTError?
-    //
-    //    guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-    //        reject("ERROR", "Error publishing. Could not find native publisher instance", nil)
-    //        return
-    //    }
-    //
-    //    guard let session = OTRN.sharedState.sessions[sessionId] else {
-    //        reject("ERROR", "Error connecting to session. Could not find native session instance", nil)
-    //        return
-    //    }
-    //
-    //    session.publish(publisher, error: &error)
-    //
-    //    if let err = error {
-    //        reject("ERROR", err.localizedDescription, err)
-    //    } else {
-    //        resolve(nil)
-    //    }
-    //}
 
     @objc public func publish(_ sessionId: String, publisherId: String) {
         var error: OTError?

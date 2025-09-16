@@ -12,6 +12,8 @@ function App(): React.JSX.Element {
   const apiKey = '';
   const sessionId = '';
   const token = '';
+  const sessionId2 = '';
+  const token2 = '';
 
   const [subscribeToVideo, setSubscribeToVideo] = React.useState<boolean>(true);
   const [publishStream, setPublishStream] = React.useState<boolean>(true);
@@ -119,8 +121,8 @@ function App(): React.JSX.Element {
           connectionCreated: (event: any) => {
             console.log('connectionCreated', event);
             sessionRef.current?.signal({
-              to: event.connection.connectionId,
-              data: `wecome to the session, connection ${event.connection.connectionId}`,
+              to: event.connectionId,
+              data: `wecome to the session, connection ${event.connectionId}`,
               type: 'connectionGreeting',
             });
           },
@@ -284,6 +286,26 @@ function App(): React.JSX.Element {
           </OTSubscriber>
         ) : null}
       </OTSession>
+      {sessionId2 ? (
+        <OTSession
+          apiKey={apiKey}
+          sessionId={sessionId2}
+          token={token2}
+          eventHandlers={{
+            error: (e) => console.log('s2 error', e),
+            sessionConnected: (e) => console.log('s2 connected', e),
+            signal: (e) => console.log('s2 signal', e),
+            connectionCreated: (e) => console.log('s2 connectionCreated', e),
+            streamCreated: (e) => console.log('s2 streamCreated', e),
+          }}
+          signal={{
+            type: 'session2',
+            data: 'signal from React Native session 2',
+          }}
+        >
+          <OTSubscriber style={styles.videoview} />
+        </OTSession>
+      ) : null}
       <Button onPress={() => toggleSubscribe()} title="Toggle subscribe" />
       <Button onPress={() => togglePublish()} title="Toggle publish" />
       <Button onPress={() => toggleVideo()} title="Toggle audio/video" />

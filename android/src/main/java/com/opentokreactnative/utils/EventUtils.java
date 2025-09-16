@@ -179,11 +179,4 @@ public final class EventUtils {
         codecsMap.putArray("videoEncoderCodecs", videoEncoderCodecsArray);
         return codecsMap;
     }
-
-    public static WritableMap createError(String message) {
-
-        WritableMap errorInfo = Arguments.createMap();
-        errorInfo.putString("message", message);
-        return errorInfo;
-    }
 }

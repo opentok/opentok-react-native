@@ -29,7 +29,7 @@ export default class OTSubscriberView extends React.Component {
   }
 
   componentWillUnmount() {
-    OT.removeSubscriber(this.props.streamId);
+    OT.removeSubscriber(this.sessionId, this.props.streamId);
   }
 
   render() {

@@ -11,10 +11,6 @@ import OpenTok
 
 class EventUtils {
     
-    static var sessionPreface: String = "session:";
-    static var publisherPreface: String = "publisher:";
-    static var subscriberPreface: String = "subscriber:";
-    
     static func prepareJSConnectionEventData(_ connection: OTConnection) -> Dictionary<String, Any> {
         var connectionInfo: Dictionary<String, Any> = [:];
         guard connection != nil else { return connectionInfo }
@@ -122,49 +118,6 @@ class EventUtils {
         guard let connection = session.connection else { return sessionInfo };
         sessionInfo["connection"] = prepareJSConnectionEventData(connection);
         return sessionInfo;
-    }
-    
-    static func getSupportedEvents() -> [String] {
-        return [
-            "\(sessionPreface)streamCreated",
-            "\(sessionPreface)streamDestroyed",
-            "\(sessionPreface)sessionDidConnect",
-            "\(sessionPreface)sessionDidDisconnect",
-            "\(sessionPreface)connectionCreated",
-            "\(sessionPreface)connectionDestroyed",
-            "\(sessionPreface)didFailWithError",
-            "\(sessionPreface)signal",
-            "\(sessionPreface)muteForced",
-            "\(publisherPreface)didFailWithError",
-            "\(publisherPreface)audioLevelUpdated",
-            "\(publisherPreface)rtcStatsReport",
-            "\(publisherPreface)muteForced",
-            "\(publisherPreface)videoEnabled",
-            "\(publisherPreface)videoDisabled",
-            "\(publisherPreface)videoDisableWarning",
-            "\(publisherPreface)videoDisableWarningLifted",
-            "\(subscriberPreface)subscriberDidConnect",
-            "\(subscriberPreface)subscriberDidDisconnect",
-            "\(subscriberPreface)didFailWithError",
-            "\(subscriberPreface)videoNetworkStatsUpdated",
-            "\(subscriberPreface)audioNetworkStatsUpdated",
-            "\(subscriberPreface)audioLevelUpdated",
-            "\(subscriberPreface)rtcStatsReport",
-            "\(subscriberPreface)subscriberVideoEnabled",
-            "\(subscriberPreface)subscriberVideoDisabled",
-            "\(subscriberPreface)subscriberVideoDisableWarning",
-            "\(subscriberPreface)subscriberVideoDisableWarningLifted",
-            "\(subscriberPreface)subscriberVideoDataReceived",
-            "\(sessionPreface)archiveStartedWithId",
-            "\(sessionPreface)archiveStoppedWithId",
-            "\(sessionPreface)sessionDidBeginReconnecting",
-            "\(sessionPreface)sessionDidReconnect",
-            "\(sessionPreface)streamPropertyChanged",
-            "\(subscriberPreface)subscriberDidReconnect",
-            "\(subscriberPreface)subscriberCaptionReceived",
-            "publisherStreamCreated",
-            "publisherStreamDestroyed"
-        ];
     }
     
     static func convertDateToString(_ creationTime: Date) -> String {

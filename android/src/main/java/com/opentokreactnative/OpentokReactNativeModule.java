@@ -48,7 +48,6 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         Application.ActivityLifecycleCallbacks {
     public static final String NAME = "OpentokReactNative";
 
-    private Session session;
     private ReactApplicationContext context = null;
     private OTRN sharedState = OTRN.getSharedState();
 
@@ -79,7 +78,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         ConcurrentHashMap<String, String> androidOnTopMap = sharedState.getAndroidOnTopMap();
         ConcurrentHashMap<String, String> androidZOrderMap = sharedState.getAndroidZOrderMap();
 
-        session = new Session.Builder(context, apiKey, sessionId)
+        Session session = new Session.Builder(context, apiKey, sessionId)
             .sessionOptions(new Session.SessionOptions() {
                 @Override
                 public boolean useTextureViews() {
@@ -111,21 +110,33 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
 
     @Override
     public void connect(String sessionId, String token, Promise promise) {
-        session.connect(token);
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null) {
+            mSession.connect(token);
         promise.resolve(null);
+        } else {
+            promise.reject("Error connecting to session. Could not find native session instance");
+        }
     }
 
     @Override
     public void disconnect(String sessionId, Promise promise) {
-        session.disconnect();
-        promise.resolve(null);
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession != null) {
+            mSession.disconnect();
+            promise.resolve(null);
+        }
     }
 
     @Override
     public void sendSignal(String sessionId, String type, String data, String to) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
         String connectionId = to;
         if (connectionId == null || connectionId.equals("")) {
-            session.sendSignal(type, data);
+            mSession.sendSignal(type, data);
             return;
         }
         ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
@@ -134,7 +145,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
             // TODO: surface errror if Connection not found
             return;
         }
-        session.sendSignal(type, data, mConnection);
+        mSession.sendSignal(type, data, mConnection);
     }
 
     @Override
@@ -147,31 +158,48 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     }
 
     @Override
-    public void publish(String publisherId) {
+    public void publish(String sessionId, String publisherId) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            return;
+        }
         ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
-            session.publish(publisher);
+            mSession.publish(publisher);
         }
     }
 
     @Override
-    public void unpublish(String publisherId) {
+    public void unpublish(String sessionId, String publisherId) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            return;
+        }
         ConcurrentHashMap<String, Publisher> publishers = sharedState.getPublishers();
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
-            session.unpublish(publisher);
+            mSession.unpublish(publisher);
             publishers.remove(publisher);
         }
     }
 
     @Override
-    public void removeSubscriber(String streamId) {
+    public void removeSubscriber(String sessionId, String streamId) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            return;
+        }
         ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
+        ConcurrentHashMap<String, Stream> streams = sharedState.getSubscriberStreams();
         Subscriber subscriber = subscribers.get(streamId);
         if (subscriber != null) {
-            session.unsubscribe(subscriber);
+            mSession.unsubscribe(subscriber);
             subscribers.remove(subscriber);
+            streams.remove(streamId);
         }
     }
 
@@ -309,6 +337,8 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     public void onDisconnected(Session session) {
         WritableMap payload = EventUtils.prepareJSSessionMap(session);
         emitOnSessionDisconnected(payload);
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        mSessions.remove(session.getSessionId());
     }
 
     @Override

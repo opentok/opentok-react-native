@@ -29,7 +29,6 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - VonageClientSDKVideoTransformers (= 2.30.1)
     - Yoga
   - OTXCFramework (2.30.1)
   - RCT-Folly (2024.11.18.00):
@@ -1524,7 +1523,6 @@ PODS:
     - React-perflogger (= 0.77.0)
     - React-utils (= 0.77.0)
   - SocketRocket (0.7.1)
-  - VonageClientSDKVideoTransformers (2.30.1)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1602,7 +1600,6 @@ SPEC REPOS:
   trunk:
     - OTXCFramework
     - SocketRocket
-    - VonageClientSDKVideoTransformers
 
 EXTERNAL SOURCES:
   boost:
@@ -1749,7 +1746,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: 1f783c3d53940aed0d2c84586f0b7a85ab7827ef
-  OpentokReactNative: ccf26b2e05652c400ed86ea33e505b0e91164a38
+  OpentokReactNative: 6409995aa2ca520264b9b3d1d0b741a0db0bc0e3
   OTXCFramework: 5424e25ee41b521b4efe3c1d10b0ea8728f929b8
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: f5c19ebdb8804b53ed029123eb69914356192fc8
@@ -1810,7 +1807,6 @@ SPEC CHECKSUMS:
   ReactCodegen: c08a5113d9c9c895fe10f3c296f74c6b705a60a9
   ReactCommon: 1bd2dc684d7992acbf0dfee887b89a57a1ead86d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  VonageClientSDKVideoTransformers: b98c1b19865035da1a0f2483cb691fc5281aba11
   Yoga: 78d74e245ed67bb94275a1316cdc170b9b7fe884
 
 PODFILE CHECKSUM: 062fa2977e6c716b14cc548368ad03801e1f3906

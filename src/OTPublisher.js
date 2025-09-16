@@ -52,7 +52,7 @@ export default class OTPublisher extends React.Component {
       const isScreenSharing = videoSource === 'screen';
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
-          OT.publish(this.state.publisherId);
+          OT.publish(this.context.sessionId, this.state.publisherId);
           this.setState({
             permissionsGranted: true,
           });
@@ -61,7 +61,7 @@ export default class OTPublisher extends React.Component {
           // this.otrnEventHandler(error);
         });
     } else {
-      OT.publish(this.state.publisherId);
+      OT.publish(this.context.sessionId, this.state.publisherId);
     }
   };
 
@@ -112,7 +112,7 @@ export default class OTPublisher extends React.Component {
   }
 
   componentWillUnmount() {
-    OT.unpublish(this.state.publisherId);
+    OT.unpublish(sessionId, this.state.publisherId);
     removeEventListener('sessionConnected', this.onSessionConnected);
   }
 
