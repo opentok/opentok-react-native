@@ -102,7 +102,7 @@ export default class OTSubscriber extends Component {
     }
   };
   getRtcStatsReport() {
-    OT.getSubscriberRtcStatsReport();
+    OT.getSubscriberRtcStatsReport(this.context.sessionId);
   }
 
   componentWillUnmount() {

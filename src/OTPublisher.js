@@ -108,11 +108,14 @@ export default class OTPublisher extends React.Component {
 
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
-    OT.getPublisherRtcStatsReport(this.state.publisherId);
+    OT.getPublisherRtcStatsReport(
+      this.context.sessionId,
+      this.state.publisherId
+    );
   }
 
   componentWillUnmount() {
-    OT.unpublish(sessionId, this.state.publisherId);
+    OT.unpublish(this.context.sessionId, this.state.publisherId);
     removeEventListener('sessionConnected', this.onSessionConnected);
   }
 

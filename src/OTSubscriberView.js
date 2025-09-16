@@ -25,7 +25,7 @@ export default class OTSubscriberView extends React.Component {
 
   getRtcStatsReport() {
     //NOSONAR - this method is exposed externally
-    OT.getSubscriberRtcStatsReport();
+    OT.getSubscriberRtcStatsReport(this.sessionId);
   }
 
   componentWillUnmount() {
