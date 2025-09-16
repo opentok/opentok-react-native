@@ -77,22 +77,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    npx pod-install
    ```
 
-2. **For React Native versions prior to 0.60**:
-
-   * Add this to your Podfile:
-
-     ```
-     target '<YourProjectName>' do
-         # Pods for <YourProject>
-         pod 'OTXCFramework', '2.30.1'
-     end
-     ```
-   
-   * Run `react-native link opentok-react-native`.
-
-   These steps are not necessary in React Native version 0.60 and later.
-
-3. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
+2. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
 
    ```
    <key>NSCameraUsageDescription</key>
@@ -103,7 +88,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
   When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-4. Register the OpenTok OTRNPublisher and OTRNSubscriber classes. Do this by modifying the AppDelegate implementation.
+3. Register the OpenTok OTRNPublisher and OTRNSubscriber classes. Do this by modifying the AppDelegate implementation.
 
    * If you app has an Objective-C++ AppDelegate file (AppDelegate.mm), add these classes to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
@@ -186,7 +171,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    
    Register the FabricComponentRegistrar.mm file as a build file in XCode.
 
-5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
+4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
    pod 'VonageClientSDKVideoTransformers'
@@ -231,7 +216,7 @@ If you try to archive the app and it fails, please do the following:
 7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.30.1"
+   implementation "com.vonage:client-sdk-video-transformers:2.31.0"
    ```
 
 #### Bintray sunset
