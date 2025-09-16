@@ -117,32 +117,39 @@ RCT_EXPORT_MODULE()
     [impl disableForceMute:sessionId resolve:resolve reject:reject];
 }
 
-- (void)getPublisherRtcStatsReport:(nonnull NSString *)publisherId { 
-      [impl getPublisherRtcStatsReport:publisherId];
+// sessionId required for multi-session
+- (void)getPublisherRtcStatsReport:(nonnull NSString *)sessionId publisherId:(nonnull NSString *)publisherId { 
+    [impl getPublisherRtcStatsReport:sessionId publisherId:publisherId];
 }
 
-- (void)getSubscriberRtcStatsReport { 
-      [impl getSubscriberRtcStatsReport];
+// sessionId required for multi-session
+- (void)getSubscriberRtcStatsReport:(nonnull NSString *)sessionId { 
+    [impl getSubscriberRtcStatsReport:sessionId];
 }
 
-- (void)publish:(nonnull NSString *)publisherId {
-    [impl publish:publisherId];
+// sessionId required for multi-session
+- (void)publish:(nonnull NSString *)sessionId publisherId:(nonnull NSString *)publisherId {
+    [impl publish:sessionId publisherId:publisherId];
 }
 
-- (void)unpublish:(nonnull NSString *)publisherId {
-    [impl unpublish:publisherId];
+// sessionId required for multi-session
+- (void)unpublish:(nonnull NSString *)sessionId publisherId:(nonnull NSString *)publisherId {
+    [impl unpublish:sessionId publisherId:publisherId];
 }
 
-- (void)removeSubscriber:(nonnull NSString *)streamId {
-    [impl removeSubscriber:streamId];
+// sessionId required for multi-session
+- (void)removeSubscriber:(nonnull NSString *)sessionId streamId:(nonnull NSString *)streamId {
+    [impl removeSubscriber:sessionId streamId:streamId];
 }
 
-- (void)setAudioTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    [impl setAudioTransformers:publisherId transformers:transformers];
+// sessionId required for multi-session
+- (void)setAudioTransformers:(nonnull NSString *)sessionId publisherId:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
+    [impl setAudioTransformers:sessionId publisherId:publisherId transformers:transformers];
 }
 
-- (void)setVideoTransformers:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
-    [impl setVideoTransformers:publisherId transformers:transformers];
+// sessionId required for multi-session
+- (void)setVideoTransformers:(nonnull NSString *)sessionId publisherId:(nonnull NSString *)publisherId transformers:(nonnull NSArray *)transformers { 
+    [impl setVideoTransformers:sessionId publisherId:publisherId transformers:transformers];
 }
 
 
