@@ -49,7 +49,7 @@ import React
         let session = OTSession(
             apiKey: apiKey, sessionId: sessionId,
             delegate: sessionDelegateHandler, settings: settings)
-        guard let otSession = session else {
+        guard let session = session else {
             print("[OpentokReactNative] Failed to create OTSession for sessionId: \(sessionId)")
             return
         }
