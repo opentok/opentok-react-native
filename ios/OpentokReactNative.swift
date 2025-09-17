@@ -439,8 +439,12 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     public func sessionDidConnect(_ session: OTSession) {
         OTRN.sharedState.connections.updateValue(
             session.connection!, forKey: session.connection!.connectionId)
+        // Multi-session: resolve promise callback if present
+        if let callback = OTRN.sharedState.sessionConnectCallbacks[session.sessionId] {
+            callback(nil)
+            OTRN.sharedState.sessionConnectCallbacks.removeValue(forKey: session.sessionId)
+        }
         let sessionInfo = EventUtils.prepareJSSessionEventData(session);
-        // Optionally, pass sessionId in event payload if needed for multi-session
         impl?.ot?.emit(onSessionConnected: sessionInfo)
     }
 
@@ -466,7 +470,11 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
 
     public func sessionDidDisconnect(_ session: OTSession) {
         let sessionInfo = EventUtils.prepareJSSessionEventData(session);
-        // Optionally, pass sessionId in event payload if needed for multi-session
+        // Multi-session: resolve promise callback if present
+        if let callback = OTRN.sharedState.sessionDisconnectCallbacks[session.sessionId] {
+            callback(nil)
+            OTRN.sharedState.sessionDisconnectCallbacks.removeValue(forKey: session.sessionId)
+        }
         impl?.ot?.emit(onSessionDisconnected: sessionInfo)
 
         // Cleanup session state for multi-session
