@@ -55,6 +55,12 @@ function App(): React.JSX.Element {
         token={token}
         sessionId={sessionId}
         ref={sessionRef}
+        options={
+          {
+            // connectionEventsSuppressed: false,
+            // enableSinglePeerConnection: true,
+          }
+        }
         eventHandlers={{
           sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
