@@ -92,7 +92,10 @@ export default class OTPublisher extends React.Component {
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
           if (isConnected()) {
-            setTimeout(() => OT.publish(this.state.publisherId), 0);
+            setTimeout(
+              () => OT.publish(this.context.sessionId, this.state.publisherId),
+              0
+            );
           }
           this.setState({
             permissionsGranted: true,
@@ -102,7 +105,10 @@ export default class OTPublisher extends React.Component {
           // this.otrnEventHandler(error);
         });
     } else if (isConnected()) {
-      setTimeout(() => OT.publish(this.state.publisherId), 100);
+      setTimeout(
+        () => OT.publish(this.context.sessionId, this.state.publisherId),
+        100
+      );
     }
   };
 
