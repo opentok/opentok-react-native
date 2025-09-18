@@ -44,7 +44,7 @@ export type SessionOptions = {
   enableStereoOutput?: boolean;
   enableSinglePeerConnection?: boolean;
   sessionMigration?: boolean;
-  iceConfig: IceConfig;
+  iceConfig?: IceConfig;
   ipWhitelist?: boolean;
   isCamera2Capable?: boolean;
   proxyUrl?: string;

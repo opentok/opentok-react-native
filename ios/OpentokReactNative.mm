@@ -43,37 +43,50 @@ RCT_EXPORT_MODULE()
 - (void)initSession:(nonnull NSString *)apiKey
           sessionId:(nonnull NSString *)sessionId
             options:(RN_SessionOptions &)options   {
-  NSMutableDictionary *optionsDict = [NSMutableDictionary dictionary];
-  optionsDict[@"connectionEventsSuppressed"] = @(options.connectionEventsSuppressed().value());
-  optionsDict[@"enableStereoOutput"] = @(options.enableStereoOutput().value());
-  optionsDict[@"enableSinglePeerConnection"] = @(options.enableSinglePeerConnection().value());
-  optionsDict[@"sessionMigration"] = @(options.sessionMigration().value());
-  optionsDict[@"ipWhitelist"] = @(options.ipWhitelist().value());
-  optionsDict[@"proxyUrl"] = options.proxyUrl();
+    NSMutableDictionary *optionsDict = [NSMutableDictionary dictionary];
 
-  NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];
-  iceConfigDict[@"includeServers"] = options.iceConfig().includeServers();
-  iceConfigDict[@"transportPolicy"] = options.iceConfig().transportPolicy();
-  iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig().filterOutLanCandidates());
+    if (options.connectionEventsSuppressed().has_value()) {
+        optionsDict[@"connectionEventsSuppressed"] = @(options.connectionEventsSuppressed().value());
+    }
+    if (options.enableStereoOutput().has_value()) {
+        optionsDict[@"enableStereoOutput"] = @(options.enableStereoOutput().value());
+    }
+    if (options.enableSinglePeerConnection().has_value()) {
+        optionsDict[@"enableSinglePeerConnection"] = @(options.enableSinglePeerConnection().value());
+    }
+    if (options.enableSinglePeerConnection().has_value()) {
+        optionsDict[@"sessionMigration"] = @(options.sessionMigration().value());
+    }
+    if (options.ipWhitelist().has_value()) {
+        optionsDict[@"ipWhitelist"] = @(options.ipWhitelist().value());
+    }
+    optionsDict[@"proxyUrl"] = options.proxyUrl();
+
+    if (options.iceConfig().has_value()) {
+        NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];
+        
+        iceConfigDict[@"includeServers"] = options.iceConfig()->includeServers();
+        iceConfigDict[@"transportPolicy"] = options.iceConfig()->transportPolicy();
+        iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig()->filterOutLanCandidates());
 
     /* TODO -- this breaks the build
-  jsi::Array customServersArray = options.customServers().asObject(runtime).asArray(runtime);
+        jsi::Array customServersArray = options.iceConfig()->customServers().asObject(runtime).asArray(runtime);
+        std::vector<std::string> nativeCustomServers;
+        for (size_t i = 0; i < customServersArray.size(runtime); ++i) {
+            jsi::Value element = customServersArray.getValueAtIndex(runtime, i);
+            NSMutableDictionary *customServersDict = [NSMutableDictionary dictionary];
+            customServersDict[@"urls"] = element.urls().
+            customServersDict[@"username"] = element.username().
+            customServersDict[@"credential"] = element.credential().
+            nativeCustomServers.push_back(customServersDict);
+        }
+        iceConfigDict[@"customServers"] = customServersArray;
+    */
 
-  std::vector<std::string> nativeCustomServers;
-  for (size_t i = 0; i < customServersArray.size(runtime); ++i) {
-     jsi::Value element = customServersArray.getValueAtIndex(runtime, i);
-     NSMutableDictionary *customServersDict = [NSMutableDictionary dictionary];
-     customServersDict[@"urls"] = element.urls().
-     customServersDict[@"username"] = element.username().
-     customServersDict[@"credential"] = element.credential().
-     nativeCustomServers.push_back(customServersDict);
-  }
+        optionsDict[@"iceConfig"] = iceConfigDict;
+    }
 
-  iceConfigDict[@"customServers"] = customServersArray;
-     */
-
-  optionsDict[@"iceConfig"] = iceConfigDict;
-  [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
+    [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
 }
 
 - (void)connect:(nonnull NSString *)sessionId 
