@@ -56,6 +56,7 @@ RCT_EXPORT_MODULE()
   iceConfigDict[@"transportPolicy"] = options.iceConfig().transportPolicy();
   iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig().filterOutLanCandidates());
 
+    /* TODO -- this breaks the build
   jsi::Array customServersArray = options.customServers().asObject(runtime).asArray(runtime);
 
   std::vector<std::string> nativeCustomServers;
@@ -69,6 +70,7 @@ RCT_EXPORT_MODULE()
   }
 
   iceConfigDict[@"customServers"] = customServersArray;
+     */
 
   optionsDict[@"iceConfig"] = iceConfigDict;
   [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
