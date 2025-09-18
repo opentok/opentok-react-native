@@ -64,24 +64,25 @@ RCT_EXPORT_MODULE()
 
     if (options.iceConfig().has_value()) {
         NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];
-        
         iceConfigDict[@"includeServers"] = options.iceConfig()->includeServers();
         iceConfigDict[@"transportPolicy"] = options.iceConfig()->transportPolicy();
         iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig()->filterOutLanCandidates());
 
-    /* TODO -- this breaks the build
-        jsi::Array customServersArray = options.iceConfig()->customServers().asObject(runtime).asArray(runtime);
-        std::vector<std::string> nativeCustomServers;
-        for (size_t i = 0; i < customServersArray.size(runtime); ++i) {
-            jsi::Value element = customServersArray.getValueAtIndex(runtime, i);
-            NSMutableDictionary *customServersDict = [NSMutableDictionary dictionary];
-            customServersDict[@"urls"] = element.urls().
-            customServersDict[@"username"] = element.username().
-            customServersDict[@"credential"] = element.credential().
-            nativeCustomServers.push_back(customServersDict);
+        // Build customServers array
+        NSMutableArray *customServersArray = [NSMutableArray array];
+        const auto &customServers = options.iceConfig()->customServers();
+        for (const auto& server : customServers) {
+            NSMutableDictionary *serverDict = [NSMutableDictionary dictionary];
+                NSMutableArray *urlsArray = [NSMutableArray array];
+                for (auto it = server.urls().begin(); it != server.urls().end(); ++it) {
+                    [urlsArray addObject:*it];
+                }
+                serverDict[@"urls"] = urlsArray;
+                serverDict[@"username"] = server.username();
+                serverDict[@"credential"] = server.credential();
+            [customServersArray addObject:serverDict];
         }
         iceConfigDict[@"customServers"] = customServersArray;
-    */
 
         optionsDict[@"iceConfig"] = iceConfigDict;
     }
