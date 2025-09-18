@@ -30,9 +30,6 @@ import React
         let settings = OTSessionSettings()
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(
             sessionOptions["connectionEventsSuppressed"] as Any)
-        // Note: IceConfig is an additional property not supported at the moment. We need to add a sanitize function
-        // to validate the input from settings.iceConfig.
-        // settings.iceConfig = sessionOptions["iceConfig"];
         settings.proxyURL = Utils.sanitizeStringProperty(
             sessionOptions["proxyUrl"] as Any)
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(
@@ -205,31 +202,6 @@ import React
             reject("ERROR", "Failed to generate issue ID", nil)
         }
     }
-
-    //@objc public func publish(_ publisherId: String,
-    //                         resolve: @escaping RCTPromiseResolveBlock,
-    //                         reject: @escaping RCTPromiseRejectBlock) -> Void {
-    //    var error: OTError?
-    //
-    //    guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-    //        reject("ERROR", "Error publishing. Could not find native publisher instance", nil)
-    //        return
-    //    }
-    //
-    //    guard let otSession = otSession else {
-    //        reject("ERROR", "Error connecting to session. Could not find native session instance", nil)
-    //        return
-    //    }
-    //
-    //    otSession.publish(publisher, error: &error)
-    //
-    //    if let err = error {
-    //        reject("ERROR", err.localizedDescription, err)
-    //    } else {
-    //        resolve(nil)
-    //    }
-    //}
-
     @objc public func publish(_ publisherId: String) {
         var error: OTError?
 

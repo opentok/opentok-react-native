@@ -43,7 +43,34 @@ RCT_EXPORT_MODULE()
 - (void)initSession:(nonnull NSString *)apiKey
           sessionId:(nonnull NSString *)sessionId
             options:(RN_SessionOptions &)options   {
-  NSDictionary *optionsDict = @{};
+  NSMutableDictionary *optionsDict = [NSMutableDictionary dictionary];
+  optionsDict[@"connectionEventsSuppressed"] = @(options.connectionEventsSuppressed().value());
+  optionsDict[@"enableStereoOutput"] = @(options.enableStereoOutput().value());
+  optionsDict[@"enableSinglePeerConnection"] = @(options.enableSinglePeerConnection().value());
+  optionsDict[@"sessionMigration"] = @(options.sessionMigration().value());
+  optionsDict[@"ipWhitelist"] = @(options.ipWhitelist().value());
+  optionsDict[@"proxyUrl"] = options.proxyUrl();
+
+  NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];
+  iceConfigDict[@"includeServers"] = options.iceConfig().includeServers();
+  iceConfigDict[@"transportPolicy"] = options.iceConfig().transportPolicy();
+  iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig().filterOutLanCandidates());
+
+  jsi::Array customServersArray = options.customServers().asObject(runtime).asArray(runtime);
+
+  std::vector<std::string> nativeCustomServers;
+  for (size_t i = 0; i < customServersArray.size(runtime); ++i) {
+     jsi::Value element = customServersArray.getValueAtIndex(runtime, i);
+     NSMutableDictionary *customServersDict = [NSMutableDictionary dictionary];
+     customServersDict[@"urls"] = element.urls().
+     customServersDict[@"username"] = element.username().
+     customServersDict[@"credential"] = element.credential().
+     nativeCustomServers.push_back(customServersDict);
+  }
+
+  iceConfigDict[@"customServers"] = customServersArray;
+
+  optionsDict[@"iceConfig"] = iceConfigDict;
   [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
 }
 
