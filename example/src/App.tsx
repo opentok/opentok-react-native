@@ -53,6 +53,9 @@ function App(): React.JSX.Element {
         token={token}
         sessionId={sessionId}
         ref={sessionRef}
+        options={{
+          // connectionEventsSuppressed: false,
+        }}
         eventHandlers={{
           sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
@@ -119,7 +122,7 @@ function App(): React.JSX.Element {
           connectionCreated: (event: any) => {
             console.log('connectionCreated', event);
             sessionRef.current?.signal({
-              to: event.connection.connectionId,
+              to: event.connectionId,
               data: `wecome to the session, connection ${event.connection.connectionId}`,
               type: 'connectionGreeting',
             });
