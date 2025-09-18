@@ -123,7 +123,7 @@ function App(): React.JSX.Element {
             console.log('connectionCreated', event);
             sessionRef.current?.signal({
               to: event.connectionId,
-              data: `wecome to the session, connection ${event.connection.connectionId}`,
+              data: `wecome to the session, connection ${event.connectionId}`,
               type: 'connectionGreeting',
             });
           },
