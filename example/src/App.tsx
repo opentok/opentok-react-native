@@ -53,9 +53,11 @@ function App(): React.JSX.Element {
         token={token}
         sessionId={sessionId}
         ref={sessionRef}
-        options={{
-          // connectionEventsSuppressed: false,
-        }}
+        options={
+          {
+            // connectionEventsSuppressed: false,
+          }
+        }
         eventHandlers={{
           sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
