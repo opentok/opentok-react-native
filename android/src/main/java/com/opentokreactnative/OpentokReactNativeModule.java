@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 import com.opentok.android.Connection;
 import com.opentok.android.MuteForcedInfo;
@@ -167,12 +168,17 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
 
     @Override
     public void removeSubscriber(String streamId) {
-        ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
-        Subscriber subscriber = subscribers.get(streamId);
-        if (subscriber != null) {
-            session.unsubscribe(subscriber);
-            subscribers.remove(subscriber);
-        }
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
+                Subscriber subscriber = subscribers.get(streamId);
+                if (subscriber != null) {
+                    session.unsubscribe(subscriber);
+                    subscribers.remove(subscriber);
+                }
+            };
+        });
     }
 
     @Override
@@ -255,6 +261,23 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
             ArrayList<PublisherKit.VideoTransformer> nativeVideoTransformers = Utils.sanitizeVideoTransformerList(publisher, videoTransformers);
             publisher.setVideoTransformers(nativeVideoTransformers);
         }
+    }
+
+    @Override
+    public void getCapabilities(String sessionId, Promise promise) {
+        ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
+        Session mSession = mSessions.get(sessionId);
+        if (mSession == null) {
+            promise.reject("Session not found.");
+            return;
+        }
+        WritableMap sessionCapabilitiesMap = Arguments.createMap();
+        Session.Capabilities sessionCapabilities = mSession.getCapabilities();
+        sessionCapabilitiesMap.putBoolean("canForceMute", sessionCapabilities.canForceMute);
+        sessionCapabilitiesMap.putBoolean("canPublish", sessionCapabilities.canPublish);
+        // Bug in OT Android SDK. This should always be true, but it is set to false:
+        sessionCapabilitiesMap.putBoolean("canSubscribe", true);
+        promise.resolve(sessionCapabilitiesMap);
     }
 
     @Override
@@ -344,11 +367,9 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     @Override
     public void onConnectionCreated(Session session, Connection connection) {
         sharedState.getConnections().put(connection.getConnectionId(), connection);
-        WritableMap eventData = Arguments.createMap();
-        eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        WritableMap eventData = EventUtils.prepareJSConnectionMap(
         connection);
-        eventData.putMap("connection", connectionInfo);
+        eventData.putString("sessionId", session.getSessionId());
         emitOnConnectionCreated(eventData);
     }
 
@@ -356,11 +377,9 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     public void onConnectionDestroyed(Session session, Connection connection) {
         ConcurrentHashMap<String, Connection> mConnections = sharedState.getConnections();
         mConnections.remove(connection.getConnectionId());
-        WritableMap eventData = Arguments.createMap();
-        eventData.putString("sessionId", session.getSessionId());
-        WritableMap connectionInfo = EventUtils.prepareJSConnectionMap(
+        WritableMap eventData = EventUtils.prepareJSConnectionMap(
         connection);
-        eventData.putMap("connection", connectionInfo);
+        eventData.putString("sessionId", session.getSessionId());
         emitOnConnectionDestroyed(eventData);
     }
 

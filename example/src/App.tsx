@@ -18,6 +18,10 @@ function App(): React.JSX.Element {
   const [subscribeToStreams, setSubscribeToStreams] =
     React.useState<boolean>(true);
   const [streamProperties, setStreamProperties] = React.useState<Any>({});
+  const [signalProp, setSignalProp] = React.useState<Any>({
+    type: 'greeting2',
+    data: 'initial signal from React Native',
+  });
 
   const sessionRef = useRef<OTSession>(null);
   const subscriberRef = useRef<OTSubscriber>(null);
@@ -49,6 +53,11 @@ function App(): React.JSX.Element {
         token={token}
         sessionId={sessionId}
         ref={sessionRef}
+        options={
+          {
+            // connectionEventsSuppressed: false,
+          }
+        }
         eventHandlers={{
           sessionConnected: (event: any) => {
             console.log('sessionConnected', event);
@@ -56,12 +65,32 @@ function App(): React.JSX.Element {
               type: 'greeting2',
               data: 'hello again from React Native',
             });
+            sessionRef.current
+              ?.reportIssue()
+              .then((id: any) => console.log('reportIssue ID', id))
+              .catch((error: any) => console.log('reportIssue error', error));
+            sessionRef.current
+              ?.getCapabilities()
+              .then((id: any) => console.log('Session.getCapabilities()', id))
+              .catch((error: any) =>
+                console.log('Session.getCapabilities() error', error)
+              );
             setTimeout(() => {
               sessionRef.current?.signal({
                 type: 'internalGreeting',
                 data: 'hello to myself only',
                 to: event.connection.connectionId,
               });
+              setSignalProp({
+                type: 'greeting2',
+                data: 'another signal from React Native (via prop)',
+              });
+              /*
+              sessionRef.current
+                ?.forceMuteAll([])
+                .then(() => console.log('forceMuteAll success'))
+                .catch((e) => console.log('forceMuteAll error', e));
+              */
             }, 1000);
           },
           streamCreated: (event: any) => {
@@ -79,6 +108,14 @@ function App(): React.JSX.Element {
                 audioVolume: 0.1,
               },
             }));
+            /*
+            sessionRef.current
+              ?.forceMuteStream(event.streamId)
+              .then(() =>
+                console.log('forceMuteStream success - stream', event.streamId)
+              )
+              .catch((e) => console.log('forceMuteStream error', e));
+            */
           },
           streamDestroyed: (event: any) =>
             console.log('streamDestroyed', event),
@@ -87,8 +124,8 @@ function App(): React.JSX.Element {
           connectionCreated: (event: any) => {
             console.log('connectionCreated', event);
             sessionRef.current?.signal({
-              to: event.connection.connectionId,
-              data: `wecome to the session, connection ${event.connection.connectionId}`,
+              to: event.connectionId,
+              data: `wecome to the session, connection ${event.connectionId}`,
               type: 'connectionGreeting',
             });
           },
@@ -102,10 +139,7 @@ function App(): React.JSX.Element {
           streamPropertyChanged: (event: any) =>
             console.log('streamPropertyChanged event', event),
         }}
-        signal={{
-          type: 'greeting2',
-          data: 'initial signal from React Native',
-        }}
+        signal={signalProp}
         style={styles.session}
       >
         {publishStream ? (
@@ -132,6 +166,17 @@ function App(): React.JSX.Element {
                 setTimeout(() => {
                   publisherRef.current?.getRtcStatsReport();
                 }, 4000);
+                /*
+                sessionRef.current
+                  ?.forceMuteAll([event.streamId])
+                  .then(() =>
+                    console.log(
+                      'forcemuteAll success - excluded stream',
+                      event.streamId
+                    )
+                  )
+                  .catch((e) => console.log('forcemuteAll error', e));
+                */
               },
               streamDestroyed: (event: any) =>
                 console.log('pub streamDestroyed', event),
@@ -142,7 +187,7 @@ function App(): React.JSX.Element {
                 logAllEvents && console.log('pub audioNetworkStats', event);
               },
               rtcStatsReport: (event: any) => {
-                console.log('pub rtcStatsReport', event);
+                logAllEvents && console.log('pub rtcStatsReport', event);
               },
               videoDisabled: (event: any) => {
                 console.log('pub videoDisabled', event);
@@ -197,7 +242,7 @@ function App(): React.JSX.Element {
                 console.log('sub error', event);
               },
               rtcStatsReport: (event: any) => {
-                console.log('sub rtcStatsReport', event);
+                logAllEvents && console.log('sub rtcStatsReport', event);
               },
               subscriberConnected: (event: any) => {
                 console.log('subscriberConnected', event);

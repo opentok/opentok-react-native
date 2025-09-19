@@ -14,8 +14,10 @@ export type Connection = {
 };
 
 export type ConnectionEvent = {
+  creationTime: string;
+  data: string;
+  connectionId: string;
   sessionId: string;
-  connection: Connection;
 };
 
 export type EmptyEvent = {};
@@ -41,7 +43,7 @@ export type SessionOptions = {
   enableStereoOutput?: boolean;
   enableSinglePeerConnection?: boolean;
   sessionMigration?: boolean;
-  iceConfig: IceConfig;
+  iceConfig?: IceConfig;
   ipWhitelist?: boolean;
   isCamera2Capable?: boolean;
   proxyUrl?: string;
@@ -57,7 +59,9 @@ export type SessionConnectEvent = {
   };
 };
 
-export type SessionDisconnectEvent = Stream;
+export type SessionDisconnectEvent = {
+  sessionId: string;
+};
 
 export type Stream = {
   name: string;
@@ -110,8 +114,8 @@ export interface Spec extends TurboModule {
   readonly onConnectionCreated: EventEmitter<ConnectionEvent>;
   readonly onConnectionDestroyed: EventEmitter<ConnectionEvent>;
   readonly onMuteForced: EventEmitter<MuteForcedEvent>;
-  readonly onSessionConnected: EventEmitter<ConnectionEvent>;
-  readonly onSessionDisconnected: EventEmitter<ConnectionEvent>;
+  readonly onSessionConnected: EventEmitter<SessionConnectEvent>;
+  readonly onSessionDisconnected: EventEmitter<SessionDisconnectEvent>;
   readonly onSessionReconnecting: EventEmitter<EmptyEvent>;
   readonly onSessionReconnected: EventEmitter<EmptyEvent>;
   readonly onStreamCreated: EventEmitter<StreamEvent>;
@@ -147,6 +151,13 @@ export interface Spec extends TurboModule {
   removeSubscriber(streamId: string): void;
   sendSignal(sessionId: string, type: string, data: string, to: string): void;
   setEncryptionSecret(sessionId: string, secret: string): Promise<void>;
+  getCapabilities(sessionId: string): Promise<
+    Array<{
+      canPublish: boolean;
+      canSubscribe: boolean;
+      canForceMute: boolean;
+    }>
+  >;
   reportIssue(sessionId: string): Promise<string>;
   forceMuteAll(
     sessionId: string,

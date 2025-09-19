@@ -30,9 +30,6 @@ import React
         let settings = OTSessionSettings()
         settings.connectionEventsSuppressed = Utils.sanitizeBooleanProperty(
             sessionOptions["connectionEventsSuppressed"] as Any)
-        // Note: IceConfig is an additional property not supported at the moment. We need to add a sanitize function
-        // to validate the input from settings.iceConfig.
-        // settings.iceConfig = sessionOptions["iceConfig"];
         settings.proxyURL = Utils.sanitizeStringProperty(
             sessionOptions["proxyUrl"] as Any)
         settings.ipWhitelist = Utils.sanitizeBooleanProperty(
@@ -163,6 +160,26 @@ import React
         }
     }
 
+    @objc public func getCapabilities(
+        _ sessionId: String,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let session = OTRN.sharedState.sessions[sessionId] else {
+            reject(
+                "ERROR",
+                "Error reporting issue. Could not find native session instance.",
+                nil)
+            return
+        }
+        var sessionCapabilities: Dictionary<String, Any> = [:];
+        sessionCapabilities["canPublish"] = session.capabilities?.canPublish;
+        // Bug in OT iOS SDK. This is set to false, but it should be true:
+        sessionCapabilities["canSubscribe"] = true;
+        sessionCapabilities["canForceMute"] = session.capabilities?.canForceMute;
+        resolve([sessionCapabilities]);
+    }
+
     @objc public func reportIssue(
         _ sessionId: String,
         resolve: @escaping RCTPromiseResolveBlock,
@@ -185,31 +202,6 @@ import React
             reject("ERROR", "Failed to generate issue ID", nil)
         }
     }
-
-    //@objc public func publish(_ publisherId: String,
-    //                         resolve: @escaping RCTPromiseResolveBlock,
-    //                         reject: @escaping RCTPromiseRejectBlock) -> Void {
-    //    var error: OTError?
-    //
-    //    guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-    //        reject("ERROR", "Error publishing. Could not find native publisher instance", nil)
-    //        return
-    //    }
-    //
-    //    guard let otSession = otSession else {
-    //        reject("ERROR", "Error connecting to session. Could not find native session instance", nil)
-    //        return
-    //    }
-    //
-    //    otSession.publish(publisher, error: &error)
-    //
-    //    if let err = error {
-    //        reject("ERROR", err.localizedDescription, err)
-    //    } else {
-    //        resolve(nil)
-    //    }
-    //}
-
     @objc public func publish(_ publisherId: String) {
         var error: OTError?
 
@@ -483,7 +475,8 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     ) {
         OTRN.sharedState.connections.updateValue(
             connection, forKey: connection.connectionId)
-        let connectionInfo = EventUtils.prepareJSSessionEventData(session)
+        var connectionInfo = EventUtils.prepareJSConnectionEventData(connection)
+        connectionInfo["sessionId"] = session.sessionId;
         impl?.ot?.emit(onConnectionCreated: connectionInfo)
     }
 
@@ -492,7 +485,8 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
     ) {
         OTRN.sharedState.connections.removeValue(
             forKey: connection.connectionId)
-        let connectionInfo = EventUtils.prepareJSSessionEventData(session)
+        var connectionInfo = EventUtils.prepareJSConnectionEventData(connection)
+        connectionInfo["sessionId"] = session.sessionId;
         impl?.ot?.emit(onConnectionDestroyed: connectionInfo)
     }
     public func session(_ session: OTSession, receivedSignalType type: String?, from connection: OTConnection?, with string: String?) {
