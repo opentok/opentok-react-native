@@ -14,10 +14,6 @@
 
   If neither property is set, the `default` preset is used.
 
-# 2.31.0-beta.0 (July 2025)
-
-- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
-
 # 2.30.2 (May 2025)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.30.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).

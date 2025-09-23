@@ -8,45 +8,17 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version is a beta build of the OpenTok React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Beta version notes") for important details on using this beta version.
+**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This Beta version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
 
-## Beta version notes
+Be sure to read the next section ("Beta version notes") for important details on using this beta version.
 
-This Beta version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
+This version supports the same API as the previous version. And it adds some new API enhancements. 
 
-This beta pre-release version is not intended for use in final production apps.
-
-### Registering the OpenTok packages in your application
+The only difference from previous versions is that you will need to use a version of React Native that supports the new architecture (0.76+) and you will need to registering the OpenTok packages in your application
 
 For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
 
 For iOS, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 4 of the "iOS Installation" section below.
-
-### Beta version release notes
-
-#### version 2.31.0-beta.1
-
-**Improved class and package names.** This version changes the names of the native classes and packages. These names are more concise. 
-
-In the iOS AppDelegate, import the `OTRNPublisherComponentView.h` and `OTSubscriberViewNativeComponentView.h` headers (previously `OTPublisherViewNativeComponentView.h` and `OTRNSubscriberComponentView.h`) and register the following components:
-
-* `OTRNPublisher` (previously named `OTPublisherViewNative` in beta.0)
-* `OTRNSubscriber` (previously named `OTSubscriberViewNative` in beta.0)
-
-In the Android MainApplication file, register the following packages:
-
-* `OTRNPublisherPackage` (previously named `OTPublisherViewNativePackage` in beta.0)
-* `OTRNSubscriberPackage` (previously named `OTSubscriberViewNativePackage` in beta.0)
-* `OpentokReactNativePackage` (same name as in beta.0)
-
-For details, see the [iOS Installation](#ios-installation) and [Android Installation](#android-installation) sections below.
-
-### Known issues
-
-The following are known issues in this beta version:
-
-* Subscriber video freezes frequently when using VP9 or H264.
-* `otrnError` events are missing.
 
 ## Prerequisites
 
