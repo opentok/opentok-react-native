@@ -43,8 +43,51 @@ RCT_EXPORT_MODULE()
 - (void)initSession:(nonnull NSString *)apiKey
           sessionId:(nonnull NSString *)sessionId
             options:(RN_SessionOptions &)options   {
-  NSDictionary *optionsDict = @{};
-  [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
+    NSMutableDictionary *optionsDict = [NSMutableDictionary dictionary];
+
+    if (options.connectionEventsSuppressed().has_value()) {
+        optionsDict[@"connectionEventsSuppressed"] = @(options.connectionEventsSuppressed().value());
+    }
+    if (options.enableStereoOutput().has_value()) {
+        optionsDict[@"enableStereoOutput"] = @(options.enableStereoOutput().value());
+    }
+    if (options.enableSinglePeerConnection().has_value()) {
+        optionsDict[@"enableSinglePeerConnection"] = @(options.enableSinglePeerConnection().value());
+    }
+    if (options.enableSinglePeerConnection().has_value()) {
+        optionsDict[@"sessionMigration"] = @(options.sessionMigration().value());
+    }
+    if (options.ipWhitelist().has_value()) {
+        optionsDict[@"ipWhitelist"] = @(options.ipWhitelist().value());
+    }
+    optionsDict[@"proxyUrl"] = options.proxyUrl();
+
+    if (options.iceConfig().has_value()) {
+        NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];
+        iceConfigDict[@"includeServers"] = options.iceConfig()->includeServers();
+        iceConfigDict[@"transportPolicy"] = options.iceConfig()->transportPolicy();
+        iceConfigDict[@"filterOutLanCandidates"] = @(options.iceConfig()->filterOutLanCandidates());
+
+        // Build customServers array
+        NSMutableArray *customServersArray = [NSMutableArray array];
+        const auto &customServers = options.iceConfig()->customServers();
+        for (const auto& server : customServers) {
+            NSMutableDictionary *serverDict = [NSMutableDictionary dictionary];
+                NSMutableArray *urlsArray = [NSMutableArray array];
+                for (auto it = server.urls().begin(); it != server.urls().end(); ++it) {
+                    [urlsArray addObject:*it];
+                }
+                serverDict[@"urls"] = urlsArray;
+                serverDict[@"username"] = server.username();
+                serverDict[@"credential"] = server.credential();
+            [customServersArray addObject:serverDict];
+        }
+        iceConfigDict[@"customServers"] = customServersArray;
+
+        optionsDict[@"iceConfig"] = iceConfigDict;
+    }
+
+    [impl initSession:apiKey sessionId:sessionId sessionOptions: optionsDict];
 }
 
 - (void)connect:(nonnull NSString *)sessionId 
