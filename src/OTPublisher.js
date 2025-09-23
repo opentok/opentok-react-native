@@ -91,7 +91,7 @@ export default class OTPublisher extends React.Component {
       const isScreenSharing = videoSource === 'screen';
       checkAndroidPermissions(audioTrack, videoTrack, isScreenSharing)
         .then(() => {
-          if (isConnected()) {
+          if (this.context && isConnected(this.context.sessionId)) {
             setTimeout(
               () => OT.publish(this.context.sessionId, this.state.publisherId),
               0
@@ -104,7 +104,7 @@ export default class OTPublisher extends React.Component {
         .catch((error) => {
           // this.otrnEventHandler(error);
         });
-    } else if (isConnected()) {
+    } else if (this.context && isConnected(this.context.sessionId)) {
       setTimeout(
         () => OT.publish(this.context.sessionId, this.state.publisherId),
         100
@@ -122,7 +122,11 @@ export default class OTPublisher extends React.Component {
 
   componentWillUnmount() {
     OT.unpublish(this.context.sessionId, this.state.publisherId);
-    removeEventListener('sessionConnected', this.onSessionConnected);
+    removeEventListener(
+      this.context.sessionId,
+      'sessionConnected',
+      this.onSessionConnected
+    );
   }
 
   getPrePermissionViewStyle = (props) => ({
@@ -139,11 +143,19 @@ export default class OTPublisher extends React.Component {
           this.props.eventHandlers?.error?.(event.nativeEvent);
         }}
         onStreamCreated={(event) => {
-          dispatchEvent('publisherStreamCreated', event.nativeEvent);
+          dispatchEvent(
+            this.context.sessionId,
+            'publisherStreamCreated',
+            event.nativeEvent
+          );
           this.props.eventHandlers?.streamCreated?.(event.nativeEvent);
         }}
         onStreamDestroyed={(event) => {
-          dispatchEvent('publisherStreamDestroyed', event);
+          dispatchEvent(
+            this.context.sessionId,
+            'publisherStreamDestroyed',
+            event
+          );
           this.props.eventHandlers?.streamDestroyed?.(event.nativeEvent);
         }}
         onAudioLevel={(event) => {

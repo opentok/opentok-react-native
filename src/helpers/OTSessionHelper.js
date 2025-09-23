@@ -12,68 +12,76 @@ const validateObject = (value) => (isObject(value) ? value : {});
 
 const validateArray = (value) => (isArray(value) ? value : []);
 
+// These objects will have key-value pairs, with the key
+// being a session ID (e.g., eventHandlers[sessionId]):
 const eventHandlers = {};
 
-let streams = [];
+let streams = {};
 
-let publisherStream;
+let publisherStreams = {};
 
-let connected = false;
+let connected = {};
 
-const setIsConnected = (value) => {
-  connected = value;
+const setIsConnected = (sessionId, value) => {
+  connected[sessionId] = value;
 };
 
-const addStream = (streamId) => {
-  if (!streams.includes(streamId)) {
-    streams.push(streamId);
+const addStream = (sessionId, streamId) => {
+  if (streams[sessionId] && !streams[sessionId].includes(streamId)) {
+    streams[sessionId].push(streamId);
   }
 };
 
-const removeStream = (streamId) => {
-  const index = streams.findIndex((obj) => obj === streamId);
+const removeStream = (sessionId, streamId) => {
+  if (!streams[sessionId]) return;
+  const index = streams[sessionId].findIndex((obj) => obj === streamId);
   if (index !== -1) {
-    streams.splice(index, 1);
+    streams[sessionId].splice(index, 1);
   }
 };
 
-const clearStreams = () => {
-  streams = [];
+const clearStreams = (sessionId) => {
+  streams[sessionId] = [];
 };
 
-const getStreams = () => streams;
+const getStreams = (sessionId) => streams[sessionId] || [];
 
-const getPublisherStream = () => publisherStream;
+const getPublisherStream = (sessionId) => publisherStreams[sessionId];
 
-const isConnected = () => connected;
+const isConnected = (sessionId) => connected[sessionId];
 
-const dispatchEvent = (type, event) => {
-  const listeners = eventHandlers[type];
+const dispatchEvent = (sessionId, type, event) => {
+  if (!eventHandlers[sessionId]) {
+    return;
+  }
+  const listeners = eventHandlers[sessionId][type];
   if (listeners) {
     listeners.forEach((listener) => {
       listener(event);
     });
   }
   if (type === 'publisherStreamCreated') {
-    publisherStream = event.streamId;
+    publisherStreams[sessionId] = event.streamId;
   }
   if (type === 'publisherStreamDestroyed') {
-    publisherStream = undefined;
+    delete publisherStreams[sessionId];
   }
 };
 
-const addEventListener = (type, listener) => {
-  if (!eventHandlers[type]) {
-    eventHandlers[type] = [listener];
+const addEventListener = (sessionId, type, listener) => {
+  if (!eventHandlers[sessionId]) {
+    eventHandlers[sessionId] = {};
+  }
+  if (!eventHandlers[sessionId][type]) {
+    eventHandlers[sessionId][type] = [listener];
   } else {
-    eventHandlers[type].push(listener);
+    eventHandlers[sessionId][type].push(listener);
   }
 };
 
-const removeEventListener = (type, listener) => {
-  if (!eventHandlers[type]) {
-    const newArray = eventHandlers[type].filter((el) => el !== listener);
-    eventHandlers[type] = newArray;
+const removeEventListener = (sessionId, type, listener) => {
+  if (eventHandlers[sessionId] && eventHandlers[sessionId][type]) {
+    delete eventHandlers[sessionId][type];
   }
 };
 

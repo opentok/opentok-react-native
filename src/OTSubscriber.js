@@ -24,8 +24,8 @@ export default class OTSubscriber extends Component {
 
   constructor(props, context) {
     super(props, context);
-    let initialStreams = getStreams();
-    let initialPublisherStream = getPublisherStream();
+    let initialStreams = getStreams(this.context.sessionId);
+    let initialPublisherStream = getPublisherStream(this.context.sessionId);
     if (props.subscribeToSelf && initialPublisherStream) {
       initialStreams.push(initialPublisherStream);
     }
@@ -41,8 +41,13 @@ export default class OTSubscriber extends Component {
   }
 
   initComponent = () => {
-    addEventListener('streamCreated', this.streamCreatedHandler);
     addEventListener(
+      this.context.sessionId,
+      'streamCreated',
+      this.streamCreatedHandler
+    );
+    addEventListener(
+      this.context.sessionId,
       'publisherStreamCreated',
       this.publisherStreamCreatedHandler
     );
@@ -50,8 +55,16 @@ export default class OTSubscriber extends Component {
       'publisherStreamDestroyed',
       this.publisherStreamDestroyedHandler
     );
-    addEventListener('streamDestroyed', this.streamDestroyedHandler);
-    addEventListener('subscriberConnected', this.subscriberConnectedHandler);
+    addEventListener(
+      this.context.sessionId,
+      'streamDestroyed',
+      this.streamDestroyedHandler
+    );
+    addEventListener(
+      this.context.sessionId,
+      'subscriberConnected',
+      this.subscriberConnectedHandler
+    );
   };
 
   componentDidUpdate() {
@@ -108,15 +121,25 @@ export default class OTSubscriber extends Component {
   componentWillUnmount() {
     removeEventListener('streamCreated', this.streamCreatedHandler);
     removeEventListener(
+      this.context.sessionId,
       'publisherStreamCreated',
       this.publisherStreamCreatedHandler
     );
     removeEventListener(
+      this.context.sessionId,
       'publisherStreamDestroyed',
       this.publisherStreamDestroyedHandler
     );
-    removeEventListener('streamDestroyed', this.streamDestroyedHandler);
-    removeEventListener('subscriberConnected', this.subscriberConnectedHandler);
+    removeEventListener(
+      this.context.sessionId,
+      'streamDestroyed',
+      this.streamDestroyedHandler
+    );
+    removeEventListener(
+      this.context.sessionId,
+      'subscriberConnected',
+      this.subscriberConnectedHandler
+    );
   }
 
   render() {

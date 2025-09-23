@@ -32,9 +32,9 @@ export default class OTSession extends Component {
     OT.onSessionConnected((event) => {
       if (event.sessionId !== sessionId) return;
       this.connectionId = event.connectionId;
-      setIsConnected(true);
+      setIsConnected(sessionId, true);
       this.eventHandlers?.sessionConnected?.(event);
-      dispatchEvent('sessionConnected', event);
+      dispatchEvent(sessionId, 'sessionConnected', event);
       if (Object.keys(this.props.signal).length > 0) {
         this.signal(this.props.signal);
       }
@@ -51,16 +51,16 @@ export default class OTSession extends Component {
       if (event.sessionId !== sessionId) return;
       this.eventHandlers?.streamCreated?.(event);
       if (event.connectionId !== this.connectionId) {
-        addStream(event.streamId);
+        addStream(sessionId, event.streamId);
       }
-      dispatchEvent('streamCreated', event);
+      dispatchEvent(sessionId, 'streamCreated', event);
     });
 
     OT.onStreamDestroyed((event) => {
       if (event.sessionId !== sessionId) return;
       this.eventHandlers?.streamDestroyed?.(event);
-      removeStream(event.streamId);
-      dispatchEvent('streamDestroyed', event);
+      removeStream(sessionId, event.streamId);
+      dispatchEvent(sessionId, 'streamDestroyed', event);
     });
 
     OT.onSignalReceived((event) => {
@@ -181,7 +181,7 @@ export default class OTSession extends Component {
 
   componentWillUnmount() {
     this.disconnectSession(this.props.sessionId);
-    clearStreams();
+    clearStreams(this.props.sessionId);
   }
 
   render() {
