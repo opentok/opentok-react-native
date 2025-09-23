@@ -8,9 +8,7 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This Beta version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
-
-Be sure to read the next section ("Beta version notes") for important details on using this beta version.
+**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
 
 This version supports the same API as the previous version. And it adds some new API enhancements. 
 
@@ -36,17 +34,18 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 1. In your terminal, change into your React Native project's directory.
 
-2. Add the beta versioin of the library using `npm` or `yarn`:
+2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native@2.31.0-beta.0`
-  * `yarn add opentok-react-native@2.31.0-beta.0`
+  * `npm install opentok-react-native0`
+  * `yarn add opentok-react-native`
 
 ### iOS Installation
 
 1. Install the iOS pods:
 
    ```
-   npx pod-install
+   cd ios;
+   bundle exec pod install
    ```
 
 2. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
