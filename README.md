@@ -8,45 +8,15 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version is a beta build of the OpenTok React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Beta version notes") for important details on using this beta version.
+**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
 
-## Beta version notes
+This version supports the same API as the previous version. And it adds some new API enhancements. 
 
-This Beta version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
-
-This beta pre-release version is not intended for use in final production apps.
-
-### Registering the OpenTok packages in your application
+The only difference from previous versions is that you will need to use a version of React Native that supports the new architecture (0.76+) and you will need to registering the OpenTok packages in your application
 
 For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
 
 For iOS, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 4 of the "iOS Installation" section below.
-
-### Beta version release notes
-
-#### version 2.31.0-beta.1
-
-**Improved class and package names.** This version changes the names of the native classes and packages. These names are more concise. 
-
-In the iOS AppDelegate, import the `OTRNPublisherComponentView.h` and `OTSubscriberViewNativeComponentView.h` headers (previously `OTPublisherViewNativeComponentView.h` and `OTRNSubscriberComponentView.h`) and register the following components:
-
-* `OTRNPublisher` (previously named `OTPublisherViewNative` in beta.0)
-* `OTRNSubscriber` (previously named `OTSubscriberViewNative` in beta.0)
-
-In the Android MainApplication file, register the following packages:
-
-* `OTRNPublisherPackage` (previously named `OTPublisherViewNativePackage` in beta.0)
-* `OTRNSubscriberPackage` (previously named `OTSubscriberViewNativePackage` in beta.0)
-* `OpentokReactNativePackage` (same name as in beta.0)
-
-For details, see the [iOS Installation](#ios-installation) and [Android Installation](#android-installation) sections below.
-
-### Known issues
-
-The following are known issues in this beta version:
-
-* Subscriber video freezes frequently when using VP9 or H264.
-* `otrnError` events are missing.
 
 ## Prerequisites
 
@@ -64,35 +34,21 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 1. In your terminal, change into your React Native project's directory.
 
-2. Add the beta versioin of the library using `npm` or `yarn`:
+2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native@2.31.0-beta.0`
-  * `yarn add opentok-react-native@2.31.0-beta.0`
+  * `npm install opentok-react-native0`
+  * `yarn add opentok-react-native`
 
 ### iOS Installation
 
 1. Install the iOS pods:
 
    ```
-   npx pod-install
+   cd ios;
+   bundle exec pod install
    ```
 
-2. **For React Native versions prior to 0.60**:
-
-   * Add this to your Podfile:
-
-     ```
-     target '<YourProjectName>' do
-         # Pods for <YourProject>
-         pod 'OTXCFramework', '2.30.1'
-     end
-     ```
-   
-   * Run `react-native link opentok-react-native`.
-
-   These steps are not necessary in React Native version 0.60 and later.
-
-3. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
+2. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
 
    ```
    <key>NSCameraUsageDescription</key>
@@ -103,7 +59,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
   When you create an archive of your app, the [privacy manifest settings required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements) are added automatically with this version of the OpenTok React Native SDK.
 
-4. Register the OpenTok OTRNPublisher and OTRNSubscriber classes. Do this by modifying the AppDelegate implementation.
+3. Register the OpenTok OTRNPublisher and OTRNSubscriber classes. Do this by modifying the AppDelegate implementation.
 
    * If you app has an Objective-C++ AppDelegate file (AppDelegate.mm), add these classes to the list of packages in the NSMutableDictionary returned by the `thirdPartyFabricComponents()` function:
 
@@ -186,7 +142,7 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
    
    Register the FabricComponentRegistrar.mm file as a build file in XCode.
 
-5. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
+4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
    pod 'VonageClientSDKVideoTransformers'
@@ -231,7 +187,7 @@ If you try to archive the app and it fails, please do the following:
 7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.30.1"
+   implementation "com.vonage:client-sdk-video-transformers:2.31.0"
    ```
 
 #### Bintray sunset

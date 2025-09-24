@@ -1,5 +1,7 @@
 # 2.31.0 (September 2025)
 
+- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.31.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+
 - [Update]: This version adds a new `OTSession.forceDisconnect()` method for forcing clients to disconnect.
 
 - [Update]: This version adds an `allowAudioCaptureWhileMuted` property of the OTPublisher `properties` prop. Set this to `true` to have the publisher receive audio level updates when not publishing audio.
@@ -10,11 +12,7 @@
 
   * `maxVideoBitrate` -- To set the maximum bitrate value (instead of a preset), set the this property to a value between 5,000 and 10,000,000 (in bits per second).
 
-If neither property is set, the `default` preset is used.
-
-# 2.31.0-beta.0 (July 2025)
-
-- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
+  If neither property is set, the `default` preset is used.
 
 # 2.30.2 (May 2025)
 

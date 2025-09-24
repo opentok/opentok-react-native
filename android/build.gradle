@@ -101,7 +101,7 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android:0.78.0"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.opentok.android:opentok-android-sdk:2.30.1'
+  implementation 'com.opentok.android:opentok-android-sdk:2.31.0'
 }
 
 if (isNewArchitectureEnabled()) {

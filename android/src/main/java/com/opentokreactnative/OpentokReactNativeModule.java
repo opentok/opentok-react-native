@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 import com.opentok.android.Connection;
 import com.opentok.android.MuteForcedInfo;
@@ -167,12 +168,17 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
 
     @Override
     public void removeSubscriber(String streamId) {
-        ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
-        Subscriber subscriber = subscribers.get(streamId);
-        if (subscriber != null) {
-            session.unsubscribe(subscriber);
-            subscribers.remove(subscriber);
-        }
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ConcurrentHashMap<String, Subscriber> subscribers = sharedState.getSubscribers();
+                Subscriber subscriber = subscribers.get(streamId);
+                if (subscriber != null) {
+                    session.unsubscribe(subscriber);
+                    subscribers.remove(subscriber);
+                }
+            };
+        });
     }
 
     @Override
