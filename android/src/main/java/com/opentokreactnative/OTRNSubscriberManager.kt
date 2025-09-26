@@ -2,7 +2,6 @@ package com.opentokreactnative
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
-import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
@@ -75,14 +74,6 @@ class OTRNSubscriberManager(context: ReactApplicationContext) :
         value: String?
     ) {
         view?.setPreferredResolution(value)
-    }
-
-    override fun updateProperties(
-        viewToUpdate: OTRNSubscriber,
-        props: ReactStylesDiffMap?
-    ) {
-        super.updateProperties(viewToUpdate, props)
-        viewToUpdate.updateProperties(props)
     }
 
     companion object {

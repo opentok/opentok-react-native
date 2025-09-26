@@ -10,7 +10,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.viewmanagers.OTRNPublisherManagerInterface;
 import com.facebook.react.viewmanagers.OTRNPublisherManagerDelegate;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.ReactStylesDiffMap
 
 
 @ReactModule(name = OTRNPublisherManager.REACT_CLASS)
@@ -32,15 +31,6 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
 
     override fun getNativeProps(): Map<String?, String?>? {
         return super.getNativeProps()
-    }
-
-    override fun updateProperties(
-        viewToUpdate: OTRNPublisher,
-        props: ReactStylesDiffMap?
-    ) {
-        super.updateProperties(viewToUpdate, props)
-        Log.d("OTRNPublisherManager", "updateProperties: $props")
-        viewToUpdate.updateProperties(props)
     }
 
     override fun setSessionId(

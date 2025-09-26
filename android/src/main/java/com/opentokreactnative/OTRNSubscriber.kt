@@ -7,7 +7,6 @@ import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.ReactContext
-import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
 import com.opentok.android.BaseVideoRenderer
@@ -56,12 +55,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         defStyleAttr
     ) {
         configureComponent()
-    }
-
-    fun updateProperties(props: ReactStylesDiffMap?) {
-        if (this.props == null) {
-            this.props = props?.toMap()
-        }
     }
 
     override fun onAttachedToWindow() {

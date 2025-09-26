@@ -8,7 +8,6 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableArray
-import com.facebook.react.uimanager.ReactStylesDiffMap
 
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.events.Event
@@ -51,13 +50,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         defStyleAttr
     ) {
         configureComponent()
-    }
-
-    fun updateProperties(props: ReactStylesDiffMap?) {
-        if (this.props == null) {
-            this.props = props?.toMap()
-            return
-        }
     }
 
     override fun onAttachedToWindow() {
