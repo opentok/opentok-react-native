@@ -5,7 +5,6 @@ import React
 @objc public class OpentokReactNativeImpl: NSObject {
 
     var ot: OpentokReactNative?
-    fileprivate var sessionDelegateHandler: SessionDelegateHandler?
 
     @objc public init(ot: OpentokReactNative) {
         self.ot = ot
@@ -45,12 +44,15 @@ import React
             sessionOptions["enableSinglePeerConnection"] as Any)
         settings.sessionMigration = Utils.sanitizeBooleanProperty(
             sessionOptions["sessionMigration"] as Any)
-        sessionDelegateHandler = SessionDelegateHandler(impl: self)
+        let sessionDelegateHandler = SessionDelegateHandler(impl: self)
+
+        OTRN.sharedState.sessionDelegateHandlers[sessionId] = sessionDelegateHandler
         let session = OTSession(
             apiKey: apiKey, sessionId: sessionId,
             delegate: sessionDelegateHandler, settings: settings)
         guard let session = session else {
             print("[OpentokReactNative] Failed to create OTSession for sessionId: \(sessionId)")
+            OTRN.sharedState.sessionDelegateHandlers.removeValue(forKey: sessionId)
             return
         }
         OTRN.sharedState.sessions.updateValue(session, forKey: sessionId)
@@ -70,7 +72,7 @@ import React
                 nil)
             return
         }
-
+        
         session.connect(withToken: token, error: &error)
         if let err = error {
             reject("ERROR", err.localizedDescription, err)
@@ -477,10 +479,9 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
         }
         impl?.ot?.emit(onSessionDisconnected: sessionInfo)
 
-        // Cleanup session state for multi-session
         session.delegate = nil
         OTRN.sharedState.sessions.removeValue(forKey: session.sessionId)
-        // Optionally, clean up session-specific publishers, subscribers, streams, etc. if needed
+        OTRN.sharedState.sessionDelegateHandlers.removeValue(forKey: session.sessionId)
     }
 
 

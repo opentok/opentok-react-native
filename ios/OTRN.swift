@@ -24,6 +24,7 @@ class OTRN : NSObject {
   var isPublishing = [String: Bool]()
   var streamObservers = [String: [NSKeyValueObservation]]()
   var connections = [String: OTConnection]()
+  var sessionDelegateHandlers = [String: AnyObject]()
   override init() {
     super.init()
   }
