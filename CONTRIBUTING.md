@@ -33,13 +33,18 @@ If the contribution doesn't meet these criteria, a maintainer will discuss it wi
 2. Clone/fetch your fork to your local development machine.
 3. Create a new branch (e.g. `issue-12`, `feat.add_foo`, etc) and check it out.
 4. Make your changes and commit them.
-5. Test your changes with the [sample applications](https://github.com/opentok/opentok-react-native-samples). (you can use `npm pack` and `npm install` to install a local version of the library.)
-6. Push your new branch to your fork. (e.g. `git push myname issue-12`)
+5. Test your changes with the example app in the source code. Run `yarn example android` and `yarn example ios`. You may want to modify the sample app (in the `example/` directory).
+
+   You can also [sample applications](https://github.com/opentok/opentok-react-native-samples). (You can use `yarn pack` and `yarn install` to install a local version of the library.)
+
+6. Push your new branch to your fork (e.g. `git push myname issue-12`).
 7. Open a Pull Request from your new branch to the original fork's `master` branch.
+
+Note that this version of the library is built with the React Native [new architecture. For technical details, see the [iOS readme file](ios/README.md).
 
 ## Development Guidelines
 
 1. Follow [installation guidelines](README.md).
-2. Modify JS components in `src/js/`.
+2. Modify JS components in `src/`.
 3. Modify iOS components in `ios/`.
 4. Modify Android components in `android/`.
