@@ -4,7 +4,7 @@
 #import <OpentokReactNative/EventEmitters.h>
 #import <OpentokReactNative/Props.h>
 #import <OpentokReactNative/RCTComponentViewHelpers.h>
-#import <OpentokReactNative/RNOpentokReactNativeSpec.h>
+#import <OpentokReactNative/OpentokReactNative.h>
 #import <React/RCTConversions.h>
 #import <React/RCTViewComponentView.h>
 #import <OpentokReactNative-Swift.h>

@@ -11,6 +11,13 @@ module.exports = function (api) {
     };
   }
 
+  // For main tests, use React Native preset
+  if (isTest) {
+    return {
+      presets: ['module:@react-native/babel-preset'],
+    };
+  }
+
   return {
     overrides: [
       {

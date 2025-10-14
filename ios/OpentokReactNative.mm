@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <OpentokReactNative/RNOpentokReactNativeSpec.h>
+#import <OpentokReactNative/OpentokReactNative.h>
 #import <OpentokReactNative-Swift.h> 
 
 
