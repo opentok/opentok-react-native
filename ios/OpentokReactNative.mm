@@ -3,8 +3,7 @@
 #import <OpentokReactNative/OpentokReactNative.h>
 #endif
 
-// Forward declare Swift classes instead of importing bridging header
-@class OpentokReactNativeImpl;
+#import "OpentokReactNative-Swift.h"
 
 typedef JS::NativeOpentok::SessionOptions RN_SessionOptions;
 
