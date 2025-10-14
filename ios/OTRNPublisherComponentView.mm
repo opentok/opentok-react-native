@@ -9,9 +9,9 @@
 #import <OpentokReactNative/OpentokReactNative.h>
 #import <React/RCTConversions.h>
 #import <React/RCTViewComponentView.h>
-#ifdef __cplusplus
-#import "OpentokReactNative-Swift.h"
-#endif
+
+// Forward declare Swift class instead of importing bridging header
+@class OTRNSubscriberImpl;
 
 using namespace facebook::react;
 
