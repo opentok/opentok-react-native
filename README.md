@@ -43,87 +43,34 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 **Expo SDK 54+ is supported with the included config plugin.**
 
-This library fully supports Expo projects using the new React Native architecture. The config plugin automatically handles all native configuration for both iOS and Android.
-
-### Quick Start
-
 1. Install the library:
-
    ```bash
    npx expo install opentok-react-native
    ```
 
-2. Add the plugin to your `app.json` or `app.config.js`:
-
+2. Add to your `app.json`:
    ```json
    {
      "expo": {
        "plugins": [
-         [
-           "opentok-react-native",
-           {
-             "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera for video calls.",
-             "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for audio calls."
-           }
-         ]
+         ["opentok-react-native", {
+           "cameraPermission": "Your camera permission message",
+           "microphonePermission": "Your microphone permission message"
+         }]
        ]
      }
    }
    ```
 
-3. Run prebuild to generate native projects:
-
+3. Run prebuild and build:
    ```bash
-   npx expo prebuild --clean
+   npx expo prebuild
+   npx expo run:ios  # or run:android
    ```
 
-4. Build and run your app:
+The plugin automatically adds required permissions and registers Fabric components.
 
-   ```bash
-   # iOS
-   npx expo run:ios
-
-   # Android
-   npx expo run:android
-   ```
-
-### Plugin Configuration Options
-
-The config plugin accepts the following optional configuration:
-
-| Option | Type | Description | Default |
-|--------|------|-------------|---------|
-| `cameraPermission` | `string` | Custom message for iOS camera permission | `"Allow $(PRODUCT_NAME) to access your camera for video calls."` |
-| `microphonePermission` | `string` | Custom message for iOS microphone permission | `"Allow $(PRODUCT_NAME) to access your microphone for audio calls."` |
-| `enableBluetoothPermissions` | `boolean` | Add Bluetooth permissions (Android only) | `false` |
-
-### What the Plugin Does
-
-**iOS:**
-- Adds `NSCameraUsageDescription` to Info.plist
-- Adds `NSMicrophoneUsageDescription` to Info.plist
-
-**Android:**
-- Adds `CAMERA` permission to AndroidManifest.xml
-- Adds `RECORD_AUDIO` permission to AndroidManifest.xml
-- Adds `INTERNET` permission to AndroidManifest.xml
-- Adds `MODIFY_AUDIO_SETTINGS` permission to AndroidManifest.xml
-- Adds `ACCESS_NETWORK_STATE` permission to AndroidManifest.xml
-- Optionally adds Bluetooth permissions
-
-### EAS Build
-
-The plugin works seamlessly with EAS Build. No additional configuration is required.
-
-```bash
-# Development build
-eas build --profile development --platform all
-
-# Production build
-eas build --profile production --platform all
-```
-
-For more detailed Expo setup information, see [EXPO_SETUP.md](./EXPO_SETUP.md).
+For detailed Expo setup, see [Expo's config plugins documentation](https://docs.expo.dev/config-plugins/introduction/).
 
 ## React Native CLI Installation
 
