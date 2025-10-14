@@ -170,7 +170,7 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNOpentokReactNativeSpec",
+    "name": "OpentokReactNative",
     "type": "all",
     "jsSrcsDir": "src",
     "android": {
