@@ -3,7 +3,7 @@
 #import <OpentokReactNative/OpentokReactNative.h>
 #endif
 
-#import "OpentokReactNative-Swift.h"
+#import <OpentokReactNative/OpentokReactNative-Swift.h>
 
 typedef JS::NativeOpentok::SessionOptions RN_SessionOptions;
 

@@ -1,0 +1,1 @@
+{"version":3,"names":["OTPublisher","OTSession","OTSubscriber","OTSubscriberView"],"sourceRoot":"../../src","sources":["index.tsx"],"mappings":";;AAAA;AACA,OAAOA,WAAW,MAAM,kBAAe;AACvC,OAAOC,SAAS,MAAM,gBAAa;AACnC,OAAOC,YAAY,MAAM,mBAAgB;AACzC,OAAOC,gBAAgB,MAAM,uBAAoB;AAEjD,SAASF,SAAS,EAAEC,YAAY,EAAEC,gBAAgB,EAAEH,WAAW","ignoreList":[]}

@@ -10,7 +10,7 @@
 #import <React/RCTConversions.h>
 #import <React/RCTViewComponentView.h>
 
-#import "OpentokReactNative-Swift.h"
+#import <OpentokReactNative/OpentokReactNative-Swift.h>
 
 template <typename T> T makeConnectionStruct(NSDictionary *connectionDict) {
   return T{.creationTime =
