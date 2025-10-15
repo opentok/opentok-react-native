@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { handleError } from '../OTError';
 import axios from 'axios';
+import packageJson from '../../package.json';
 
 const sanitizeBooleanProperty = (property) =>
   property || property === undefined ? true : property;
@@ -21,14 +22,14 @@ const getLog = (apiKey, sessionId, action, connectionId) => {
   const body = {
     payload: {
       platform: Platform.OS,
-      otrn_version: require('../../package.json').version,
+      otrn_version: packageJson.version, // otrn_version: require('../../package.json').version,
       platform_version: Platform.Version,
     },
     payload_type: 'info',
     action,
     partner_id: apiKey,
     session_id: sessionId,
-    source: require('../../package.json').repository.url,
+    source: packageJson.repository.url, // source: require('../../package.json').repository.url,
   };
   if (connectionId) {
     body.connectionId = connectionId;
