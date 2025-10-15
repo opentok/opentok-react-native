@@ -36,8 +36,45 @@ See the system requirements for the [OpenTok Android SDK](https://tokbox.com/dev
 
 2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native0`
+  * `npm install opentok-react-native`
   * `yarn add opentok-react-native`
+
+## Expo Installation
+
+**Expo SDK 54+ is supported with the included config plugin.**
+
+1. Install the library:
+   ```bash
+   npx expo install opentok-react-native
+   ```
+
+2. Add to your `app.json`:
+   ```json
+   {
+     "expo": {
+       "plugins": [
+         ["opentok-react-native", {
+           "cameraPermission": "Your camera permission message",
+           "microphonePermission": "Your microphone permission message"
+         }]
+       ]
+     }
+   }
+   ```
+
+3. Run prebuild and build:
+   ```bash
+   npx expo prebuild
+   npx expo run:ios  # or run:android
+   ```
+
+The plugin automatically adds required permissions and registers Fabric components.
+
+For detailed Expo setup, see [Expo's config plugins documentation](https://docs.expo.dev/config-plugins/introduction/).
+
+## React Native CLI Installation
+
+If you're using React Native CLI (not Expo), follow these platform-specific instructions:
 
 ### iOS Installation
 
