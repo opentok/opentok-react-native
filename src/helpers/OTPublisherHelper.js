@@ -175,6 +175,7 @@ const sanitizeProperties = (properties) => {
       properties.videoBitratePreset,
       properties.maxVideoBitrate
     ),
+    scaleBehavior: properties.scaleBehavior ? properties.scaleBehavior : 'fill',
   };
 };
 

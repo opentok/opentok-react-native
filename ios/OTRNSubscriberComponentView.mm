@@ -69,7 +69,8 @@ using namespace facebook::react;
             @"sessionId": RCTNSStringFromString(newViewProps.sessionId),
             @"streamId": RCTNSStringFromString(newViewProps.streamId),
             @"subscribeToAudio": @(newViewProps.subscribeToAudio),
-            @"subscribeToVideo": @(newViewProps.subscribeToVideo)
+            @"subscribeToVideo": @(newViewProps.subscribeToVideo),
+            @"scaleBehavior": RCTNSStringFromString(newViewProps.scaleBehavior)
         };
         [_impl createSubscriber:subscriberProperties];
         self.contentView = _impl.subscriberView;
@@ -89,6 +90,10 @@ using namespace facebook::react;
 
     if (oldViewProps.subscribeToVideo != newViewProps.subscribeToVideo) {
         [_impl setSubscribeToVideo:newViewProps.subscribeToVideo];
+    }
+
+    if (oldViewProps.scaleBehavior != newViewProps.scaleBehavior) {
+        [_impl setScaleBehavior:RCTNSStringFromString(newViewProps.scaleBehavior)];
     }
 
     [super updateProps:props oldProps:oldProps];

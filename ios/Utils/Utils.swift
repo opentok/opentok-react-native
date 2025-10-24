@@ -201,6 +201,21 @@ class Utils {
             return OTVideoBitratePreset.default
         }
     }
+
+    static func convertScaleBehavior(_ scaleBehavior: Any)
+        -> OTVideoViewScaleBehavior
+    {
+        print("Converting scale behavior: \(scaleBehavior)")
+        guard let behavior = scaleBehavior as? String else {
+            return .fill
+        }
+        switch behavior {
+        case "fill":
+            return .fill
+        default:
+            return .fit
+        }
+    }
     static func setStreamObservers(stream: OTStream, isPublisherStream: Bool) {
         let streamId = stream.streamId
 

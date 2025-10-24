@@ -244,6 +244,7 @@ OTPublisher.defaultProps = {
     videoContentHint: '',
     maxVideoBitrate: 0,
     videoBitratePreset: 'default',
+    scaleBehavior: 'fill',
   },
   style: {
     flex: 1,

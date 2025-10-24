@@ -160,6 +160,12 @@ import React
             }
         }
 
+        if let scaleBehavior = properties["scaleBehavior"] as? String {
+           if(scaleBehavior != "") {
+                publisher.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
+            }
+        }
+
         if let pubView = publisher.view {
             pubView.frame = strictUIViewContainer?.bounds ?? .zero
             publisherUIView = pubView
@@ -315,6 +321,28 @@ import React
         if (videoBitratePreset != "") {
             publisher.videoBitratePreset = 
                 Utils.convertVideoBitratePreset(videoBitratePreset)
+        }
+    }
+
+    @objc public func setScaleBehavior(_ scaleBehavior: String) {
+        guard let publisherId = self.publisherId else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Publisher ID is not set",
+            ])
+            return
+        }
+
+        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
+            strictUIViewContainer?.handleError([
+                "code": "OTPublisherError",
+                "message": "Could not find publisher instance",
+            ])
+            return
+        }
+
+        if (scaleBehavior != "") {
+            publisher.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
         }
     }
 

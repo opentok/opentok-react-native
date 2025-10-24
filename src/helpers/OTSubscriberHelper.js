@@ -68,6 +68,7 @@ const sanitizeProperties = (properties) => {
       preferredResolution: sanitizeResolution(null),
       preferredFrameRate: sanitizeFrameRate(null),
       audioVolume: 100,
+      scaleBehavior: 'fill',
     };
   }
   return {
@@ -79,6 +80,7 @@ const sanitizeProperties = (properties) => {
     preferredResolution: sanitizeResolution(properties.preferredResolution),
     preferredFrameRate: sanitizeFrameRate(properties.preferredFrameRate),
     audioVolume: sanitizeAudioVolume(properties.audioVolume),
+    scaleBehavior: properties.scaleBehavior ? properties.scaleBehavior : 'fill',
   };
 };
 
@@ -91,6 +93,7 @@ const sanitizeStreamProperties = (streamProperties) => {
       preferredResolution,
       preferredFrameRate,
       audioVolume,
+      scaleBehavior,
     } = individualStreamProperties;
     if (subscribeToAudio !== undefined) {
       individualStreamProperties.subscribeToAudio =
@@ -114,6 +117,9 @@ const sanitizeStreamProperties = (streamProperties) => {
     }
     if (audioVolume !== undefined) {
       individualStreamProperties.audioVolume = sanitizeAudioVolume(audioVolume);
+    }
+    if (scaleBehavior !== undefined) {
+      individualStreamProperties.scaleBehavior = scaleBehavior;
     }
   });
 };

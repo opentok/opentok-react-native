@@ -8,6 +8,8 @@ declare module 'opentok-react-native' {
 
   type VideoSource = 'screen' | 'camera';
 
+  type VideoScaleType = 'fill' | 'fit';
+
   interface SessionConnectEvent {
     sessionId: string;
     connection: Connection;
@@ -490,6 +492,11 @@ declare module 'opentok-react-native' {
      * The video bitrate preset to use for the published stream. Ignored if maxVideoBitrate is set.
      */
     videoBitratePreset?: 'default' | 'bw_saver' | 'extra_bw_saver';
+
+    /**
+     * Publisher view scale behavior. Defaults to "fill".
+     */
+    scaleBehavior?: VideoScaleType;
   }
 
   interface OTPublisherEventHandlers {
@@ -659,6 +666,11 @@ declare module 'opentok-react-native' {
      * Whether to subscribe video.
      */
     subscribeToVideo?: boolean;
+
+    /**
+     * Subscriber view scale behavior. Defaults to "fill".
+     */
+    scaleBehavior?: VideoScaleType;
   }
 
   interface OTSubscriberEventHandlers {

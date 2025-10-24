@@ -91,6 +91,9 @@ import React
             properties["preferredFrameRate"] as Any)
         subscriber.preferredResolution = Utils.sanitizePreferredResolution(
             properties["preferredResolution"] as Any)
+        subscriber.viewScaleBehavior = Utils.convertScaleBehavior(
+            Utils.sanitizeStringProperty(
+                properties["scaleBehavior"] as Any))
 
         var error: OTError?
         session.subscribe(subscriber, error: &error)
@@ -141,6 +144,12 @@ import React
         guard let subscriber = OTRN.sharedState.subscribers[streamId ?? ""]
         else { return }
         subscriber.subscribeToCaptions = subscribeToCaptions
+    }
+
+    @objc public func setScaleBehavior(_ scaleBehavior: String) {
+        guard let subscriber = OTRN.sharedState.subscribers[streamId ?? ""]
+        else { return }
+        subscriber.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
     }
 
     @objc public func cleanup() {

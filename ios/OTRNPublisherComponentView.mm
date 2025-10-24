@@ -51,6 +51,7 @@ using namespace facebook::react;
         @"allowAudioCaptureWhileMuted" : @(viewProps.allowAudioCaptureWhileMuted),
         @"maxVideoBitrate" : @(viewProps.maxVideoBitrate),
         @"videoBitratePreset" : RCTNSStringFromString(viewProps.videoBitratePreset),
+        @"scaleBehavior": RCTNSStringFromString(viewProps.scaleBehavior),
     };
 }
 
@@ -114,6 +115,10 @@ using namespace facebook::react;
 
     if (oldViewProps.cameraZoomFactor != newViewProps.cameraZoomFactor) {
         [_impl setCameraZoomFactor:newViewProps.cameraZoomFactor];
+    }
+
+    if (oldViewProps.scaleBehavior != newViewProps.scaleBehavior) {
+        [_impl setScaleBehavior:RCTNSStringFromString(newViewProps.scaleBehavior)];
     }
 
     [super updateProps:props oldProps:oldProps];
