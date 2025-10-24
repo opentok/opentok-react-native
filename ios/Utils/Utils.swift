@@ -205,7 +205,6 @@ class Utils {
     static func convertScaleBehavior(_ scaleBehavior: Any)
         -> OTVideoViewScaleBehavior
     {
-        print("Converting scale behavior: \(scaleBehavior)")
         guard let behavior = scaleBehavior as? String else {
             return .fill
         }
