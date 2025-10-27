@@ -208,6 +208,7 @@ class Utils {
         guard let behavior = scaleBehavior as? String else {
             return .fill
         }
+        print("Converting subscriber scale behavior string: \(behavior)")
         switch behavior {
         case "fill":
             return .fill
