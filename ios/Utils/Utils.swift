@@ -332,3 +332,15 @@ class Utils {
         OTRN.sharedState.opentokModule?.emit(onStreamPropertyChanged: eventData)
     }
 }
+
+extension String {
+    var toViewScaleBehavior: OTVideoViewScaleBehavior {
+        print("Converting scale behavior string: \(self)")
+        switch self {
+        case "fit":
+            return .fit
+        default:
+            return .fill
+        }
+    }
+}

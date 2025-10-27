@@ -118,6 +118,7 @@ using namespace facebook::react;
     }
 
     if (oldViewProps.scaleBehavior != newViewProps.scaleBehavior) {
+        NSLog(@"Setting scale behavior to %@", RCTNSStringFromString(newViewProps.scaleBehavior));
         [_impl setScaleBehavior:RCTNSStringFromString(newViewProps.scaleBehavior)];
     }
 
