@@ -341,7 +341,8 @@ import React
             return
         }
         print("Setting publisher scale behavior to \(scaleBehavior)")
-        publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
+        publisher.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
+        // publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
     }
 
     @objc public func cleanup() {
