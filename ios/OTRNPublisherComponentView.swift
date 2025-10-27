@@ -162,7 +162,6 @@ import React
         }
 
         if let scaleBehavior = properties["scaleBehavior"] as? String, !scaleBehavior.isEmpty {
-            print("OTRNPublisherImpl -> Setting scale behavior to \(scaleBehavior)")
             publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
         }
 
@@ -340,9 +339,7 @@ import React
             ])
             return
         }
-        print("Setting publisher scale behavior to \(Utils.convertScaleBehavior(scaleBehavior))")
-        publisher.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
-        // publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
+        publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
     }
 
     @objc public func cleanup() {
