@@ -91,7 +91,7 @@ import React
             properties["preferredFrameRate"] as Any)
         subscriber.preferredResolution = Utils.sanitizePreferredResolution(
             properties["preferredResolution"] as Any)
-        subscriber.viewScaleBehavior = properties["scaleBehavior"].toViewScaleBehavior
+        subscriber.viewScaleBehavior = Utils.sanitizeStringProperty(properties["scaleBehavior"]).toViewScaleBehavior
 
         var error: OTError?
         session.subscribe(subscriber, error: &error)
