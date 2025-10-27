@@ -340,7 +340,7 @@ import React
             ])
             return
         }
-
+        print("OTRNPublisherImpl -> Setting scale behavior to \(scaleBehavior.toViewScaleBehavior)")
         publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
     }
 
