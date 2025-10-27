@@ -340,7 +340,7 @@ import React
             ])
             return
         }
-        print("Setting publisher scale behavior to \(scaleBehavior)")
+        print("Setting publisher scale behavior to \(Utils.convertScaleBehavior(scaleBehavior))")
         publisher.viewScaleBehavior = Utils.convertScaleBehavior(scaleBehavior)
         // publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
     }
