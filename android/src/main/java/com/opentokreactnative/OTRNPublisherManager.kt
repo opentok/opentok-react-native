@@ -171,6 +171,11 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setAllowAudioCaptureWhileMuted(value)
     }
 
+    @ReactProp(name = "scaleBehavior")
+    override public fun setScaleBehavior(view: OTRNPublisher, value: String?) {
+        view.setScaleBehavior(value)
+    }
+
     companion object {
         const val REACT_CLASS = "OTRNPublisher"
     }

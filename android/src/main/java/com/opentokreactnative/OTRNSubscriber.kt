@@ -19,6 +19,7 @@ import com.opentok.android.SubscriberKit
 import com.opentok.android.SubscriberKit.SubscriberListener
 import com.opentok.android.SubscriberKit.SubscriberRtcStatsReportListener
 import com.opentok.android.VideoUtils
+import com.opentokreactnative.utils.Utils;
 import com.opentokreactnative.utils.EventUtils;
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -185,6 +186,14 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
             this.addView(subscriber?.view)
             requestLayout()
         }
+    }
+
+    public fun setScaleBehavior(value: String?) {
+        val videoScaleType = Utils.convertVideoScaleType(value)
+        subscriber?.setStyle(
+            BaseVideoRenderer.STYLE_VIDEO_SCALE,
+            videoScaleType
+        )
     }
 
     override fun onConnected(subscriber: SubscriberKit) {

@@ -194,6 +194,14 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         // Ignore -- set as initialization option only
     }
 
+    public fun setScaleBehavior(value: String?) {
+        val videoScaleType = Utils.convertVideoScaleType(value)
+        publisher?.setStyle(
+            BaseVideoRenderer.STYLE_VIDEO_SCALE,
+            videoScaleType
+        )
+    }
+
     private fun publishStream(/*session: Session*/) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
