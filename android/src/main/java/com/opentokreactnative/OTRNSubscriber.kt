@@ -129,7 +129,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
         subscriber?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            BaseVideoRenderer.STYLE_VIDEO_FILL
+            Utils.convertVideoScaleType(this.props?.get("scaleBehavior") as String)
         )
 
         if (androidOnTopMap.get(sessionId) != null) {
@@ -189,10 +189,9 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     public fun setScaleBehavior(value: String?) {
-        val videoScaleType = Utils.convertVideoScaleType(value)
         subscriber?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            videoScaleType
+            Utils.convertVideoScaleType(value)
         )
     }
 

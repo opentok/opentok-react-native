@@ -195,10 +195,9 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     }
 
     public fun setScaleBehavior(value: String?) {
-        val videoScaleType = Utils.convertVideoScaleType(value)
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            videoScaleType
+            Utils.convertVideoScaleType(value)
         )
     }
 
@@ -255,7 +254,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         publisher?.setPublishCaptions(this.props?.get("publishCaptions") as Boolean)
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            BaseVideoRenderer.STYLE_VIDEO_FILL
+            Utils.convertVideoScaleType(this.props?.get("scaleBehavior") as String)
         )
 
         if (androidOnTopMap.get(sessionId) != null) {
