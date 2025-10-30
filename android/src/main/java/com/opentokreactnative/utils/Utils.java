@@ -158,15 +158,4 @@ public final class Utils {
                 return VideoBitratePreset.VideoBitratePresetDefault;
         }
     }
-
-    public static String convertVideoScaleType(String rendererType) {
-        switch (rendererType) {
-            case "fit":
-                return BaseVideoRenderer.STYLE_VIDEO_FIT;
-            case "fill":
-                return BaseVideoRenderer.STYLE_VIDEO_FILL;
-            default:
-                return BaseVideoRenderer.STYLE_VIDEO_FILL;
-        }
-    }
 }

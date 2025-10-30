@@ -21,6 +21,7 @@ import com.opentok.android.SubscriberKit.SubscriberRtcStatsReportListener
 import com.opentok.android.VideoUtils
 import com.opentokreactnative.utils.Utils;
 import com.opentokreactnative.utils.EventUtils;
+import com.opentokreactnative.utils.toVideoScaleType;
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
@@ -129,7 +130,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
         subscriber?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            Utils.convertVideoScaleType(this.props?.get("scaleBehavior") as String)
+            (this.props?.get("scaleBehavior") as String).toVideoScaleType()
         )
 
         if (androidOnTopMap.get(sessionId) != null) {
@@ -191,7 +192,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     public fun setScaleBehavior(value: String?) {
         subscriber?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
-            Utils.convertVideoScaleType(value)
+            value.toVideoScaleType()
         )
     }
 
