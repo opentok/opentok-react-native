@@ -202,7 +202,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         )
     }
 
-    private fun publishStream(/*session: Session*/) {
+    private fun publishStream() {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
         if (this.props?.get("videoSource") == "screen") {
