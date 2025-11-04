@@ -8,7 +8,8 @@
     ".": {
       "source": "./src/index.tsx",
       "types": "./lib/typescript/module/src/index.d.ts",
-      "default": "./lib/module/index.js"
+      "import": "./lib/module/index.js",
+      "require": "./lib/commonjs/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -96,6 +97,7 @@
     "react": "*",
     "react-native": "*"
   },
+  "react-native": "src/index.tsx",
   "workspaces": [
     "example"
   ],
