@@ -3,13 +3,18 @@
   "version": "2.31.0",
   "description": "Vonage Video client SDK for React Native",
   "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "types": "./lib/typescript/module/src/index.d.ts",
   "exports": {
     ".": {
       "source": "./src/index.tsx",
-      "types": "./lib/typescript/src/index.d.ts",
-      "import": "./lib/module/index.js",
-      "require": "./lib/commonjs/index.js"
+      "import": {
+        "types": "./lib/typescript/module/src/index.d.ts",
+        "default": "./lib/module/index.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/index.d.ts",
+        "default": "./lib/commonjs/index.js"
+      }
     },
     "./package.json": "./package.json"
   },
@@ -88,7 +93,7 @@
     "prettier": "^3.6.2",
     "react": "19.1.0",
     "react-native": "0.81.1",
-    "react-native-builder-bob": "^0.36.0",
+    "react-native-builder-bob": "^0.40.13",
     "release-it": "^19.0.4",
     "turbo": "^2.5.6",
     "typescript": "^5.9.2"
@@ -144,13 +149,13 @@
     "targets": [
       "codegen",
       [
-        "commonjs",
+        "module",
         {
           "esm": true
         }
       ],
       [
-        "module",
+        "commonjs",
         {
           "esm": true
         }
