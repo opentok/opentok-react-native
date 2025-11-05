@@ -136,6 +136,10 @@
       }
     }
   },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
   "prettier": {
     "quoteProps": "consistent",
     "singleQuote": true,
@@ -149,13 +153,13 @@
     "targets": [
       "codegen",
       [
-        "module",
+        "commonjs",
         {
           "esm": true
         }
       ],
       [
-        "commonjs",
+        "module",
         {
           "esm": true
         }
