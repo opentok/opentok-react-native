@@ -144,13 +144,13 @@
     "targets": [
       "codegen",
       [
-        "module",
+        "commonjs",
         {
           "esm": true
         }
       ],
       [
-        "commonjs",
+        "module",
         {
           "esm": true
         }
