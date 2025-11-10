@@ -21,7 +21,6 @@
     "src",
     "lib",
     "android",
-    "android/generated",
     "ios",
     "cpp",
     "*.podspec",
@@ -44,7 +43,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
+    "prepare": "bob build && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/",
     "release": "release-it"
   },
   "keywords": [
