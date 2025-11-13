@@ -1,3 +1,7 @@
+# 2.30.3 (November 2025)
+
+- [Fix]: React Native Multi-Party Video Missing Participant Streams.
+
 # 2.30.2 (May 2025)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.30.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
