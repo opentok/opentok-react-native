@@ -1,4 +1,8 @@
-# 2.31.0 (September 2025)
+# 2.31.0-beta.2 (November 2025)
+
+- [Update]: Updated project documentation (README, LICENSE, CODE_OF_CONDUCT) and corrected references in package.json.
+
+# 2.31.0-beta.1 (November 2025)
 
 - [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
 
@@ -15,6 +19,10 @@
   * `maxVideoBitrate` -- To set the maximum bitrate value (instead of a preset), set the this property to a value between 5,000 and 10,000,000 (in bits per second).
 
   If neither property is set, the `default` preset is used.
+
+# 2.31.0-beta.0 (July 2025)
+
+- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
 
 # 2.30.2 (May 2025)
 
