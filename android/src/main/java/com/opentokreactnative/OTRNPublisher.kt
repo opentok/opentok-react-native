@@ -57,6 +57,9 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     fun updateProperties(props: ReactStylesDiffMap?) {
         if (this.props == null) {
             this.props = props?.toMap()
+            ?.filterValues { it != null }
+            ?.mapValues { it.value!! }
+            ?.toMutableMap()
             return
         }
     }
