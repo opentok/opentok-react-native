@@ -1,9 +1,5 @@
 # 2.31.0-beta.2 (November 2025)
 
-- [Update]: Updated project documentation (README, LICENSE, CODE_OF_CONDUCT) and corrected references in package.json.
-
-# 2.31.0-beta.1 (November 2025)
-
 - [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.31.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
