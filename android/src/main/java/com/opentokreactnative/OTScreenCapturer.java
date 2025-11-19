@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.view.View;
+import android.os.Looper;
 
 import com.opentok.android.BaseVideoCapturer;
 
@@ -21,14 +22,26 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     private Bitmap bmp;
     private Canvas canvas;
 
-    private Handler mHandler = new Handler();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable newFrame = new Runnable() {
         @Override
         public void run() {
             if (capturing) {
+                // Check if the view is attached and has dimensions
+                if (contentView == null || !contentView.isAttachedToWindow()) {
+                    mHandler.postDelayed(newFrame, 1000 / fps);
+                    return;
+                }
+
                 int width = contentView.getWidth();
                 int height = contentView.getHeight();
+
+                // Skip frame if dimensions are zero
+                if (width <= 0 || height <= 0) {
+                    mHandler.postDelayed(newFrame, 1000 / fps);
+                    return;
+                }
 
                 if (frame == null ||
                         OTScreenCapturer.this.width != width ||
