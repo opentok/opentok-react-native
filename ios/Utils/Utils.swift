@@ -329,14 +329,3 @@ extension String {
         }
     }
 }
-
-extension String {
-    var toCameraPosition: AVCaptureDevice.Position {
-        switch self {
-        case "front":
-            return .front
-        default:
-            return .back
-        }
-    }
-}

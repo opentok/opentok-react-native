@@ -128,8 +128,8 @@ import React
             publisher.videoType = .screen
             publisher.videoCapture = OTScreenCapture(view: screenView)
         } else if let cameraPosition = properties["cameraPosition"] as? String {
-            publisher.cameraPosition =
-                cameraPosition.toCameraPosition
+            publisher.cameraPosition = cameraPosition == "front" ? .front : .back
+            // publisher.cameraPosition = cameraPosition.toCameraPosition
         }
 
         publisher.cameraTorch = Utils.sanitizeBooleanProperty(
@@ -340,26 +340,6 @@ import React
             return
         }
         publisher.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
-    }
-
-    @objc public func setCameraPosition(_ cameraPosition: String) {
-        guard let publisherId = self.publisherId else {
-            strictUIViewContainer?.handleError([
-                "code": OTPublisherError,
-                "message": "Publisher ID is not set",
-            ])
-            return
-        }
-
-        guard let publisher = OTRN.sharedState.publishers[publisherId] else {
-            strictUIViewContainer?.handleError([
-                "code": OTPublisherError,
-                "message": "Could not find publisher instance",
-            ])
-            return
-        }
-
-        publisher.cameraPosition = cameraPosition.toCameraPosition
     }
 
     @objc public func cleanup() {
