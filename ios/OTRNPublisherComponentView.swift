@@ -359,8 +359,7 @@ import React
             return
         }
 
-        publisher.cameraPosition =
-            cameraPosition == cameraPosition.toCameraPosition
+        publisher.cameraPosition = cameraPosition.toCameraPosition
     }
 
     @objc public func cleanup() {
