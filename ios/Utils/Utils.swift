@@ -329,3 +329,14 @@ extension String {
         }
     }
 }
+
+extension String {
+    var toCameraPosition: OTCameraPosition {
+        switch self {
+        case "front":
+            return .front
+        default:
+            return .back
+        }
+    }
+}
