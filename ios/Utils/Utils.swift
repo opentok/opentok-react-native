@@ -331,7 +331,7 @@ extension String {
 }
 
 extension String {
-    var toCameraPosition: AVCaptureDevicePosition {
+    var toCameraPosition: AVCaptureDevice.Position {
         switch self {
         case "front":
             return .front
