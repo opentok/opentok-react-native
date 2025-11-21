@@ -174,7 +174,25 @@ If you try to archive the app and it fails, please do the following:
 
 5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
 
-6. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
+6. In the MainApplication.kt file for your app, register the OpenTok OpentokReactNativePackage, OTRNPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function:
+
+    ```
+    import com.opentokreactnative.OTRNPublisherPackage
+    import com.opentokreactnative.OTRNSubscriberPackage
+    import com.opentokreactnative.OpentokReactNativePackage;
+
+    // ...
+
+    override fun getPackages(): List<ReactPackage> =
+        PackageList(this).packages.apply {
+            add(OTRNPublisherPackage())
+            add(OTRNSubscriberPackage())
+            add(OpentokReactNativePackage())
+        }
+        // ...
+    ```
+
+7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
    implementation "com.vonage:client-sdk-video-transformers:2.31.0"
