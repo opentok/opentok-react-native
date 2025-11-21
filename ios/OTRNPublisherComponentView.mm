@@ -122,8 +122,7 @@ using namespace facebook::react;
     }
 
     if (oldViewProps.cameraPosition != newViewProps.cameraPosition) {
-        NSLog(@"Setting camera position to %@", RCTNSStringFromString(newViewProps.cameraPosition));
-        // [_impl setCameraPosition:RCTNSStringFromString(newViewProps.cameraPosition)];
+        [_impl setCameraPosition:RCTNSStringFromString(newViewProps.cameraPosition)];
     }
 
     [super updateProps:props oldProps:oldProps];
