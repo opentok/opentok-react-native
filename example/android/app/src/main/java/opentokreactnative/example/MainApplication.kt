@@ -24,7 +24,8 @@ class MainApplication : Application(), ReactApplication {
               add(OTRNPublisherPackage())
               add(OTRNSubscriberPackage())
               add(OpentokReactNativePackage())
-        }
+            }
+
         override fun getJSMainModuleName(): String = "index"
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
         override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
