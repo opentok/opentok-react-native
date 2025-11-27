@@ -45,6 +45,7 @@ const logRequest = (body, proxyUrl) => {
     data: body,
   })
     .then(() => {
+      console.log('OT log sent');
       // response complete
     })
     .catch(() => {
