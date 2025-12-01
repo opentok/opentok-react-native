@@ -17,7 +17,7 @@ metadata:
   annotations:
     vonage.com/jira-id: VIDCS
 spec:
-  type: service
+  type: library
   owner: group:orgdata/vcl
   domain: video-api
 
