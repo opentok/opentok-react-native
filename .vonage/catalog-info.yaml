@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-  name: video-react-native-sdk
+  name: video-react-native-sdks
   title: Video React Native SDK
   description: Video API React Native Client SDK
   links:
@@ -25,12 +25,12 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: video-react-native-sdk
+  name: video-react-native-sdks
   description: OpenTok React Native - a library for OpenTok iOS and Android SDKs
   annotations:
     github.com/project-slug: opentok/opentok-react-native
 spec:
   type: library
   owner: group:orgdata/vcl
-  system: video-react-native-sdk
+  system: video-react-native-sdks
   lifecycle: production
