@@ -32,5 +32,5 @@ metadata:
 spec:
   type: library
   owner: group:orgdata/vcl
-  system: video-react-native-sdks
+  system: video-react-native-sdk
   lifecycle: production
