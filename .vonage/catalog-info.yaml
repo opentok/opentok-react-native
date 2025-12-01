@@ -1,0 +1,36 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: video-react-native-sdk
+  title: Video React Native SDK
+  description: Video API React Native Client SDK
+  links:
+    - url: https://confluence.vonage.com/display/VIDCLIENT/Client+SDKs
+      title: Confluence Documentation
+      icon: help
+    - url: mailto:video.clients@vonage.com
+      title: Email
+      icon: user
+    - url: https://vonage.enterprise.slack.com/archives/CCY5ZBC6T
+      title: Slack
+      icon: dashboard
+  annotations:
+    vonage.com/jira-id: VIDCS
+spec:
+  type: service
+  owner: group:orgdata/vcl
+  domain: video-api
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: video-react-native-sdk
+  description: OpenTok React Native - a library for OpenTok iOS and Android SDKs
+  annotations:
+    github.com/project-slug: opentok/opentok-react-native
+spec:
+  type: library
+  owner: group:orgdata/vcl
+  system: video-react-native-sdks
+  lifecycle: production
