@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: video-react-native-sdks
-  title: Video React Native SDK
+  title: Video React Native SDKs
   description: Video API React Native Client SDK
   links:
     - url: https://confluence.vonage.com/display/VIDCLIENT/Client+SDKs
