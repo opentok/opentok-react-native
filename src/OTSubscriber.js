@@ -97,9 +97,9 @@ export default class OTSubscriber extends Component {
         if (error) {
           this.otrnEventHandler(error);
         } else {
-          this.setState({
-            streams: [...this.state.streams, stream.streamId],
-          });
+          this.setState(prevState => ({
+            streams: [...prevState.streams, stream.streamId],
+          }));
         }
       });
     }

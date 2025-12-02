@@ -1,45 +1,32 @@
-# Contributing Guidelines
+# Getting Involved
 
-If you're interested in contributing to this project, here are a few ways to do so:
+## Welcome to Contributors
+Thank you for your interest in contributing to our open source **OpenTok Network Test** application! We're excited to have you join our community and help improve this project.
 
-- Bug fixes
-  - If you find a bug, please first report it using Github Issues.
-  - Issues that have already been identified as a bug will be labelled `bug`.
-  - If you'd like to submit a fix for a bug, send a Pull Request from your own fork and mention the Issue number.
-    - Include a test that isolates the bug and verifies that it was fixed.
-- New Features
-  - If you'd like to add a feature to the library that doesn't already exist, feel free to describe the feature in a new Github Issue.
-  - Issues that have been identified as a feature request will be labelled `enhancement`.
-  - If you'd like to implement the new feature, please wait for feedback from the project maintainers before spending too much time writing the code. In some cases, `enhancement`s may not align well with the project objectives at the time.
-- Documentation & Miscellaneous
-  - If you think the documentation could be clearer, or you have an alternative
-    implementation of something that may have more advantages, we would love to hear it.
-    - If its a trivial change, go ahead and send a Pull Request with the changes you have in mind
-    - If not, open a Github Issue to discuss the idea first.
+## Getting Started
+Before you begin, please review the following:
+- Read our Code of Conduct to understand our community standards.
+- Check the README.md for an overview of the project and setup instructions.
+- Browse the open issues to see what needs attention.
 
-## Requirements
+## Contributing
 
-For a contribution to be accepted:
+### Opening an Issue - Bug Reports or Feature Requests
 
-- Code must follow existing styling conventions
-- Commit messages must be descriptive. Related issues should be mentioned by number.
-- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
+We always welcome feedback, if you've seen something that isn't quite right or you have a suggestion for a new feature, please go ahead and open an issue in this project. Select the appropriate template and include as much information as you have, it really helps.
 
-If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the Issue. You can still continue to add more commits to the branch you have sent the Pull Request from.
+### Making a Code Change
 
-## How To
+We're always open to pull requests, but these should be small and clearly described so that we can understand what you're trying to do. Feel free to open an issue first and get some discussion going.
 
-1. Fork this repository on GitHub.
-2. Clone/fetch your fork to your local development machine.
-3. Create a new branch (e.g. `issue-12`, `feat.add_foo`, etc) and check it out.
-4. Make your changes and commit them.
-5. Test your changes with the [sample applications](https://github.com/opentok/opentok-react-native-samples). (you can use `npm pack` and `npm install` to install a local version of the library.)
-6. Push your new branch to your fork. (e.g. `git push myname issue-12`)
-7. Open a Pull Request from your new branch to the original fork's `master` branch.
+When you're ready to start coding, fork this repository to your own GitHub account and make your changes in a new branch based on develop. Once you're happy, open a pull request to merge into develop and explain what the change is and why you think we should include it in our project.
 
-## Development Guidelines
+All the commits pushed into *develop* and *master* branches have to be signed. Please refer to [this guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits). Commits that are not signed can't be merged into *develop* or *master* branches.
 
-1. Follow [installation guidelines](README.md).
-2. Modify JS components in `src/js/`.
-3. Modify iOS components in `ios/`.
-4. Modify Android components in `android/`.
+### Branching 
+
+Our *master* branch is the evergreen source of truth for the Vonage Video API Reference App for React. However, all new development should be done in the develop branch. Contributions should be made by branching off develop, and pull requests should be submitted against develop. Periodically, develop will be merged into master as a batch.
+ 
+Internally, we use Jira for issue tracking. Issue and feature branches use the format DEVELOPERNAME/TICKETNUMBER-SHORTDESCRIPTION e.g. alicesmith/VIDCS-123-fix-broken-icon. If you'd like to contribute a pull request, please use a branch on your fork with a descriptive name e.g. **fix-broken-icon**.
+
+Release versions use the format v-RELEASENUMBER number, e.g. v1.0.0. We use [semantic versioning](https://semver.org/) for our releases.
