@@ -45,7 +45,7 @@ const clearStreams = (sessionId) => {
   clearPublisherStream(sessionId);
 };
 
-const clearPublsherStream = (sessionId) => {
+const clearPublisherStream = (sessionId) => {
   publisherStreams[sessionId] = undefined;
 };
 
