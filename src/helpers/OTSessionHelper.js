@@ -42,7 +42,7 @@ const removeStream = (sessionId, streamId) => {
 
 const clearStreams = (sessionId) => {
   streams[sessionId] = [];
-  clearPublsherStream(sessionId);
+  clearPublisherStream(sessionId);
 };
 
 const clearPublsherStream = (sessionId) => {
