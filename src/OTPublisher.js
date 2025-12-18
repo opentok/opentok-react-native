@@ -134,12 +134,12 @@ export default class OTPublisher extends React.Component {
 
   componentWillUnmount() {
     OT.unpublish(this.context.sessionId, this.state.publisherId);
-    const publiherStreamId = getPublisherStream(this.context.sessionId);
-    if (publiherStreamId) {
+    const publisherStreamId = getPublisherStream(this.context.sessionId);
+    if (publisherStreamId) {
       const event = {
-        streamId: publiherStreamId,
+        streamId: publisherStreamId,
         nativeEvent: {
-          streamId: publiherStreamId,
+          streamId: publisherStreamId,
         },
       };
       this.onStreamDestroyed(event);
