@@ -42,6 +42,10 @@ const removeStream = (sessionId, streamId) => {
 
 const clearStreams = (sessionId) => {
   streams[sessionId] = [];
+  clearPublsherStream(sessionId);
+};
+
+const clearPublsherStream = (sessionId) => {
   publisherStreams[sessionId] = undefined;
 };
 

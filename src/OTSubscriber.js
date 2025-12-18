@@ -52,6 +52,7 @@ export default class OTSubscriber extends Component {
       this.publisherStreamCreatedHandler
     );
     addEventListener(
+      this.context.sessionId,
       'publisherStreamDestroyed',
       this.publisherStreamDestroyedHandler
     );
