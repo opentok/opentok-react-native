@@ -69,11 +69,37 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         }
     }
 
+    private fun findStream(streamId: String): Stream? {
+        // Check subscriberStreams (remote streams)
+        var stream = sharedState.getSubscriberStreams().get(streamId)
+        if (stream != null) return stream
+        
+        // Check publisher streams (your own published streams)
+        val publishers = sharedState.getPublishers()
+        for (publisher in publishers.values) {
+            if (publisher.stream?.streamId == streamId) {
+                return publisher.stream
+            }
+        }
+        return null
+    }
+
     override fun onAttachedToWindow() {
-        session = sharedState.getSessions().get(sessionId)
-        stream = sharedState.getSubscriberStreams().get(streamId)
         super.onAttachedToWindow()
-        subscribeToStream(session ?: return, stream ?: return)
+        
+        val safeSessionId = sessionId
+        val safeStreamId = streamId
+        
+        if (safeSessionId == null || safeStreamId == null) {
+            return
+        }
+        
+        session = sharedState.getSessions().get(safeSessionId)
+        stream = findStream(safeStreamId)
+
+        if (session != null && stream != null) {
+            subscribeToStream(session!!, stream!!)
+        }
     }
 
     private fun configureComponent() {
