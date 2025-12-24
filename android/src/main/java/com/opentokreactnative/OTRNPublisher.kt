@@ -251,6 +251,13 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                     Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
                 )
             }
+            if (this.props?.get("cameraPosition") as String == "back") {
+                // Do not set publishVideo here, start when stream is created
+                // to avoid front camera preview flash
+                publisher?.setPublishVideo(false)
+            } else {
+                publisher?.setPublishVideo(this.props?.get("publishVideo") as Boolean)
+            }
         }
 
         publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
@@ -295,10 +302,14 @@ class OTRNPublisher : FrameLayout, PublisherListener,
             this.addView(publisher?.view)
             requestLayout()
         }
-        props!!.clear() //we do not need to keep this around ?
     }
 
     override fun onStreamCreated(publisher: PublisherKit, stream: Stream) {
+        val cameraPosition = this.props?.get("cameraPosition") as? String ?: "front"
+        if (cameraPosition == "back") {
+            this.publisher?.cycleCamera()
+            this.publisher?.setPublishVideo(this.props?.get("publishVideo") as Boolean)
+        }
         val payload = EventUtils.prepareJSStreamMap(stream, publisher.getSession())
         emitOpenTokEvent("onStreamCreated", payload)
     }
