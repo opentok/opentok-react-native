@@ -243,9 +243,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
-            if (this.props?.get("cameraPosition") == "back") {
-                publisher?.cycleCamera()
-            }
             if (this.props?.get("videoTrack") as Boolean) {
                 publisher?.getCapturer()?.setVideoContentHint(
                     Utils.convertVideoContentHint(this.props?.get("videoContentHint") as String)
