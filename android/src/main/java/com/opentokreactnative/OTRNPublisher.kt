@@ -258,7 +258,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         }
 
         publisher?.setPublishAudio(this.props?.get("publishAudio") as Boolean)
-        publisher?.setPublishVideo(this.props?.get("publishVideo") as Boolean)
         publisher?.setPublishCaptions(this.props?.get("publishCaptions") as Boolean)
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
