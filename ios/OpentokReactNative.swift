@@ -232,7 +232,6 @@ import React
         }
 
         session.unpublish(publisher, error: &error)
-        OTRN.sharedState.publishers.removeValue(forKey: publisherId)
     }
 
     @objc public func removeSubscriber(_ sessionId: String, streamId: String) {
@@ -247,7 +246,6 @@ import React
         }
 
         session.unsubscribe(subscriber, error: &error)
-        OTRN.sharedState.subscribers.removeValue(forKey: streamId)
     }
 
     @objc public func forceMuteAll(
@@ -488,6 +486,7 @@ private class SessionDelegateHandler: NSObject, OTSessionDelegate {
         let streamInfo: [String: Any] = EventUtils.prepareJSStreamEventData(
             stream)
         OTRN.sharedState.subscriberStreams.removeValue(forKey: stream.streamId)
+        OTRN.sharedState.subscribers.removeValue(forKey: stream.streamId)
         impl?.ot?.emit(onStreamDestroyed: streamInfo)
     }
 

@@ -409,8 +409,8 @@ import React
             publisher.audioLevelDelegate = nil
             publisher.networkStatsDelegate = nil
             publisher.rtcStatsReportDelegate = nil
-            OTRN.sharedState.publishers[publisherId] = nil
-            OTRN.sharedState.isPublishing[publisherId] = nil
+            OTRN.sharedState.publishers.removeValue(forKey: publisherId)
+            OTRN.sharedState.isPublishing.removeValue(forKey: publisherId)
             self.publisherId = ""
             self.sessionId = ""
             self.currentSession = nil
@@ -480,6 +480,7 @@ private class PublisherDelegateHandler: NSObject, OTPublisherKitDelegate {
             )
             streamInfo["publisherId"] = publisherId
             OTRN.sharedState.publishers[publisherId] = nil
+            OTRN.sharedState.publishers.removeValue(forKey: publisherId)
             impl?.strictUIViewContainer?.handleStreamDestroyed(streamInfo)
         }
     }
