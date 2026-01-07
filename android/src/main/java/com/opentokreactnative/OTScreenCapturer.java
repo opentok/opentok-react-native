@@ -12,6 +12,9 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
     private boolean capturing = false;
     private View contentView;
+    
+    private View publisherView;
+    private Bitmap prevFrameBmp;
 
     private int fps = 15;
     private int width = 20;
@@ -41,7 +44,14 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                         bmp.recycle();
                         bmp = null;
                     }
+                    if (prevFrameBmp != null) {
+                        prevFrameBmp.recycle();
+                        prevFrameBmp = null;
+                    }
                     bmp = Bitmap.createBitmap(width,
+                            height, Bitmap.Config.ARGB_8888);
+
+                    prevFrameBmp = Bitmap.createBitmap(width,
                             height, Bitmap.Config.ARGB_8888);
 
                     canvas = new Canvas(bmp);
@@ -51,7 +61,24 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                 canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
                 contentView.draw(canvas);
 
+                if (prevFrameBmp != null && 
+                    publisherView != null &&
+                    publisherView.getWidth() > 0 && 
+                    publisherView.getHeight() > 0) {
+                    
+                    float pubX = publisherView.getX();
+                    float pubY = publisherView.getY();
+                    int pubWidth = publisherView.getWidth();
+                    int pubHeight = publisherView.getHeight();
+                    
+                    canvas.drawBitmap(prevFrameBmp, null, 
+                        new android.graphics.RectF(pubX, pubY, pubX + pubWidth, pubY + pubHeight), null);
+                }
+
                 bmp.getPixels(frame, 0, width, 0, 0, width, height);
+
+                // Update the previous frame bitmap with the current frame for the next iteration
+                prevFrameBmp.setPixels(frame, 0, width, 0, 0, width, height);
 
                 provideIntArrayFrame(frame, ARGB, width, height, 0, false);
 
@@ -70,6 +97,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         } else {
             this.contentView = view; // Fallback
         }
+        this.publisherView = view;
     }
 
     @Override
