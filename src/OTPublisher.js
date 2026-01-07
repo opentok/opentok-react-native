@@ -116,11 +116,14 @@ export default class OTPublisher extends React.Component {
         .catch((error) => {
           // this.otrnEventHandler(error);
         });
-    } else if (this.context && isConnected(this.context.sessionId)) {
-      setTimeout(
-        () => OT.publish(this.context.sessionId, this.state.publisherId),
-        100
-      );
+    } else {
+      // Context and publisherId might not be available immediately
+      // So we delay the publish call slightly
+      setTimeout(() => {
+        if (this.context && isConnected(this.context.sessionId)) {
+          OT.publish(this.context.sessionId, this.state.publisherId);
+        }
+      }, 100);
     }
   };
 
