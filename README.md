@@ -83,7 +83,7 @@ If you're using Expo, the setup is simplified with the config plugin:
 - ✅ Adds all required Android permissions to AndroidManifest.xml (BLUETOOTH, CAMERA, RECORD_AUDIO, etc.)
 - ✅ Configures hardware features for Android
 
-**No manual native configuration needed!** 🎉
+**No manual native configuration needed!**
 
 ---
 
