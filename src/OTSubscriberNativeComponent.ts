@@ -70,6 +70,7 @@ export interface NativeProps extends ViewProps {
   streamId: string;
   subscribeToAudio?: boolean;
   subscribeToVideo?: boolean;
+  subscribeToSelf?: boolean;
   scaleBehavior?: string;
 
   subscribeToCaptions?: boolean;

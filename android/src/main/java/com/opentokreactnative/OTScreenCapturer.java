@@ -3,6 +3,7 @@ package com.opentokreactnative;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.view.View;
 
@@ -14,6 +15,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     private View contentView;
     
     private View publisherView;
+    private View selfSubscriberView;
     private Bitmap prevFrameBmp;
 
     private int fps = 15;
@@ -61,18 +63,12 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                 canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
                 contentView.draw(canvas);
 
-                if (prevFrameBmp != null && 
-                    publisherView != null &&
-                    publisherView.getWidth() > 0 && 
-                    publisherView.getHeight() > 0) {
-                    
-                    float pubX = publisherView.getX();
-                    float pubY = publisherView.getY();
-                    int pubWidth = publisherView.getWidth();
-                    int pubHeight = publisherView.getHeight();
-                    
-                    canvas.drawBitmap(prevFrameBmp, null, 
-                        new android.graphics.RectF(pubX, pubY, pubX + pubWidth, pubY + pubHeight), null);
+                if (prevFrameBmp != null) {
+                    drawOverlay(publisherView);
+                    // Avoid double-draw if both references point to the same view
+                    if (selfSubscriberView != null && selfSubscriberView != publisherView) {
+                        drawOverlay(selfSubscriberView);
+                    }
                 }
 
                 bmp.getPixels(frame, 0, width, 0, 0, width, height);
@@ -98,6 +94,27 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             this.contentView = view; // Fallback
         }
         this.publisherView = view;
+    }
+
+    public void setSelfSubscriberView(View v) {
+        this.selfSubscriberView = v;
+    }
+
+    private void drawOverlay(View v) {
+        if (v == null || prevFrameBmp == null || canvas == null) return;
+        if (v.getWidth() <= 0 || v.getHeight() <= 0) return;
+
+        int[] viewLoc = new int[2];
+        int[] contentLoc = new int[2];
+        v.getLocationOnScreen(viewLoc);
+        contentView.getLocationOnScreen(contentLoc);
+
+        float x = (float) (viewLoc[0] - contentLoc[0]);
+        float y = (float) (viewLoc[1] - contentLoc[1]);
+        int w = v.getWidth();
+        int h = v.getHeight();
+
+        canvas.drawBitmap(prevFrameBmp, null, new RectF(x, y, x + w, y + h), null);
     }
 
     @Override

@@ -8,6 +8,7 @@ export default class OTSubscriberView extends React.Component {
   static defaultProps = {
     subscribeToAudio: true,
     subscribeToVideo: true,
+    subscribeToSelf: false,
     scaleBehavior: 'fill',
     style: {
       flex: 1,
@@ -34,7 +35,7 @@ export default class OTSubscriberView extends React.Component {
   }
 
   render() {
-    const { streamId } = this.props;
+    const { streamId, subscribeToSelf } = this.props;
     const subscriberProperties = this.context.subscriberProperties;
     const eventHandlers = this.context.eventHandlers;
     const streamProperties = this.context.streamProperties
@@ -73,6 +74,7 @@ export default class OTSubscriberView extends React.Component {
         streamId={streamId}
         subscribeToAudio={subscribeToAudio}
         subscribeToVideo={subscribeToVideo}
+        subscribeToSelf={subscribeToSelf}
         scaleBehavior={scaleBehavior}
         subscribeToCaptions={subscribeToCaptions}
         preferredFrameRate={preferredFrameRate}

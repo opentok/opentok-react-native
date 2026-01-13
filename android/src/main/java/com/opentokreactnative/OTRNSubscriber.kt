@@ -43,6 +43,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     private var androidOnTopMap = sharedState.getAndroidOnTopMap();
     private var androidZOrderMap = sharedState.getAndroidZOrderMap();
     private var props: MutableMap<String, Any>? = null
+    private var subscribeToSelf: Boolean = false
 
     constructor(context: Context) : super(context) {
         configureComponent()
@@ -58,6 +59,21 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         defStyleAttr
     ) {
         configureComponent()
+    }
+
+    fun setSubscribeToSelf(value: Boolean) {
+        subscribeToSelf = value
+        wireSelfOverlay()
+    }
+
+    private fun wireSelfOverlay() {
+        val v = subscriber?.view ?: return
+        val cap = OTRN.getSharedState().screenCapturers[sessionId] ?: return
+        if (subscribeToSelf) {
+            cap.setSelfSubscriberView(v)
+        } else {
+            cap.setSelfSubscriberView(null)
+        }
     }
 
     fun updateProperties(props: ReactStylesDiffMap?) {
@@ -215,6 +231,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         if (subscriber?.view != null) {
             this.addView(subscriber?.view)
             requestLayout()
+            wireSelfOverlay()
         }
     }
 
