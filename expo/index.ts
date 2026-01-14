@@ -6,7 +6,7 @@ import {
   withPlugins,
 } from '@expo/config-plugins';
 
-export interface OpentokPluginProps {
+export interface OpentokPluginiOSProps {
   /**
    * iOS camera permission message
    * @default 'Allow $(PRODUCT_NAME) to access your camera for video calls'
@@ -17,17 +17,12 @@ export interface OpentokPluginProps {
    * @default 'Allow $(PRODUCT_NAME) to access your microphone for audio calls'
    */
   microphonePermission?: string;
-  /**
-   * Enable video transformers support (requires additional dependencies)
-   * @default false
-   */
-  enableTransformers?: boolean;
 }
 
 /**
  * Add iOS Info.plist entries for camera and microphone permissions
  */
-const withIosPermissions: ConfigPlugin<OpentokPluginProps> = (
+const withIosPermissions: ConfigPlugin<OpentokPluginiOSProps> = (
   config,
   props
 ) => {
@@ -50,6 +45,7 @@ const withAndroidPermissions: ConfigPlugin = (config) => {
   return withAndroidManifest(config, (config) => {
     const permissions = [
       'android.permission.BLUETOOTH',
+      'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
       'android.permission.BLUETOOTH_CONNECT',
       'android.permission.BROADCAST_STICKY',
       'android.permission.CAMERA',
@@ -90,7 +86,10 @@ const withAndroidPermissions: ConfigPlugin = (config) => {
  * Main Expo Config Plugin for opentok-react-native
  * Automatically configures native permissions and dependencies
  */
-const withOpentok: ConfigPlugin<OpentokPluginProps> = (config, props = {}) => {
+const withOpentok: ConfigPlugin<OpentokPluginiOSProps> = (
+  config,
+  props = {}
+) => {
   return withPlugins(config, [
     [withIosPermissions, props],
     withAndroidPermissions,

@@ -61,7 +61,7 @@ If you're using Expo, the setup is simplified with the config plugin:
    }
    ```
 
-   **Plugin Configuration Options:**
+   **Plugin iOS Configuration Options:**
 
    | Option                 | Type   | Default                                                             | Description                                                      |
    | ---------------------- | ------ | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -80,7 +80,17 @@ If you're using Expo, the setup is simplified with the config plugin:
 **What the config plugin does automatically:**
 
 - ✅ Adds iOS camera and microphone permissions to Info.plist
-- ✅ Adds all required Android permissions to AndroidManifest.xml (BLUETOOTH, CAMERA, RECORD_AUDIO, etc.)
+- ✅ Adds all required Android permissions to AndroidManifest.xml:
+  - BLUETOOTH
+  - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+  - BLUETOOTH_CONNECT
+  - BROADCAST_STICKY
+  - CAMERA
+  - INTERNET
+  - MODIFY_AUDIO_SETTINGS
+  - READ_PHONE_STATE
+  - RECORD_AUDIO
+  - ACCESS_NETWORK_STATE
 - ✅ Configures hardware features for Android
 
 **No manual native configuration needed!**
