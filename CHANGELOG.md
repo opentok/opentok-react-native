@@ -1,4 +1,6 @@
-# 2.31.0 (September 2025)
+# 2.31.0 (January 2026)
+
+- [Update]: This version now supports expo, now you can use expo plugin to configure user permissions for both platforms (see the [Installation section](./README.md#installation) of the README.md file).
 
 - [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
 
