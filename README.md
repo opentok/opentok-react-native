@@ -36,6 +36,73 @@ See the system requirements for the [Vonage Video Android SDK](https://developer
 
 ## Installation
 
+
+### For Expo projects
+
+If you're using Expo, the setup is simplified with the config plugin:
+
+1. Install the package:
+
+   ```bash
+   npx expo install @vonage/client-sdk-video-react-native
+   ```
+
+2. Add the plugin to your `app.json` or `app.config.js`:
+
+   ```json
+   {
+     "expo": {
+       "plugins": [
+         [
+           "@vonage/client-sdk-video-react-native",
+           {
+             "cameraPermission": "Allow $(PRODUCT_NAME) to use your camera for video calls",
+             "microphonePermission": "Allow $(PRODUCT_NAME) to use your microphone for audio calls"
+           }
+         ]
+       ]
+     }
+   }
+   ```
+
+   **Plugin iOS Configuration Options:**
+
+   | Option                 | Type   | Default                                                             | Description                                                      |
+   | ---------------------- | ------ | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
+   | `cameraPermission`     | string | `"Allow $(PRODUCT_NAME) to access your camera for video calls"`     | iOS camera permission message (NSCameraUsageDescription)         |
+   | `microphonePermission` | string | `"Allow $(PRODUCT_NAME) to access your microphone for audio calls"` | iOS microphone permission message (NSMicrophoneUsageDescription) |
+
+3. Rebuild your app:
+
+   ```bash
+   npx expo prebuild
+   npx expo run:ios
+   # or
+   npx expo run:android
+   ```
+
+**What the config plugin does automatically:**
+
+- ✅ Adds iOS camera and microphone permissions to Info.plist
+- ✅ Adds all required Android permissions to AndroidManifest.xml:
+  - BLUETOOTH
+  - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+  - BLUETOOTH_CONNECT
+  - BROADCAST_STICKY
+  - CAMERA
+  - INTERNET
+  - MODIFY_AUDIO_SETTINGS
+  - READ_PHONE_STATE
+  - RECORD_AUDIO
+  - ACCESS_NETWORK_STATE
+- ✅ Configures hardware features for Android
+
+**No manual native configuration needed!**
+
+---
+
+### For React Native CLI projects
+
 1. In your terminal, change into your React Native project's directory.
 
 2. Add the beta versioin of the library using `npm` or `yarn`:

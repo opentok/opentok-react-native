@@ -11,6 +11,7 @@ import {
   removeEventListener,
   dispatchEvent,
   isConnected,
+  getPublisherStream,
 } from './helpers/OTSessionHelper';
 import { sanitizeProperties } from './helpers/OTPublisherHelper';
 import OTContext from './contexts/OTContext';
@@ -115,11 +116,14 @@ export default class OTPublisher extends React.Component {
         .catch((error) => {
           // this.otrnEventHandler(error);
         });
-    } else if (this.context && isConnected(this.context.sessionId)) {
-      setTimeout(
-        () => OT.publish(this.context.sessionId, this.state.publisherId),
-        100
-      );
+    } else {
+      // Context and publisherId might not be available immediately
+      // So we delay the publish call slightly
+      setTimeout(() => {
+        if (this.context && isConnected(this.context.sessionId)) {
+          OT.publish(this.context.sessionId, this.state.publisherId);
+        }
+      }, 100);
     }
   };
 
@@ -133,6 +137,16 @@ export default class OTPublisher extends React.Component {
 
   componentWillUnmount() {
     OT.unpublish(this.context.sessionId, this.state.publisherId);
+    const publisherStreamId = getPublisherStream(this.context.sessionId);
+    if (publisherStreamId) {
+      const event = {
+        streamId: publisherStreamId,
+        nativeEvent: {
+          streamId: publisherStreamId,
+        },
+      };
+      this.onStreamDestroyed(event);
+    }
     removeEventListener(
       this.context.sessionId,
       'sessionConnected',
@@ -140,10 +154,15 @@ export default class OTPublisher extends React.Component {
     );
   }
 
-  getPrePermissionViewStyle = (props) => ({
+  getPrePermissionViewStyle = () => ({
     backgroundColor: '#000',
     ...this.props.style,
   });
+
+  onStreamDestroyed = (event) => {
+    dispatchEvent(this.context.sessionId, 'publisherStreamDestroyed', event);
+    this.props.eventHandlers?.streamDestroyed?.(event.nativeEvent);
+  };
 
   render() {
     return this.state.permissionsGranted && this.state.componentMounted ? (
@@ -161,14 +180,7 @@ export default class OTPublisher extends React.Component {
           );
           this.props.eventHandlers?.streamCreated?.(event.nativeEvent);
         }}
-        onStreamDestroyed={(event) => {
-          dispatchEvent(
-            this.context.sessionId,
-            'publisherStreamDestroyed',
-            event
-          );
-          this.props.eventHandlers?.streamDestroyed?.(event.nativeEvent);
-        }}
+        onStreamDestroyed={this.onStreamDestroyed}
         onAudioLevel={(event) => {
           this.props.eventHandlers?.audioLevel?.(event.nativeEvent);
         }}

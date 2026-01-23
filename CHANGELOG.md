@@ -1,6 +1,8 @@
-# 2.31.0-beta.2 (November 2025)
+# 2.31.0 (January 2026)
 
-- [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
+- [Update]: This version now supports expo, now you can use expo plugin to configure user permissions for both platforms (see the [Installation section](./README.md#installation) of the README.md file).
+
+- [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the Vonag React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.31.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
 
@@ -59,7 +61,7 @@
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.29.1. For more information, see the [Android SDK release notes](https://developer.vonage.com/en/video/client-sdks/android/release-notes) and the [iOS SDK release notes](https://developer.vonage.com/en/video/client-sdks/ios/release-notes).
 
-- [Update]: For Android, this version requires the `ACCESS_NETWORK_STATE` permission, and on Android API level 35+ it also requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission. You do not need to add these to your app manifest. The OpenTok Android SDK adds them automatically. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://developer.vonage.com/en/video/client-sdks/android/overview#permissions) in the Vonage Video API Android SDK documentation.
+- [Update]: For Android, this version requires the `ACCESS_NETWORK_STATE` permission, and on Android API level 35+ it also requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission. You do not need to add these to your app manifest. The Vonage Android SDK adds them automatically. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://developer.vonage.com/en/video/client-sdks/android/overview#permissions) in the Vonage Video API Android SDK documentation.
 
 # 2.29.0 (February 2025)
 

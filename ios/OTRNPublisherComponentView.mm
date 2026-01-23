@@ -118,8 +118,11 @@ using namespace facebook::react;
     }
 
     if (oldViewProps.scaleBehavior != newViewProps.scaleBehavior) {
-        NSLog(@"Setting scale behavior to %@", RCTNSStringFromString(newViewProps.scaleBehavior));
         [_impl setScaleBehavior:RCTNSStringFromString(newViewProps.scaleBehavior)];
+    }
+
+    if (oldViewProps.cameraPosition != newViewProps.cameraPosition) {
+        [_impl setCameraPosition:RCTNSStringFromString(newViewProps.cameraPosition)];
     }
 
     [super updateProps:props oldProps:oldProps];

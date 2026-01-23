@@ -64,7 +64,12 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     };
 
     public OTScreenCapturer(View view) {
-        this.contentView = view;
+        View parentView = (View) view.getParent();
+        if (parentView != null) {
+            this.contentView = parentView; // Use ReactSurfaceView in a NewArchitecture
+        } else {
+            this.contentView = view; // Fallback
+        }
     }
 
     @Override
