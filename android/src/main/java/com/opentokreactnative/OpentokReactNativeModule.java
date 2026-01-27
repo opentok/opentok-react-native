@@ -169,6 +169,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
             mSession.publish(publisher);
+            rewireAllSubscribersToScreenCapturer(sessionId);
         }
     }
 
@@ -183,7 +184,13 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
             mSession.unpublish(publisher);
-            publishers.remove(publisher);
+            publishers.remove(publisherId);
+        }
+        // Clean up screen capturer if any
+        OTScreenCapturer sc = sharedState.getScreenCapturers().remove(sessionId);
+        if (sc != null) {
+            try { sc.stopCapture(); } catch (Throwable ignored) {}
+            try { sc.destroy(); } catch (Throwable ignored) {}
         }
     }
 
@@ -201,7 +208,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
                 Subscriber subscriber = subscribers.get(streamId);
                 if (subscriber != null) {
                     mSession.unsubscribe(subscriber);
-                    subscribers.remove(subscriber);
+                    subscribers.remove(streamId);
                 }
             };
         });
@@ -307,6 +314,27 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         }
     }
 
+    private void rewireAllSubscribersToScreenCapturer(String sessionId) {
+        OTScreenCapturer sc = sharedState.getScreenCapturers().get(sessionId);
+        if (sc == null) return;
+
+        ConcurrentHashMap<String, Subscriber> subs = sharedState.getSubscribers();
+        for (Subscriber sub : subs.values()) {
+            if (sub == null) continue;
+
+            Session sess = sub.getSession(); // <-- use subscriber session
+            String sid = (sess != null) ? sess.getSessionId() : null;
+            if (sid == null || !sid.equals(sessionId)) continue;
+
+            Stream s = sub.getStream();
+            if (s == null) continue;
+
+            if (sub.getView() != null) {
+                sc.setSubscriberView(s.getStreamId(), sub.getView());
+            }
+        }
+    }
+
     @Override
     public void getCapabilities(String sessionId, Promise promise) {
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
@@ -360,8 +388,17 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
     public void onDisconnected(Session session) {
         WritableMap payload = EventUtils.prepareJSSessionMap(session);
         emitOnSessionDisconnected(payload);
+
+        String sid = session.getSessionId();
+        
+        // // Clean up screen capturer if any
+        OTScreenCapturer sc = sharedState.getScreenCapturers().get(sid);
+        if (sc != null) {
+            try { sc.stopCapture(); } catch (Throwable ignored) {}
+            try { sc.destroy(); } catch (Throwable ignored) {}
+        }
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
-        mSessions.remove(session.getSessionId());
+        mSessions.remove(sid);
     }
 
     @Override

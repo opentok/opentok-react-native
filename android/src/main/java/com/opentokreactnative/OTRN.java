@@ -26,7 +26,7 @@ public class OTRN {
         return sharedState;
     }
 
-    public ConcurrentHashMap<String, OTScreenCapturer> getScreenCapturers() {
+    public ConcurrentMap<String, OTScreenCapturer> getScreenCapturers() {
         return this.screenCapturers;
     }
 

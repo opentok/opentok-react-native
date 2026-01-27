@@ -67,12 +67,20 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     private fun wireSelfOverlay() {
-        val v = subscriber?.view ?: return
-        val cap = OTRN.getSharedState().screenCapturers[sessionId] ?: return
+        val view = subscriber?.view ?: return
+        val capturer = OTRN.getSharedState().screenCapturers[sessionId] ?: return
         if (subscribeToSelf) {
-            cap.setSelfSubscriberView(v)
+            capturer.setSelfSubscriberView(view)
         } else {
-            cap.setSelfSubscriberView(null)
+            capturer.setSelfSubscriberView(null)
+        }
+    }
+
+    private fun wireSubscribersOverlays() {
+        val view = subscriber?.view ?: return
+        val capturer = OTRN.getSharedState().screenCapturers[sessionId] ?: return
+        if (streamId != null && view != null) {
+            capturer.setSubscriberView(streamId, view)
         }
     }
 
@@ -170,7 +178,17 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     fun subscribeToStream(session: Session, stream: Stream) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
+        val captureRenderer = OTCaptureBmpVideoRenderer(context, stream.getStreamId()).apply {
+            onBitmapFrame = { streamId, bmp, w, h ->
+                // NOTE: this callback runs on the GL thread.
+                val cap = OTRN.getSharedState().screenCapturers[sessionId]
+                if (cap != null) {
+                    cap.updateSubscriberPreview(streamId, bmp, w, h)
+                }
+            }
+        }
         subscriber = Subscriber.Builder(context, stream)
+            .renderer(captureRenderer)
             .build()
         sharedState.getSubscribers().put(stream.getStreamId(), subscriber ?: return);
         subscriber?.setStyle(
@@ -232,6 +250,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
             this.addView(subscriber?.view)
             requestLayout()
             wireSelfOverlay()
+            wireSubscribersOverlays()
         }
     }
 
@@ -243,6 +262,8 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
+        wireSelfOverlay()
+        wireSubscribersOverlays()
         val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val payload =
             Arguments.createMap().apply {
