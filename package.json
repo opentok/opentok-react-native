@@ -31,6 +31,8 @@
     "*.podspec",
     "app.plugin.js",
     "react-native.config.js",
+    "tsconfig.build.json",
+    "tsconfig.json",
     "expo",
     "!expo/node_modules",
     "!expo/tsconfig.json",
