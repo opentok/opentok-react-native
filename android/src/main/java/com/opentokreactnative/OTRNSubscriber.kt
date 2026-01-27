@@ -26,6 +26,9 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator
 
+// Debug logging for subscriber preview frames
+import android.os.SystemClock
+
 class OTRNSubscriber : FrameLayout, SubscriberListener,
     SubscriberRtcStatsReportListener, SubscriberKit.AudioLevelListener,
     SubscriberKit.CaptionsListener,
@@ -174,15 +177,20 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         var height: Int = values[1].toInt()
         subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
     }
-
+    // Debug logging for preview frames
+    private var lastPreviewLogMs: Long = 0
     fun subscribeToStream(session: Session, stream: Stream) {
+        android.util.Log.d("@Debug OTRNSubscriber", "subscribeToStream called")
         var pubOrSub: String? = ""
         var zOrder: String? = ""
-        val captureRenderer = OTCaptureBmpVideoRenderer(context, stream.getStreamId()).apply {
+        val captureRenderer = CaptureBmpVideoRenderer(context, stream.getStreamId()).apply {
             onBitmapFrame = { streamId, bmp, w, h ->
                 // NOTE: this callback runs on the GL thread.
+                // Keep it lightweight. If you plan to send to JS, do it on another thread.
                 val cap = OTRN.getSharedState().screenCapturers[sessionId]
-                if (cap != null) {
+                if (cap == null) {
+                    // android.util.Log.w("@Debug OTRNPublisher", "No screen capturer for sessionId=$sessionId (preview dropped)")
+                } else {
                     cap.updateSubscriberPreview(streamId, bmp, w, h)
                 }
             }
@@ -262,8 +270,10 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
+        android.util.Log.d("@Debug OTRNSubscriber", "onConnected called")
         wireSelfOverlay()
         wireSubscribersOverlays()
+        
         val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())
         val payload =
             Arguments.createMap().apply {

@@ -169,12 +169,14 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
             mSession.publish(publisher);
+            // android.util.Log.d("@Debug opentokReactNativeModule publish", sharedState.getScreenCapturers().size() + " screen capturers stored after publish");
             rewireAllSubscribersToScreenCapturer(sessionId);
         }
     }
 
     @Override
     public void unpublish(String sessionId, String publisherId) {
+        // android.util.Log.d("@Debug opentokReactNativeModule unpublish", sharedState.getScreenCapturers().size() + " screen capturers stored before session disconnect");
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
         if (mSession == null) {
@@ -392,11 +394,12 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         String sid = session.getSessionId();
         
         // // Clean up screen capturer if any
-        OTScreenCapturer sc = sharedState.getScreenCapturers().get(sid);
-        if (sc != null) {
-            try { sc.stopCapture(); } catch (Throwable ignored) {}
-            try { sc.destroy(); } catch (Throwable ignored) {}
-        }
+        // OTScreenCapturer sc = sharedState.getScreenCapturers().get(sid);
+        // if (sc != null) {
+        //     android.util.Log.d("@Debug OTScreenCapturer", "Stopping screen capturer for sessionId=" + sid);
+        //     try { sc.stopCapture(); } catch (Throwable ignored) {}
+        //     try { sc.destroy(); } catch (Throwable ignored) {}
+        // }
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         mSessions.remove(sid);
     }
