@@ -7,6 +7,7 @@
   "module": "./lib/module/index.js",
   "exports": {
     ".": {
+      "node": "./app.plugin.js",
       "import": {
         "types": "./lib/typescript/module/src/index.d.ts",
         "default": "./lib/module/index.js"
@@ -17,6 +18,10 @@
       }
     }
   },
+  "app.plugin": "./app.plugin.js",
+  "expo": {
+    "plugin": "./app.plugin.js"
+  },
   "files": [
     "src",
     "lib",
@@ -24,7 +29,13 @@
     "ios",
     "cpp",
     "*.podspec",
+    "app.plugin.js",
     "react-native.config.js",
+    "tsconfig.build.json",
+    "tsconfig.json",
+    "expo",
+    "!expo/node_modules",
+    "!expo/tsconfig.json",
     "!ios/build",
     "!android/build",
     "!android/gradle",
@@ -43,7 +54,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/",
+    "prepare": "bob build && build:expo && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
+    "build:expo": "tsc --project expo/tsconfig.json",
     "release": "release-it"
   },
   "keywords": [
@@ -55,8 +67,11 @@
     "type": "git",
     "url": "git+https://github.com/opentok/opentok-react-native.git"
   },
-  "author": "Jeff Swartz <jeff.swartz@vonage.com> (https://github.com/jeffswartz)",
-  "license": "MIT",
+  "author": {
+    "name": "Vonage Video API",
+    "email": "support@api.vonage.com"
+  },
+  "license": "Adobe-2",
   "bugs": {
     "url": "https://github.com/opentok/opentok-react-native/issues"
   },
@@ -76,6 +91,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.35.0",
     "@evilmartians/lefthook": "^1.12.3",
+    "@expo/config-plugins": "^54.0.4",
     "@react-native-community/cli": "20.0.1",
     "@react-native/babel-preset": "0.81.1",
     "@react-native/eslint-config": "^0.81.1",
