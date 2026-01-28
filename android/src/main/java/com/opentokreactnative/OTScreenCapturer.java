@@ -42,14 +42,11 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     private static final long PREVIEW_MIN_INTERVAL_MS = 100; // 10fps
 
     private static final class PreviewSlot {
-        volatile Bitmap bitmap;          // owned by this slot (safe to draw)
+        volatile Bitmap bitmap;
         volatile int width;
         volatile int height;
         volatile long lastUpdateMs;
     }
-
-    // Debug 
-    // private final Paint previewBgPaint = new Paint();
 
     private Handler mHandler = new Handler();
 
@@ -127,10 +124,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         }
     }
 
-    // Debug logging throttle
-    private long lastPreviewLogMs = 0;
-    private int previewUpdateCount = 0;
-
     /**
    * Store only the latest preview frame per streamId.
    * Called from subscriber GL thread -> keep it lightweight and thread-safe.
@@ -149,24 +142,8 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             if (prev != null) slot = prev;
         }
 
-        Log.d("@Debug OTScreenCapturerPreview", subscriberPreviews.size() + " previews stored");
-
         // simple per-stream throttle
         if (now - slot.lastUpdateMs < PREVIEW_MIN_INTERVAL_MS) return;
-        
-        // Debug logging throttle
-        previewUpdateCount++;
-        if (now - lastPreviewLogMs > 1000) {
-            int sx = Math.max(0, Math.min(w - 1, w / 2));
-            int sy = Math.max(0, Math.min(h - 1, h / 2));
-            int srcPx = src.getPixel(sx, sy);
-            // Log.d("@Debug OTScreenCapturerPreview",
-            //         "update #" + previewUpdateCount +
-            //                 " streamId=" + streamId +
-            //                 " src=" + src.getWidth() + "x" + src.getHeight() +
-            //                 " arg=" + w + "x" + h +
-            //                 " srcSample=0x" + Integer.toHexString(srcPx));
-        }
 
         // Ensure destination bitmap exists and matches size.
         Bitmap dst = slot.bitmap;
@@ -182,20 +159,10 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         }
 
         // Copy pixels safely: create an immutable snapshot.
-        // bitmap.copy(...) also works but allocates; this reuses dst allocation.
         Canvas c = new Canvas(dst);
         c.drawBitmap(src, 0f, 0f, null);
 
         slot.lastUpdateMs = now;
-
-        // DEBUG: sample destination after copy (if src non-black but dst black, copy/draw path is the issue)
-        if (now - lastPreviewLogMs > 1000) {
-            int dx = Math.max(0, Math.min(w - 1, w / 2));
-            int dy = Math.max(0, Math.min(h - 1, h / 2));
-            int dstPx = dst.getPixel(dx, dy);
-            // Log.d("@Debug OTScreenCapturerPreview", "dstSample=0x" + Integer.toHexString(dstPx));
-            lastPreviewLogMs = now;
-        }
     }
 
       /** Optional: remove a preview when stream ends */
@@ -209,12 +176,10 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         }
         }
     }
-
-    private long lastPreviewGeomLogMs = 0;
     
     // Call this from your capture loop after contentView.draw(canvas)
     private void drawSubscriberPreviews(Canvas canvas) {
-        final long now = SystemClock.uptimeMillis();
+        // final long now = SystemClock.uptimeMillis();
 
         int[] viewLoc = new int[2];
         int[] contentLoc = new int[2];
@@ -227,16 +192,12 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             final String streamId = e.getKey();
             final PreviewSlot slot = e.getValue();
 
-            Log.d("@Debug OTScreenCapturer", "drawSubscriberPreviews streamId=" + streamId + " slot=" + slot);
 
             final Bitmap b = (slot != null) ? slot.bitmap : null;
             if (b == null || b.isRecycled()) continue;
 
             final View v = subscriberViews.get(streamId);
             if (v == null || v.getWidth() <= 0 || v.getHeight() <= 0) continue;
-            
-            // // If this preview belongs to the self subscriber view, skip it
-            // if (selfSubscriberView != null && v == selfSubscriberView) continue;
             
             v.getLocationOnScreen(viewLoc);
 
@@ -271,22 +232,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                 src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
             }
 
-            // DEBUG (throttled): geometry + aspect + scroll
-            if (now - lastPreviewGeomLogMs > 1000) {
-                Log.d("@Debug OTPreviewGeom",
-                        "streamId=" + streamId +
-                                " viewSize=" + v.getWidth() + "x" + v.getHeight() +
-                                " viewLoc=" + viewLoc[0] + "," + viewLoc[1] +
-                                " contentLoc=" + contentLoc[0] + "," + contentLoc[1] +
-                                " scroll=" + scrollX + "," + scrollY +
-                                " dst=" + dst.left + "," + dst.top + "-" + dst.right + "," + dst.bottom +
-                                " bmp=" + bw + "x" + bh +
-                                " src=" + src.left + "," + src.top + "-" + src.right + "," + src.bottom +
-                                " srcAsp=" + String.format(java.util.Locale.US, "%.3f", srcAspect) +
-                                " dstAsp=" + String.format(java.util.Locale.US, "%.3f", dstAspect));
-                lastPreviewGeomLogMs = now;
-            }
-
             canvas.drawBitmap(b, src, dst, previewPaint);
         }
     }
@@ -299,16 +244,11 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             this.contentView = view; // Fallback
         }
         this.publisherView = view;
-        // DEBUG 
-        // previewBgPaint.setARGB(255, 255, 0, 0);
     }
 
     public void setSelfSubscriberView(View v) {
         this.selfSubscriberView = v;
     }
-
-    // Debug
-    private long lastOverlayGeomLogMs = 0;
 
     private void drawOverlay(View v) {
         if (v == null || prevFrameBmp == null || canvas == null) return;
@@ -353,19 +293,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             int newH = Math.round(bw / dstAspect);
             int y0 = Math.max(0, (bh - newH) / 2);
             src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
-        }
-
-        final long now = SystemClock.uptimeMillis();
-        if (now - lastOverlayGeomLogMs > 1000) {
-            lastOverlayGeomLogMs = now;
-            float prevAsp = (float) bw / (float) bh;
-            float dstAsp = (float) dst.width() / (float) dst.height();
-            // Log.d("@Debug OTOverlayGeom",
-            //         "view=" + v +
-            //         " prevFrameBmp=" + bw + "x" + bh +
-            //         " dst=" + dst.width() + "x" + dst.height() +
-            //         " prevAsp=" + String.format(java.util.Locale.US, "%.3f", prevAsp) +
-            //         " dstAsp=" + String.format(java.util.Locale.US, "%.3f", dstAsp));
         }
 
         canvas.drawBitmap(prevFrameBmp, src, dst, null);

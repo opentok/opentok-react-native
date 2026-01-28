@@ -54,7 +54,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
          *
          * Bigger value -> less CPU/GPU work for readback, lower bitmap quality.
          */
-        private const val DOWNSCALE = 1
+        private const val DOWNSCALE = 2
 
         /**
          * Target size (in pixels) for the *long side* of the captured preview bitmap.
