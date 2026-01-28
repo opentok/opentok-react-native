@@ -1,6 +1,6 @@
 # 2.31.0 (January 2026)
 
-- [Update]: All release notes were migrated to [Developer center](https://github.com/vonage-technology/developer-center/blob/develop/src/documents/developer/sdks/react-native/release-notes.html.md)
+- [Update]: All release notes were migrated to [Developer center](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes?source=video)
 
 - [Update]: This version adds a new `OTSession.forceDisconnect()` method for forcing clients to disconnect.
 
