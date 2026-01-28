@@ -174,8 +174,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         var height: Int = values[1].toInt()
         subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
     }
-    // Debug logging for preview frames
-    private var lastPreviewLogMs: Long = 0
+    
     fun subscribeToStream(session: Session, stream: Stream) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""

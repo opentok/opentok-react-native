@@ -100,6 +100,54 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
             }
         }
+
+        private void drawOverlay(View v) {
+            if (v == null || prevFrameBmp == null || canvas == null) return;
+            if (v.getWidth() <= 0 || v.getHeight() <= 0) return;
+
+            int[] viewLoc = new int[2];
+            int[] contentLoc = new int[2];
+            v.getLocationOnScreen(viewLoc);
+            contentView.getLocationOnScreen(contentLoc);
+
+            // Match coordinate space used for contentView.draw(canvas)
+            final int scrollX = contentView.getScrollX();
+            final int scrollY = contentView.getScrollY();
+
+            final float x = ((float) viewLoc[0] - contentLoc[0]) - scrollX;
+            final float y = ((float) viewLoc[1] - contentLoc[1]) - scrollY;
+            final int w = v.getWidth();
+            final int h = v.getHeight();
+            if (w <= 0 || h <= 0) return;
+
+            Rect dst = new Rect(Math.round(x), Math.round(y), Math.round(x + w), Math.round(y + h));
+            if (dst.width() <= 0 || dst.height() <= 0) return;
+
+            // Clamp to capture frame bounds (prevents partial/out-of-bounds weirdness)
+            Rect frameRect = new Rect(0, 0, OTScreenCapturer.this.width, OTScreenCapturer.this.height);
+            if (!dst.intersect(frameRect) || dst.width() <= 0 || dst.height() <= 0) return;
+
+            final int bw = prevFrameBmp.getWidth();
+            final int bh = prevFrameBmp.getHeight();
+            if (bw <= 0 || bh <= 0) return;
+
+            final float srcAspect = (float) bw / (float) bh;
+            final float dstAspect = (float) dst.width() / (float) dst.height();
+
+            // Center-crop the prevFrameBmp to match dst aspect (avoids squish)
+            Rect src;
+            if (srcAspect > dstAspect) {
+                int newW = Math.round(bh * dstAspect);
+                int x0 = Math.max(0, (bw - newW) / 2);
+                src = new Rect(x0, 0, Math.min(bw, x0 + newW), bh);
+            } else {
+                int newH = Math.round(bw / dstAspect);
+                int y0 = Math.max(0, (bh - newH) / 2);
+                src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
+            }
+
+            canvas.drawBitmap(prevFrameBmp, src, dst, null);
+        }
     };
 
     public void setSubscriberView(String streamId, View view) {
@@ -152,16 +200,18 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         slot.lastUpdateMs = now;
     }
 
-      /** Optional: remove a preview when stream ends */
-    public void removeSubscriberPreview(String streamId) {
-        if (streamId == null) return;
-        PreviewSlot slot = subscriberPreviews.remove(streamId);
-        if (slot != null) {
+    // Release cached preview bitmaps and clear maps
+    private void clearSubscriberPreviews() {
+        for (PreviewSlot slot : subscriberPreviews.values()) {
+            if (slot == null) continue;
             Bitmap b = slot.bitmap;
+            slot.bitmap = null;
             if (b != null && !b.isRecycled()) {
                 b.recycle();
             }
         }
+        subscriberPreviews.clear();
+        subscriberViews.clear();
     }
     
     // Call this from your capture loop after contentView.draw(canvas)
@@ -235,54 +285,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         this.selfSubscriberView = v;
     }
 
-    private void drawOverlay(View v) {
-        if (v == null || prevFrameBmp == null || canvas == null) return;
-        if (v.getWidth() <= 0 || v.getHeight() <= 0) return;
-
-        int[] viewLoc = new int[2];
-        int[] contentLoc = new int[2];
-        v.getLocationOnScreen(viewLoc);
-        contentView.getLocationOnScreen(contentLoc);
-
-        // Match coordinate space used for contentView.draw(canvas)
-        final int scrollX = contentView.getScrollX();
-        final int scrollY = contentView.getScrollY();
-
-        final float x = ((float) viewLoc[0] - contentLoc[0]) - scrollX;
-        final float y = ((float) viewLoc[1] - contentLoc[1]) - scrollY;
-        final int w = v.getWidth();
-        final int h = v.getHeight();
-        if (w <= 0 || h <= 0) return;
-
-        Rect dst = new Rect(Math.round(x), Math.round(y), Math.round(x + w), Math.round(y + h));
-        if (dst.width() <= 0 || dst.height() <= 0) return;
-
-        // Clamp to capture frame bounds (prevents partial/out-of-bounds weirdness)
-        Rect frameRect = new Rect(0, 0, OTScreenCapturer.this.width, OTScreenCapturer.this.height);
-        if (!dst.intersect(frameRect) || dst.width() <= 0 || dst.height() <= 0) return;
-
-        final int bw = prevFrameBmp.getWidth();
-        final int bh = prevFrameBmp.getHeight();
-        if (bw <= 0 || bh <= 0) return;
-
-        final float srcAspect = (float) bw / (float) bh;
-        final float dstAspect = (float) dst.width() / (float) dst.height();
-
-        // Center-crop the prevFrameBmp to match dst aspect (avoids squish)
-        Rect src;
-        if (srcAspect > dstAspect) {
-            int newW = Math.round(bh * dstAspect);
-            int x0 = Math.max(0, (bw - newW) / 2);
-            src = new Rect(x0, 0, Math.min(bw, x0 + newW), bh);
-        } else {
-            int newH = Math.round(bw / dstAspect);
-            int y0 = Math.max(0, (bh - newH) / 2);
-            src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
-        }
-
-        canvas.drawBitmap(prevFrameBmp, src, dst, null);
-    }
-
     @Override
     public void init() {
 
@@ -300,6 +302,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     public int stopCapture() {
         capturing = false;
         mHandler.removeCallbacks(newFrame);
+        clearSubscriberPreviews();
         return 0;
     }
 
