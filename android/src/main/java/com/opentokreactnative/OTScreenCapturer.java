@@ -10,9 +10,6 @@ import android.os.SystemClock;
 import android.os.Handler;
 import android.view.View;
 
-// Debug 
-import android.util.Log;
-
 import com.opentok.android.BaseVideoCapturer;
 
 import java.util.concurrent.ConcurrentHashMap;

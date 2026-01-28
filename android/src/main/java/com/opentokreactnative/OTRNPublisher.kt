@@ -303,7 +303,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     }
 
     override fun onDetachedFromWindow() {
-        android.util.Log.d("@Debug OTRNPublisher", "onDetachedFromWindow called")
         super.onDetachedFromWindow()
         OTRN.getSharedState().screenCapturers.remove(sessionId)
     }
