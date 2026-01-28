@@ -81,33 +81,20 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                     canvas = new Canvas(bmp);
                     frame = new int[width * height];
                 }
-                // canvas.drawARGB(255, 0, 255, 0); 
                 canvas.save();
                 canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
                 contentView.draw(canvas);
 
                 if (prevFrameBmp != null) {
                     drawOverlay(publisherView);
-                    // Avoid double-draw if both references point to the same view
-                    // if (selfSubscriberView != null && selfSubscriberView != publisherView) {
-                    //     drawOverlay(selfSubscriberView);
-                    // }
                 }
                 drawSubscriberPreviews(canvas);
                 canvas.restore();
-
-                // bmp.getPixels(frame, 0, width, 0, 0, width, height);
-
                 // Update the previous frame bitmap with the current frame for the next iteration
                 prevFrameBmp.setPixels(frame, 0, width, 0, 0, width, height);
                 
-                // Draws other subscribers previews
-                // drawSubscriberPreviews(canvas);
-                
                 bmp.getPixels(frame, 0, width, 0, 0, width, height);
                 provideIntArrayFrame(frame, ARGB, width, height, 0, false);
-
-                // canvas.restore();
 
                 mHandler.postDelayed(newFrame, 1000 / fps);
 
@@ -142,7 +129,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
             if (prev != null) slot = prev;
         }
 
-        // simple per-stream throttle
+        // Simple per-stream throttle
         if (now - slot.lastUpdateMs < PREVIEW_MIN_INTERVAL_MS) return;
 
         // Ensure destination bitmap exists and matches size.
@@ -170,17 +157,15 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         if (streamId == null) return;
         PreviewSlot slot = subscriberPreviews.remove(streamId);
         if (slot != null) {
-        Bitmap b = slot.bitmap;
-        if (b != null && !b.isRecycled()) {
-            b.recycle();
-        }
+            Bitmap b = slot.bitmap;
+            if (b != null && !b.isRecycled()) {
+                b.recycle();
+            }
         }
     }
     
     // Call this from your capture loop after contentView.draw(canvas)
     private void drawSubscriberPreviews(Canvas canvas) {
-        // final long now = SystemClock.uptimeMillis();
-
         int[] viewLoc = new int[2];
         int[] contentLoc = new int[2];
         contentView.getLocationOnScreen(contentLoc);
@@ -263,8 +248,8 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         final int scrollX = contentView.getScrollX();
         final int scrollY = contentView.getScrollY();
 
-        final float x = (viewLoc[0] - contentLoc[0]) - scrollX;
-        final float y = (viewLoc[1] - contentLoc[1]) - scrollY;
+        final float x = ((float) viewLoc[0] - contentLoc[0]) - scrollX;
+        final float y = ((float) viewLoc[1] - contentLoc[1]) - scrollY;
         final int w = v.getWidth();
         final int h = v.getHeight();
         if (w <= 0 || h <= 0) return;
@@ -325,7 +310,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
     @Override
     public CaptureSettings getCaptureSettings() {
-
         CaptureSettings settings = new CaptureSettings();
         settings.fps = fps;
         settings.width = width;

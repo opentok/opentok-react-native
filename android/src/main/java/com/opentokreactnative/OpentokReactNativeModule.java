@@ -169,14 +169,12 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         Publisher publisher = publishers.get(publisherId);
         if (publisher != null) {
             mSession.publish(publisher);
-            // android.util.Log.d("@Debug opentokReactNativeModule publish", sharedState.getScreenCapturers().size() + " screen capturers stored after publish");
             rewireAllSubscribersToScreenCapturer(sessionId);
         }
     }
 
     @Override
     public void unpublish(String sessionId, String publisherId) {
-        // android.util.Log.d("@Debug opentokReactNativeModule unpublish", sharedState.getScreenCapturers().size() + " screen capturers stored before session disconnect");
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         Session mSession = mSessions.get(sessionId);
         if (mSession == null) {
@@ -324,7 +322,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         for (Subscriber sub : subs.values()) {
             if (sub == null) continue;
 
-            Session sess = sub.getSession(); // <-- use subscriber session
+            Session sess = sub.getSession();
             String sid = (sess != null) ? sess.getSessionId() : null;
             if (sid == null || !sid.equals(sessionId)) continue;
 
@@ -392,14 +390,6 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         emitOnSessionDisconnected(payload);
 
         String sid = session.getSessionId();
-        
-        // // Clean up screen capturer if any
-        // OTScreenCapturer sc = sharedState.getScreenCapturers().get(sid);
-        // if (sc != null) {
-        //     android.util.Log.d("@Debug OTScreenCapturer", "Stopping screen capturer for sessionId=" + sid);
-        //     try { sc.stopCapture(); } catch (Throwable ignored) {}
-        //     try { sc.destroy(); } catch (Throwable ignored) {}
-        // }
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         mSessions.remove(sid);
     }
