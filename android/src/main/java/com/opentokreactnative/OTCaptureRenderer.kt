@@ -7,7 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
-import android.util.Log
+
 import com.opentok.android.BaseVideoRenderer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -19,7 +19,6 @@ import javax.microedition.khronos.opengles.GL10
 class OTCaptureRenderer : GLSurfaceView.Renderer {
 
     companion object {
-        private const val TAG = "MyRenderer"
         // Hardcoded downscale factor: 1=full, 2=half, 4=quarter
         private const val DOWNSCALE = 1
         private const val CAPTURE_LONG_SIDE = 320
@@ -123,9 +122,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         )
 
         val status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)
-        if (status != GLES20.GL_FRAMEBUFFER_COMPLETE) {
-            Log.w(TAG, "Capture FBO not complete, status=$status")
-        }
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)
@@ -171,7 +167,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         }
 
     fun setOnBitmapFrameListener(streamId: String, cb: ((Bitmap, Int, Int) -> Unit)?) {
-        Log.d(TAG, "setOnBitmapFrameListener streamId=$streamId enabled=${cb != null}")
         onBitmapFrame = cb
     }
 
@@ -313,12 +308,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         val now = android.os.SystemClock.uptimeMillis()
         if (now - lastAspectLogMs > 1000) {
             lastAspectLogMs = now
-            Log.d(
-                "@Debug MyRendererAspect",
-                "video=${videoW}x${videoH} vidAsp=${"%.3f".format(vidAspect)} " +
-                    "viewport=${viewportW}x${viewportH} viewAsp=${"%.3f".format(viewAspect)} " +
-                    "videoFit=$videoFit scaleX=${"%.3f".format(scaleX)} scaleY=${"%.3f".format(scaleY)}"
-            )
         }
 
         drawQuadPos.position(0)
@@ -441,7 +430,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
           val sx = (flipped.width / 2).coerceIn(0, flipped.width - 1)
           val sy = (flipped.height / 2).coerceIn(0, flipped.height - 1)
           val px = flipped.getPixel(sx, sy)
-          Log.d("@Debug MyRendererReadback", "size=${flipped.width}x${flipped.height} sample=0x${Integer.toHexString(px)}")
       }
 
         cb.invoke(flipped, outW, outH)

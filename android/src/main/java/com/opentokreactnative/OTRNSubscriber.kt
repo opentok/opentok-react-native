@@ -183,7 +183,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         android.util.Log.d("@Debug OTRNSubscriber", "subscribeToStream called")
         var pubOrSub: String? = ""
         var zOrder: String? = ""
-        val captureRenderer = CaptureBmpVideoRenderer(context, stream.getStreamId()).apply {
+        val captureRenderer = OTCaptureBmpVideoRenderer(context, stream.getStreamId()).apply {
             onBitmapFrame = { streamId, bmp, w, h ->
                 // NOTE: this callback runs on the GL thread.
                 // Keep it lightweight. If you plan to send to JS, do it on another thread.
