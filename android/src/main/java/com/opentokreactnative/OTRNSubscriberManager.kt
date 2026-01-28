@@ -39,11 +39,6 @@ class OTRNSubscriberManager(context: ReactApplicationContext) :
     override public fun setScaleBehavior(view: OTRNSubscriber, value: String?) {
         view.setScaleBehavior(value)
     }
-    
-    @ReactProp(name = "subscribeToSelf", defaultBoolean = false)
-    override fun setSubscribeToSelf(view: OTRNSubscriber, value: Boolean) {
-        view.setSubscribeToSelf(value)
-    }
 
     override fun setSubscribeToAudio(
         view: OTRNSubscriber?,
