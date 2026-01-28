@@ -43,7 +43,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     private var androidOnTopMap = sharedState.getAndroidOnTopMap();
     private var androidZOrderMap = sharedState.getAndroidZOrderMap();
     private var props: MutableMap<String, Any>? = null
-    private var subscribeToSelf: Boolean = false
 
     constructor(context: Context) : super(context) {
         configureComponent()
@@ -59,21 +58,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         defStyleAttr
     ) {
         configureComponent()
-    }
-
-    fun setSubscribeToSelf(value: Boolean) {
-        subscribeToSelf = value
-        wireSelfOverlay()
-    }
-
-    private fun wireSelfOverlay() {
-        val view = subscriber?.view ?: return
-        val capturer = OTRN.getSharedState().screenCapturers[sessionId] ?: return
-        if (subscribeToSelf) {
-            capturer.setSelfSubscriberView(view)
-        } else {
-            capturer.setSelfSubscriberView(null)
-        }
     }
 
     private fun wireSubscribersOverlays() {
@@ -174,7 +158,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         var height: Int = values[1].toInt()
         subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
     }
-    
+
     fun subscribeToStream(session: Session, stream: Stream) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
@@ -250,7 +234,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         if (subscriber?.view != null) {
             this.addView(subscriber?.view)
             requestLayout()
-            wireSelfOverlay()
             wireSubscribersOverlays()
         }
     }
@@ -263,7 +246,6 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     }
 
     override fun onConnected(subscriber: SubscriberKit) {
-        wireSelfOverlay()
         wireSubscribersOverlays()
         
         val stream = EventUtils.prepareJSStreamMap(subscriber.getStream(), subscriber.getSession())

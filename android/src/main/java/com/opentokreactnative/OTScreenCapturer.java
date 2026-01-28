@@ -21,7 +21,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     private View contentView;
     
     private View publisherView;
-    private View selfSubscriberView;
     private Bitmap prevFrameBmp;
 
     private int fps = 15;
@@ -148,6 +147,63 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
             canvas.drawBitmap(prevFrameBmp, src, dst, null);
         }
+
+        // Call this from your capture loop after contentView.draw(canvas)
+        private void drawSubscriberPreviews(Canvas canvas) {
+            int[] viewLoc = new int[2];
+            int[] contentLoc = new int[2];
+            contentView.getLocationOnScreen(contentLoc);
+
+            final int scrollX = contentView.getScrollX();
+            final int scrollY = contentView.getScrollY();
+
+            for (Map.Entry<String, PreviewSlot> e : subscriberPreviews.entrySet()) {
+                final String streamId = e.getKey();
+                final PreviewSlot slot = e.getValue();
+
+
+                final Bitmap b = (slot != null) ? slot.bitmap : null;
+                if (b == null || b.isRecycled()) continue;
+
+                final View v = subscriberViews.get(streamId);
+                if (v == null || v.getWidth() <= 0 || v.getHeight() <= 0) continue;
+                
+                v.getLocationOnScreen(viewLoc);
+
+                // Position relative to contentView, then compensate for the translate(-scrollX, -scrollY)
+                final int left = (viewLoc[0] - contentLoc[0]) - scrollX;
+                final int top  = (viewLoc[1] - contentLoc[1]) - scrollY;
+                final int right = left + v.getWidth();
+                final int bottom = top + v.getHeight();
+
+                Rect dst = new Rect(left, top, right, bottom);
+                if (dst.width() <= 0 || dst.height() <= 0) continue;
+
+                // Clamp to capture bounds
+                Rect frameRect = new Rect(0, 0, OTScreenCapturer.this.width, OTScreenCapturer.this.height);
+                if (!dst.intersect(frameRect) || dst.width() <= 0 || dst.height() <= 0) continue;
+
+                final int bw = b.getWidth();
+                final int bh = b.getHeight();
+                if (bw <= 0 || bh <= 0) continue;
+
+                final float srcAspect = (float) bw / (float) bh;
+                final float dstAspect = (float) dst.width() / (float) dst.height();
+
+                Rect src;
+                if (srcAspect > dstAspect) {
+                    int newW = Math.round(bh * dstAspect);
+                    int x0 = Math.max(0, (bw - newW) / 2);
+                    src = new Rect(x0, 0, Math.min(bw, x0 + newW), bh);
+                } else {
+                    int newH = Math.round(bw / dstAspect);
+                    int y0 = Math.max(0, (bh - newH) / 2);
+                    src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
+                }
+
+                canvas.drawBitmap(b, src, dst, previewPaint);
+            }
+        }
     };
 
     public void setSubscriberView(String streamId, View view) {
@@ -160,9 +216,9 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     }
 
     /**
-   * Store only the latest preview frame per streamId.
-   * Called from subscriber GL thread -> keep it lightweight and thread-safe.
-   */
+    * Store only the latest preview frame per streamId.
+    * Called from subscriber GL thread -> keep it lightweight and thread-safe.
+    */
     public void updateSubscriberPreview(String streamId, Bitmap src, int w, int h) {
         if (streamId == null || src == null) return;
         if (w <= 0 || h <= 0) return;
@@ -200,6 +256,16 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         slot.lastUpdateMs = now;
     }
 
+    public OTScreenCapturer(View view) {
+        View parentView = (View) view.getParent();
+        if (parentView != null) {
+            this.contentView = parentView; // Use ReactSurfaceView in a NewArchitecture
+        } else {
+            this.contentView = view; // Fallback
+        }
+        this.publisherView = view;
+    }
+
     // Release cached preview bitmaps and clear maps
     private void clearSubscriberPreviews() {
         for (PreviewSlot slot : subscriberPreviews.values()) {
@@ -212,77 +278,6 @@ public class OTScreenCapturer extends BaseVideoCapturer {
         }
         subscriberPreviews.clear();
         subscriberViews.clear();
-    }
-    
-    // Call this from your capture loop after contentView.draw(canvas)
-    private void drawSubscriberPreviews(Canvas canvas) {
-        int[] viewLoc = new int[2];
-        int[] contentLoc = new int[2];
-        contentView.getLocationOnScreen(contentLoc);
-
-        final int scrollX = contentView.getScrollX();
-        final int scrollY = contentView.getScrollY();
-
-        for (Map.Entry<String, PreviewSlot> e : subscriberPreviews.entrySet()) {
-            final String streamId = e.getKey();
-            final PreviewSlot slot = e.getValue();
-
-
-            final Bitmap b = (slot != null) ? slot.bitmap : null;
-            if (b == null || b.isRecycled()) continue;
-
-            final View v = subscriberViews.get(streamId);
-            if (v == null || v.getWidth() <= 0 || v.getHeight() <= 0) continue;
-            
-            v.getLocationOnScreen(viewLoc);
-
-            // Position relative to contentView, then compensate for the translate(-scrollX, -scrollY)
-            final int left = (viewLoc[0] - contentLoc[0]) - scrollX;
-            final int top  = (viewLoc[1] - contentLoc[1]) - scrollY;
-            final int right = left + v.getWidth();
-            final int bottom = top + v.getHeight();
-
-            Rect dst = new Rect(left, top, right, bottom);
-            if (dst.width() <= 0 || dst.height() <= 0) continue;
-
-            // Clamp to capture bounds
-            Rect frameRect = new Rect(0, 0, OTScreenCapturer.this.width, OTScreenCapturer.this.height);
-            if (!dst.intersect(frameRect) || dst.width() <= 0 || dst.height() <= 0) continue;
-
-            final int bw = b.getWidth();
-            final int bh = b.getHeight();
-            if (bw <= 0 || bh <= 0) continue;
-
-            final float srcAspect = (float) bw / (float) bh;
-            final float dstAspect = (float) dst.width() / (float) dst.height();
-
-            Rect src;
-            if (srcAspect > dstAspect) {
-                int newW = Math.round(bh * dstAspect);
-                int x0 = Math.max(0, (bw - newW) / 2);
-                src = new Rect(x0, 0, Math.min(bw, x0 + newW), bh);
-            } else {
-                int newH = Math.round(bw / dstAspect);
-                int y0 = Math.max(0, (bh - newH) / 2);
-                src = new Rect(0, y0, bw, Math.min(bh, y0 + newH));
-            }
-
-            canvas.drawBitmap(b, src, dst, previewPaint);
-        }
-    }
-
-    public OTScreenCapturer(View view) {
-        View parentView = (View) view.getParent();
-        if (parentView != null) {
-            this.contentView = parentView; // Use ReactSurfaceView in a NewArchitecture
-        } else {
-            this.contentView = view; // Fallback
-        }
-        this.publisherView = view;
-    }
-
-    public void setSelfSubscriberView(View v) {
-        this.selfSubscriberView = v;
     }
 
     @Override

@@ -162,7 +162,6 @@ export default class OTSubscriber extends Component {
             <OTSubscriberView
               streamId={streamId}
               style={style}
-              subscribeToSelf={this.state.subscribeToSelf}
               {...this.props.properties}
             />
           </OTContext.Provider>
