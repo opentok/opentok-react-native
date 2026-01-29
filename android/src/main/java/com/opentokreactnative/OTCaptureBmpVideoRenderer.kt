@@ -87,9 +87,7 @@ class OTCaptureBmpVideoRenderer(
                     value.invoke(streamId, bmp, w, h)
                 }
 
-            // Note: streamId is passed here, but renderer currently stores only one callback.
-            // It can be useful for debugging/logging inside OTCaptureRenderer if needed.
-            renderer.setOnBitmapFrameListener(streamId, cb)
+            renderer.setOnBitmapFrameListener(cb)
         }
 
     init {
