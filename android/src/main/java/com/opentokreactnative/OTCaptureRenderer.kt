@@ -283,7 +283,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * - blitProgram: a simple texture blit program (currently not used in capture path).
      * - plane textures: texY/texU/texV to store I420 planes.
      */
-    override fun onSurfaceCreated(_: GL10?, config: EGLConfig?) {
+    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         // Build YUV shader program (I420: Y + U + V planes)
         yuvProgram = buildProgram(
             // vertex shader
@@ -340,7 +340,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
     /**
      * Called when view/surface size changes.
      */
-    override fun onSurfaceChanged(_: GL10?, width: Int, height: Int) {
+    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         viewportW = width
         viewportH = height
         GLES20.glViewport(0, 0, width, height)
@@ -416,7 +416,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * - On-screen rendering (full size): uploadI420 + drawI420
      * - Offscreen capture rendering (small size): draw into capFboId + glReadPixels + callback
      */
-    override fun onDrawFrame(_: GL10?) {
+    override fun onDrawFrame(gl: GL10?) {
         // Grab latest frame reference (do NOT do GL calls under lock)
         val frame: BaseVideoRenderer.Frame? = run {
             frameLock.lock()
