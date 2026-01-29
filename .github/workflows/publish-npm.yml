@@ -23,24 +23,15 @@ jobs:
         id: version
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
-          echo "Branch name: $BRANCH_NAME"
           
           # Extract version from release-X.X.X branch name
           if [[ $BRANCH_NAME =~ ^release-(.+)$ ]]; then
             VERSION="${BASH_REMATCH[1]}"
-            echo "Extracted version: $VERSION"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           else
             echo "❌ Error: Branch must be named 'release-X.X.X'"
-            echo "Current branch: $BRANCH_NAME"
             exit 1
           fi
-          
-      - name: Validate inputs
-        run: |
-          echo "Version: ${{ steps.version.outputs.version }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Dry run: ${{ inputs.dry_run }}"
           
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -53,11 +44,8 @@ jobs:
         
       - name: Verify version matches package.json
         run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          PACKAGE_VERSION=$(npm run version:local --silent)
           BRANCH_VERSION="${{ steps.version.outputs.version }}"
-          
-          echo "Package.json version: $PACKAGE_VERSION"
-          echo "Branch version: $BRANCH_VERSION"
           
           if [ "$PACKAGE_VERSION" != "$BRANCH_VERSION" ]; then
             echo "❌ Error: Version mismatch!"
@@ -65,53 +53,33 @@ jobs:
             exit 1
           fi
           
-          echo "✅ Version matches package.json"
-          
       - name: Check if version already published
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+          PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
           
-          if npm view opentok-react-native@$VERSION version 2>/dev/null; then
+          if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
             echo "❌ Error: Version $VERSION is already published on NPM!"
-            echo "Please bump the version in package.json and create a new release branch."
             exit 1
           fi
-          
-          echo "✅ Version $VERSION is not yet published"
         
       - name: Dry run - Verify package
         if: inputs.dry_run == true
         run: |
-          echo "🔍 DRY RUN MODE - No actual publishing will occur"
-          echo "=================================="
+          echo "🔍 DRY RUN MODE"
           npm publish --dry-run
-          echo "=================================="
-          echo "✅ Dry run completed successfully"
           
       - name: Publish to NPM
         if: inputs.dry_run == false
-        run: |
-          echo "📦 Publishing version ${{ steps.version.outputs.version }}"
-          npm publish
-          echo "✅ Successfully published opentok-react-native@${{ steps.version.outputs.version }}"
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           
       - name: Verify publication
         if: inputs.dry_run == false
         run: |
-          echo "Waiting 10 seconds for NPM registry to update..."
           sleep 10
-          
-          echo "Verifying publication..."
           npm view opentok-react-native@${{ steps.version.outputs.version }} version
-          
-          if [ $? -eq 0 ]; then
-            echo "✅ Version ${{ steps.version.outputs.version }} successfully published and verified"
-          else
-            echo "⚠️ Warning: Could not verify publication immediately. Check manually."
-            exit 1
-          fi
           
       - name: Summary
         if: always()
@@ -121,16 +89,3 @@ jobs:
           echo "- **Version**: ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ inputs.dry_run }}" == "false" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Rollback Commands" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-            echo "# Unpublish (within 72 hours)" >> $GITHUB_STEP_SUMMARY
-            echo "npm unpublish opentok-react-native@${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "# Or deprecate" >> $GITHUB_STEP_SUMMARY
-            echo "npm deprecate opentok-react-native@${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          fi
