@@ -54,7 +54,9 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build && build:expo && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
     "build:expo": "tsc --project expo/tsconfig.json",
-    "release": "release-it"
+    "release": "release-it",
+    "version:local": "node -pe 'require(\"./package.json\").version'",
+    "version:published": "npm show opentok-react-native version"
   },
   "keywords": [
     "react-native",
