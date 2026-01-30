@@ -234,28 +234,28 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * UVs for sampling the I420 textures.
      * Values are arranged so the video appears correct in OpenGL coordinate system.
      */
-    // private val quadUv: FloatBuffer = ByteBuffer
-    //     .allocateDirect(4 * 2 * 4)
-    //     .order(ByteOrder.nativeOrder())
-    //     .asFloatBuffer()
-    //     .apply {
-    //         // flipped vertically to match GL coords
-    //         put(floatArrayOf(0f, 1f, 1f, 1f, 0f, 0f, 1f, 0f))
-    //         position(0)
-    //     }
+    private val quadUv: FloatBuffer = ByteBuffer
+        .allocateDirect(4 * 2 * 4)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .apply {
+            // flipped vertically to match GL coords
+            put(floatArrayOf(0f, 1f, 1f, 1f, 0f, 0f, 1f, 0f))
+            position(0)
+        }
 
     /**
      * Mirrored UVs: swap left/right.
      * Used when OpenTok reports frame mirrored.
      */
-    // private val quadUvMirrored: FloatBuffer = ByteBuffer
-    //     .allocateDirect(4 * 2 * 4)
-    //     .order(ByteOrder.nativeOrder())
-    //     .asFloatBuffer()
-    //     .apply {
-    //         put(floatArrayOf(1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f))
-    //         position(0)
-    //     }
+    private val quadUvMirrored: FloatBuffer = ByteBuffer
+        .allocateDirect(4 * 2 * 4)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .apply {
+            put(floatArrayOf(1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f))
+            position(0)
+        }
     
 
     /**
@@ -334,7 +334,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
               gl_Position = vec4(aPos, 0.0, 1.0);
             }
             """.trimIndent(),
-            // fragment shader (simple BT.601 style conversion; may need tuning for your content)
+            // fragment shader (BT.601 style conversion)
             """
             precision mediump float;
             varying vec2 vTex;
@@ -536,7 +536,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         GLES20.glVertexAttribPointer(yPosLoc, 2, GLES20.GL_FLOAT, false, 0, quadPos)
 
         GLES20.glEnableVertexAttribArray(yTexLoc)
-        // val uvs = if (mirrored) quadUvMirrored else quadUv
         val uvs = if (mirrored) quadUvCaptureMirrored else quadUvCapture
         uvs.position(0)
         GLES20.glVertexAttribPointer(yTexLoc, 2, GLES20.GL_FLOAT, false, 0, uvs)
@@ -565,9 +564,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         GLES20.glReadPixels(0, 0, outW, outH, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buf)
         buf.rewind()
         bmp.copyPixelsFromBuffer(buf)
-
-        // Fix vertical orientation (glReadPixels origin mismatch)
-        // val flipped = flipBitmapVertical(bmp)
 
         // Restore on-screen framebuffer + viewport so future draws are correct
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
@@ -631,8 +627,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
     }
 
     /**
-     * Reflection-based accessors: OpenTok's Frame API differs across versions.
-     * These helpers try multiple method names / fields.
+     * Helpers to upload a single plane into its texture.
      */
     private fun frameBuffer(frame: BaseVideoRenderer.Frame): ByteBuffer? =
         runCatching { frame.javaClass.getMethod("getBuffer").invoke(frame) as ByteBuffer }.getOrNull()
@@ -676,7 +671,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
 
         // UVs (mirrored or not)
         GLES20.glEnableVertexAttribArray(yTexLoc)
-        val uvs = if (mirrored) quadUvCaptureMirrored else quadUvCapture
+        val uvs = if (mirrored) quadUvMirrored else quadUv
         uvs.position(0)
         GLES20.glVertexAttribPointer(yTexLoc, 2, GLES20.GL_FLOAT, false, 0, uvs)
 
@@ -717,7 +712,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
 
     /**
      * Allocate texture storage for a plane.
-     * Uses GL_LUMINANCE to store 8-bit plane values (good enough for ES2 pipeline).
+     * Uses GL_LUMINANCE to store 8-bit plane values.
      */
     private fun allocPlane(texId: Int, w: Int, h: Int) {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId)
@@ -819,9 +814,4 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         videoFit = enable
         quadDirty = true
     }
-
-    /**
-     * Video enable/disable callback. Not implemented (no-op).
-     */
-    fun disableVideo(disable: Boolean) {}
 }
