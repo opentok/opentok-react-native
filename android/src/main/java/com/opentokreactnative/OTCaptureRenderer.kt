@@ -1,10 +1,9 @@
 package com.opentokreactnative
 
 import kotlin.math.max
-import kotlin.math.min
 
 import android.graphics.Bitmap
-import android.graphics.Matrix
+// import android.graphics.Matrix
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 
@@ -35,7 +34,7 @@ import javax.microedition.khronos.opengles.GL10
  * (4) GLSurfaceView invokes onDrawFrame() on the GL thread.
  * (5) We upload I420 planes (Y/U/V) from the frame into 3 GL textures.
  * (6) We draw those textures with a YUV->RGB fragment shader onto the visible surface.
- * (7) Capture path: we draw again into an offscreen FBO (smaller size), glReadPixels to RGBA buffer,
+ * (7) Capture path: we draw again into an offscreen FBO (FrameBuffer Object) smaller size, glReadPixels to RGBA buffer,
  *     copy to a Bitmap, flip vertically, and invoke callback onBitmapFrame(bitmap, w, h).
  *
  * Threading:
@@ -120,15 +119,14 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      */
     @Volatile private var videoFit: Boolean = false // true = FIT, false = FILL (crop)
 
-    // Capture downscale: FBO + blit program state (some is legacy/unused in this snippet)
-    private var blitProgram: Int = 0
+    // Capture downscale: FBO (FrameBuffer Object) state
     private var aPosLoc: Int = -1
     private var aTexLoc: Int = -1
     private var uTexLoc: Int = -1
 
     /**
      * drawQuadPos is the quad we actually use for on-screen drawing.
-     * Its values are updated by updateCropQuadIfNeeded() whenever viewport/video dims change.
+     * Its values are updated by updateCropQuadIfNeeded() whenever viewport/video dimensions change.
      */
     private val drawQuadPos: FloatBuffer = ByteBuffer
         .allocateDirect(4 * 2 * 4)
@@ -141,15 +139,15 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
     private var lastVidW = -1
     private var lastVidH = -1
 
-    // Capture-only FBO state (this is what we actually use for preview capture) ---
+    // Capture-only FBO (FrameBuffer Object) state (this is what we actually use for preview capture)
     private var capFboId: Int = 0        // framebuffer object handle
     private var capTexId: Int = 0        // texture attached to capFboId
     private var capW: Int = 0            // size of cap FBO (capture output width)
     private var capH: Int = 0            // size of cap FBO (capture output height)
 
+
     /**
      * Ensure we have an offscreen framebuffer + RGBA texture attachment at size (w x h).
-     *
      * This lets us draw the video into a smaller render target before calling glReadPixels,
      * which is significantly faster than reading back the full on-screen surface.
      */
@@ -196,8 +194,24 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         )
 
         // Validate FBO
-        @Suppress("UNUSED_VARIABLE")
         val status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER)
+        if (status != GLES20.GL_FRAMEBUFFER_COMPLETE) {
+            // FBO isn't usable; clean up to avoid leaking GL objects / leaving broken state
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)
+
+            if (capTexId != 0) {
+                GLES20.glDeleteTextures(1, intArrayOf(capTexId), 0)
+                capTexId = 0
+            }
+            if (capFboId != 0) {
+                GLES20.glDeleteFramebuffers(1, intArrayOf(capFboId), 0)
+                capFboId = 0
+            }
+            capW = 0
+            capH = 0
+            return
+        }
 
         // Unbind
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
@@ -212,10 +226,10 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * Android Bitmaps assume (0,0) at top-left.
      * So the copied bitmap appears upside-down unless we flip.
      */
-    private fun flipBitmapVertical(src: Bitmap): Bitmap {
-        val m = Matrix().apply { preScale(1f, -1f) }
-        return Bitmap.createBitmap(src, 0, 0, src.width, src.height, m, false)
-    }
+    // private fun flipBitmapVertical(src: Bitmap): Bitmap {
+    //     val m = Matrix().apply { preScale(1f, -1f) }
+    //     return Bitmap.createBitmap(src, 0, 0, src.width, src.height, m, false)
+    // }
 
     // Full-screen quad positions (covers full render target)
     private val quadPos: FloatBuffer = ByteBuffer
@@ -253,6 +267,44 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
             put(floatArrayOf(1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f))
             position(0)
         }
+    
+
+    /**
+    * UVs for capture pass that flip vertically so glReadPixels results match Android Bitmap origin.
+    * OpenGL FBO origin is bottom-left; Bitmap origin is top-left.
+    *
+    * Using these UVs makes the captured bitmap come out upright without CPU-side flipping.
+    */
+    private val quadUvCapture: FloatBuffer = ByteBuffer
+        .allocateDirect(4 * 2 * 4)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .apply {
+            // Same quad order as quadPos: (-1,-1), (1,-1), (-1,1), (1,1)
+            // Here we invert V compared to quadUv.
+            put(floatArrayOf(
+                0f, 0f,
+                1f, 0f,
+                0f, 1f,
+                1f, 1f
+            ))
+            position(0)
+    }
+
+    private val quadUvCaptureMirrored: FloatBuffer = ByteBuffer
+        .allocateDirect(4 * 2 * 4)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .apply {
+            // mirrored + vertically flipped
+            put(floatArrayOf(
+                1f, 0f,
+                0f, 0f,
+                1f, 1f,
+                0f, 1f
+            ))
+            position(0)
+    }
 
     /**
      * Set a capture callback. When set, onDrawFrame() will emit a Bitmap each frame.
@@ -280,7 +332,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * GL initialization.
      * We build:
      * - yuvProgram: YUV->RGB shader program for drawing OpenTok I420 frames.
-     * - blitProgram: a simple texture blit program (currently not used in capture path).
      * - plane textures: texY/texU/texV to store I420 planes.
      */
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
@@ -498,7 +549,8 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         GLES20.glVertexAttribPointer(yPosLoc, 2, GLES20.GL_FLOAT, false, 0, quadPos)
 
         GLES20.glEnableVertexAttribArray(yTexLoc)
-        val uvs = if (mirrored) quadUvMirrored else quadUv
+        // val uvs = if (mirrored) quadUvMirrored else quadUv
+        val uvs = if (mirrored) quadUvCaptureMirrored else quadUvCapture
         uvs.position(0)
         GLES20.glVertexAttribPointer(yTexLoc, 2, GLES20.GL_FLOAT, false, 0, uvs)
 
@@ -528,7 +580,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         bmp.copyPixelsFromBuffer(buf)
 
         // Fix vertical orientation (glReadPixels origin mismatch)
-        val flipped = flipBitmapVertical(bmp)
+        // val flipped = flipBitmapVertical(bmp)
 
         // Restore on-screen framebuffer + viewport so future draws are correct
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
@@ -537,7 +589,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         }
 
         // Emit the captured preview bitmap (GL thread)
-        cb.invoke(flipped, outW, outH)
+        cb.invoke(bmp, outW, outH)
     }
 
     /**
