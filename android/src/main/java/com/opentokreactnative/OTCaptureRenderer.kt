@@ -3,7 +3,6 @@ package com.opentokreactnative
 import kotlin.math.max
 
 import android.graphics.Bitmap
-// import android.graphics.Matrix
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 
@@ -221,16 +220,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         capH = h
     }
 
-    /**
-     * glReadPixels reads framebuffer with (0,0) at bottom-left.
-     * Android Bitmaps assume (0,0) at top-left.
-     * So the copied bitmap appears upside-down unless we flip.
-     */
-    // private fun flipBitmapVertical(src: Bitmap): Bitmap {
-    //     val m = Matrix().apply { preScale(1f, -1f) }
-    //     return Bitmap.createBitmap(src, 0, 0, src.width, src.height, m, false)
-    // }
-
     // Full-screen quad positions (covers full render target)
     private val quadPos: FloatBuffer = ByteBuffer
         .allocateDirect(4 * 2 * 4)
@@ -245,28 +234,28 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
      * UVs for sampling the I420 textures.
      * Values are arranged so the video appears correct in OpenGL coordinate system.
      */
-    private val quadUv: FloatBuffer = ByteBuffer
-        .allocateDirect(4 * 2 * 4)
-        .order(ByteOrder.nativeOrder())
-        .asFloatBuffer()
-        .apply {
-            // flipped vertically to match GL coords
-            put(floatArrayOf(0f, 1f, 1f, 1f, 0f, 0f, 1f, 0f))
-            position(0)
-        }
+    // private val quadUv: FloatBuffer = ByteBuffer
+    //     .allocateDirect(4 * 2 * 4)
+    //     .order(ByteOrder.nativeOrder())
+    //     .asFloatBuffer()
+    //     .apply {
+    //         // flipped vertically to match GL coords
+    //         put(floatArrayOf(0f, 1f, 1f, 1f, 0f, 0f, 1f, 0f))
+    //         position(0)
+    //     }
 
     /**
      * Mirrored UVs: swap left/right.
      * Used when OpenTok reports frame mirrored.
      */
-    private val quadUvMirrored: FloatBuffer = ByteBuffer
-        .allocateDirect(4 * 2 * 4)
-        .order(ByteOrder.nativeOrder())
-        .asFloatBuffer()
-        .apply {
-            put(floatArrayOf(1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f))
-            position(0)
-        }
+    // private val quadUvMirrored: FloatBuffer = ByteBuffer
+    //     .allocateDirect(4 * 2 * 4)
+    //     .order(ByteOrder.nativeOrder())
+    //     .asFloatBuffer()
+    //     .apply {
+    //         put(floatArrayOf(1f, 1f, 0f, 1f, 1f, 0f, 0f, 0f))
+    //         position(0)
+    //     }
     
 
     /**
@@ -280,8 +269,6 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         .order(ByteOrder.nativeOrder())
         .asFloatBuffer()
         .apply {
-            // Same quad order as quadPos: (-1,-1), (1,-1), (-1,1), (1,1)
-            // Here we invert V compared to quadUv.
             put(floatArrayOf(
                 0f, 0f,
                 1f, 0f,
@@ -689,7 +676,7 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
 
         // UVs (mirrored or not)
         GLES20.glEnableVertexAttribArray(yTexLoc)
-        val uvs = if (mirrored) quadUvMirrored else quadUv
+        val uvs = if (mirrored) quadUvCaptureMirrored else quadUvCapture
         uvs.position(0)
         GLES20.glVertexAttribPointer(yTexLoc, 2, GLES20.GL_FLOAT, false, 0, uvs)
 
