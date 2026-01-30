@@ -1,4 +1,4 @@
-# 2.31.0 (January 2026)
+# 2.31.1 (January 2026)
 
 - [Update]: All release notes were migrated to [Developer center](https://tokbox.com/developer/sdks/react-native/release-notes.html)
 
