@@ -30,7 +30,7 @@ import com.opentok.android.BaseVideoRenderer
  * (3) We call [GLSurfaceView.requestRender()] to schedule a render pass.
  * (4) GLSurfaceView GL-thread calls [OTCaptureRenderer.onDrawFrame()].
  * (5) OTCaptureRenderer draws the frame (YUV->RGB shader) into the GL surface.
- * (6) OTCaptureRenderer optionally renders into an offscreen FBO + glReadPixels to produce a Bitmap.
+ * (6) OTCaptureRenderer optionally renders into an offscreen FBO (Frame Buffer Object) + glReadPixels to produce a Bitmap.
  * (7) OTCaptureRenderer calls our internal callback (Bitmap, w, h).
  * (8) We "re-add" streamId and invoke external [onBitmapFrame(streamId, bmp, w, h)].
  * (9) OTRNSubscriber forwards that bitmap to OTScreenCapturer.updateSubscriberPreview(...)
@@ -128,6 +128,14 @@ class OTCaptureBmpVideoRenderer(
                 BaseVideoRenderer.STYLE_VIDEO_FILL -> renderer.enableVideoFit(false)
             }
         }
+    }
+
+    /**
+     * Called when video is enabled/disabled for this Subscriber.
+     * Forwarded to renderer (currently a no-op in OTCaptureRenderer.disableVideo()).
+     */
+    override fun onVideoPropertiesChanged(videoEnabled: Boolean) {
+        renderer.disableVideo(!videoEnabled)
     }
 
     /**

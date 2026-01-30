@@ -174,7 +174,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
                 // We translate by scroll offsets so that view rect calculations (screen coords -> content coords)
                 // match the canvas coordinate system.
                 canvas.save();
-                canvas.translate(-contentView.getScrollX(), -contentView.getScrollY());
+                canvas.translate(-contentView.getScrollX(), - contentView.getScrollY());
                 contentView.draw(canvas);
 
                 // Overlay publisher (GL-backed) region with previous frame buffer
@@ -425,9 +425,7 @@ public class OTScreenCapturer extends BaseVideoCapturer {
     }
 
     @Override
-    public void init() {
-        // OpenTok calls this during capturer setup. No initialization needed here currently.
-    }
+    public void init() {}
 
     @Override
     public int startCapture() {
@@ -473,11 +471,9 @@ public class OTScreenCapturer extends BaseVideoCapturer {
 
     @Override
     public void onPause() {
-        // No-op: this capturer is view-based; handle pause/resume outside if needed.
     }
 
     @Override
     public void onResume() {
-        // No-op
     }
 }

@@ -814,4 +814,9 @@ class OTCaptureRenderer : GLSurfaceView.Renderer {
         videoFit = enable
         quadDirty = true
     }
+
+    /**
+     * Video enable/disable callback. Not implemented (no-op).
+     */
+    fun disableVideo(disable: Boolean) {}
 }
