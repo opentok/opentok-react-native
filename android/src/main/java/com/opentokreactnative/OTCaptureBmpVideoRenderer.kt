@@ -131,14 +131,6 @@ class OTCaptureBmpVideoRenderer(
     }
 
     /**
-     * Called when video is enabled/disabled for this Subscriber.
-     * Forwarded to renderer (currently a no-op in OTCaptureRenderer.disableVideo()).
-     */
-    override fun onVideoPropertiesChanged(videoEnabled: Boolean) {
-        renderer.disableVideo(!videoEnabled)
-    }
-
-    /**
      * OpenTok asks for the Android view to attach into the layout.
      */
     override fun getView(): View = view
