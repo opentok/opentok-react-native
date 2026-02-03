@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "2.31.0",
+  "version": "2.31.1",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -31,6 +31,8 @@
     "*.podspec",
     "app.plugin.js",
     "react-native.config.js",
+    "tsconfig.build.json",
+    "tsconfig.json",
     "expo",
     "!expo/node_modules",
     "!expo/tsconfig.json",
@@ -65,8 +67,11 @@
     "type": "git",
     "url": "git+https://github.com/opentok/opentok-react-native.git"
   },
-  "author": "Jeff Swartz <jeff.swartz@vonage.com> (https://github.com/jeffswartz)",
-  "license": "MIT",
+  "author": {
+    "name": "Vonage Video API",
+    "email": "support@api.vonage.com"
+  },
+  "license": "Adobe-2",
   "bugs": {
     "url": "https://github.com/opentok/opentok-react-native/issues"
   },
