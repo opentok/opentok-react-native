@@ -90,7 +90,12 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
+      - name: Create tag
+        uses: negz/create-tag@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{github.ref_name }}
+          message: New ${{github.ref_name}} tag created!         
       - name: Verify publication
         if: inputs.dry_run == false
         run: |
