@@ -17,12 +17,17 @@ public class OTRN {
     private ConcurrentHashMap<String, String> androidOnTopMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, String> androidZOrderMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, OTScreenCapturer> screenCapturers = new ConcurrentHashMap<>();
 
     public static synchronized OTRN getSharedState() {
         if (sharedState == null) {
             sharedState = new OTRN();
         }
         return sharedState;
+    }
+
+    public ConcurrentHashMap<String, OTScreenCapturer> getScreenCapturers() {
+        return this.screenCapturers;
     }
 
     public ConcurrentHashMap<String, String> getAndroidOnTopMap() {

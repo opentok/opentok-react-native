@@ -209,6 +209,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         var pubOrSub: String? = ""
         var zOrder: String? = ""
         if (this.props?.get("videoSource") == "screen") {
+            val capturer = OTScreenCapturer(this)
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
                 .name(this.props?.get("name") as String)
@@ -223,9 +224,10 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
-                .capturer(OTScreenCapturer(this))
+                .capturer(capturer)
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)
+            OTRN.getSharedState().screenCapturers[sessionId] = capturer
         } else if (this.props?.get("videoSource") == "camera") {
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
@@ -298,6 +300,11 @@ class OTRNPublisher : FrameLayout, PublisherListener,
             this.addView(publisher?.view)
             requestLayout()
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        OTRN.getSharedState().screenCapturers.remove(sessionId)
     }
 
     override fun onStreamCreated(publisher: PublisherKit, stream: Stream) {
