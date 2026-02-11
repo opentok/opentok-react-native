@@ -56,15 +56,15 @@ jobs:
             exit 1
           fi
 
-      # - name: Check if version already published
-      #   run: |
-      #     VERSION="${{ github.ref_name }}"
-      #     PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
+      - name: Check if version already published
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
 
-      #     if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
-      #       echo "❌ Error: Version $VERSION is already published on NPM!"
-      #       exit 1
-      #     fi
+          if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
+            echo "❌ Error: Version $VERSION is already published on NPM!"
+            exit 1
+          fi
 
       # - name: Dry run - Verify package
       #   if: inputs.dry_run == true
