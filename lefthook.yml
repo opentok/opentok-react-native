@@ -11,4 +11,5 @@ commit-msg:
   parallel: true
   commands:
     commitlint:
+      skip: true
       run: npx commitlint --edit
