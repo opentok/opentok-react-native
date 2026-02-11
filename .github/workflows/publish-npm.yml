@@ -66,30 +66,30 @@ jobs:
             exit 1
           fi
 
-      # - name: Dry run - Verify package
-      #   if: inputs.dry_run == true
-      #   run: |
-      #     echo "🔍 DRY RUN MODE"
-      #     TAG="${{ steps.npm-tag.outputs.tag }}"
-      #     if [ -n "$TAG" ]; then
-      #       echo "📦 Tag: $TAG"
-      #       npm publish --dry-run --tag "$TAG"
-      #     else
-      #       echo "📦 No explicit tag (using npm default)"
-      #       npm publish --dry-run
-      #     fi
+      - name: Dry run - Verify package
+        if: inputs.dry_run == true
+        run: |
+          echo "🔍 DRY RUN MODE"
+          TAG="${{ steps.npm-tag.outputs.tag }}"
+          if [ -n "$TAG" ]; then
+            echo "📦 Tag: $TAG"
+            npm publish --dry-run --tag "$TAG"
+          else
+            echo "📦 No explicit tag (using npm default)"
+            npm publish --dry-run
+          fi
 
-      # - name: Publish to NPM
-      #   if: inputs.dry_run == false
-      #   run: |
-      #     TAG="${{ steps.npm-tag.outputs.tag }}"
-      #     if [ -n "$TAG" ]; then
-      #       npm publish --tag "$TAG"
-      #     else
-      #       npm publish
-      #     fi
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM
+        if: inputs.dry_run == false
+        run: |
+          TAG="${{ steps.npm-tag.outputs.tag }}"
+          if [ -n "$TAG" ]; then
+            npm publish --tag "$TAG"
+          else
+            npm publish
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Create tag
       #   uses: negz/create-tag@v1
