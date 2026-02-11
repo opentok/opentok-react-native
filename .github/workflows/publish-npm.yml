@@ -45,6 +45,16 @@ jobs:
             echo "📦 Publishing without explicit tag (npm default)"
           fi
 
+      - name: Check if version already published
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
+
+          if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
+            echo "❌ Error: Version $VERSION is already published on NPM!"
+            exit 1
+          fi
+
       - name: Verify version matches package.json
         run: |
           PACKAGE_VERSION=$(npm run version:local --silent)
@@ -53,16 +63,6 @@ jobs:
           if [ "$PACKAGE_VERSION" != "$BRANCH_VERSION" ]; then
             echo "❌ Error: Version mismatch!"
             echo "Package.json has version $PACKAGE_VERSION but branch name indicates $BRANCH_VERSION"
-            exit 1
-          fi
-
-      - name: Check if version already published
-        run: |
-          VERSION="${{ github.ref_name }}"
-          PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
-
-          if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
-            echo "❌ Error: Version $VERSION is already published on NPM!"
             exit 1
           fi
 
