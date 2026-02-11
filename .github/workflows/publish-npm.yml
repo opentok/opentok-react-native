@@ -12,7 +12,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -91,23 +92,23 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Create tag
-      #   uses: negz/create-tag@v1
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     version: v${{github.ref_name }}
-      #     message: New ${{github.ref_name}} tag created!
+      - name: Create tag
+        uses: negz/create-tag@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v${{github.ref_name }}
+          message: New v${{github.ref_name}} tag created!
 
-      # - name: Verify publication
-      #   if: inputs.dry_run == false
-      #   run: |
-      #     sleep 10
-      #     npm view opentok-react-native@${{ github.ref_name }} version
+      - name: Verify publication
+        if: inputs.dry_run == false
+        run: |
+          sleep 10
+          npm view opentok-react-native@${{ github.ref_name }} version
 
-      # - name: Summary
-      #   if: always()
-      #   run: |
-      #     echo "## Publish Summary" >> $GITHUB_STEP_SUMMARY
-      #     echo "" >> $GITHUB_STEP_SUMMARY
-      #     echo "- **Version**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-      #     echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Publish Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
