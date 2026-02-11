@@ -12,24 +12,25 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-          
+
       - name: Install dependencies
         run: |
           npm ci
           npm run prepare
-      
+
       - name: Determine NPM tag
         id: npm-tag
         run: |
@@ -44,28 +45,28 @@ jobs:
             echo "tag=" >> $GITHUB_OUTPUT
             echo "📦 Publishing without explicit tag (npm default)"
           fi
-        
+
       - name: Verify version matches package.json
         run: |
           PACKAGE_VERSION=$(npm run version:local --silent)
           BRANCH_VERSION="${{ github.ref_name }}"
-          
+
           if [ "$PACKAGE_VERSION" != "$BRANCH_VERSION" ]; then
             echo "❌ Error: Version mismatch!"
             echo "Package.json has version $PACKAGE_VERSION but branch name indicates $BRANCH_VERSION"
             exit 1
           fi
-          
+
       - name: Check if version already published
         run: |
           VERSION="${{ github.ref_name }}"
           PUBLISHED_VERSION=$(npm run version:published --silent 2>/dev/null || echo "")
-          
+
           if [ "$PUBLISHED_VERSION" == "$VERSION" ]; then
             echo "❌ Error: Version $VERSION is already published on NPM!"
             exit 1
           fi
-        
+
       - name: Dry run - Verify package
         if: inputs.dry_run == true
         run: |
@@ -78,7 +79,7 @@ jobs:
             echo "📦 No explicit tag (using npm default)"
             npm publish --dry-run
           fi
-          
+
       - name: Publish to NPM
         if: inputs.dry_run == false
         run: |
@@ -90,18 +91,20 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create tag
         uses: negz/create-tag@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: v${{github.ref_name }}
-          message: New ${{github.ref_name}} tag created!         
+          message: New v${{github.ref_name}} tag created!
+
       - name: Verify publication
         if: inputs.dry_run == false
         run: |
           sleep 10
           npm view opentok-react-native@${{ github.ref_name }} version
-          
+
       - name: Summary
         if: always()
         run: |
