@@ -1,20 +1,10 @@
-# 2.31.0 (September 2025)
+# 2.31.1 (January 2026)
 
-- [Update]: This version is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). The only differences from previous versions are that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application (see the [Installation section](./README.md#installation) of the README.md file).
+- [Update]: All release notes were migrated to [Developer center](https://tokbox.com/developer/sdks/react-native/release-notes.html)
 
-- [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.31.1. For more information, see the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
+# 2.31.0-beta.0 (July 2025)
 
-- [Update]: This version adds a new `OTSession.forceDisconnect()` method for forcing clients to disconnect.
-
-- [Update]: This version adds an `allowAudioCaptureWhileMuted` property of the OTPublisher `properties` prop. Set this to `true` to have the publisher receive audio level updates when not publishing audio.
-
-- [Update]: This version adds API enhancements for controling the maximum bitrate of a published stream. These are added as new properties of the OTPublisher `properties` prop:
-
-  * `videoBitratePreset` -- Set this to one of the following string values: 'default', 'bw_saver', or 'extra_bw_saver'. This property is ignored if the `maxVideoBitrate` property is set.
-
-  * `maxVideoBitrate` -- To set the maximum bitrate value (instead of a preset), set the this property to a value between 5,000 and 10,000,000 (in bits per second).
-
-  If neither property is set, the `default` preset is used.
+- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
 
 # 2.30.2 (May 2025)
 
@@ -32,7 +22,7 @@
 
 - [Update]: This version includes an option to skip local network checks when establishing media connectivity on iOS. This prevents the app from prompting the user for permission when it attempts to subscribe to clients on the same local network in a relayed session.
 
-  Set the `filterOutLanCandidates` property of the object set as the  `iceConfig` property `options` prop of the OTSession component to `true`:
+  Set the `filterOutLanCandidates` property of the object set as the `iceConfig` property `options` prop of the OTSession component to `true`:
 
   ```
   <OTSession
@@ -45,7 +35,7 @@
   />
   ```
 
-  Note that -- unlike the other `iceConfig` settings -- this setting does *not* require the [configurable TURN server](https://tokbox.com/developer/guides/configurable-turn-servers/) add-on feature.
+  Note that -- unlike the other `iceConfig` settings -- this setting does _not_ require the [configurable TURN server](https://tokbox.com/developer/guides/configurable-turn-servers/) add-on feature.
 
   For more information see [this documentation](https://tokbox.com/developer/guides/mobile/ios/#ios-14-networking).
 
@@ -74,7 +64,7 @@
   }
   ```
 
-# 2.28.2  (September 2024)
+# 2.28.2 (September 2024)
 
 - [Update]: This version updates the Vonage Video Android and iOS SDK to version 2.28.1. See the [Android SDK release notes](https://tokbox.com/developer/sdks/android/release-notes.html) and the [iOS SDK release notes](https://tokbox.com/developer/sdks/ios/release-notes.html).
 
@@ -82,22 +72,24 @@
 
 - [Fix]: Fixes an error that resulted if you set an OTPublisher event handler for `streamCreated` without setting one for `streamDestroyed`.
 
-# 2.28.1  (September 2024)
+# 2.28.1 (September 2024)
 
 - [Update]: The new `OTPublisher.setAudioTransformers()` method lets you set (and clear) audio transformers. One transformer, the noise suppression filter, is supported. To use this, call the `setAudioTransformers()` method of the OTPublisher ref, and pass in an array with one object that has a `name` property set to `'NoiseSuppression'` and a `properties` property set to an empty string:
 
   ```js
-  publisherRef.setAudioTransformers([{
-    name: 'NoiseSuppression',
-    properties: '',
-  }]);
+  publisherRef.setAudioTransformers([
+    {
+      name: 'NoiseSuppression',
+      properties: '',
+    },
+  ]);
   ```
 
-  *Important:* To use this method, you must add the Vonage Media Transformer library to your project, separately from the OpenTok React Native SDK. See [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
+  _Important:_ To use this method, you must add the Vonage Media Transformer library to your project, separately from the OpenTok React Native SDK. See [Vonage Media Library integration](https://tokbox.com/developer/guides/vonage-media-processor/react-native/#vonage-media-library-integration).
 
 - [Update]: This version adds support for enabling single peer connection for the client, by setting the `enableSinglePeerConnection` property of the `options` prop of the OTSession component to `true`. For more information see [this documentation](https://tokbox.com/developer/guides/create-session/#single-peer-connection).
 
-# 2.28.0  (July 2024)
+# 2.28.0 (July 2024)
 
 - [Update]: This version updates the Vonage Video Android SDK and iOS SDK to version 2.28.0.
 
@@ -113,11 +105,11 @@
 
 - [Update]: This version updates a vulnerable Node module (braces).
 
-# 2.27.6  (June 2024)
+# 2.27.6 (June 2024)
 
 - [Fix]: This version fixes some iOS crashes that were introduced in version 2.27.5. Fixes issue #757.
 
-# 2.27.5  (June 2024)
+# 2.27.5 (June 2024)
 
 - [Fix]: This version fixes the `OTSubscriber captionReceived` event handler. It also fixes the `OTPublisher publishCaptions` option in iOS.
 
@@ -127,38 +119,37 @@
 
 - [Fix] The `subscribeToSelf` prop of the OTSubscriber component was not working. This version fixes the issue (issue #612).
 
-
-# 2.27.4  (April 2024)
+# 2.27.4 (April 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
 
 - [Update]: The installation instructions in the README file are updated, with new details on required Android permissions (such as `android.permission.BLUETOOTH`).
 
-# 2.26.2  (April 2024)
+# 2.26.2 (April 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.26.3. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
 
-# 2.25.5  (April 2024)
+# 2.25.5 (April 2024)
+
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.25.5. This version adds a [privacy manifest required by Apple's App store](https://developer.apple.com/support/third-party-SDK-requirements). Issue #737.
 
-# 2.27.3  (March 2024)
+# 2.27.3 (March 2024)
 
 - [Update]: This version updates the Vonage Video iOS SDK version to 2.27.2 and the Vonage Video Android SDK version to 2.27.1. See their release notes for details:
-
-  * https://tokbox.com/developer/sdks/android/release-notes.html
-  * https://tokbox.com/developer/sdks/ios/release-notes.html
+  - https://tokbox.com/developer/sdks/android/release-notes.html
+  - https://tokbox.com/developer/sdks/ios/release-notes.html
 
 - [Fix] Toggling between a screen and camera video source for publisher caused apps to crash in iOS. This version fixes the issue (issue #710).
 
-# 2.27.2  (March 2024)
+# 2.27.2 (March 2024)
 
 - [Fix]: On Android, a screen-sharing OTPublisher (one with the `videoSource` setting set to `"screen"`) failed if the app did not have camera access permission. This version fixes the issue, so that screen-sharing can proceed without camera access permission.
 
-*Note:* In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds the camera access permission. However, an app or user can disable it independently of the SDK.
+_Note:_ In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds the camera access permission. However, an app or user can disable it independently of the SDK.
 
 - [Update]: Updates react-native and axios packages to fix vulnerable dependencies.
 
-# 2.27.1  (March 2024)
+# 2.27.1 (March 2024)
 
 - [Fix]: On Android, OTPublisher components failed with an error when either `PermissionsAndroid.PERMISSIONS.CAMERA` or `PermissionsAndroid.PERMISSIONS.RECORD_AUDIO` were not `true`. This version fixes that, by having audio-only or video-only publishers skip the `PermissionsAndroid.PERMISSIONS.CAMERA` or `PermissionsAndroid.PERMISSIONS.RECORD_AUDIO` check if the `videoTrack` or `audioTrack` property of the `properties` prop of the OTPublisher component is set to `false`. You can set these props to `false` based on these permissions:
 
@@ -173,13 +164,13 @@ import { PermissionsAndroid } from 'react-native';
 />
 ```
 
-*Note:* In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds these permissions. However, an app or user can disable them independently of the SDK.
+_Note:_ In Android 6.0 (`API Level 23`) and higher, the OpenTok React Native SDK automatically adds these permissions. However, an app or user can disable them independently of the SDK.
 
 - [Fix]: On Android, setting the `videoTrack` property of the `properties` prop of the OTPublisher component `false` resulted in the app to crash. This version fixes the issue (issue #652).
 
 - [Fix]: Fixes some TypeScript definitions (issue #725).
 
-# 2.27.0  (March 2024)
+# 2.27.0 (March 2024)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.27.0.
 
@@ -192,7 +183,7 @@ import { PermissionsAndroid } from 'react-native';
 - [Update]: This version adds support for [end-to-end encryption](https://tokbox.com/developer/guides/end-to-end-encryption). The `OTSession` component includes a new `encryptionSecret` prop, which you can use to set and change the encryption secret used by the local client.
 
 - [Update]: This version adds a new `OTPublisher audioFallback` option, which supports both subscriber and publisher audio fallback. The `audioFallback.subscriber` property replaces the `OTPublisher audioFallbackEnabled` option, which is deprecated.
-The OTPublisher component has new callback functions for publisher audio fallback-related events: `videoDisabled()`, `videoEnabled()`, `videoDisableWarning()`, and `videoDisableWarningLifted()`. See the [audio fallback developer guide](https://tokbox.com/developer/guides/audio-fallback).
+  The OTPublisher component has new callback functions for publisher audio fallback-related events: `videoDisabled()`, `videoEnabled()`, `videoDisableWarning()`, and `videoDisableWarningLifted()`. See the [audio fallback developer guide](https://tokbox.com/developer/guides/audio-fallback).
 
 - [Update]: The `OTPublisher.setVideoTransformer()` method now supports the background image replacement transformer in Android (as well as iOS). And the custom radius option for the background blur filter is now supported in Android (as well as iOS).
 
@@ -201,36 +192,34 @@ The OTPublisher component has new callback functions for publisher audio fallbac
 - [Fix]: This version fixes some issues in the TypeScript definitions.
 
 - [Fix]: This version fixes the following events, which were not being dispatched:
-
-  * OTPublisher audioNetworkStats
-  * OTPublisher videoNetworkStats
-  * OTPublisher muteForced
-  * OTSession muteForced
+  - OTPublisher audioNetworkStats
+  - OTPublisher videoNetworkStats
+  - OTPublisher muteForced
+  - OTSession muteForced
 
 - [Fix]: This version fixes the `OTSession.forceMuteAll()` method in iOS.
 
-# 2.26.1  (October 2023)
+# 2.26.1 (October 2023)
 
 - [Update]: The new `OTPublisher.setVideoTransformers()` method lets you set (and clear)
   video transformers, such as a background blur for a publisher (issues #631 and #682).
   For more info, see the docs: [OTPublisher](/docs/OTPublisher.md).
 
 - [Update]: Live Captions API enhancements (issue #643)
+  - The new OTPublisher.publishCaptions option lets you enable and disable captions for a published stream (if captions are enabled for the session). For more info, see the docs:[OTPublisher](/docs/OTPublisher.md).
 
-  * The new OTPublisher.publishCaptions option lets you enable and disable captions for a published stream  (if captions are enabled for the session). For more info, see the docs:[OTPublisher](/docs/OTPublisher.md).
+  - The new OTSubscriber.subscribeToCaptions option lets you turn captions on and off for a subscriber (if captions are enabled for the session and the publisher is publishing captions). For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
 
-  * The new OTSubscriber.subscribeToCaptions option lets you turn captions on and off for a subscriber (if captions are enabled for the session and the publisher is publishing captions). For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
+  - The new OTSubscriber captionReceived event is dispatched when a subscriber receives a caption. For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
 
-  * The new OTSubscriber captionReceived event is dispatched when a subscriber receives a caption. For more info, see the docs: [OTSubscriber](/docs/OTSubscriber.md).
-
-  * For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
+  - For more information, see the [Live Captions developer guide](https://tokbox.com/developer/guides/live-captions).
 
 - [Fix]: Fixes an issue in which applications could not connect to a session when
   the `proxyUrl` option for OTSession was set. - issue #645
 
 - [Fix]: Fixes an issue a stream is not destroyed immediately after unmounting an OTSession component or when the `OTSession.disconnect()` method is called. - issues #685 and #686
 
-# 2.26.0  (October 2023)
+# 2.26.0 (October 2023)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.26.1.
 
@@ -245,41 +234,40 @@ The OTPublisher component has new callback functions for publisher audio fallbac
 
 # 2.25.4 (October 2023)
 
-- [Fix]: Fixes TypeScript definitions  - issue #690.
+- [Fix]: Fixes TypeScript definitions - issue #690.
 
 # 2.25.3 (September 2023)
 
 - [Update]: Add API to implement functionality missing from the OpenTok Android and iOS SDKs:
-
-  * `OTSession.getCapabilities()` method
-  * `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
-  * OTPublisher `scalableScreenshare` option (in the OTPublisher properties)
-  * OTPublisher `audioNetworkStats` and `videoNetworkStats` events
-  * `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
-  * "1920x1080" option for OTPublisher `resolution` (for FHD video support)
-  * OTSubscriber `audioVolume` property.
-  * OT.getSupportedCodecs() method.
-  * OT.forceMuteAll(), OT.forceMuteStream(), OT.disableForceMute() methods. OTPublisher
+  - `OTSession.getCapabilities()` method
+  - `reportIssue()` methods and `rtcStatsReport` events added to OTPublisher and OTSubscriber
+  - OTPublisher `scalableScreenshare` option (in the OTPublisher properties)
+  - OTPublisher `audioNetworkStats` and `videoNetworkStats` events
+  - `OTPublisher.getRtcStatsReport()` method and OTPublisher `rtcStatsReport` event
+  - "1920x1080" option for OTPublisher `resolution` (for FHD video support)
+  - OTSubscriber `audioVolume` property.
+  - OT.getSupportedCodecs() method.
+  - OT.forceMuteAll(), OT.forceMuteStream(), OT.disableForceMute() methods. OTPublisher
     `muteForce` event and OTSession `muteForced` event.
 
 For more info, see the docs:
 
-* [OTPublisher](/docs/OTPublisher.md)
-* [OTSession](/docs/OTSession.md)
-* [OTSubscriber](/docs/OTSubscriber.md)
+- [OTPublisher](/docs/OTPublisher.md)
+- [OTSession](/docs/OTSession.md)
+- [OTSubscriber](/docs/OTSubscriber.md)
 
-- [Fix]: Fix android app crash due to permission missing.
-- [Fix]: Fix OTSubscriber audioVolume and other properties not working -- issue #694
+* [Fix]: Fix android app crash due to permission missing.
+* [Fix]: Fix OTSubscriber audioVolume and other properties not working -- issue #694
 
 # 2.25.2 (July 5 2023)
 
 - [Fix]: Fix crash on iOS when publishing a screen-sharing stream.
 
-# 2.25.1  (June 27 2023)
+# 2.25.1 (June 27 2023)
 
 - [Fix]: Fix camera lifecycle on Android. - issue #645
 
-# 2.25.0  (May 17 2023)
+# 2.25.0 (May 17 2023)
 
 - [Update]: Update OpenTok Android SDK and OpenTok iOS SDK to version 2.25.1.
 
@@ -332,27 +320,32 @@ For more info, see the docs:
 - [Fix]: Typescrit types fixed audioLevel
 
 # 0.20.1 (Jan 28, 2022)
+
 - [Update]: Add Content Hint API on the OTPublisher object
 - [Update]: Add timestamp property on the audioNetworkStats and videoNetworkStats
-- [Fix]: Bump `opentok-react-native` version to 
+- [Fix]: Bump `opentok-react-native` version to
 
 # 0.20.0 (Jan 26, 2022)
-- [Update]: update SDKs iOS to 2.21.3 and Android to 2.21.4 
+
+- [Update]: update SDKs iOS to 2.21.3 and Android to 2.21.4
 
 # 0.19.0 (Oct 11, 2021)
+
 - [Update]: update SDKs Android to 2.20.2
 - [Update]: added IceConfig options in the Session Options object
 - [Fix]: added missing typings in @types/index.d.ts
 - [Fix]: fix crash in OTSubscriberLayout [#525](https://github.com/opentok/opentok-react-native/pull/525)
 
 # 0.18.0 (Jun 24, 2021)
+
 - [Update]: update SDKs iOS to 2.20.0 and Android to 2.20.1
 - [Fix]: fix crash in OTPublisherLayout when sessionId is null. Fix: https://github.com/opentok/opentok-react-native/issues/462#issuecomment-752171962
 - [Fix]: Downgrade uuidv4 module to `3.4.0` due to [UUID#375](https://github.com/uuidjs/uuid/issues/375)
 - [Fix]: OTCustomAudioDrive added file in project.pbxproj
-- [Fix]: Update Github Actions 
+- [Fix]: Update Github Actions
 
 # 0.17.2 (May 27, 2021)
+
 - **[Fix]**: Fixed incorrect audio bitrate sanitization [#473](https://github.com/opentok/opentok-react-native/pull/473)
 - **[Fix]**: Fix audio crash on teardown [#495](https://github.com/opentok/opentok-react-native/pull/495)
 
@@ -360,7 +353,6 @@ For more info, see the docs:
 
 - **[Fix]**: Fixed @opentok/types (merged from [PR505](https://github.com/opentok/opentok-react-native/pull/505))
 - **[Fix]**: Fixed double listeners [#271](https://github.com/opentok/opentok-react-native/issues/271) (merged from [PR307](https://github.com/opentok/opentok-react-native/pull/307))
-
 
 # 0.17.0 (Apr 29, 2021)
 
@@ -378,7 +370,7 @@ For more info, see the docs:
 - **[Fix]**: Fixed android app crash with API level 29 (merged from [PR456](https://github.com/opentok/opentok-react-native/pull/456)). Adheres to: [#455](https://github.com/opentok/opentok-react-native/issues/455)
 - iOS SDK updated to `2.18.1`
 - Android SDK updated to `2.18.1`
-- Added typescript support 
+- Added typescript support
 
 # 0.14.0 (May 22, 2020)
 
@@ -390,31 +382,28 @@ For more info, see the docs:
 - **[Feature]**: Add Session Options support, both [iOS](https://tokbox.com/developer/sdks/ios/reference/Classes/OTSessionSettings.html) and [Android](https://tokbox.com/developer/sdks/android/reference/). Note: iceConfig option is not currently supported
 - **[Feature]**: Update of iOS SDK to `2.16.5` and Android SDK to `2.16.5`
 
-
 # 0.12.2 (Dec 4, 2019)
 
--   **[Fix]**: Prevent to unpublish on disconnected sessions (merged from [PR356](https://github.com/opentok/opentok-react-native/pull/356)). Adheres to: [#337](https://github.com/opentok/opentok-react-native/issues/337)
--   **[Feature]**: Add podspec for autolinking support in RN 0.6x (merged from [PR358](https://github.com/opentok/opentok-react-native/pull/358)). Adheres to: [#332](https://github.com/opentok/opentok-react-native/issues/332)
--   Android SDK updated to `2.16.3`
+- **[Fix]**: Prevent to unpublish on disconnected sessions (merged from [PR356](https://github.com/opentok/opentok-react-native/pull/356)). Adheres to: [#337](https://github.com/opentok/opentok-react-native/issues/337)
+- **[Feature]**: Add podspec for autolinking support in RN 0.6x (merged from [PR358](https://github.com/opentok/opentok-react-native/pull/358)). Adheres to: [#332](https://github.com/opentok/opentok-react-native/issues/332)
+- Android SDK updated to `2.16.3`
 
 # 0.12.1 (Aug 30, 2019)
 
--   **[Fix]**: Fix an error when updating streamId for subscriber component (merged from [PR326](https://github.com/opentok/opentok-react-native/pull/326)). Adheres to: [#315](https://github.com/opentok/opentok-react-native/issues/315), [#324](https://github.com/opentok/opentok-react-native/issues/324)
--   **[Fix]**: Use Context API for passing props down the component tree (merged from [PR333](https://github.com/opentok/opentok-react-native/pull/333)). Adheres to: [#329](https://github.com/opentok/opentok-react-native/issues/329), [#335](https://github.com/opentok/opentok-react-native/issues/335)
--   **[Fix]**: Fix `Attempted to register RCTBridgeModule class OTSessionManager` issue after opening/reloading app (merged from [PR336](https://github.com/opentok/opentok-react-native/pull/336)).
--   **[Fix]**: Fix reload in iOS (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/339)).
--   **[Fix]**: Fix security vulnerabilities on dependencies (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/340)).
-
+- **[Fix]**: Fix an error when updating streamId for subscriber component (merged from [PR326](https://github.com/opentok/opentok-react-native/pull/326)). Adheres to: [#315](https://github.com/opentok/opentok-react-native/issues/315), [#324](https://github.com/opentok/opentok-react-native/issues/324)
+- **[Fix]**: Use Context API for passing props down the component tree (merged from [PR333](https://github.com/opentok/opentok-react-native/pull/333)). Adheres to: [#329](https://github.com/opentok/opentok-react-native/issues/329), [#335](https://github.com/opentok/opentok-react-native/issues/335)
+- **[Fix]**: Fix `Attempted to register RCTBridgeModule class OTSessionManager` issue after opening/reloading app (merged from [PR336](https://github.com/opentok/opentok-react-native/pull/336)).
+- **[Fix]**: Fix reload in iOS (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/339)).
+- **[Fix]**: Fix security vulnerabilities on dependencies (merged from [PR339](https://github.com/opentok/opentok-react-native/pull/340)).
 
 # 0.12.0 (Aug 5, 2019)
 
--   **[Feature]**: Add Multi-session support (merged from [PR311](https://github.com/opentok/opentok-react-native/pull/311)). Adheres to: [#218](https://github.com/opentok/opentok-react-native/issues/218), [#271](https://github.com/opentok/opentok-react-native/issues/271)
-
+- **[Feature]**: Add Multi-session support (merged from [PR311](https://github.com/opentok/opentok-react-native/pull/311)). Adheres to: [#218](https://github.com/opentok/opentok-react-native/issues/218), [#271](https://github.com/opentok/opentok-react-native/issues/271)
 
 # 0.11.2 (July 2, 2019)
 
--   **[Feature]**: Enable `OTSubscriber` children custom render (merged from [PR306](https://github.com/opentok/opentok-react-native/pull/306)). Adheres to: [#289](https://github.com/opentok/opentok-react-native/issues/289), [#174](https://github.com/opentok/opentok-react-native/issues/174)
--  iOS SDK updated to `2.16.1`
--  Android SDK updated to `2.16.1`
-  
+- **[Feature]**: Enable `OTSubscriber` children custom render (merged from [PR306](https://github.com/opentok/opentok-react-native/pull/306)). Adheres to: [#289](https://github.com/opentok/opentok-react-native/issues/289), [#174](https://github.com/opentok/opentok-react-native/issues/174)
+- iOS SDK updated to `2.16.1`
+- Android SDK updated to `2.16.1`
+
 # 0.x.x (todo)

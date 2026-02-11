@@ -8,9 +8,9 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
+**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native). This beta pre-release version is not intended for use in final production apps.
 
-This version supports the same API as the previous version. And it adds some new API enhancements. 
+This version supports Client SDK updates for v2.31.0. 
 
 The only difference from previous versions is that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application:
 
@@ -103,8 +103,8 @@ If you're using Expo, the setup is simplified with the config plugin:
 
 2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native0`
-  * `yarn add opentok-react-native`
+  * `npm install opentok-react-native@2.31.0-beta.2`
+  * `yarn add opentok-react-native@2.31.0-beta.2`
 
 ### iOS Installation
 
