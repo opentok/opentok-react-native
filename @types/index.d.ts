@@ -177,6 +177,12 @@ declare module 'opentok-react-native' {
 
   interface OTSessionSessionOptions {
     /**
+     * Custom API URL to use instead of the default https://api.opentok.com.
+     * This is useful for testing or using a custom OpenTok server.
+     */
+    apiUrl?: string;
+
+    /**
      * default is false
      */
     connectionEventsSuppressed?: boolean;

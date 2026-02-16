@@ -61,6 +61,7 @@ RCT_EXPORT_MODULE()
         optionsDict[@"ipWhitelist"] = @(options.ipWhitelist().value());
     }
     optionsDict[@"proxyUrl"] = options.proxyUrl();
+    optionsDict[@"apiUrl"] = options.apiUrl();
 
     if (options.iceConfig().has_value()) {
         NSMutableDictionary *iceConfigDict = [NSMutableDictionary dictionary];

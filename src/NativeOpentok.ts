@@ -40,6 +40,7 @@ export type MuteForcedEvent = {
 
 export type SessionOptions = {
   androidZOrder?: string;
+  apiUrl?: string;
   connectionEventsSuppressed?: boolean;
   enableStereoOutput?: boolean;
   enableSinglePeerConnection?: boolean;

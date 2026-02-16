@@ -52,6 +52,16 @@ import React
             OTRN.sharedState.sessionDelegateHandlers.removeValue(forKey: sessionId)
             return
         }
+        
+        // Set custom API URL if provided
+        let apiUrlString = Utils.sanitizeStringProperty(sessionOptions["apiUrl"] as Any)
+        if !apiUrlString.isEmpty, let apiUrl = URL(string: apiUrlString) {
+            // Use the private setApiRootURL method available in OTSession
+            if session.responds(to: Selector(("setApiRootURL:"))) {
+                session.perform(Selector(("setApiRootURL:")), with: apiUrl)
+            }
+        }
+        
         OTRN.sharedState.sessions.updateValue(session, forKey: sessionId)
     }
 
