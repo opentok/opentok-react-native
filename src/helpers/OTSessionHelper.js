@@ -134,6 +134,7 @@ const sanitizeSessionOptions = (options) => {
 
   if (platform === 'android') {
     sessionOptions = {
+      apiUrl: '',
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
@@ -147,6 +148,7 @@ const sanitizeSessionOptions = (options) => {
     };
   } else {
     sessionOptions = {
+      apiUrl: '',
       connectionEventsSuppressed: false,
       ipWhitelist: false,
       iceConfig: {},
@@ -163,6 +165,7 @@ const sanitizeSessionOptions = (options) => {
 
   const validSessionOptions = {
     ios: {
+      apiUrl: 'string',
       connectionEventsSuppressed: 'boolean',
       ipWhitelist: 'boolean',
       iceConfig: 'object',
@@ -172,6 +175,7 @@ const sanitizeSessionOptions = (options) => {
       sessionMigration: 'boolean',
     },
     android: {
+      apiUrl: 'string',
       connectionEventsSuppressed: 'boolean',
       useTextureViews: 'boolean',
       androidOnTop: 'string',
