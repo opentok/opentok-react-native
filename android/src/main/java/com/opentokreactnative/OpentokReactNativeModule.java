@@ -189,8 +189,10 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         // Clean up screen capturer if any
         OTScreenCapturer sc = sharedState.getScreenCapturers().remove(sessionId);
         if (sc != null) {
-            try { sc.stopCapture(); } catch (Throwable ignored) {}
-            try { sc.destroy(); } catch (Throwable ignored) {}
+            try { 
+                sc.stopCapture(); 
+                sc.destroy();
+            } catch (Throwable ignored) {}
         }
     }
 
