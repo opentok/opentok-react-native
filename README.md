@@ -304,45 +304,6 @@ allprojects {
 }
 ```
 
-## Custom API URL Configuration
-
-By default, the OpenTok React Native SDK connects to the OpenTok API at `https://api.opentok.com`. You can override this to use a custom API URL by passing the `apiUrl` option to the `OTSession` component. This is useful for testing environments or when using a custom OpenTok server deployment.
-
-### Usage Example
-
-```javascript
-import { OTSession, OTPublisher, OTSubscriber } from 'opentok-react-native';
-
-const sessionOptions = {
-  apiUrl: 'https://your-custom-api-url.com'
-};
-
-<OTSession 
-  apiKey={apiKey} 
-  sessionId={sessionId} 
-  token={token}
-  options={sessionOptions}
->
-  <OTPublisher />
-  <OTSubscriber />
-</OTSession>
-```
-
-### Additional Session Options
-
-The `options` prop also supports other configuration options:
-
-- `connectionEventsSuppressed` (boolean): Whether to suppress connection events
-- `proxyUrl` (string): EU proxy server URL
-- `ipWhitelist` (boolean): Enable IP whitelist feature
-- `enableStereoOutput` (boolean): Enable stereo audio output
-- `enableSinglePeerConnection` (boolean): Use single peer connection mode
-- `sessionMigration` (boolean): Enable session migration
-- `iceConfig` (object): Configure custom TURN servers
-- Android only: `androidOnTop`, `androidZOrder`, `useTextureViews`
-
-For more details, see the [official documentation](https://tokbox.com/developer/sdks/react-native/reference/OTSession.html).
-
 ## Docs
 
 See the [docs](https://tokbox.com/developer/sdks/react-native/reference).
