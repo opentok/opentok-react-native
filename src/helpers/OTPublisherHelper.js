@@ -105,6 +105,16 @@ const sanitizeVideoBitratePreset = (videoBitratePreset, maxVideoBitrate) => {
   }
 };
 
+const sanitizePreferredVideoCodecs = (preferredVideoCodecs = '') => {
+  if (Array.isArray(preferredVideoCodecs)) {
+    const filtered = preferredVideoCodecs.filter(
+      (codec) => ['vp8', 'vp9', 'h264'].includes(codec)
+    );
+    return filtered.join(';');
+  }
+  return preferredVideoCodecs === '' ? '' : '';
+};
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
@@ -127,6 +137,7 @@ const sanitizeProperties = (properties) => {
       videoSource: 'camera',
       scalableScreenshare: false,
       allowAudioCaptureWhileMuted: false,
+      preferredVideoCodecs: '',
     };
   }
 
@@ -176,6 +187,7 @@ const sanitizeProperties = (properties) => {
       properties.maxVideoBitrate
     ),
     scaleBehavior: properties.scaleBehavior ?? 'fill',
+    preferredVideoCodecs: sanitizePreferredVideoCodecs(properties.preferredVideoCodecs),
   };
 };
 

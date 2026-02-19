@@ -10,6 +10,10 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   type VideoScaleType = 'fill' | 'fit';
 
+  type VideoCodec = 'vp8' | 'vp9' | 'h264';
+
+  type PreferredVideoCodecs = 'automatic' | [VideoCodec, ...VideoCodec[]];
+
   interface SessionConnectEvent {
     sessionId: string;
     connection: Connection;
@@ -507,6 +511,16 @@ declare module "@vonage/client-sdk-video-react-native" {
      * Publisher view scale behavior. Defaults to "fill".
      */
     scaleBehavior?: VideoScaleType;
+
+    /**
+     * The preferred video codecs priority for publishing.
+     *
+     * It can be set to "automatic" or an array of video codecs in order of preference. The supported video codecs are "vp8", "vp9", and "h264".
+     * The default value is "automatic". Setting this property to "automatic" will use the default video codec priority for the client.
+     * Setting this property to an array of video codecs will prioritize the specified video codecs in the order they are listed.
+     * If invalid (such as an empty array or unsupported codec), publisher initialization fails.
+     */
+    preferredVideoCodecs?: PreferredVideoCodecs;
   }
 
   interface OTPublisherEventHandlers {
