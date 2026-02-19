@@ -1,6 +1,6 @@
 {
   "name": "opentok-react-native",
-  "version": "2.31.1",
+  "version": "2.31.2",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -54,7 +54,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build && build:expo && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
+    "prepare": "bob build && npm run build:expo && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
     "build:expo": "tsc --project expo/tsconfig.json",
     "release": "release-it"
   },
