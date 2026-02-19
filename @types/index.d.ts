@@ -182,6 +182,13 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSessionSessionOptions {
     /**
+     * Server URL.
+     * 
+     * This parameter is meant for testing purposes.
+     */
+    apiUrl?: string;
+
+    /**
      * default is false
      */
     connectionEventsSuppressed?: boolean;

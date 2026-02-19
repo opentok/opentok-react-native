@@ -72,6 +72,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         final IncludeServers includeServers = Utils.sanitizeIncludeServer(options.getString("includeServers"));
         final TransportPolicy transportPolicy = Utils.sanitizeTransportPolicy(options.getString("transportPolicy"));
         final String proxyUrl = options.getString("proxyUrl");
+        final String apiUrl = options.getString("apiUrl");
         final String androidOnTop = options.getString("androidOnTop");
         final String androidZOrder = options.getString("androidZOrder");
         final boolean singlePeerConnection = options.getBoolean("enableSinglePeerConnection");
@@ -79,7 +80,7 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
         ConcurrentHashMap<String, String> androidOnTopMap = sharedState.getAndroidOnTopMap();
         ConcurrentHashMap<String, String> androidZOrderMap = sharedState.getAndroidZOrderMap();
 
-        Session session = new Session.Builder(context, apiKey, sessionId)
+        Session.Builder sessionBuilder = new Session.Builder(context, apiKey, sessionId)
             .sessionOptions(new Session.SessionOptions() {
                 @Override
                 public boolean useTextureViews() {
@@ -92,8 +93,18 @@ public class OpentokReactNativeModule extends NativeOpentokSpec implements
             .setIpWhitelist(ipWhitelist)
             .setProxyUrl(proxyUrl)
             .setSinglePeerConnection(singlePeerConnection)
-            .setSessionMigration(sessionMigration)
-            .build();
+            .setSessionMigration(sessionMigration);
+
+        // Set custom API URL if provided
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            try {
+                sessionBuilder.setApiUrl(new java.net.URL(apiUrl));
+            } catch (java.net.MalformedURLException e) {
+                android.util.Log.e(NAME, "Invalid API URL: " + apiUrl, e);
+            }
+        }
+
+        Session session = sessionBuilder.build();
 
         sharedState.getSessions().put(sessionId, session);
 
