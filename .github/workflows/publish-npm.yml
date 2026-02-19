@@ -103,7 +103,7 @@ jobs:
         if: inputs.dry_run == false
         run: |
           sleep 10
-          npm view opentok-react-native@${{ github.ref_name }} version
+          npm view @vonage/client-sdk-video-react-native@${{ github.ref_name }} version
 
       - name: Summary
         if: always()
