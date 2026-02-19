@@ -182,8 +182,9 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTSessionSessionOptions {
     /**
-     * Custom API URL to use instead of the default https://api.opentok.com.
-     * This is useful for testing or using a custom OpenTok server.
+     * Server URL.
+     * 
+     * This parameter is meant for testing purposes.
      */
     apiUrl?: string;
 
