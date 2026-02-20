@@ -54,8 +54,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build && npm run build:expo && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
-    "build:expo": "tsc --project expo/tsconfig.json",
+    "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
     "release": "release-it"
   },
   "keywords": [
