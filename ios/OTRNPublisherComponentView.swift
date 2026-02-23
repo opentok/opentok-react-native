@@ -81,6 +81,9 @@ import React
         settings.allowAudioCaptureWhileMuted = Utils.sanitizeBooleanProperty(
             properties["allowAudioCaptureWhileMuted"] as Any
         )
+        settings.videoCodecPreference = Utils.convertPreferredVideoCodecs(
+            properties["preferredVideoCodecs"] as Any
+        )
 
         self.publisherId = Utils.sanitizeStringProperty(
             properties["publisherId"] as Any

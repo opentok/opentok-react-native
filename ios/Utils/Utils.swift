@@ -201,6 +201,45 @@ class Utils {
             return OTVideoBitratePreset.default
         }
     }
+
+    static func convertPreferredVideoCodecs(_ preferredVideoCodecs: Any)
+        -> OTVideoCodecPreference
+    {
+        guard let preferredVideoCodecsStr = preferredVideoCodecs as? String else {
+            return OTVideoCodecPreference.automatic()
+        }
+
+        print("preferredVideoCodecs: \(preferredVideoCodecsStr)")
+
+        if preferredVideoCodecsStr.isEmpty {
+            return OTVideoCodecPreference.automatic()
+        }
+
+        let codecNames = preferredVideoCodecsStr
+            .split(separator: ";")
+            .map { $0.trimmingCharacters(in: .whitespaces).uppercased() }
+
+        var codecTypes: [NSNumber] = []
+
+        for codecName in codecNames {
+            switch codecName {
+            case "VP9":
+                codecTypes.append(NSNumber(value: OTVideoCodecType.VP9.rawValue))
+            case "VP8":
+                codecTypes.append(NSNumber(value: OTVideoCodecType.VP8.rawValue))
+            case "H264":
+                codecTypes.append(NSNumber(value: OTVideoCodecType.H264.rawValue))
+            default:
+                break
+            }
+        }
+
+        if codecTypes.isEmpty {
+            return OTVideoCodecPreference.automatic()
+        }
+        return OTVideoCodecPreference.manual(withCodecs: codecTypes)
+    }
+
     static func setStreamObservers(stream: OTStream, isPublisherStream: Bool) {
         let streamId = stream.streamId
 
