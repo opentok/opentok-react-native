@@ -112,7 +112,7 @@ const sanitizePreferredVideoCodecs = (preferredVideoCodecs = '') => {
     );
     return filtered.join(';');
   }
-  return preferredVideoCodecs === '' ? '' : '';
+  return preferredVideoCodecs === 'automatic' ? '' : '';
 };
 
 const sanitizeProperties = (properties) => {

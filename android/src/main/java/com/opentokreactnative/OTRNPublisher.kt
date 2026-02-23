@@ -214,8 +214,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     private fun publishStream() {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
-        println("preferredVideoCodecs: " + this.props?.get("preferredVideoCodecs"))
-
+        var preferredVideoCodecs: ArrayList<PublisherKit.PreferredVideoCodecs.Codec> = this.getPreferredVideoCodecs();
         if (this.props?.get("videoSource") == "screen") {
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
@@ -232,6 +231,9 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
+                .preferredVideoCodecs(
+                    if (preferredVideoCodecs.isEmpty()) null
+                    else PublisherKit.PreferredVideoCodecs.manual(preferredVideoCodecs))
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)
         } else if (this.props?.get("videoSource") == "camera") {
@@ -249,6 +251,9 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .audioTrack(this.props?.get("audioTrack") as Boolean)
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
+                .preferredVideoCodecs(
+                    if (preferredVideoCodecs.isEmpty()) null
+                    else PublisherKit.PreferredVideoCodecs.manual(preferredVideoCodecs))
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
             if (this.props?.get("videoTrack") as Boolean) {
@@ -422,6 +427,23 @@ class OTRNPublisher : FrameLayout, PublisherListener,
 
     override fun onVideoDisableWarningLifted(publisher: PublisherKit?) {
         emitOpenTokEvent("onVideoDisableWarningLifted", Arguments.createMap())
+    }
+
+    private fun getPreferredVideoCodecs(): ArrayList<PublisherKit.PreferredVideoCodecs.Codec> {
+        val preferredVideoCodecsStr = (this.props?.get("preferredVideoCodecs") as? String)?.uppercase() ?: ""
+        println("preferredVideoCodecs: " + preferredVideoCodecsStr)
+        val videoCodecs = preferredVideoCodecsStr.split(";")
+        val preferredVideoCodecs = ArrayList<PublisherKit.PreferredVideoCodecs.Codec>()
+
+        for (codec in videoCodecs) {
+            when (codec) {
+                "VP8" -> preferredVideoCodecs.add(PublisherKit.PreferredVideoCodecs.Codec.VP8)
+                "VP9" -> preferredVideoCodecs.add(PublisherKit.PreferredVideoCodecs.Codec.VP9)
+                "H264" -> preferredVideoCodecs.add(PublisherKit.PreferredVideoCodecs.Codec.H264)
+            }
+        }
+
+        return preferredVideoCodecs
     }
 
     inner class OpenTokEvent(
