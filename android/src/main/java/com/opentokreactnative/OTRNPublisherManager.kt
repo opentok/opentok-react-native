@@ -176,6 +176,11 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setScaleBehavior(value)
     }
 
+    @ReactProp(name = "preferredVideoCodecs")
+    override public fun setPreferredVideoCodecs(view: OTRNPublisher, value: String?) {
+        view.setPreferredVideoCodecs(value)
+    }
+
     companion object {
         const val REACT_CLASS = "OTRNPublisher"
     }

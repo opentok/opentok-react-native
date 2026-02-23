@@ -29,6 +29,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     PublisherKit.MuteListener,
     PublisherKit.VideoStatsListener,
     PublisherKit.VideoListener {
+
     private var sessionId: String? = ""
     private var publisherId: String? = ""
 
@@ -205,9 +206,16 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         )
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    public fun setPreferredVideoCodecs(value: String?) {
+        // Ignore -- set as initialization option only
+    }
+
     private fun publishStream() {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
+        println("preferredVideoCodecs: " + this.props?.get("preferredVideoCodecs"))
+
         if (this.props?.get("videoSource") == "screen") {
             publisher = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
