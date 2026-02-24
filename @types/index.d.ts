@@ -518,7 +518,8 @@ declare module "@vonage/client-sdk-video-react-native" {
      * It can be set to "automatic" or an array of video codecs in order of preference. The supported video codecs are "vp8", "vp9", and "h264".
      * The default value is "automatic". Setting this property to "automatic" will use the default video codec priority for the client.
      * Setting this property to an array of video codecs will prioritize the specified video codecs in the order they are listed.
-     * If invalid (such as an empty array or unsupported codec), publisher initialization fails.
+     * If invalid video codecs are included in the array, they will be ignored and the valid video codecs will be prioritized in the order they are listed.
+     * If an empty array is passed in, no video codecs will be prioritized and the default value will be used for the client ("automatic").
      */
     preferredVideoCodecs?: PreferredVideoCodecs;
   }
