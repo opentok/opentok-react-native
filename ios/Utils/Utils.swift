@@ -203,13 +203,17 @@ class Utils {
     }
 
     static func convertPreferredVideoCodecs(_ preferredVideoCodecs: Any)
-        -> OTVideoCodecPreference
+        -> OTVideoCodecPreference?
     {
         guard let preferredVideoCodecsStr = preferredVideoCodecs as? String else {
-            return OTVideoCodecPreference.automatic()
+            return nil
         }
 
+        print("preferredVideoCodecs: \(preferredVideoCodecsStr)")
+
         if preferredVideoCodecsStr.isEmpty {
+            return nil
+        } else if preferredVideoCodecsStr == "automatic" {
             return OTVideoCodecPreference.automatic()
         }
 
@@ -233,7 +237,7 @@ class Utils {
         }
 
         if codecTypes.isEmpty {
-            return OTVideoCodecPreference.automatic()
+            return nil
         }
         return OTVideoCodecPreference.manual(withCodecs: codecTypes)
     }

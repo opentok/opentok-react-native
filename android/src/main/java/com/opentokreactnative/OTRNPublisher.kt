@@ -214,9 +214,9 @@ class OTRNPublisher : FrameLayout, PublisherListener,
     private fun publishStream() {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
-        var preferredVideoCodecs: ArrayList<PublisherKit.PreferredVideoCodecs.Codec> = this.getPreferredVideoCodecs();
+        var preferredVideoCodecs: PublisherKit.PreferredVideoCodecs? = this.getPreferredVideoCodecs();
         if (this.props?.get("videoSource") == "screen") {
-            publisher = Publisher.Builder(context)
+            var publisherBuilder: Publisher.Builder = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
                 .name(this.props?.get("name") as String)
                 .frameRate(
@@ -231,13 +231,13 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
-                .preferredVideoCodecs(
-                    if (preferredVideoCodecs.isEmpty()) null
-                    else PublisherKit.PreferredVideoCodecs.manual(preferredVideoCodecs))
-                .build()
+            if (preferredVideoCodecs != null) {
+                publisherBuilder?.preferredVideoCodecs(preferredVideoCodecs)
+            }
+            publisher = publisherBuilder?.build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)
         } else if (this.props?.get("videoSource") == "camera") {
-            publisher = Publisher.Builder(context)
+            var publisherBuilder: Publisher.Builder = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())
                 .publisherAudioFallbackEnabled(this.props?.get("publisherAudioFallback") as Boolean)
                 .subscriberAudioFallbackEnabled(this.props?.get("subscriberAudioFallback") as Boolean)
@@ -251,10 +251,10 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .audioTrack(this.props?.get("audioTrack") as Boolean)
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
-                .preferredVideoCodecs(
-                    if (preferredVideoCodecs.isEmpty()) null
-                    else PublisherKit.PreferredVideoCodecs.manual(preferredVideoCodecs))
-                .build()
+            if (preferredVideoCodecs != null) {
+                publisherBuilder?.preferredVideoCodecs(preferredVideoCodecs)
+            }
+            publisher = publisherBuilder?.build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeCamera)
             if (this.props?.get("videoTrack") as Boolean) {
                 publisher?.getCapturer()?.setVideoContentHint(
@@ -429,8 +429,14 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         emitOpenTokEvent("onVideoDisableWarningLifted", Arguments.createMap())
     }
 
-    private fun getPreferredVideoCodecs(): ArrayList<PublisherKit.PreferredVideoCodecs.Codec> {
+    private fun getPreferredVideoCodecs(): PublisherKit.PreferredVideoCodecs? {
         val preferredVideoCodecsStr = (this.props?.get("preferredVideoCodecs") as? String)?.uppercase() ?: ""
+        println("preferredVideoCodecs: " + preferredVideoCodecsStr)
+        if (preferredVideoCodecsStr.isEmpty()) {
+            return null
+        } else if (preferredVideoCodecsStr == "AUTOMATIC") {
+            return PublisherKit.PreferredVideoCodecs.automatic()
+        }
         val videoCodecs = preferredVideoCodecsStr.split(";")
         val preferredVideoCodecs = ArrayList<PublisherKit.PreferredVideoCodecs.Codec>()
 
@@ -442,7 +448,11 @@ class OTRNPublisher : FrameLayout, PublisherListener,
             }
         }
 
-        return preferredVideoCodecs
+        return if (preferredVideoCodecs.isEmpty()) {
+            null
+        } else {
+            PublisherKit.PreferredVideoCodecs.manual(preferredVideoCodecs)
+        }
     }
 
     inner class OpenTokEvent(
