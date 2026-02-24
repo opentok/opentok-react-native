@@ -107,8 +107,8 @@ const sanitizeVideoBitratePreset = (videoBitratePreset, maxVideoBitrate) => {
 
 const sanitizePreferredVideoCodecs = (preferredVideoCodecs = 'automatic') => {
   if (Array.isArray(preferredVideoCodecs)) {
-    const filtered = preferredVideoCodecs.filter(
-      (codec) => ['vp8', 'vp9', 'h264'].includes(codec)
+    const filtered = preferredVideoCodecs.filter((codec, index, array) =>
+      ['vp8', 'vp9', 'h264'].includes(codec) && array.indexOf(codec) === index
     );
     return filtered.join(';');
   }
