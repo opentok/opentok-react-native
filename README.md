@@ -8,13 +8,13 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
+**Important:** Starting from version 2.31.1, the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
 
 The only difference from previous versions is that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application:
 
-* For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+* For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 5 of the "Android Installation" section below.
 
-* For iOS, register the `OTRNPublisherPackage` and `OTRNSubscriberPackage` packages in the AppDelegate file for your app. See step 4 of the "iOS Installation" section below.
+* For iOS, register the `OTRNPublisherPackage` and `OTRNSubscriberPackage` packages in the AppDelegate file for your app. See step 3 of the "iOS Installation" section below.
 
 ## Prerequisites
 
