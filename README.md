@@ -8,17 +8,9 @@ This library is now officially supported by Vonage.
 
 **Important:** This version is a beta build of the Vonage Video React Native SDK with support for the [React Native new architecture](https://reactnative.dev/architecture/landing-page). Be sure to read the next section ("Beta version notes") for important details on using this beta version.
 
-This version support Client SDK updates for 2.31.0
+The only difference from previous versions is that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application:
 
-## Beta version notes
-
-This Beta version is only supported in the React Native new architecture. It is not supported in apps that use the old architecture.
-
-This beta pre-release version is not intended for use in final production apps.
-
-### Registering the Vonage Video packages in your application
-
-For Android, register the `OpentokReactNativePackage`, `OTPublisherViewNativePackage`, and `OTSubscriberViewNativePackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
+* For Android, register the `OpentokReactNativePackage`, `OTRNPublisherPackage`, and `OTRNSubscriberPackage` packages in the MainActivity file for your app. See step 6 of the "Android Installation" section below.
 
 * For iOS, register the `OTRNPublisherPackage` and `OTRNSubscriberPackage` packages in the AppDelegate file for your app. See step 4 of the "iOS Installation" section below.
 
@@ -32,10 +24,9 @@ For Android, register the `OpentokReactNativePackage`, `OTPublisherViewNativePac
 
 ## System requirements
 
-See the system requirements for the [Vonage Video Android SDK](https://developer.vonage.com/en/video/client-sdks/android/overview#developer-and-client-requirements) and [Vonage Video iOS SDK](https://developer.vonage.com/en/video/client-sdks/ios/overview#system-requirements). (The Vonage Video React Native SDK has the same requirements for Android and iOS.)
+See the system requirements for the [Vonage Video Android SDK](https://developer.vonage.com/en/video/client-sdks/android/overview) and [Vonage Video iOS SDK](https://developer.vonage.com/en/video/client-sdks/ios/overview). The Vonage Video React Native SDK has the same requirements for Android and iOS.
 
 ## Installation
-
 
 ### For Expo projects
 
@@ -107,9 +98,10 @@ If you're using Expo, the setup is simplified with the config plugin:
 
 2. Add the beta versioin of the library using `npm` or `yarn`:
 
-
-  * `npm install @vonage/client-sdk-video-react-native@2.31.0-beta.2`
-  * `yarn add @vonage/client-sdk-video-react-native@2.31.0-beta.2`
+  * `npm install @vonage/client-sdk-video-react-native@<VERSION>`
+  * `yarn add @vonage/client-sdk-video-react-native@<VERSION>`
+  
+Note: Replace `<VERSION>` with the target version to use.
 
 ### iOS Installation
 
@@ -120,22 +112,7 @@ If you're using Expo, the setup is simplified with the config plugin:
    bundle exec pod install
    ```
 
-2. **For React Native versions prior to 0.60**:
-
-   * Add this to your Podfile:
-
-     ```
-     target '<YourProjectName>' do
-         # Pods for <YourProject>
-         pod 'VonageClientSDKVideo', '2.31'
-     end
-     ```
-   
-   * Run `react-native link @vonage/client-sdk-video-react-native`.
-
-   These steps are not necessary in React Native version 0.60 and later.
-
-3. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
+2. Ensure you have enabled both camera and microphone usage by adding the following entries to the `Info.plist` file:
 
    ```
    <key>NSCameraUsageDescription</key>
@@ -232,9 +209,12 @@ If you're using Expo, the setup is simplified with the config plugin:
    Register the FabricComponentRegistrar.mm file as a build file in XCode.
 
 4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
+
    ```
-   pod 'VonageClientSDKVideoTransformers'
+   pod 'VonageClientSDKVideoTransformers', '= <VERSION>'
    ```
+
+Note: Replace `<VERSION>` with the iOS Client SDK version.
 
 If you try to archive the app and it fails, please do the following:
 
@@ -248,20 +228,13 @@ If you try to archive the app and it fails, please do the following:
 
 1. In your terminal, change into your project directory.
 
-2. **For React Native versions prior to 0.60**:
+2. Run `bundle install`.
 
-   - Run `react-native link @vonage/client-sdk-video-react-native`
+3. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the Vonage Video React library.
 
-   This step is not necessary in React Native version 0.60 and later.
+4. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://developer.vonage.com/en/video/client-sdks/android/overview#permissions) in the Vonage Video API Android SDK documentation.
 
-3. Run `bundle install`.
-
-4. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the Vonage Video React library.
-
-5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://developer.vonage.com/en/video/client-sdks/android/overview#permissions) in the Vonage Video API Android SDK documentation.
-
-6. In the MainApplication.kt file for your app, register the OpenTok OpentokReactNativePackage, OTRNPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function:
-6. In the MainActivity.kt file for you app, register the OpentokReactNativePackage, OTPublisherViewNativePackage, and OTSubscriberViewNativePackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function
+5. In the MainApplication.kt file for your app, register the OpenTok OpentokReactNativePackage, OTRNPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function:
 
     ```
     import com.opentokreactnative.OTRNPublisherPackage
@@ -282,8 +255,10 @@ If you try to archive the app and it fails, please do the following:
 7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.31.0"
+   implementation "com.vonage:client-sdk-video-transformers:<VERSION>"
    ```
+
+Note: Replace `<VERSION>` with the Android Client SDK version.
 
 #### Bintray sunset
 
