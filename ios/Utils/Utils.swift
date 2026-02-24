@@ -209,8 +209,6 @@ class Utils {
             return OTVideoCodecPreference.automatic()
         }
 
-        print("preferredVideoCodecs: \(preferredVideoCodecsStr)")
-
         if preferredVideoCodecsStr.isEmpty {
             return OTVideoCodecPreference.automatic()
         }

@@ -431,7 +431,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
 
     private fun getPreferredVideoCodecs(): ArrayList<PublisherKit.PreferredVideoCodecs.Codec> {
         val preferredVideoCodecsStr = (this.props?.get("preferredVideoCodecs") as? String)?.uppercase() ?: ""
-        println("preferredVideoCodecs: " + preferredVideoCodecsStr)
         val videoCodecs = preferredVideoCodecsStr.split(";")
         val preferredVideoCodecs = ArrayList<PublisherKit.PreferredVideoCodecs.Codec>()
 
