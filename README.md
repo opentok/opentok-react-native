@@ -8,9 +8,7 @@ This library is now officially supported by Vonage.
 
 In this repo, you'll find the OpenTok React Native library.
 
-**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native). This beta pre-release version is not intended for use in final production apps.
-
-This version supports Client SDK updates for v2.31.0. 
+**Important:** This version of the OpenTok React Native SDK includes components built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page). This version is only supported in the React Native new architecture (such as React Native 0.76+). It is not supported in the React Native old architecture (such as older versions of React Native).
 
 The only difference from previous versions is that you need to use a version of React Native that supports the new architecture (0.76+) and you need to register the OpenTok React Native packages in your application:
 
@@ -28,10 +26,9 @@ The only difference from previous versions is that you need to use a version of 
 
 ## System requirements
 
-See the system requirements for the [OpenTok Android SDK](https://tokbox.com/developer/sdks/android/#requirements) and [OpenTok iOS SDK](https://tokbox.com/developer/sdks/ios/#system-requirements). (The OpenTok React Native SDK has the same requirements for Android and iOS.)
+See the system requirements for the [OpenTok Android SDK](https://tokbox.com/developer/sdks/android) and [OpenTok iOS SDK](https://tokbox.com/developer/sdks/ios). The OpenTok React Native SDK has the same requirements for Android and iOS.
 
 ## Installation
-
 
 ### For Expo projects
 
@@ -103,8 +100,10 @@ If you're using Expo, the setup is simplified with the config plugin:
 
 2. Add the library using `npm` or `yarn`:
 
-  * `npm install opentok-react-native@2.31.0-beta.2`
-  * `yarn add opentok-react-native@2.31.0-beta.2`
+  * `npm install opentok-react-native@<VERSION>`
+  * `yarn add opentok-react-native@<VERSION>`
+  
+Note: Replace `<VERSION>` with the target version to use.
 
 ### iOS Installation
 
@@ -214,8 +213,10 @@ If you're using Expo, the setup is simplified with the config plugin:
 4. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your Podfile:
 
    ```
-   pod 'VonageClientSDKVideoTransformers'
+   pod 'VonageClientSDKVideoTransformers', '= <VERSION>'
    ```
+
+Note: Replace `<VERSION>` with the iOS Client SDK version.
 
 If you try to archive the app and it fails, please do the following:
 
@@ -229,19 +230,13 @@ If you try to archive the app and it fails, please do the following:
 
 1. In your terminal, change into your project directory.
 
-2. **For React Native versions prior to 0.60**:
+2. Run `bundle install`.
 
-   - Run `react-native link opentok-react-native`
+3. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
 
-   This step is not necessary in React Native version 0.60 and later.
+4. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
 
-3. Run `bundle install`.
-
-4. Make sure the following in your app's gradle `compileSdkVersion`, `buildToolsVersion`, `minSdkVersion`, and `targetSdkVersion` are greater than or equal to versions specified in the OpenTok React Native library.
-
-5. The SDK automatically adds Android permissions it requires. You do not need to add these to your app manifest. However, certain permissions require you to prompt the user. See the [full list of required permissions](https://tokbox.com/developer/sdks/android/#permissions) in the Vonage Video API Android SDK documentation.
-
-6. In the MainApplication.kt file for your app, register the OpenTok OpentokReactNativePackage, OTRNPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function:
+5. In the MainApplication.kt file for your app, register the OpenTok OpentokReactNativePackage, OTRNPublisherPackage, and OTRNSubscriberPackage packages. Do this by modifying the MainApplication file by adding these to the list of packages returned by the `getPackages()` function:
 
     ```
     import com.opentokreactnative.OTRNPublisherPackage
@@ -262,8 +257,10 @@ If you try to archive the app and it fails, please do the following:
 7. If your app will use the `OTPublisher.setVideoTransformers()` or `OTPublisher.setAudioTransformers()` method, you need to include the following in your app/build.gradle file:
 
    ```
-   implementation "com.vonage:client-sdk-video-transformers:2.31.0"
+   implementation "com.vonage:client-sdk-video-transformers:<VERSION>"
    ```
+
+Note: Replace `<VERSION>` with the Android Client SDK version.
 
 #### Bintray sunset
 

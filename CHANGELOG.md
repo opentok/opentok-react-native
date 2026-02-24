@@ -1,10 +1,10 @@
+# 2.31.2 (February 2026)
+
+- **Note:** All release notes were migrated to [Developer center](https://tokbox.com/developer/sdks/react-native/release-notes.html)
+
 # 2.31.1 (January 2026)
 
-- [Update]: All release notes were migrated to [Developer center](https://tokbox.com/developer/sdks/react-native/release-notes.html)
-
-# 2.31.0-beta.0 (July 2025)
-
-- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
+- **Note:** All release notes were migrated to [Developer center](https://tokbox.com/developer/sdks/react-native/release-notes.html)
 
 # 2.30.2 (May 2025)
 
