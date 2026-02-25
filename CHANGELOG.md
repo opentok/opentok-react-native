@@ -1,22 +1,10 @@
+# 2.31.2 (February 2026)
+
+- **Note**: All release notes were migrated to [Developer center](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes?source=video)
+
 # 2.31.1 (January 2026)
 
-- [Update]: All release notes were migrated to [Developer center](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes?source=video)
-
-- [Update]: This version adds a new `OTSession.forceDisconnect()` method for forcing clients to disconnect.
-
-- [Update]: This version adds an `allowAudioCaptureWhileMuted` property of the OTPublisher `properties` prop. Set this to `true` to have the publisher receive audio level updates when not publishing audio.
-
-- [Update]: This version adds API enhancements for controling the maximum bitrate of a published stream. These are added as new properties of the OTPublisher `properties` prop:
-
-  * `videoBitratePreset` -- Set this to one of the following string values: 'default', 'bw_saver', or 'extra_bw_saver'. This property is ignored if the `maxVideoBitrate` property is set.
-
-  * `maxVideoBitrate` -- To set the maximum bitrate value (instead of a preset), set the this property to a value between 5,000 and 10,000,000 (in bits per second).
-
-  If neither property is set, the `default` preset is used.
-
-# 2.31.0-beta.0 (July 2025)
-
-- [Update]: This version is a pre-release beta version that supports the [React Native new architecture](https://reactnative.dev/architecture/landing-page). See "Beta version notes" in the README.md file.
+- **Note**: All release notes were migrated to [Developer center](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes?source=video)
 
 # 2.30.2 (May 2025)
 
