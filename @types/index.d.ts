@@ -517,7 +517,7 @@ declare module "@vonage/client-sdk-video-react-native" {
      *
      * It can be set to "automatic" or an array of video codecs in order of preference.
      *
-     * The supported video codecs are "vp8", "vp9", and "h264". Video codecs are case sentive and must be "vp8", "vp9", or "h264" to be valid.
+     * The supported video codecs are "vp8", "vp9", and "h264". Video codecs are case sensitive and must be "vp8", "vp9", or "h264" to be valid.
      *
      * Set to "automatic" to let the SDK select the most suitable order.
      *
