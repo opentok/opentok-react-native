@@ -3,6 +3,14 @@ name: Publish to NPM
 on:
   workflow_dispatch:
     inputs:
+      package:
+        description: 'Package to publish'
+        required: true
+        type: choice
+        options:
+          - vonage
+          - opentok
+        default: vonage
       dry_run:
         description: 'Dry run mode (test without publishing)'
         required: true
@@ -30,6 +38,11 @@ jobs:
         run: |
           npm ci
           npm run prepare
+
+      - name: Apply OpenTok patch
+        if: inputs.package == 'opentok'
+        run: |
+          git apply patch/code-changes.patch
 
       - name: Determine NPM tag
         id: npm-tag
@@ -90,7 +103,7 @@ jobs:
             npm publish
           fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ inputs.package == 'opentok' && secrets.NPM_TOKEN_OPENTOK || secrets.NPM_TOKEN_VONAGE }}
 
       - name: Create tag
         uses: negz/create-tag@v1
@@ -103,12 +116,13 @@ jobs:
         if: inputs.dry_run == false
         run: |
           sleep 10
-          npm view @vonage/client-sdk-video-react-native@${{ github.ref_name }} version
+          npm view ${{ inputs.package == 'opentok' && 'opentok-react-native' || '@vonage/client-sdk-video-react-native' }}@${{ github.ref_name }} version
 
       - name: Summary
         if: always()
         run: |
           echo "## Publish Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package**: ${{ inputs.package == 'opentok' && 'opentok-react-native' || '@vonage/client-sdk-video-react-native' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Version**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY

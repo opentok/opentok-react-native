@@ -1,0 +1,241 @@
+diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
+index c48bd2d..8c5fef2 100644
+--- a/.github/CODEOWNERS
++++ b/.github/CODEOWNERS
+@@ -1,2 +1,2 @@
+-* @vonage/video-client-sdks
++* @opentok/video-client-sdks
+ 
+diff --git a/.github/workflows/publish-npm.yml b/.github/workflows/publish-npm.yml
+index fd4e041..54f6895 100644
+--- a/.github/workflows/publish-npm.yml
++++ b/.github/workflows/publish-npm.yml
+@@ -103,7 +103,7 @@ jobs:
+         if: inputs.dry_run == false
+         run: |
+           sleep 10
+-          npm view @vonage/client-sdk-video-react-native@${{ github.ref_name }} version
++          npm view opentok-react-native@${{ github.ref_name }} version
+ 
+       - name: Summary
+         if: always()
+diff --git a/@types/index.d.ts b/@types/index.d.ts
+index 4543112..6ea3f44 100644
+--- a/@types/index.d.ts
++++ b/@types/index.d.ts
+@@ -1,4 +1,4 @@
+-declare module "@vonage/client-sdk-video-react-native" {
++declare module 'opentok-react-native' {
+   import React from 'react';
+   import { ViewProps } from 'react-native';
+ 
+@@ -134,23 +134,17 @@ declare module "@vonage/client-sdk-video-react-native" {
+ 
+   interface OTSessionProps extends ViewProps {
+     /**
+-     * Deprecated. Replaced by the applicationId prop.
++     * TokBox API Key
+      */
+-    apiKey?: string;
++    apiKey: string;
+ 
+     /**
+-     * The Vonage application ID. This is a beta feature, replacing the
+-     * apiKey prop.
+-     */
+-    applicationId?: string;
+-
+-    /**
+-     * Vonage Video API session ID.
++     * TokBox Session ID
+      */
+     sessionId: string;
+ 
+     /**
+-     * A connection token for the Video API session.
++     * TokBox token
+      */
+     token: string;
+ 
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 7205877..5f21020 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -23,7 +23,7 @@ For a contribution to be accepted:
+ 
+ - Code must follow existing styling conventions
+ - Commit messages must be descriptive. Related issues should be mentioned by number.
+-- The [sample applications](https://github.com/Vonage/vonage-video-react-native-sdk-samples) must build with your changes. 
++- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
+ 
+ If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the Issue. You can still continue to add more commits to the branch you have sent the Pull Request from.
+ 
+diff --git a/android/build.gradle b/android/build.gradle
+index 7c2a278..f998abb 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -101,7 +101,7 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
+ dependencies {
+   implementation "com.facebook.react:react-android:0.78.0"
+   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+-  implementation 'com.vonage:client-sdk-video:2.31.0'
++  implementation 'com.opentok.android:opentok-android-sdk:2.31.0'
+ }
+ 
+ if (isNewArchitectureEnabled()) {
+diff --git a/expo/index.ts b/expo/index.ts
+index e04b60b..73ef2e9 100644
+--- a/expo/index.ts
++++ b/expo/index.ts
+@@ -6,7 +6,7 @@ import {
+   withPlugins,
+ } from '@expo/config-plugins';
+ 
+-export interface VonagePluginiOSProps {
++export interface OpentokPluginiOSProps {
+   /**
+    * iOS camera permission message
+    * @default 'Allow $(PRODUCT_NAME) to access your camera for video calls'
+@@ -22,7 +22,7 @@ export interface VonagePluginiOSProps {
+ /**
+  * Add iOS Info.plist entries for camera and microphone permissions
+  */
+-const withIosPermissions: ConfigPlugin<VonagePluginiOSProps> = (
++const withIosPermissions: ConfigPlugin<OpentokPluginiOSProps> = (
+   config,
+   props
+ ) => {
+@@ -83,10 +83,10 @@ const withAndroidPermissions: ConfigPlugin = (config) => {
+ };
+ 
+ /**
+- * Main Expo Config Plugin for @vonage/client-sdk-video-react-native
++ * Main Expo Config Plugin for opentok-react-native
+  * Automatically configures native permissions and dependencies
+  */
+-const withVonage: ConfigPlugin<VonagePluginiOSProps> = (
++const withOpentok: ConfigPlugin<OpentokPluginiOSProps> = (
+   config,
+   props = {}
+ ) => {
+@@ -96,4 +96,4 @@ const withVonage: ConfigPlugin<VonagePluginiOSProps> = (
+   ]);
+ };
+ 
+-export default withVonage;
++export default withOpentok;
+diff --git a/package-lock.json b/package-lock.json
+index cc934c7..be149ac 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,11 +1,11 @@
+ {
+-  "name": "@vonage/client-sdk-video-react-native",
++  "name": "opentok-react-native",
+   "version": "2.32.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+-      "name": "@vonage/client-sdk-video-react-native",
++      "name": "opentok-react-native",
+       "version": "2.32.0",
+       "license": "Adobe-2",
+       "workspaces": [
+diff --git a/package.json b/package.json
+index 52c7a6f..0ae7d8a 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "@vonage/client-sdk-video-react-native",
++  "name": "opentok-react-native",
+   "version": "2.32.0",
+   "description": "Vonage Video client SDK for React Native",
+   "source": "./src/index.tsx",
+@@ -57,18 +57,16 @@
+     "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
+     "release": "release-it",
+     "version:local": "node -pe 'require(\"./package.json\").version'",
+-    "version:published": "npm show @vonage/client-sdk-video-react-native version"
++    "version:published": "npm show opentok-react-native version"
+   },
+   "keywords": [
+     "react-native",
+-    "vonage",
+-    "webrtc",
+     "ios",
+     "android"
+   ],
+   "repository": {
+     "type": "git",
+-    "url": "https://github.com/Vonage/vonage-video-react-native-sdk.git"
++    "url": "git+https://github.com/opentok/opentok-react-native.git"
+   },
+   "author": {
+     "name": "Vonage Video API",
+@@ -78,7 +76,7 @@
+   "bugs": {
+     "url": "https://github.com/opentok/opentok-react-native/issues"
+   },
+-  "homepage": "https://developer.vonage.com/en/video/overview",
++  "homepage": "https://github.com/opentok/opentok-react-native#readme",
+   "publishConfig": {
+     "registry": "https://registry.npmjs.org/"
+   },
+diff --git a/src/OTSession.js b/src/OTSession.js
+index 6ccc38f..97d7b48 100644
+--- a/src/OTSession.js
++++ b/src/OTSession.js
+@@ -27,7 +27,7 @@ export default class OTSession extends Component {
+         proxyUrl: this.props.options?.proxyUrl,
+       });
+     } else {
+-      handleError('Please check your Vonage Video API credentials.');
++      handleError('Please check your OpenTok credentials.');
+     }
+     OT.onSessionConnected((event) => {
+       if (event.sessionId !== sessionId) return;
+@@ -117,8 +117,7 @@ export default class OTSession extends Component {
+   }
+ 
+   initComponent = () => {
+-    const { apiKey, applicationId, token, sessionId} = this.props;
+-    this.initSession(applicationId || apiKey, sessionId, token);
++    this.initSession(this.props.apiKey, this.props.sessionId, this.props.token);
+   };
+ 
+   reportIssue() {
+@@ -194,8 +193,7 @@ export default class OTSession extends Component {
+   }
+ 
+   render() {
+-    const { style, children, sessionId, applicationId, token } = this.props;
+-    const apiKey = applicationId || this.props.apiKey;
++    const { style, children, sessionId, apiKey, token } = this.props;
+ 
+     if (children && sessionId && apiKey && token) {
+       return (
+@@ -211,8 +209,7 @@ export default class OTSession extends Component {
+ }
+ 
+ OTSession.propTypes = {
+-  apiKey: PropTypes.string,
+-  applicationId: PropTypes.string,
++  apiKey: PropTypes.string.isRequired,
+   sessionId: PropTypes.string.isRequired,
+   token: PropTypes.string.isRequired,
+   children: PropTypes.oneOfType([
+diff --git a/yarn.lock b/yarn.lock
+index dab42a4..f1cec82 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -7230,7 +7230,7 @@ open@10.2.0:
+     is-inside-container "^1.0.0"
+     wsl-utils "^0.1.0"
+ 
+-"opentok-react-native-example@file:/Users/joliveraortega/source/repos/vonage-video-react-native-sdk/example":
++"opentok-react-native-example@file:/Users/joliveraortega/source/repos/opentok-react-native/example":
+   version "0.0.1"
+   resolved "file:example"
+   dependencies:
