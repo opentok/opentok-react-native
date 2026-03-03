@@ -43,6 +43,7 @@ jobs:
         if: inputs.package == 'opentok'
         run: |
           git apply patch/code-changes.patch
+          git apply patch/flavor-changes.patch
 
       - name: Determine NPM tag
         id: npm-tag
