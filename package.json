@@ -48,7 +48,6 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace opentok-react-native-example",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",

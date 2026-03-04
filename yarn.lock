@@ -7230,14 +7230,6 @@ open@10.2.0:
     is-inside-container "^1.0.0"
     wsl-utils "^0.1.0"
 
-"opentok-react-native-example@file:/Users/joliveraortega/source/repos/vonage-video-react-native-sdk/example":
-  version "0.0.1"
-  resolved "file:example"
-  dependencies:
-    react "19.1.0"
-    react-native "0.81.1"
-    react-native-safe-area-context "^5.6.2"
-
 optionator@^0.9.3:
   version "0.9.4"
   resolved "https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz"
