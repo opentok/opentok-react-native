@@ -34,16 +34,16 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: |
-          npm ci
-          npm run prepare
-
       - name: Apply OpenTok patch
         if: inputs.package == 'opentok'
         run: |
           git apply patch/code-changes.patch
           git apply patch/flavor-changes.patch
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run prepare
 
       - name: Determine NPM tag
         id: npm-tag
