@@ -6,19 +6,6 @@ index c48bd2d..8c5fef2 100644
 -* @vonage/video-client-sdks
 +* @opentok/video-client-sdks
  
-diff --git a/.github/workflows/publish-npm.yml b/.github/workflows/publish-npm.yml
-index fd4e041..54f6895 100644
---- a/.github/workflows/publish-npm.yml
-+++ b/.github/workflows/publish-npm.yml
-@@ -103,7 +103,7 @@ jobs:
-         if: inputs.dry_run == false
-         run: |
-           sleep 10
--          npm view @vonage/client-sdk-video-react-native@${{ github.ref_name }} version
-+          npm view opentok-react-native@${{ github.ref_name }} version
- 
-       - name: Summary
-         if: always()
 diff --git a/@types/index.d.ts b/@types/index.d.ts
 index 4543112..6ea3f44 100644
 --- a/@types/index.d.ts
@@ -57,32 +44,9 @@ index 4543112..6ea3f44 100644
       */
      token: string;
  
-diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
-index 7205877..5f21020 100644
---- a/CONTRIBUTING.md
-+++ b/CONTRIBUTING.md
-@@ -23,7 +23,7 @@ For a contribution to be accepted:
- 
- - Code must follow existing styling conventions
- - Commit messages must be descriptive. Related issues should be mentioned by number.
--- The [sample applications](https://github.com/Vonage/vonage-video-react-native-sdk-samples) must build with your changes. 
-+- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
- 
+
  If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the Issue. You can still continue to add more commits to the branch you have sent the Pull Request from.
  
-diff --git a/android/build.gradle b/android/build.gradle
-index 7c2a278..f998abb 100644
---- a/android/build.gradle
-+++ b/android/build.gradle
-@@ -101,7 +101,7 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
- dependencies {
-   implementation "com.facebook.react:react-android:0.78.0"
-   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
--  implementation 'com.vonage:client-sdk-video:2.31.0'
-+  implementation 'com.opentok.android:opentok-android-sdk:2.31.0'
- }
- 
- if (isNewArchitectureEnabled()) {
 diff --git a/expo/index.ts b/expo/index.ts
 index e04b60b..73ef2e9 100644
 --- a/expo/index.ts
@@ -167,35 +131,10 @@ index 52c7a6f..0ae7d8a 100644
      "ios",
      "android"
    ],
-   "repository": {
-     "type": "git",
--    "url": "https://github.com/Vonage/vonage-video-react-native-sdk.git"
-+    "url": "git+https://github.com/opentok/opentok-react-native.git"
-   },
-   "author": {
-     "name": "Vonage Video API",
-@@ -78,7 +76,7 @@
-   "bugs": {
-     "url": "https://github.com/opentok/opentok-react-native/issues"
-   },
--  "homepage": "https://developer.vonage.com/en/video/overview",
-+  "homepage": "https://github.com/opentok/opentok-react-native#readme",
-   "publishConfig": {
-     "registry": "https://registry.npmjs.org/"
-   },
 diff --git a/src/OTSession.js b/src/OTSession.js
 index 6ccc38f..97d7b48 100644
 --- a/src/OTSession.js
 +++ b/src/OTSession.js
-@@ -27,7 +27,7 @@ export default class OTSession extends Component {
-         proxyUrl: this.props.options?.proxyUrl,
-       });
-     } else {
--      handleError('Please check your Vonage Video API credentials.');
-+      handleError('Please check your OpenTok credentials.');
-     }
-     OT.onSessionConnected((event) => {
-       if (event.sessionId !== sessionId) return;
 @@ -117,8 +117,7 @@ export default class OTSession extends Component {
    }
  
@@ -226,16 +165,3 @@ index 6ccc38f..97d7b48 100644
    sessionId: PropTypes.string.isRequired,
    token: PropTypes.string.isRequired,
    children: PropTypes.oneOfType([
-diff --git a/yarn.lock b/yarn.lock
-index dab42a4..f1cec82 100644
---- a/yarn.lock
-+++ b/yarn.lock
-@@ -7230,7 +7230,7 @@ open@10.2.0:
-     is-inside-container "^1.0.0"
-     wsl-utils "^0.1.0"
- 
--"opentok-react-native-example@file:/Users/joliveraortega/source/repos/vonage-video-react-native-sdk/example":
-+"opentok-react-native-example@file:/Users/joliveraortega/source/repos/opentok-react-native/example":
-   version "0.0.1"
-   resolved "file:example"
-   dependencies:

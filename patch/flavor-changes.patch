@@ -89,3 +89,14 @@ index a32eafd..1af8131 100644
  - **Tweet at us:** [@VonageDev](https://twitter.com/VonageDev)
  - **Join the community:** [Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
  
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 7205877..5f21020 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -23,7 +23,7 @@ For a contribution to be accepted:
+ 
+ - Code must follow existing styling conventions
+ - Commit messages must be descriptive. Related issues should be mentioned by number.
+-- The [sample applications](https://github.com/Vonage/vonage-video-react-native-sdk-samples) must build with your changes. 
++- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
+ 
