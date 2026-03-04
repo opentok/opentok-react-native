@@ -107,6 +107,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ inputs.package == 'opentok' && secrets.NPM_TOKEN_OPENTOK || secrets.NPM_TOKEN_VONAGE }}
 
       - name: Create tag
+        if: inputs.dry_run == false && inputs.package == 'vonage'
         uses: negz/create-tag@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
