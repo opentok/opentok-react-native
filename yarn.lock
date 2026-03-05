@@ -2425,11 +2425,6 @@
   resolved "https://registry.npmjs.org/@react-native/normalize-colors/-/normalize-colors-0.81.1.tgz"
   integrity sha512-TsaeZlE8OYFy3PSWc+1VBmAzI2T3kInzqxmwXoGU4w1d4XFkQFg271Ja9GmDi9cqV3CnBfqoF9VPwRxVlc/l5g==
 
-"@react-native/typescript-config@0.81.1":
-  version "0.81.1"
-  resolved "https://registry.npmjs.org/@react-native/typescript-config/-/typescript-config-0.81.1.tgz"
-  integrity sha512-6G8/aCy9HZvzfD6UdgnWFVDDkmL+UfYw1A9BJcB7sBp3J0J2X2BTZ3x2JQnYeI7e/QxiI3RravghS5e9EDxU5Q==
-
 "@react-native/virtualized-lists@0.81.1":
   version "0.81.1"
   resolved "https://registry.npmjs.org/@react-native/virtualized-lists/-/virtualized-lists-0.81.1.tgz"
@@ -7730,11 +7725,6 @@ react-native-monorepo-config@^0.3.3:
   dependencies:
     escape-string-regexp "^5.0.0"
     fast-glob "^3.3.3"
-
-react-native-safe-area-context@^5.6.2:
-  version "5.6.2"
-  resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-5.6.2.tgz"
-  integrity sha512-4XGqMNj5qjUTYywJqpdWZ9IG8jgkS3h06sfVjfw5yZQZfWnRFXczi0GnYyFyCc2EBps/qFmoCH8fez//WumdVg==
 
 react-native-uuid@^2.0.3:
   version "2.0.3"
