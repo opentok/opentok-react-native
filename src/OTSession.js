@@ -27,7 +27,7 @@ export default class OTSession extends Component {
         proxyUrl: this.props.options?.proxyUrl,
       });
     } else {
-      handleError('Please check your Vonage Video API credentials.');
+      handleError('Please check your credentials.');
     }
     OT.onSessionConnected((event) => {
       if (event.sessionId !== sessionId) return;
