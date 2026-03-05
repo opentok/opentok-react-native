@@ -1,5 +1,5 @@
 {
-  "name": "@vonage/client-sdk-video-react-native",
+  "name": "opentok-react-native",
   "version": "2.32.0",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
@@ -56,7 +56,7 @@
     "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
     "release": "release-it",
     "version:local": "node -pe 'require(\"./package.json\").version'",
-    "version:published": "npm show @vonage/client-sdk-video-react-native version"
+    "version:published": "npm show opentok-react-native version"
   },
   "keywords": [
     "react-native",
