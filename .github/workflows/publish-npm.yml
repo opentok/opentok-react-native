@@ -6,7 +6,7 @@ on:
       package:
         description: 'The full module name.'
         required: true
-        default: '@opentok/client'
+        default: '@vonage/client-sdk-video-react-native'
         type: choice
         options:
           - 'opentok-react-native'
@@ -60,17 +60,6 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Apply OpenTok patch
-        if: inputs.package == 'opentok'
-        run: |
-          git apply patch/code-changes.patch
-          git apply patch/flavor-changes.patch
-
-      - name: Install dependencies
-        run: |
-          npm ci
-          npm run prepare
-
       - name: Apply opentok-react-native package patch
         if: inputs.package == 'opentok-react-native'
         run: |
@@ -83,6 +72,11 @@ jobs:
           git apply patch/code-changes.patch
           git apply patch/code-changes-opentok-github.patch
           git apply patch/flavor-changes.patch
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run prepare
 
       - name: Determine NPM tag
         id: npm-tag
