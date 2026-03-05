@@ -1,43 +1,43 @@
 diff --git a/README.md b/README.md
-index a32eafd..1af8131 100644
+index 1af8131..a32eafd 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,11 +1,11 @@
--# OpenTok React Native SDK
-+# Vonage Video React Native SDK
+-# Vonage Video React Native SDK
++# OpenTok React Native SDK
  
  <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
  
--React Native library for using [OpenTok](https://tokbox.com/developer/) / Vonage Video API. This library is officially supported by Vonage.
-+React Native library for using the [Vonage Video API](https://developer.vonage.com/en/video/overview). This library is officially supported by Vonage.
+-React Native library for using the [Vonage Video API](https://developer.vonage.com/en/video/overview). This library is officially supported by Vonage.
++React Native library for using [OpenTok](https://tokbox.com/developer/) / Vonage Video API. This library is officially supported by Vonage.
  
  **📚 For complete documentation, installation instructions, API reference, and samples, visit:**  
--**[https://tokbox.com/developer/sdks/react-native/](https://tokbox.com/developer/sdks/react-native/)**
-+**[https://developer.vonage.com/en/video/client-sdks/react-native/overview](https://developer.vonage.com/en/video/client-sdks/react-native/overview)**
+-**[https://developer.vonage.com/en/video/client-sdks/react-native/overview](https://developer.vonage.com/en/video/client-sdks/react-native/overview)**
++**[https://tokbox.com/developer/sdks/react-native/](https://tokbox.com/developer/sdks/react-native/)**
  
  ---
  
-@@ -14,19 +14,19 @@ React Native library for using [OpenTok](https://tokbox.com/developer/) / Vonage
+@@ -14,19 +14,19 @@ React Native library for using the [Vonage Video API](https://developer.vonage.c
  ### Installation
  
  ```bash
--npm install opentok-react-native@<VERSION>
-+npm install @vonage/client-sdk-video-react-native@<VERSION>
+-npm install @vonage/client-sdk-video-react-native@<VERSION>
++npm install opentok-react-native@<VERSION>
  # or
--yarn add opentok-react-native@<VERSION>
-+yarn add @vonage/client-sdk-video-react-native@<VERSION>
+-yarn add @vonage/client-sdk-video-react-native@<VERSION>
++yarn add opentok-react-native@<VERSION>
  ```
  
  **Note:** Replace `<VERSION>` with the target version to use.
  
--For complete installation instructions including iOS and Android setup, see the [official installation guide](https://tokbox.com/developer/sdks/react-native/#installation).
-+For complete installation instructions including iOS and Android setup, see the [official installation guide](https://developer.vonage.com/en/video/client-sdks/react-native/overview#installation).
+-For complete installation instructions including iOS and Android setup, see the [official installation guide](https://developer.vonage.com/en/video/client-sdks/react-native/overview#installation).
++For complete installation instructions including iOS and Android setup, see the [official installation guide](https://tokbox.com/developer/sdks/react-native/#installation).
  
  ### Basic Usage
  
  ```jsx
--<OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
-+<OTSession applicationId="your-application-id" sessionId="your-session-id" token="your-session-token">
+-<OTSession applicationId="your-application-id" sessionId="your-session-id" token="your-session-token">
++<OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
    <OTPublisher style={{ width: 100, height: 100 }}/>
    <OTSubscriber style={{ width: 100, height: 100 }} />
  </OTSession>
@@ -45,14 +45,14 @@ index a32eafd..1af8131 100644
  
  ## Important: React Native New Architecture Support
  
--**Starting from version 2.31.1**, the OpenTok React Native SDK is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page).
-+**Starting from version 2.31.1**, the Vonage Video React Native SDK is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page).
+-**Starting from version 2.31.1**, the Vonage Video React Native SDK is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page).
++**Starting from version 2.31.1**, the OpenTok React Native SDK is built with the [React Native new architecture](https://reactnative.dev/architecture/landing-page).
  
  - ✅ **Supported:** React Native 0.76+ (new architecture)
  - ❌ **Not supported:** Older React Native versions (legacy architecture)
  
--Applications using older SDK versions will need to migrate to React Native's new architecture before upgrading. See the [installation guide](https://tokbox.com/developer/sdks/react-native/#installation) for required package registration steps.
-+Applications using older SDK versions will need to migrate to React Native's new architecture before upgrading. See the [installation guide](https://developer.vonage.com/en/video/client-sdks/react-native/overview#installation) for required package registration steps.
+-Applications using older SDK versions will need to migrate to React Native's new architecture before upgrading. See the [installation guide](https://developer.vonage.com/en/video/client-sdks/react-native/overview#installation) for required package registration steps.
++Applications using older SDK versions will need to migrate to React Native's new architecture before upgrading. See the [installation guide](https://tokbox.com/developer/sdks/react-native/#installation) for required package registration steps.
  
  ---
  
@@ -60,23 +60,23 @@ index a32eafd..1af8131 100644
  
  | Resource | Link |
  |----------|------|
--| **SDK Documentation** | [https://tokbox.com/developer/sdks/react-native/](https://tokbox.com/developer/sdks/react-native/) |
--| **API Reference** | [https://tokbox.com/developer/sdks/react-native/reference](https://tokbox.com/developer/sdks/react-native/reference) |
--| **Sample Applications** | [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) |
--| **Release Notes** | [https://tokbox.com/developer/sdks/react-native/release-notes](https://tokbox.com/developer/sdks/react-native/release-notes) |
--| **Developer Guides** | [https://tokbox.com/developer/guides](https://tokbox.com/developer/guides) |
-+| **SDK Documentation** | [https://developer.vonage.com/en/video/client-sdks/react-native/overview](https://developer.vonage.com/en/video/client-sdks/react-native/overview) |
-+| **API Reference** | [https://vonage.github.io/video-docs/video-react-native-reference/latest](https://vonage.github.io/video-docs/video-react-native-reference/latest) |
-+| **Sample Applications** | [vonage-video-react-native-sdk-samples](https://github.com/Vonage/vonage-video-react-native-sdk-samples) |
-+| **Release Notes** | [https://developer.vonage.com/en/video/client-sdks/react-native/release-notes](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes) |
-+| **Developer Guides** | [https://developer.vonage.com/en/video/overview](https://developer.vonage.com/en/video/overview) |
+-| **SDK Documentation** | [https://developer.vonage.com/en/video/client-sdks/react-native/overview](https://developer.vonage.com/en/video/client-sdks/react-native/overview) |
+-| **API Reference** | [https://vonage.github.io/video-docs/video-react-native-reference/latest](https://vonage.github.io/video-docs/video-react-native-reference/latest) |
+-| **Sample Applications** | [vonage-video-react-native-sdk-samples](https://github.com/Vonage/vonage-video-react-native-sdk-samples) |
+-| **Release Notes** | [https://developer.vonage.com/en/video/client-sdks/react-native/release-notes](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes) |
+-| **Developer Guides** | [https://developer.vonage.com/en/video/overview](https://developer.vonage.com/en/video/overview) |
++| **SDK Documentation** | [https://tokbox.com/developer/sdks/react-native/](https://tokbox.com/developer/sdks/react-native/) |
++| **API Reference** | [https://tokbox.com/developer/sdks/react-native/reference](https://tokbox.com/developer/sdks/react-native/reference) |
++| **Sample Applications** | [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) |
++| **Release Notes** | [https://tokbox.com/developer/sdks/react-native/release-notes](https://tokbox.com/developer/sdks/react-native/release-notes) |
++| **Developer Guides** | [https://tokbox.com/developer/guides](https://tokbox.com/developer/guides) |
  
  ---
  
  ## Samples
  
--To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo, which includes:
-+To see this library in action, check out the [vonage-video-react-native-sdk-samples](https://github.com/Vonage/vonage-video-react-native-sdk-samples) repo, which includes:
+-To see this library in action, check out the [vonage-video-react-native-sdk-samples](https://github.com/Vonage/vonage-video-react-native-sdk-samples) repo, which includes:
++To see this library in action, check out the [opentok-react-native-samples](https://github.com/opentok/opentok-react-native-samples) repo, which includes:
  
  - **Basic Video Chat** - Connect, publish, and subscribe to streams
  - **Archiving** - Display recording indicators
@@ -84,19 +84,8 @@ index a32eafd..1af8131 100644
  We love to hear from you! If you have questions, comments, or find a bug in the project, let us know:
  
  - **Open an issue** on this repository
--- **Visit support:** [https://support.tokbox.com/](https://support.tokbox.com/)
-+- **Visit support:** [https://api.support.vonage.com/hc/en-us/](https://api.support.vonage.com/hc/en-us/)
+-- **Visit support:** [https://api.support.vonage.com/hc/en-us/](https://api.support.vonage.com/hc/en-us/)
++- **Visit support:** [https://support.tokbox.com/](https://support.tokbox.com/)
  - **Tweet at us:** [@VonageDev](https://twitter.com/VonageDev)
  - **Join the community:** [Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
- 
-diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
-index 7205877..5f21020 100644
---- a/CONTRIBUTING.md
-+++ b/CONTRIBUTING.md
-@@ -23,7 +23,7 @@ For a contribution to be accepted:
- 
- - Code must follow existing styling conventions
- - Commit messages must be descriptive. Related issues should be mentioned by number.
--- The [sample applications](https://github.com/Vonage/vonage-video-react-native-sdk-samples) must build with your changes. 
-+- The [sample applications](https://github.com/opentok/opentok-react-native-samples) must build with your changes. 
  
