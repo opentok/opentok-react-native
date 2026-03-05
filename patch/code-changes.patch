@@ -1,18 +1,10 @@
-diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
-index c48bd2d..8c5fef2 100644
---- a/.github/CODEOWNERS
-+++ b/.github/CODEOWNERS
-@@ -1,2 +1,2 @@
--* @vonage/video-client-sdks
-+* @opentok/video-client-sdks
- 
 diff --git a/@types/index.d.ts b/@types/index.d.ts
-index 4543112..6ea3f44 100644
+index 4543112..e321c6e 100644
 --- a/@types/index.d.ts
 +++ b/@types/index.d.ts
 @@ -1,4 +1,4 @@
 -declare module "@vonage/client-sdk-video-react-native" {
-+declare module 'opentok-react-native' {
++declare module "opentok-react-native" {
    import React from 'react';
    import { ViewProps } from 'react-native';
  
@@ -43,9 +35,6 @@ index 4543112..6ea3f44 100644
 +     * TokBox token
       */
      token: string;
- 
-
- If the contribution doesn't meet these criteria, a maintainer will discuss it with you on the Issue. You can still continue to add more commits to the branch you have sent the Pull Request from.
  
 diff --git a/expo/index.ts b/expo/index.ts
 index e04b60b..73ef2e9 100644
@@ -89,35 +78,35 @@ index e04b60b..73ef2e9 100644
 -export default withVonage;
 +export default withOpentok;
 diff --git a/package-lock.json b/package-lock.json
-index cc934c7..be149ac 100644
+index 2d424ab..1658e1c 100644
 --- a/package-lock.json
 +++ b/package-lock.json
 @@ -1,11 +1,11 @@
  {
 -  "name": "@vonage/client-sdk-video-react-native",
 +  "name": "opentok-react-native",
-   "version": "2.32.0",
+   "version": "2.32.0-alpha.0",
    "lockfileVersion": 3,
    "requires": true,
    "packages": {
      "": {
 -      "name": "@vonage/client-sdk-video-react-native",
 +      "name": "opentok-react-native",
-       "version": "2.32.0",
+       "version": "2.32.0-alpha.0",
        "license": "Adobe-2",
        "workspaces": [
 diff --git a/package.json b/package.json
-index 52c7a6f..0ae7d8a 100644
+index fd863ea..6d46a43 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,5 +1,5 @@
  {
 -  "name": "@vonage/client-sdk-video-react-native",
 +  "name": "opentok-react-native",
-   "version": "2.32.0",
+   "version": "2.32.0-alpha.0",
    "description": "Vonage Video client SDK for React Native",
    "source": "./src/index.tsx",
-@@ -57,18 +57,16 @@
+@@ -56,7 +56,7 @@
      "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
      "release": "release-it",
      "version:local": "node -pe 'require(\"./package.json\").version'",
@@ -126,13 +115,8 @@ index 52c7a6f..0ae7d8a 100644
    },
    "keywords": [
      "react-native",
--    "vonage",
--    "webrtc",
-     "ios",
-     "android"
-   ],
 diff --git a/src/OTSession.js b/src/OTSession.js
-index 6ccc38f..97d7b48 100644
+index 544d7f7..dcd2b8b 100644
 --- a/src/OTSession.js
 +++ b/src/OTSession.js
 @@ -117,8 +117,7 @@ export default class OTSession extends Component {
