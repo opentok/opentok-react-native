@@ -4,13 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Package to publish'
+        description: 'The full module name.'
         required: true
+        default: '@opentok/client'
         type: choice
         options:
-          - vonage
-          - opentok
-        default: vonage
+          - 'opentok-react-native'
+          - '@opentok/opentok-react-native'
+          - '@vonage/client-sdk-video-react-native'
+      registry:
+        description: 'NPM Registry to publish to.'
+        required: true
+        default: 'npmjs.com'
+        type: choice
+        options:
+          - 'npmjs.com'
+          - 'github.com'
       dry_run:
         description: 'Dry run mode (test without publishing)'
         required: true
@@ -23,6 +32,23 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Validate package and registry combination
+        run: |
+          COMBINATION="${{ inputs.package }}|${{ inputs.registry }}"
+
+          case "$COMBINATION" in
+            "opentok-react-native|github.com")
+              echo "❌ Unsupported combination: 'opentok-react-native' can only be published to npmjs.com"
+              exit 1
+              ;;
+            "@opentok/opentok-react-native|npmjs.com")
+              echo "❌ Unsupported combination: '@opentok/opentok-react-native' can only be published to github.com"
+              exit 1
+              ;;
+          esac
+
+          echo "✅ Supported combination: $COMBINATION"
+
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
@@ -45,10 +71,17 @@ jobs:
           npm ci
           npm run prepare
 
-      - name: Apply OpenTok patch
-        if: inputs.package == 'opentok'
+      - name: Apply opentok-react-native package patch
+        if: inputs.package == 'opentok-react-native'
         run: |
           git apply patch/code-changes.patch
+          git apply patch/flavor-changes.patch
+
+      - name: Apply @opentok/opentok-react-native package patch
+        if: inputs.package == '@opentok/opentok-react-native'
+        run: |
+          git apply patch/code-changes.patch
+          git apply patch/code-changes-opentok-github.patch
           git apply patch/flavor-changes.patch
 
       - name: Determine NPM tag
@@ -103,17 +136,58 @@ jobs:
       - name: Publish to NPM
         if: inputs.dry_run == false
         run: |
+          case "${{ inputs.package }}" in
+            "opentok-react-native")
+              export NPM_SCOPE_NAME=""
+              export NPM_MODULE_NAME="opentok-react-native"
+              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK }}"
+              export NPM_GITHUB_AUTH_TOKEN=""
+              ;;
+            "@opentok/opentok-react-native")
+              export NPM_SCOPE_NAME="opentok"
+              export NPM_MODULE_NAME="opentok-react-native"
+              export NPM_AUTH_TOKEN=""
+              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK_GITHUB }}"
+              ;;
+            "@vonage/client-sdk-video-react-native")
+              export NPM_SCOPE_NAME="vonage"
+              export NPM_MODULE_NAME="client-sdk-video-react-native"
+              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE }}"
+              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE_GITHUB }}"
+              ;;
+            *)
+              echo "Unsupported NPM package name: ${{ inputs.package }}"
+              exit 1
+              ;;
+          esac
+
+          echo $NPM_SCOPE_NAME $NPM_MODULE_NAME
+
+          case "${{ inputs.registry }}" in
+            "npmjs.com")
+              export NPMRC="//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}"
+              ;;
+            "github.com")
+              export NPMRC="always-auth=true\nregistry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=${NPM_GITHUB_AUTH_TOKEN}"
+              ;;
+            *)
+              echo "Unsupported NPM registry: ${{ inputs.registry }}"
+              exit 1
+              ;;
+          esac
+
+          printf "${NPMRC}" > .npmrc
+          cat .npmrc
+
           TAG="${{ steps.npm-tag.outputs.tag }}"
           if [ -n "$TAG" ]; then
             npm publish --tag "$TAG"
           else
             npm publish
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ inputs.package == 'opentok' && secrets.NPM_TOKEN_OPENTOK || secrets.NPM_TOKEN_VONAGE }}
 
       - name: Create tag
-        if: inputs.dry_run == false && inputs.package == 'vonage'
+        if: inputs.dry_run == false && inputs.package == '@vonage/client-sdk-video-react-native' && inputs.registry == 'npmjs.com'
         uses: negz/create-tag@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -124,13 +198,27 @@ jobs:
         if: inputs.dry_run == false
         run: |
           sleep 10
-          npm view ${{ inputs.package == 'opentok' && 'opentok-react-native' || '@vonage/client-sdk-video-react-native' }}@${{ github.ref_name }} version
+          case "${{ inputs.package }}" in
+            "opentok-react-native")
+              npm view opentok-react-native@${{ github.ref_name }} version
+              ;;
+            "@opentok/opentok-react-native")
+              npm view @opentok/opentok-react-native@${{ github.ref_name }} version
+              ;;
+            "@vonage/client-sdk-video-react-native")
+              npm view @vonage/client-sdk-video-react-native@${{ github.ref_name }} version
+              ;;
+            *)
+              echo "Unsupported NPM package name: ${{ inputs.package }}"
+              exit 1
+              ;;
+          esac
 
       - name: Summary
         if: always()
         run: |
           echo "## Publish Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Package**: ${{ inputs.package == 'opentok' && 'opentok-react-native' || '@vonage/client-sdk-video-react-native' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package**: ${{ inputs.package }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Version**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
