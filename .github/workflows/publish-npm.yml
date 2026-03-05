@@ -73,8 +73,7 @@ jobs:
           git apply patch/code-changes-opentok-github.patch
           git apply patch/flavor-changes.patch
 
-      - name: Publish to NPM
-        if: inputs.dry_run == false
+      - name: Build .npmrc file
         run: |
           case "${{ inputs.package }}" in
             "opentok-react-native")
@@ -118,13 +117,6 @@ jobs:
 
           printf "${NPMRC}" > .npmrc
           cat .npmrc
-
-          TAG="${{ steps.npm-tag.outputs.tag }}"
-          if [ -n "$TAG" ]; then
-            npm publish --tag "$TAG"
-          else
-            npm publish
-          fi
 
       - name: Install dependencies
         run: |
@@ -178,6 +170,16 @@ jobs:
           else
             echo "📦 No explicit tag (using npm default)"
             npm publish --dry-run
+          fi
+
+      - name: Publish to NPM
+        if: inputs.dry_run == false
+        run: |
+          TAG="${{ steps.npm-tag.outputs.tag }}"
+          if [ -n "$TAG" ]; then
+            npm publish --tag "$TAG"
+          else
+            npm publish
           fi
 
       - name: Create tag
