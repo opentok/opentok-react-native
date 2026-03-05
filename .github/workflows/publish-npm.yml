@@ -73,6 +73,59 @@ jobs:
           git apply patch/code-changes-opentok-github.patch
           git apply patch/flavor-changes.patch
 
+      - name: Publish to NPM
+        if: inputs.dry_run == false
+        run: |
+          case "${{ inputs.package }}" in
+            "opentok-react-native")
+              export NPM_SCOPE_NAME=""
+              export NPM_MODULE_NAME="opentok-react-native"
+              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK }}"
+              export NPM_GITHUB_AUTH_TOKEN=""
+              ;;
+            "@opentok/opentok-react-native")
+              export NPM_SCOPE_NAME="opentok"
+              export NPM_MODULE_NAME="opentok-react-native"
+              export NPM_AUTH_TOKEN=""
+              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK_GITHUB }}"
+              ;;
+            "@vonage/client-sdk-video-react-native")
+              export NPM_SCOPE_NAME="vonage"
+              export NPM_MODULE_NAME="client-sdk-video-react-native"
+              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE }}"
+              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE_GITHUB }}"
+              ;;
+            *)
+              echo "Unsupported NPM package name: ${{ inputs.package }}"
+              exit 1
+              ;;
+          esac
+
+          echo $NPM_SCOPE_NAME $NPM_MODULE_NAME
+
+          case "${{ inputs.registry }}" in
+            "npmjs.com")
+              export NPMRC="//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}"
+              ;;
+            "github.com")
+              export NPMRC="always-auth=true\nregistry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=${NPM_GITHUB_AUTH_TOKEN}"
+              ;;
+            *)
+              echo "Unsupported NPM registry: ${{ inputs.registry }}"
+              exit 1
+              ;;
+          esac
+
+          printf "${NPMRC}" > .npmrc
+          cat .npmrc
+
+          TAG="${{ steps.npm-tag.outputs.tag }}"
+          if [ -n "$TAG" ]; then
+            npm publish --tag "$TAG"
+          else
+            npm publish
+          fi
+
       - name: Install dependencies
         run: |
           npm ci
@@ -125,59 +178,6 @@ jobs:
           else
             echo "📦 No explicit tag (using npm default)"
             npm publish --dry-run
-          fi
-
-      - name: Publish to NPM
-        if: inputs.dry_run == false
-        run: |
-          case "${{ inputs.package }}" in
-            "opentok-react-native")
-              export NPM_SCOPE_NAME=""
-              export NPM_MODULE_NAME="opentok-react-native"
-              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK }}"
-              export NPM_GITHUB_AUTH_TOKEN=""
-              ;;
-            "@opentok/opentok-react-native")
-              export NPM_SCOPE_NAME="opentok"
-              export NPM_MODULE_NAME="opentok-react-native"
-              export NPM_AUTH_TOKEN=""
-              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_OPENTOK_GITHUB }}"
-              ;;
-            "@vonage/client-sdk-video-react-native")
-              export NPM_SCOPE_NAME="vonage"
-              export NPM_MODULE_NAME="client-sdk-video-react-native"
-              export NPM_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE }}"
-              export NPM_GITHUB_AUTH_TOKEN="${{ secrets.NPM_TOKEN_VONAGE_GITHUB }}"
-              ;;
-            *)
-              echo "Unsupported NPM package name: ${{ inputs.package }}"
-              exit 1
-              ;;
-          esac
-
-          echo $NPM_SCOPE_NAME $NPM_MODULE_NAME
-
-          case "${{ inputs.registry }}" in
-            "npmjs.com")
-              export NPMRC="//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}"
-              ;;
-            "github.com")
-              export NPMRC="always-auth=true\nregistry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=${NPM_GITHUB_AUTH_TOKEN}"
-              ;;
-            *)
-              echo "Unsupported NPM registry: ${{ inputs.registry }}"
-              exit 1
-              ;;
-          esac
-
-          printf "${NPMRC}" > .npmrc
-          cat .npmrc
-
-          TAG="${{ steps.npm-tag.outputs.tag }}"
-          if [ -n "$TAG" ]; then
-            npm publish --tag "$TAG"
-          else
-            npm publish
           fi
 
       - name: Create tag
