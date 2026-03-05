@@ -40,6 +40,11 @@ class OTRNSubscriberManager(context: ReactApplicationContext) :
         view.setScaleBehavior(value)
     }
 
+    @ReactProp(name = "publishSenderStats)
+    override public fun setPublishSenderStats(view: OTRNSubscriber, value: Boolean?) {
+        view.setPublishSenderStats(value)
+    }
+    
     override fun setSubscribeToAudio(
         view: OTRNSubscriber?,
         value: Boolean

@@ -106,13 +106,23 @@ public final class EventUtils {
         return audioStats;
     }
 
-    public static WritableMap prepareVideoNetworkStats(SubscriberKit.SubscriberVideoStats stats) {
+    public static WritableMap prepareSenderStats(SubscriberKit.SenderInfo senderStats) {
+        WritableMap senderStatsMap = Arguments.createMap();
+        senderStatsMap.putInt("connectionMaxAllocatedBitrate", senderStats.connectionMaxAllocatedBitrate);
+        senderStatsMap.putInt("connectionEstimatedBandwidth", senderStats.connectionEstimatedBandwidth);
+        return senderStatsMap;
+    }
+
+    public static WritableMap prepareSubscriberVideoNetworkStats(SubscriberKit.SubscriberVideoStats stats) {
 
         WritableMap videoStats = Arguments.createMap();
         videoStats.putInt("videoPacketsLost", stats.videoPacketsLost);
         videoStats.putInt("videoBytesReceived", stats.videoBytesReceived);
         videoStats.putInt("videoPacketsReceived", stats.videoPacketsReceived);
         videoStats.putDouble("timestamp", stats.timeStamp);
+        if (stats.senderStats != null) {
+            videoStats.putMap("senderStats", prepareSenderStats(stats.senderStats));
+        }
         return videoStats;
     }
 

@@ -7230,7 +7230,7 @@ open@10.2.0:
     is-inside-container "^1.0.0"
     wsl-utils "^0.1.0"
 
-"opentok-react-native-example@file:/Users/joliveraortega/source/repos/vonage-video-react-native-sdk/example":
+"opentok-react-native-example@file:/Users/iperunovic/Code/vonage-video-react-native-sdk/example":
   version "0.0.1"
   resolved "file:example"
   dependencies:

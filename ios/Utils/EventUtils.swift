@@ -93,12 +93,23 @@ class EventUtils {
         return statsArray;
     }
     
+    static func prepareJSSenderStatsEventData(_ senderStats: OTSenderInfo) -> Dictionary<String, Any> {
+        var senderStatsEventData: Dictionary<String, Any> = [:];
+        senderStatsEventData["connectionMaxAllocatedBitrate"] = senderStats.connectionMaxAllocatedBitrate;
+        senderStatsEventData["connectionEstimatedBandwidth"] = senderStats.connectionEstimatedBandwidth;
+        return senderStatsEventData;
+    }
+    
     static func prepareSubscriberVideoNetworkStatsEventData(_ videoStats: OTSubscriberKitVideoNetworkStats) -> Dictionary<String, Any> {
         var videoStatsEventData: Dictionary<String, Any> = [:];
         videoStatsEventData["videoPacketsLost"] = videoStats.videoPacketsLost;
         videoStatsEventData["videoBytesReceived"] = videoStats.videoBytesReceived;
         videoStatsEventData["videoPacketsReceived"] = videoStats.videoPacketsReceived;
         videoStatsEventData["timestamp"] = videoStats.timestamp;
+        if let senderStats = videoStats.senderStats {
+            videoStatsEventData["senderStats"] = prepareJSSenderStatsEventData(senderStats);
+        }
+
         return videoStatsEventData;
     }
     

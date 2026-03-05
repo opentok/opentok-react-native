@@ -205,6 +205,10 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         )
     }
 
+    public fun setTestProperty(val: String?) {
+        publisher.setTestProperty(val);
+    }
+
     private fun publishStream() {
         var pubOrSub: String? = ""
         var zOrder: String? = ""

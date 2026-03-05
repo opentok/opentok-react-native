@@ -60,6 +60,8 @@ export interface NativeProps extends ViewProps {
   videoBitratePreset?: string;
   scaleBehavior?: string;
 
+  testproperty?: string;
+
   onError?: BubblingEventHandler<ErrorEvent> | null;
   onStreamCreated?: BubblingEventHandler<StreamEvent> | null;
   onStreamDestroyed?: BubblingEventHandler<StreamEvent> | null;

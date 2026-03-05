@@ -43,6 +43,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
     private var androidOnTopMap = sharedState.getAndroidOnTopMap();
     private var androidZOrderMap = sharedState.getAndroidZOrderMap();
     private var props: MutableMap<String, Any>? = null
+    private var publishSenderStats: Boolean = false
 
     constructor(context: Context) : super(context) {
         configureComponent()
@@ -151,6 +152,10 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         subscriber?.setPreferredResolution(VideoUtils.Size(width, height))
     }
 
+    fun setPublishSenderStats(value: Boolean?) {
+        subscriber?.publishSenderStats = value 
+    }
+    
     fun subscribeToStream(session: Session, stream: Stream) {
         var pubOrSub: String? = ""
         var zOrder: String? = ""
@@ -301,7 +306,7 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        val videoStats: WritableMap = Arguments.createMap()
+           val videoStats: WritableMap = Arguments.createMap()
         videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
         videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)

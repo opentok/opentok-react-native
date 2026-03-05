@@ -176,6 +176,11 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setScaleBehavior(value)
     }
 
+    @ReactProp(name = "testProperty)
+        override public fun setTestProperty(view: OTRNPublisher, value: String?) {
+        view.setTestProperty(value)
+    }
+
     companion object {
         const val REACT_CLASS = "OTRNPublisher"
     }

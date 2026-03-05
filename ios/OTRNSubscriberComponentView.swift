@@ -5,6 +5,7 @@ import React
 @objc public class OTRNSubscriberImpl: NSObject {
     private var sessionId: String?
     private var streamId: String?
+    private var publishSenderStats: Bool = false
     fileprivate weak var strictUIViewContainer:
         OTRNSubscriberComponentView?
     fileprivate var subscriberDelegateHandler: SubscriberDelegateHandler?
@@ -44,6 +45,8 @@ import React
             properties["sessionId"] as Any)
         self.streamId = Utils.sanitizeStringProperty(
             properties["streamId"] as Any)
+        self.publishSenderStats = Utils.sanitizeBooleanProperty(//ovde? do we need to sanitize this?
+            properties["publishSenderStats"] as Any)
 
         guard let streamId = self.streamId,
             let stream = OTRN.sharedState.subscriberStreams[streamId]
@@ -148,6 +151,10 @@ import React
         guard let subscriber = OTRN.sharedState.subscribers[streamId ?? ""]
         else { return }
         subscriber.viewScaleBehavior = scaleBehavior.toViewScaleBehavior
+    }
+
+    @objc public func setPublishSenderStats(_ publishSenderStats: Bool) {
+        self.publishSenderStats = publishSenderStats
     }
 
     @objc public func cleanup() {
@@ -395,12 +402,16 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
         _ subscriber: OTSubscriberKit,
         videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats
     ) {
-        let statsDict: [String: Any] = [
+        var statsDict: [String: Any] = [
             "videoPacketsLost": stats.videoPacketsLost,
             "videoBytesReceived": stats.videoBytesReceived,
             "videoPacketsReceived": stats.videoPacketsReceived,
             "timestamp": stats.timestamp,
         ]
+        
+        if let senderStats = stats.senderStats {
+            statsDict["senderStats"] = EventUtils.prepareJSSenderStatsEventData(senderStats)
+        }
 
         var subscriberInfo: [String: Any] = [:]
         if let jsonData = try? JSONSerialization.data(
