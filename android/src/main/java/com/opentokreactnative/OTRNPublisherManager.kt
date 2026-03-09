@@ -181,9 +181,9 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setScaleBehavior(value)
     }
 
-    @ReactProp(name = "testProperty)
-        override public fun setTestProperty(view: OTRNPublisher, value: String?) {
-        view.setTestProperty(value)
+    @ReactProp(name = "preferredVideoCodecs")
+    override public fun setPreferredVideoCodecs(view: OTRNPublisher, value: String?) {
+        view.setPreferredVideoCodecs(value)
     }
 
     companion object {

@@ -10,6 +10,10 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   type VideoScaleType = 'fill' | 'fit';
 
+  type VideoCodec = 'vp8' | 'vp9' | 'h264';
+
+  type PreferredVideoCodecs = 'automatic' | [VideoCodec, ...VideoCodec[]];
+
   interface SessionConnectEvent {
     sessionId: string;
     connection: Connection;
@@ -467,6 +471,21 @@ declare module "@vonage/client-sdk-video-react-native" {
     name?: string;
 
     /**
+     * The preferred video codecs priority for publishing.
+     *
+     * It can be set to "automatic" or an array of video codecs in order of preference.
+     *
+     * The supported video codecs are "vp8", "vp9", and "h264". Video codecs are case sensitive and must be "vp8", "vp9", or "h264" to be valid.
+     *
+     * Set to "automatic" to let the SDK select the most suitable order.
+     *
+     * If omitted, the SDK uses the project's default setting.
+     *
+     * If invalid video codecs are included in the array, they will be ignored and the valid video codecs will be prioritized in the order they are listed. If an empty array is passed in, or an empty string is provided, or a string other than "automatic" is provided, the SDK uses the project's default setting.
+     */
+    preferredVideoCodecs?: PreferredVideoCodecs;
+
+    /**
      * Whether to publish audio.
      */
     publishAudio?: boolean;
@@ -521,8 +540,6 @@ declare module "@vonage/client-sdk-video-react-native" {
      * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
      */
     videoTrack?: boolean;
-
-
   }
 
   interface OTPublisherEventHandlers {

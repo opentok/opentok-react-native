@@ -258,6 +258,7 @@ OTPublisher.defaultProps = {
     maxVideoBitrate: 0,
     videoBitratePreset: 'default',
     scaleBehavior: 'fill',
+    preferredVideoCodecs: '',
   },
   style: {
     flex: 1,

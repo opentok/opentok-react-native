@@ -84,6 +84,11 @@ import React
         settings.senderStatsTrack = Utils.sanitizeBooleanProperty(
             properties["publishSenderStats"] as Any
         )
+        if let videoCodecPreference = properties["preferredVideoCodecs"] as? String {
+            if (videoCodecPreference != "") {
+                settings.videoCodecPreference = Utils.convertPreferredVideoCodecs(videoCodecPreference)
+            }
+        }
 
         self.publisherId = Utils.sanitizeStringProperty(
             properties["publisherId"] as Any
