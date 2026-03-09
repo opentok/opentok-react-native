@@ -76,7 +76,6 @@ export interface NativeProps extends ViewProps {
   audioVolume?: Float;
   preferredFrameRate?: Int32;
   preferredResolution?: string;
-  publishSenderStats?: boolean;
 
   onSubscriberConnected?: BubblingEventHandler<StreamEvent> | null;
   onSubscriberDisconnected?: BubblingEventHandler<StreamEvent> | null;

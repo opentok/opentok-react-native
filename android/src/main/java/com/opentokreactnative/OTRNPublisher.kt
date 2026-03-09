@@ -198,6 +198,10 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         // Ignore -- set as initialization option only
     }
 
+     public fun setPublishSenderStats(value: Boolean) {
+        // Ignore -- set as initialization option only
+    }
+
     public fun setScaleBehavior(value: String?) {
         publisher?.setStyle(
             BaseVideoRenderer.STYLE_VIDEO_SCALE,
@@ -228,6 +232,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
+                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean))
                 .build()
             publisher?.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen)
         } else if (this.props?.get("videoSource") == "camera") {

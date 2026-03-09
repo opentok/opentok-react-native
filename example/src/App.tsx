@@ -138,6 +138,7 @@ function App(): React.JSX.Element {
               publishVideo: subscribeToVideo,
               publishAudio: subscribeToVideo,
               allowAudioCaptureWhileMuted: true,
+              publishSenderStats: true, //todo: check if this works and if we should keep it as default.
               name: 'OTRN',
             }}
             eventHandlers={{

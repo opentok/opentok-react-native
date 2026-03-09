@@ -171,6 +171,11 @@ class OTRNPublisherManager(context: ReactApplicationContext) :
         view.setAllowAudioCaptureWhileMuted(value)
     }
 
+    @ReactProp(name = "publishSenderStats")
+    override public fun setPublishSenderStats(view: OTRNPublisher, value: Boolean) {
+        view.setPublishSenderStats(value)
+    }
+
     @ReactProp(name = "scaleBehavior")
     override public fun setScaleBehavior(view: OTRNPublisher, value: String?) {
         view.setScaleBehavior(value)
