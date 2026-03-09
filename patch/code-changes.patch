@@ -1,0 +1,151 @@
+diff --git a/@types/index.d.ts b/@types/index.d.ts
+index 4543112..e321c6e 100644
+--- a/@types/index.d.ts
++++ b/@types/index.d.ts
+@@ -1,4 +1,4 @@
+-declare module "@vonage/client-sdk-video-react-native" {
++declare module "opentok-react-native" {
+   import React from 'react';
+   import { ViewProps } from 'react-native';
+ 
+@@ -134,23 +134,17 @@ declare module "@vonage/client-sdk-video-react-native" {
+ 
+   interface OTSessionProps extends ViewProps {
+     /**
+-     * Deprecated. Replaced by the applicationId prop.
++     * TokBox API Key
+      */
+-    apiKey?: string;
++    apiKey: string;
+ 
+     /**
+-     * The Vonage application ID. This is a beta feature, replacing the
+-     * apiKey prop.
+-     */
+-    applicationId?: string;
+-
+-    /**
+-     * Vonage Video API session ID.
++     * TokBox Session ID
+      */
+     sessionId: string;
+ 
+     /**
+-     * A connection token for the Video API session.
++     * TokBox token
+      */
+     token: string;
+ 
+diff --git a/expo/index.ts b/expo/index.ts
+index e04b60b..73ef2e9 100644
+--- a/expo/index.ts
++++ b/expo/index.ts
+@@ -6,7 +6,7 @@ import {
+   withPlugins,
+ } from '@expo/config-plugins';
+ 
+-export interface VonagePluginiOSProps {
++export interface OpentokPluginiOSProps {
+   /**
+    * iOS camera permission message
+    * @default 'Allow $(PRODUCT_NAME) to access your camera for video calls'
+@@ -22,7 +22,7 @@ export interface VonagePluginiOSProps {
+ /**
+  * Add iOS Info.plist entries for camera and microphone permissions
+  */
+-const withIosPermissions: ConfigPlugin<VonagePluginiOSProps> = (
++const withIosPermissions: ConfigPlugin<OpentokPluginiOSProps> = (
+   config,
+   props
+ ) => {
+@@ -83,10 +83,10 @@ const withAndroidPermissions: ConfigPlugin = (config) => {
+ };
+ 
+ /**
+- * Main Expo Config Plugin for @vonage/client-sdk-video-react-native
++ * Main Expo Config Plugin for opentok-react-native
+  * Automatically configures native permissions and dependencies
+  */
+-const withVonage: ConfigPlugin<VonagePluginiOSProps> = (
++const withOpentok: ConfigPlugin<OpentokPluginiOSProps> = (
+   config,
+   props = {}
+ ) => {
+@@ -96,4 +96,4 @@ const withVonage: ConfigPlugin<VonagePluginiOSProps> = (
+   ]);
+ };
+ 
+-export default withVonage;
++export default withOpentok;
+diff --git a/package-lock.json b/package-lock.json
+index 2d424ab..1658e1c 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,11 +1,11 @@
+ {
+-  "name": "@vonage/client-sdk-video-react-native",
++  "name": "opentok-react-native",
+   "version": "2.32.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+-      "name": "@vonage/client-sdk-video-react-native",
++      "name": "opentok-react-native",
+       "version": "2.32.0",
+       "license": "Adobe-2",
+       "workspaces": [
+diff --git a/package.json b/package.json
+index fd863ea..6d46a43 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "@vonage/client-sdk-video-react-native",
++  "name": "opentok-react-native",
+   "version": "2.32.0",
+   "description": "Vonage Video client SDK for React Native",
+   "source": "./src/index.tsx",
+@@ -56,7 +56,7 @@
+     "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
+     "release": "release-it",
+     "version:local": "node -pe 'require(\"./package.json\").version'",
+-    "version:published": "npm show @vonage/client-sdk-video-react-native version"
++    "version:published": "npm show opentok-react-native version"
+   },
+   "keywords": [
+     "react-native",
+diff --git a/src/OTSession.js b/src/OTSession.js
+index 544d7f7..dcd2b8b 100644
+--- a/src/OTSession.js
++++ b/src/OTSession.js
+@@ -117,8 +117,7 @@ export default class OTSession extends Component {
+   }
+ 
+   initComponent = () => {
+-    const { apiKey, applicationId, token, sessionId} = this.props;
+-    this.initSession(applicationId || apiKey, sessionId, token);
++    this.initSession(this.props.apiKey, this.props.sessionId, this.props.token);
+   };
+ 
+   reportIssue() {
+@@ -194,8 +193,7 @@ export default class OTSession extends Component {
+   }
+ 
+   render() {
+-    const { style, children, sessionId, applicationId, token } = this.props;
+-    const apiKey = applicationId || this.props.apiKey;
++    const { style, children, sessionId, apiKey, token } = this.props;
+ 
+     if (children && sessionId && apiKey && token) {
+       return (
+@@ -211,8 +209,7 @@ export default class OTSession extends Component {
+ }
+ 
+ OTSession.propTypes = {
+-  apiKey: PropTypes.string,
+-  applicationId: PropTypes.string,
++  apiKey: PropTypes.string.isRequired,
+   sessionId: PropTypes.string.isRequired,
+   token: PropTypes.string.isRequired,
+   children: PropTypes.oneOfType([
