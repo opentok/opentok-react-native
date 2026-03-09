@@ -105,6 +105,26 @@ const sanitizeVideoBitratePreset = (videoBitratePreset, maxVideoBitrate) => {
   }
 };
 
+/**
+ * sanitizePreferredVideoCodecs
+ *
+ * The supported video codecs are "vp8", "vp9", and "h264". Video codecs are case sentive and must be "vp8", "vp9", or "h264" to be valid.
+ *
+ * If invalid video codecs are included in the array, they will be ignored and the valid video codecs will be prioritized in the order they are listed.
+ *
+ * If an empty array is passed in, or an empty string is provided, or a string other than "automatic" is provided, the SDK uses the project's default setting.
+ */
+const sanitizePreferredVideoCodecs = (preferredVideoCodecs = '') => {
+  if (Array.isArray(preferredVideoCodecs)) {
+    const filtered = preferredVideoCodecs.filter((codec, index, array) =>
+      ['vp8', 'vp9', 'h264'].includes(codec) && array.indexOf(codec) === index
+    );
+    return filtered.join(';');
+  }
+  // The empty string the function can return represents the SDK uses the project's default setting for preferred video codecs.
+  return preferredVideoCodecs === 'automatic' ? 'automatic' : '';
+};
+
 const sanitizeProperties = (properties) => {
   if (typeof properties !== 'object') {
     return {
@@ -127,6 +147,7 @@ const sanitizeProperties = (properties) => {
       videoSource: 'camera',
       scalableScreenshare: false,
       allowAudioCaptureWhileMuted: false,
+      preferredVideoCodecs: '',
     };
   }
 
@@ -176,6 +197,7 @@ const sanitizeProperties = (properties) => {
       properties.maxVideoBitrate
     ),
     scaleBehavior: properties.scaleBehavior ?? 'fill',
+    preferredVideoCodecs: sanitizePreferredVideoCodecs(properties.preferredVideoCodecs),
   };
 };
 
