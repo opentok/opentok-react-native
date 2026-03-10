@@ -250,7 +250,7 @@ OTPublisher.defaultProps = {
     publishCaptions: false,
     scalableScreenshare: false,
     allowAudioCaptureWhileMuted: false,
-    publishSenderStats: false, //todo: check if this should be default or not.
+    publishSenderStats: false,
     resolution: 'MEDIUM',
     videoTrack: true,
     videoSource: 'camera',

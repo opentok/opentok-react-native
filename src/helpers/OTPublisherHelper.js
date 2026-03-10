@@ -147,7 +147,7 @@ const sanitizeProperties = (properties) => {
       videoSource: 'camera',
       scalableScreenshare: false,
       allowAudioCaptureWhileMuted: false,
-      publishsenderStats: false, //todo: check if this should be default or not.
+      publishsenderStats: false,
       preferredVideoCodecs: '',
     };
   }
@@ -192,7 +192,7 @@ const sanitizeProperties = (properties) => {
     allowAudioCaptureWhileMuted: Boolean(
       properties.allowAudioCaptureWhileMuted
     ),
-    publishSenderStats: Boolean(properties.publishSenderStats), //todo: check if this should be default or not.
+    publishSenderStats: Boolean(properties.publishSenderStats),
     maxVideoBitrate: sanitizeMaxVideoBitrate(properties.videoBitratePreset),
     videoBitratePreset: sanitizeVideoBitratePreset(
       properties.videoBitratePreset,
