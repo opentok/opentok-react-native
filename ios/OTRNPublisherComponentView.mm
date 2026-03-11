@@ -53,7 +53,7 @@ using namespace facebook::react;
         @"videoBitratePreset" : RCTNSStringFromString(viewProps.videoBitratePreset),
         @"scaleBehavior": RCTNSStringFromString(viewProps.scaleBehavior),
         @"publishSenderStats": @(viewProps.publishSenderStats),
-        @"preferredVideoCodecs": RCTNSStringFromString(viewProps.preferredVideoCodecs),
+        @"preferredVideoCodecs": RCTNSStringFromString(viewProps.preferredVideoCodecs)
     };
 }
 
