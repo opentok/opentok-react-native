@@ -1,6 +1,5 @@
 {
   "name": "@vonage/client-sdk-video-react-native",
-  "version": "2.32.0",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -18,6 +17,7 @@
       }
     }
   },
+  "version": "2.32.0",
   "app.plugin": "./app.plugin.js",
   "expo": {
     "plugin": "./app.plugin.js"
