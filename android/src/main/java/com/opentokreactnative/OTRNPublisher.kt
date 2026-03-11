@@ -219,6 +219,10 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         var pubOrSub: String? = ""
         var zOrder: String? = ""
         var preferredVideoCodecs: PublisherKit.PreferredVideoCodecs? = this.getPreferredVideoCodecs();
+
+        val publishSenderStats: Boolean = this.props?.get("publishSenderStats") as Boolean
+        println("publishSenderStats: " + publishSenderStats)
+
         if (this.props?.get("videoSource") == "screen") {
             var publisherBuilder: Publisher.Builder = Publisher.Builder(context)
                 .audioBitrate((this.props?.get("audioBitrate") as Double).toInt())

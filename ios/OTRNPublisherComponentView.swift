@@ -81,6 +81,10 @@ import React
         settings.allowAudioCaptureWhileMuted = Utils.sanitizeBooleanProperty(
             properties["allowAudioCaptureWhileMuted"] as Any
         )
+        let publishSenderStats = Utils.sanitizeBooleanProperty(
+            properties["publishSenderStats"] as Any
+        )
+        print("publishSenderStats: \(publishSenderStats)")
         settings.senderStatsTrack = Utils.sanitizeBooleanProperty(
             properties["publishSenderStats"] as Any
         )
