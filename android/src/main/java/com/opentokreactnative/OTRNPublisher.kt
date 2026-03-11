@@ -235,7 +235,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
-                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean))
+                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean)
             if (preferredVideoCodecs != null) {
                 publisherBuilder?.preferredVideoCodecs(preferredVideoCodecs)
             }
@@ -256,7 +256,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .audioTrack(this.props?.get("audioTrack") as Boolean)
                 .videoTrack(this.props?.get("videoTrack") as Boolean)
                 .enableOpusDtx(this.props?.get("enableDtx") as Boolean)
-                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean))
+                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean)
             if (preferredVideoCodecs != null) {
                 publisherBuilder?.preferredVideoCodecs(preferredVideoCodecs)
             }

@@ -106,10 +106,11 @@ public final class EventUtils {
         return audioStats;
     }
 
-    public static WritableMap prepareSenderStats(SubscriberKit.SenderInfo senderStats) {
+    public static WritableMap prepareSenderStats(SubscriberKit.SenderStats senderStats) {
         WritableMap senderStatsMap = Arguments.createMap();
-        senderStatsMap.putInt("connectionMaxAllocatedBitrate", senderStats.connectionMaxAllocatedBitrate);
-        senderStatsMap.putInt("connectionEstimatedBandwidth", senderStats.connectionEstimatedBandwidth);
+        // There is no putLong method in React Native's WritableMap—only putInt, putDouble, putString, etc. For large numbers (like Java long), the recommended approach is to use putDouble to avoid data loss, since JavaScript numbers are all doubles and can safely represent 53-bit integers.
+        senderStatsMap.putDouble("connectionMaxAllocatedBitrate", senderStats.connectionMaxAllocatedBitrate);
+        senderStatsMap.putDouble("connectionEstimatedBandwidth", senderStats.connectionEstimatedBandwidth);
         return senderStatsMap;
     }
 

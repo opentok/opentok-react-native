@@ -93,7 +93,7 @@ class EventUtils {
         return statsArray;
     }
     
-    static func prepareJSSenderStatsEventData(_ senderStats: OTSenderInfo) -> Dictionary<String, Any> {
+    static func prepareJSSenderStatsEventData(_ senderStats: OTSenderStats) -> Dictionary<String, Any> {
         var senderStatsEventData: Dictionary<String, Any> = [:];
         senderStatsEventData["connectionMaxAllocatedBitrate"] = senderStats.connectionMaxAllocatedBitrate;
         senderStatsEventData["connectionEstimatedBandwidth"] = senderStats.connectionEstimatedBandwidth;
