@@ -6,14 +6,14 @@ index e7b3626..ab8558f 100644
  {
 -  "name": "opentok-react-native",
 +  "name": "@opentok/opentok-react-native",
-   "version": "0.0.3",
+   "version": "2.32.0",
    "lockfileVersion": 3,
    "requires": true,
    "packages": {
      "": {
 -      "name": "opentok-react-native",
 +      "name": "@opentok/opentok-react-native",
-       "version": "0.0.3",
+       "version": "2.32.0",
        "license": "Adobe-2",
        "workspaces": [
 diff --git a/package.json b/package.json
