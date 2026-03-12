@@ -496,7 +496,7 @@ declare module "@vonage/client-sdk-video-react-native" {
     publishCaptions?: boolean;
 
     /**
-     * Enables a sender statistics channel for a publisher to be constructed with {@link otc_publisher_new_with_settings}.
+     * Enables a sender statistics channel for the publisher.
      * Currently, this feature only supports calls with more than two participants.
      */
     publishSenderStats?: boolean;
