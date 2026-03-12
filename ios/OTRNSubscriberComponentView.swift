@@ -394,16 +394,7 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
         _ subscriber: OTSubscriberKit,
         videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats
     ) {
-        var statsDict: [String: Any] = [
-            "videoPacketsLost": stats.videoPacketsLost,
-            "videoBytesReceived": stats.videoBytesReceived,
-            "videoPacketsReceived": stats.videoPacketsReceived,
-            "timestamp": stats.timestamp,
-        ]
-        
-        if let senderStats = stats.senderStats {
-            statsDict["senderStats"] = EventUtils.prepareJSSenderStatsEventData(senderStats)
-        }
+        var statsDict: Dictionary<String, Any> = EventUtils.prepareSubscriberVideoNetworkStatsEventData(stats);
 
         var subscriberInfo: [String: Any] = [:]
         if let jsonData = try? JSONSerialization.data(
