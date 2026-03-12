@@ -301,14 +301,15 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        val videoStats: WritableMap = Arguments.createMap()
-        videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
-        videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
-        videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
-        videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
-        // There is no putLong method in React Native's WritableMap—only putInt, putDouble, putString, etc. For large numbers (like Java long), the recommended approach is to use putDouble to avoid data loss, since JavaScript numbers are all doubles and can safely represent 53-bit integers.
-        videoStats.putDouble("connectionMaxAllocatedBitrate", stats?.senderStats?.connectionMaxAllocatedBitrate?.toDouble() ?: 0.0);
-        videoStats.putDouble("connectionEstimatedBandwidth", stats?.senderStats?.connectionEstimatedBandwidth?.toDouble() ?: 0.0);
+//        val videoStats: WritableMap = Arguments.createMap()
+//        videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
+//        videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
+//        videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
+//        videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+//        // There is no putLong method in React Native's WritableMap—only putInt, putDouble, putString, etc. For large numbers (like Java long), the recommended approach is to use putDouble to avoid data loss, since JavaScript numbers are all doubles and can safely represent 53-bit integers.
+//        videoStats.putDouble("connectionMaxAllocatedBitrate", stats?.senderStats?.connectionMaxAllocatedBitrate?.toDouble() ?: 0.0);
+//        videoStats.putDouble("connectionEstimatedBandwidth", stats?.senderStats?.connectionEstimatedBandwidth?.toDouble() ?: 0.0);
+        val videoStats: WritableMap = EventUtils.prepareSubscriberVideoNetworkStats(stats)
         
         emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
