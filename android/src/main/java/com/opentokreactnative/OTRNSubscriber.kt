@@ -306,9 +306,10 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
         videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
-        // There is no putLong method in React Native's WritableMap—only putInt, putDouble, putString, etc. For large numbers (like Java long), the recommended approach is to use putDouble to avoid data loss, since JavaScript numbers are all doubles and can safely represent 53-bit integers.
-        videoStats.putDouble("connectionMaxAllocatedBitrate", stats?.senderStats?.connectionMaxAllocatedBitrate?.toDouble() ?: 0.0);
-        videoStats.putDouble("connectionEstimatedBandwidth", stats?.senderStats?.connectionEstimatedBandwidth?.toDouble() ?: 0.0);
+
+        if (stats?.senderStats != null) {
+            videoStats.putMap("senderStats", EventUtils.prepareSenderStats(stats.senderStats))
+        }
         
         emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
