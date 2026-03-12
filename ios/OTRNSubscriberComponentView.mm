@@ -70,7 +70,7 @@ using namespace facebook::react;
             @"streamId": RCTNSStringFromString(newViewProps.streamId),
             @"subscribeToAudio": @(newViewProps.subscribeToAudio),
             @"subscribeToVideo": @(newViewProps.subscribeToVideo),
-            @"scaleBehavior": RCTNSStringFromString(newViewProps.scaleBehavior),
+            @"scaleBehavior": RCTNSStringFromString(newViewProps.scaleBehavior)
         };
         [_impl createSubscriber:subscriberProperties];
         self.contentView = _impl.subscriberView;
