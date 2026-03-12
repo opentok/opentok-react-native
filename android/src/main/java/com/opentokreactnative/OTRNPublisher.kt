@@ -221,7 +221,6 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         var preferredVideoCodecs: PublisherKit.PreferredVideoCodecs? = this.getPreferredVideoCodecs();
 
         val publishSenderStats: Boolean = this.props?.get("publishSenderStats") as Boolean
-        println("publishSenderStats: " + publishSenderStats)
 
         if (this.props?.get("videoSource") == "screen") {
             var publisherBuilder: Publisher.Builder = Publisher.Builder(context)

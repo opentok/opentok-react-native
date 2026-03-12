@@ -147,7 +147,7 @@ const sanitizeProperties = (properties) => {
       videoSource: 'camera',
       scalableScreenshare: false,
       allowAudioCaptureWhileMuted: false,
-      publishsenderStats: false,
+      publishSenderStats: false,
       preferredVideoCodecs: '',
     };
   }
