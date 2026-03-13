@@ -220,7 +220,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
         var zOrder: String? = ""
         var preferredVideoCodecs: PublisherKit.PreferredVideoCodecs? = this.getPreferredVideoCodecs();
 
-        val publishSenderStats: Boolean = this.props?.get("publishSenderStats") as Boolean
+        val publishSenderStats : Boolean = this.props?.get("publishSenderStats") as? Boolean ?: false;
 
         if (this.props?.get("videoSource") == "screen") {
             var publisherBuilder: Publisher.Builder = Publisher.Builder(context)
@@ -238,7 +238,7 @@ class OTRNPublisher : FrameLayout, PublisherListener,
                 .scalableScreenshare(this.props?.get("scalableScreenshare") as Boolean)
                 .allowAudioCaptureWhileMuted(this.props?.get("allowAudioCaptureWhileMuted") as Boolean)
                 .capturer(OTScreenCapturer(this))
-                .senderStatsTrack(this.props?.get("publishSenderStats") as Boolean)
+                .senderStatsTrack(publishSenderStats)
             if (preferredVideoCodecs != null) {
                 publisherBuilder?.preferredVideoCodecs(preferredVideoCodecs)
             }
