@@ -301,11 +301,8 @@ class OTRNSubscriber : FrameLayout, SubscriberListener,
         subscriber: SubscriberKit?,
         stats: SubscriberKit.SubscriberVideoStats?
     ) {
-        val videoStats: WritableMap = Arguments.createMap()
-        videoStats.putDouble("videoPacketsLost", stats?.videoPacketsLost?.toDouble() ?: 0.0)
-        videoStats.putDouble("videoPacketsReceived", stats?.videoPacketsReceived?.toDouble() ?: 0.0)
-        videoStats.putDouble("videoBytesReceived", stats?.videoBytesReceived?.toDouble() ?: 0.0)
-        videoStats.putDouble("startTime", stats?.timeStamp?.toDouble() ?: 0.0)
+        val videoStats: WritableMap = EventUtils.prepareSubscriberVideoNetworkStats(stats)
+        
         emitOpenTokEvent("onVideoNetworkStats", videoStats)
     }
 

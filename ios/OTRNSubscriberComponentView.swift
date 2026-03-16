@@ -44,7 +44,6 @@ import React
             properties["sessionId"] as Any)
         self.streamId = Utils.sanitizeStringProperty(
             properties["streamId"] as Any)
-
         guard let streamId = self.streamId,
             let stream = OTRN.sharedState.subscriberStreams[streamId]
         else {
@@ -395,12 +394,7 @@ private class SubscriberNetworkStatsDelegateHandler: NSObject,
         _ subscriber: OTSubscriberKit,
         videoNetworkStatsUpdated stats: OTSubscriberKitVideoNetworkStats
     ) {
-        let statsDict: [String: Any] = [
-            "videoPacketsLost": stats.videoPacketsLost,
-            "videoBytesReceived": stats.videoBytesReceived,
-            "videoPacketsReceived": stats.videoPacketsReceived,
-            "timestamp": stats.timestamp,
-        ]
+        var statsDict: Dictionary<String, Any> = EventUtils.prepareSubscriberVideoNetworkStatsEventData(stats);
 
         var subscriberInfo: [String: Any] = [:]
         if let jsonData = try? JSONSerialization.data(

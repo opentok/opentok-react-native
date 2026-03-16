@@ -95,12 +95,15 @@ declare module "@vonage/client-sdk-video-react-native" {
     timeStamp: number;
   }
 
-  interface VideoNetworkStatsEvent {
-    videoPacketsLost: number;
+  //subscriber video stats event
+  interface VideoNetworkStatsEvent { 
+    senderStats?: SenderStats;
     videoBytesReceived: number;
+    videoPacketsLost: number;
     videoPacketsReceived: number;
     timestamp: number;
   }
+
 
   interface PublisherAudioNetworkStats {
     connectionId?: string;
@@ -123,6 +126,11 @@ declare module "@vonage/client-sdk-video-react-native" {
   interface PublisherRtcStatsReport {
     connectionId: string;
     jsonArrayOfReports: string;
+  }
+
+  interface SenderStats {
+    connectionMaxAllocatedBitrate : number;
+    connectionEstimatedBandwidth: number;
   }
 
   interface SignalEvent {
@@ -394,6 +402,11 @@ declare module "@vonage/client-sdk-video-react-native" {
 
   interface OTPublisherProperties {
     /**
+     * If set to false, the microphone will be automatically switched off when the publish has muted.
+     */
+    allowAudioCaptureWhileMuted?: boolean;
+
+    /**
      * The desired bitrate for the published audio, in bits per second. The supported range of values is 6,000 - 510,000. (Invalid values are ignored.) Set this value to enable high-quality audio (or to reduce bandwidth usage with lower-quality audio). The following are recommended settings:
      * 8,000 - 12,000 for narrowband (NB) speech
      * 16,000 - 20,000 for wideband (WB) speech
@@ -447,70 +460,15 @@ declare module "@vonage/client-sdk-video-react-native" {
      */
     frameRate?: 30 | 15 | 7 | 1;
 
-    /**
-     * A string that will be associated with this publisher’s stream. This string is displayed at the bottom of publisher videos and at the bottom of subscriber videos associated with the published stream. If you do not specify a value, the name is set to the device name.
-     */
-    name?: string;
-
-    /**
-     * Whether to publish audio.
-     */
-    publishAudio?: boolean;
-
-    /**
-     * Whether to publish captions.
-     */
-    publishCaptions?: boolean;
-
-    /**
-     * Whether to publish video.
-     */
-    publishVideo?: boolean;
-
-    /**
-     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
-     */
-    resolution?: '1920x1080' | '1280x720' | '640x480' | '352x288';
-
-    /**
-     * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
-     */
-    videoTrack?: boolean;
-
-    /**
-     * To publish a screen-sharing stream, set this property to "screen". If you do not specify a value, this will default to "camera".
-     */
-    videoSource?: VideoSource;
-
-    /**
-     * The video content hint fpr the publisher (either "none", "motion", "detail", or "text").
-     */
-    videoContentHint?: string;
-
-    /**
-     * Whether to allow use of scalable video for a publisher that has the videoSource set "screen".
-     */
-    scalableScreenshare?: boolean;
-
-    /**
-     * If set to false, the microphone will be automatically switched off when the publish has muted.
-     */
-    allowAudioCaptureWhileMuted?: boolean;
 
     /**
      * The maximum video bitrate for the published stream (between 5,000 and 10,000,000).
      */
     maxVideoBitrate?: number;
-
     /**
-     * The video bitrate preset to use for the published stream. Ignored if maxVideoBitrate is set.
+     * A string that will be associated with this publisher’s stream. This string is displayed at the bottom of publisher videos and at the bottom of subscriber videos associated with the published stream. If you do not specify a value, the name is set to the device name.
      */
-    videoBitratePreset?: 'default' | 'bw_saver' | 'extra_bw_saver';
-
-    /**
-     * Publisher view scale behavior. Defaults to "fill".
-     */
-    scaleBehavior?: VideoScaleType;
+    name?: string;
 
     /**
      * The preferred video codecs priority for publishing.
@@ -526,6 +484,62 @@ declare module "@vonage/client-sdk-video-react-native" {
      * If invalid video codecs are included in the array, they will be ignored and the valid video codecs will be prioritized in the order they are listed. If an empty array is passed in, or an empty string is provided, or a string other than "automatic" is provided, the SDK uses the project's default setting.
      */
     preferredVideoCodecs?: PreferredVideoCodecs;
+
+    /**
+     * Whether to publish audio.
+     */
+    publishAudio?: boolean;
+
+    /**
+     * Whether to publish captions.
+     */
+    publishCaptions?: boolean;
+
+    /**
+     * Enables a sender statistics channel for the publisher.
+     * Currently, this feature only supports calls with more than two participants.
+     */
+    publishSenderStats?: boolean;
+    /**
+     * Whether to publish video.
+     */
+    publishVideo?: boolean;
+
+    /**
+     * The desired resolution of the video. The format of the string is "widthxheight", where the width and height are represented in pixels. Valid values are "1920x1080", "1280x720", "640x480", and "352x288". The published video will only use the desired resolution if the client configuration supports it. Some devices and clients do not support each of these resolution settings.
+     */
+    resolution?: '1920x1080' | '1280x720' | '640x480' | '352x288';
+
+    /**
+     * Whether to allow use of scalable video for a publisher that has the videoSource set "screen".
+     */
+    scalableScreenshare?: boolean;
+
+    /**
+     * Publisher view scale behavior. Defaults to "fill".
+     */
+    scaleBehavior?: VideoScaleType;
+
+    /**
+     * The video bitrate preset to use for the published stream. Ignored if maxVideoBitrate is set.
+     */
+    videoBitratePreset?: 'default' | 'bw_saver' | 'extra_bw_saver';
+
+    /**
+     * The video content hint fpr the publisher (either "none", "motion", "detail", or "text").
+     */
+    videoContentHint?: string;
+
+
+    /**
+     * To publish a screen-sharing stream, set this property to "screen". If you do not specify a value, this will default to "camera".
+     */
+    videoSource?: VideoSource;
+
+    /**
+     * If this property is set to false, the video subsystem will not be initialized for the publisher, and setting the publishVideo property will have no effect. If your application does not require the use of video, it is recommended to set this property rather than use the publishVideo property, which only temporarily disables the video track.
+     */
+    videoTrack?: boolean;
   }
 
   interface OTPublisherEventHandlers {
