@@ -1,5 +1,7 @@
 :warning: **This repository has been deprecated in favour of the [Vonage Video React Native SDK](https://github.com/Vonage/vonage-video-react-native-sdk) repository** :warning:
 
+> **Why this change?** We've consolidated our OpenTok and Vonage branded React Native SDKs into a single monorepo to eliminate code duplication. The [Vonage Video React Native SDK](https://github.com/Vonage/vonage-video-react-native-sdk) repository uses brand-aware build configuration to produce both OpenTok and Vonage artifacts from shared sources.
+
 # OpenTok React Native SDK
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
