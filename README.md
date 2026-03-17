@@ -9,6 +9,12 @@ React Native library for using the [Vonage Video API](https://developer.vonage.c
 
 ---
 
+## 📦 Monorepo Consolidation
+
+This repository represents the **consolidated monorepo** for the Vonage Video React Native SDK. We merged previously separate branding-specific repositories (including [opentok-react-native](https://github.com/opentok/opentok-react-native)) into this single codebase to eliminate duplication and streamline maintenance.
+
+This monorepo uses **brand-aware build configuration** to produce both OpenTok and Vonage branded artifacts from shared sources. Bug fixes and features are now automatically available to both brands from a single source of truth.
+
 ## Quick Start
 
 ### Installation
