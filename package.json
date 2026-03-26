@@ -65,6 +65,10 @@
     "ios",
     "android"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vonage/vonage-video-react-native-sdk.git"
+  },
   "author": {
     "name": "Vonage Video API",
     "email": "support@api.vonage.com"
@@ -74,6 +78,9 @@
     "url": "https://github.com/opentok/opentok-react-native/issues"
   },
   "homepage": "https://developer.vonage.com/en/video/overview",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "axios": "^1.13.2",
     "deprecated-react-native-prop-types": "5.0.0",
