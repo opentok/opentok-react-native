@@ -1,5 +1,5 @@
 diff --git a/@types/index.d.ts b/@types/index.d.ts
-index 4543112..e321c6e 100644
+index 664a4c2..c7561a1 100644
 --- a/@types/index.d.ts
 +++ b/@types/index.d.ts
 @@ -1,4 +1,4 @@
@@ -8,7 +8,7 @@ index 4543112..e321c6e 100644
    import React from 'react';
    import { ViewProps } from 'react-native';
  
-@@ -134,23 +134,17 @@ declare module "@vonage/client-sdk-video-react-native" {
+@@ -146,23 +146,17 @@ declare module "@vonage/client-sdk-video-react-native" {
  
    interface OTSessionProps extends ViewProps {
      /**
@@ -78,34 +78,34 @@ index e04b60b..73ef2e9 100644
 -export default withVonage;
 +export default withOpentok;
 diff --git a/package-lock.json b/package-lock.json
-index 2d424ab..1658e1c 100644
+index 50ce8af..2b1cbb5 100644
 --- a/package-lock.json
 +++ b/package-lock.json
 @@ -1,11 +1,11 @@
  {
 -  "name": "@vonage/client-sdk-video-react-native",
 +  "name": "opentok-react-native",
-   "version": "2.32.0",
+   "version": "2.32.1",
    "lockfileVersion": 3,
    "requires": true,
    "packages": {
      "": {
 -      "name": "@vonage/client-sdk-video-react-native",
 +      "name": "opentok-react-native",
-       "version": "2.32.0",
+       "version": "2.32.1",
        "license": "Adobe-2",
        "workspaces": [
 diff --git a/package.json b/package.json
-index fd863ea..6d46a43 100644
+index 85c754a..a2a12d2 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,5 +1,5 @@
  {
 -  "name": "@vonage/client-sdk-video-react-native",
 +  "name": "opentok-react-native",
+   "version": "2.32.1",
    "description": "Vonage Video client SDK for React Native",
    "source": "./src/index.tsx",
-   "main": "./lib/commonjs/index.js",
 @@ -56,7 +56,7 @@
      "prepare": "bob build && node build-expo.js && mkdir -p android/src/main/java/com/facebook/react/viewmanagers && cp -R android/generated/java/com/facebook/react/viewmanagers/* android/src/main/java/com/facebook/react/viewmanagers/ || true",
      "release": "release-it",
