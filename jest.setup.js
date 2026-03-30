@@ -1,0 +1,1 @@
+// Global Jest setup placeholder.
