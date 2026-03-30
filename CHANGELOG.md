@@ -1,4 +1,4 @@
-# 2.32.0 (March 2026)
+# 2.32.1 (March 2026)
 
 - **Note**: All release notes were migrated to [Developer center](https://developer.vonage.com/en/video/client-sdks/react-native/release-notes?source=video)
 
