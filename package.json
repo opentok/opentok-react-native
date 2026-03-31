@@ -1,5 +1,6 @@
 {
   "name": "@vonage/client-sdk-video-react-native",
+  "version": "2.32.1",
   "description": "Vonage Video client SDK for React Native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -17,7 +18,6 @@
       }
     }
   },
-  "version": "2.32.0",
   "app.plugin": "./app.plugin.js",
   "expo": {
     "plugin": "./app.plugin.js"
@@ -70,6 +70,10 @@
     "ios",
     "android"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vonage/vonage-video-react-native-sdk.git"
+  },
   "author": {
     "name": "Vonage Video API",
     "email": "support@api.vonage.com"
@@ -79,6 +83,9 @@
     "url": "https://github.com/opentok/opentok-react-native/issues"
   },
   "homepage": "https://developer.vonage.com/en/video/overview",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "axios": "^1.13.2",
     "deprecated-react-native-prop-types": "5.0.0",
