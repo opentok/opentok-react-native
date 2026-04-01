@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { OTSession } from '../src';
+import { OTPublisher, OTSession, OTSubscriber } from '../src';
 
 function App() {
   const [joined, setJoined] = useState(false);
@@ -44,7 +44,8 @@ function App() {
           sessionId={creds.sessionId}
           token={creds.token}
         >
-          <Text>Test</Text>
+          <OTPublisher style={{width: 200, height: 200}} />
+          <OTSubscriber style={{width: 200, height: 200}} />        
         </OTSession>
       ) : null}
     </SafeAreaView>

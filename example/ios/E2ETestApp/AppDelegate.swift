@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       in: window,
       launchOptions: launchOptions
     )
+    FabricComponentRegistrar.registerCustomComponents()
 
     return true
   }
