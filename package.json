@@ -51,7 +51,7 @@
     "test": "jest",
     "test:unit": "jest --watch=false",
     "test:e2e:build:ios": "detox build-framework-cache && detox build -c ios.sim.debug",
-    "test:e2e:ios": "detox test -c ios.sim.debug --cleanup -- --config e2e/jest.config.json",
+    "test:e2e:ios": "detox test -c ios.sim.debug -- --config e2e/jest.config.json",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "lint-fix": "eslint \"**/*.{js,ts,tsx}\" --fix",

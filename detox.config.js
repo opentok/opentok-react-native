@@ -1,7 +1,4 @@
 module.exports = {
-  testRunner: {
-    runnerConfig: 'e2e/jest.config.json',
-  },
   apps: {
     'ios.debug': {
       type: 'ios.app',
