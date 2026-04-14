@@ -14,8 +14,10 @@ Pod::Spec.new do |s|
   s.swift_version = "4.2"
 
   s.source        = { :git => "https://github.com/opentok/opentok-react-native.git", :tag => "v#{s.version}" }
-  s.source_files  = "ios/**/*.{h,m,swift}"
+  # This library currently ships the classic architecture iOS implementation.
+  # Avoid exporting generated Fabric/C++ headers, which break non-new-architecture builds.
+  s.source_files  = "ios/OpenTokReactNative/**/*.{h,m,swift}"
 
   s.dependency 'React'
-  s.dependency 'OTXCFramework','2.30.1'
+  s.dependency 'OTXCFramework','2.31.1'
 end
